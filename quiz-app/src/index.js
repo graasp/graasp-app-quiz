@@ -1,17 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, {Component} from "react";
+import ReactDOM from "react-dom";
+import { mockServer, buildMockLocalContext } from '@graasp/apps-query-client';
+import buildDatabase from './data/db';
+import './index.css'
+import {Quiz} from './components/Quiz'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const MOCK_API = process.env.REACT_APP_MOCK_API
+
+if (MOCK_API) {
+  const appContext = buildMockLocalContext(window.appContext);
+  // automatically append item id as a query string
+  const searchParams = new URLSearchParams(window.location.search);
+  if (!searchParams.get('itemId')) {
+    searchParams.set('itemId', appContext.itemId);
+    window.location.search = searchParams.toString();
+  }
+  const database = window.Cypress ? window.database : buildDatabase(appContext);
+  mockServer({ database, appContext });
+}
+  
+ReactDOM.render(<div id="root"><Quiz/></div>, document.getElementById("root"));

@@ -1,8 +1,8 @@
-import React, {useState} from "react"/*
-import "../style.css"
+import React, {useState} from "react"
   
 // Function to question inside our app
 const QuestionBox = ({ question, options, selected}) => {
+  return null
   const [answer, setAnswer] = useState(options)
   return (
     <div className="questionBox">
@@ -21,4 +21,4 @@ const QuestionBox = ({ question, options, selected}) => {
   )
 }
   
-export default QuestionBox*/
+export default QuestionBox

@@ -1,5 +1,5 @@
-import React from 'react'/*
-import "../style.css"
+import React from 'react'
+//import "../style.css"
   
 const Result = ({score, playAgain}) => (
   <div className="score-board">
@@ -8,4 +8,4 @@ const Result = ({score, playAgain}) => (
   </div>
 )
   
-export default Result*/
+export default Result
