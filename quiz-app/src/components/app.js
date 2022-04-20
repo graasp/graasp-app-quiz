@@ -25,6 +25,7 @@ function App() {
             label="Quiz question"
             name="Quiz Question"
             variant="outlined"
+            fullWidth = {true}
             onChange={t => {
               setValue(t.target.value)
             }}
@@ -32,74 +33,104 @@ function App() {
         </Grid>
         <Grid item xs={6}>
           <FormControl component="fieldset">
-            <Grid item sx={{ py: 2 }}>
-              <p1> Enter Choice 1:</p1>
-            </Grid>
-            <TextField
-              value={option1}
-              placeholder="Enter Choice 1"
-              label="Choice 1"
-              name="Choice 1"
-              variant="outlined"
-              onChange={t => {
-                setValue2(t.target.value)
-              }}
-            />
             <FormLabel component="legend" id="correct answer">Answers: </FormLabel>
             <RadioGroup aria-labelledby="correct answer" name="correct answer" checked={correctAns} onChange={event => {
               console.log(event.target.checked)
               setCorrectAns(event.target.checked)
             }}>
-              <FormControlLabel value="1" control={<Radio />} label="correct answer" />
-
               <Grid item sx={{ py: 2 }}>
+                <Grid container direction={"row"} spacing={20}>
+                  <Grid item>
+                    <p12> Enter Choice 1:</p12>
+                  </Grid>
+                  <Grid item>
+                    <p22> Correct Answer:</p22>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid container direction={"row"} spacing={9}>
+                <Grid item>
+                  <TextField
+                    value={option1}
+                    placeholder="Enter Choice 1"
+                    label="Choice 1"
+                    name="Choice 1"
+                    variant="outlined"
+                    onChange={t => {
+                      setValue2(t.target.value)
+                    }}
+                  />
+                </Grid>
+                <Grid item>
+                  <FormControlLabel value="1" control={<Radio />} />
+                </Grid>
+              </Grid>
+
+              <Grid item sx={{ py: 2, mr: 35 }}>
                 <p2> Enter Choice 2:</p2>
               </Grid>
-              <TextField
-                value={option2}
-                placeholder="Enter Choice 2"
-                label="Choice 2"
-                name="Choice 2"
-                variant="outlined"
-                onChange={t => {
-                  setValue3(t.target.value)
-                }}
-              />
+              <Grid container direction={"row"} spacing={9}>
+                <Grid item>
+                  <TextField
+                    value={option2}
+                    placeholder="Enter Choice 2"
+                    label="Choice 2"
+                    name="Choice 2"
+                    variant="outlined"
+                    onChange={t => {
+                      setValue3(t.target.value)
+                    }}
+                  />
+                </Grid>
+                <Grid item>
+                  <FormControlLabel value="2" control={<Radio />} />
+                </Grid>
+              </Grid>
 
-              <FormControlLabel value="2" control={<Radio />} label="correct answer" />
-
-              <Grid item sx={{ py: 2 }}>
+              <Grid item sx={{ py: 2, mr: 35 }}>
                 <p3> Enter Choice 3:</p3>
               </Grid>
-              <TextField
-                value={option3}
-                placeholder="Enter Choice 3"
-                label="Choice 3"
-                name="Choice 3"
-                variant="outlined"
-                onChange={t => {
-                  setValue4(t.target.value)
-                }}
-              />
+              <Grid container direction={"row"} spacing={9}>
+                <Grid item>
+                  <TextField
+                    value={option3}
+                    placeholder="Enter Choice 3"
+                    label="Choice 3"
+                    name="Choice 3"
+                    variant="outlined"
+                    onChange={t => {
+                      setValue4(t.target.value)
+                    }}
+                  />
+                </Grid>
+                <Grid item>
+                  <FormControlLabel value="3" control={<Radio />} />
+                </Grid>
+              </Grid>
 
-              <FormControlLabel value="3" control={<Radio />} label="correct answer" />
-              <Grid item sx={{ py: 2 }}>
+              <Grid item sx={{ py: 2, mr: 35 }}>
                 <p4> Enter Choice 4:</p4>
               </Grid>
-              <TextField
-                value={option4}
-                placeholder="Enter Choice 4"
-                label="Choice 4"
-                name="Choice 4"
-                variant="outlined"
-                onChange={t => {
-                  setValue5(t.target.value)
-                }}
-              />
-              <FormControlLabel value="4" control={<Radio />} label="correct answer" />
+              <Grid container direction={"row"} spacing={9}>
+                <Grid item>
+                  <TextField
+                    value={option4}
+                    placeholder="Enter Choice 4"
+                    label="Choice 4"
+                    name="Choice 4"
+                    variant="outlined"
+                    onChange={t => {
+                      setValue5(t.target.value)
+                    }}
+                  />
+                </Grid>
+                <Grid item>
+                  <FormControlLabel value="4" control={<Radio />} />
+                </Grid>
+              </Grid>
             </RadioGroup>
           </FormControl>
-          <Grid item sx={{ py: 2, ml: 22 }}>
+          <Grid item sx={{ py: 2 }}>
             <Button variant="contained" color="success">
               Save
             </Button>
