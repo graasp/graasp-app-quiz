@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 //import "./style.css";
 // import questionAPI from './questions';
-import QuestionBox from './QuestionBox';
-import Result from './AnswerBox';
 import { TokenProvider } from './context/TokenContext';
 import { ContextProvider } from './context/ContextContext';
 import App from './app'
@@ -64,20 +62,6 @@ export class Quiz extends Component {
       <div className="title">
         <App> </App>
       </div>
-  
-      {this.state.questionBank.length > 0 && 
-       this.state.responses < 5 && 
-       this.state.questionBank.map(({question, answers,
-       correct, questionId}) => <QuestionBox question=
-       {question} options={answers} key={questionId}
-       selected={answer => this.computeAnswer(answer, correct)}/>)}
-  
-      {
-        this.state.responses === 5
-          ? (<Result score={this.state.score}
-            playAgain={this.playAgain}/>)
-          : null
-      }
   
     </div>)
 

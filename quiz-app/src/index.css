@@ -15,6 +15,11 @@ body {
   min-height: 100vh;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: 600px;
+}
+
 .app {
   background-color: #252d4a;
   width: 450px;
