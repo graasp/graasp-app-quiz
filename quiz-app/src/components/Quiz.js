@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-//import "./style.css";
-// import questionAPI from './questions';
 import { TokenProvider } from './context/TokenContext';
 import { ContextProvider } from './context/ContextContext';
-import App from './app'
+import App from './App'
 import {
   queryClient,
   QueryClientProvider,
@@ -27,29 +25,12 @@ export class Quiz extends Component {
 
   // Function to get question from ./question
   getQuestions = () => {
-    // questionAPI().then(question => {
-    //   this.setState({questionBank: question});
-    // });
   };
   
   // Set state back to default and call function
   playAgain = () => {
     this.getQuestions();
     this.setState({score: 0, responses: 0});
-  };
-  
-  // Function to compute scores
-  computeAnswer = (answer, correctAns) => {
-    if (answer === correctAns) {
-      this.setState({
-        score: this.state.score + 1
-      });
-    }
-    this.setState({
-      responses: this.state.responses < 5
-        ? this.state.responses + 1
-        : 5
-    });
   };
   
   // componentDidMount function to get question
@@ -59,7 +40,7 @@ export class Quiz extends Component {
   
   render() {
     const quiz = (<div className="container">
-      <div className="title">
+      <div>
         <App> </App>
       </div>
   
