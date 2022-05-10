@@ -2072,6 +2072,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/icons-material@npm:5.6.2":
+  version: 5.6.2
+  resolution: "@mui/icons-material@npm:5.6.2"
+  dependencies:
+    "@babel/runtime": ^7.17.2
+  peerDependencies:
+    "@mui/material": ^5.0.0
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: eef561fc68c01f103a8edde897b95628d179f4b79bf59a8cfa005db3dde1c473b13a803534018e901d5df287820bf6d62097dcad1c10db531ef237b407cfb51e
+  languageName: node
+  linkType: hard
+
 "@mui/material@npm:^5.5.3":
   version: 5.5.3
   resolution: "@mui/material@npm:5.5.3"
@@ -10511,6 +10527,7 @@ __metadata:
     "@emotion/react": ^11.8.2
     "@emotion/styled": ^11.8.1
     "@graasp/apps-query-client": "github:graasp/graasp-apps-query-client.git"
+    "@mui/icons-material": 5.6.2
     "@mui/material": ^5.5.3
     "@testing-library/jest-dom": ^5.16.3
     "@testing-library/react": ^12.1.4
