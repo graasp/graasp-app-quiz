@@ -44,20 +44,23 @@ function App() {
       <Typography variant="h1" fontSize={40} sx={{ pb: 4 }}> Create your quiz </Typography>
       <Grid container direction={"column"} spacing={2} columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} align="left">
         <Grid item xs={6} align="left">
-          <Typography variant="p1"> Enter Question 1:</Typography>
+          <Typography variant="p1"> Question:</Typography>
         </Grid>
         <Grid item align="left">
 
           <TextField
             value={question}
             placeholder="Enter Question"
-            label="Quiz question"
+            label="Question"
             name="quizQuestion"
             variant="outlined"
             onChange={t => {
               setQuestion(t.target.value)
             }}
           />
+        </Grid>
+        <Grid item xs={6} align="left">
+          <Typography variant="p1"> Answers:</Typography>
         </Grid>
         <Grid item>
           <Typography variant="ch1"> Enter Choice 1:</Typography>
