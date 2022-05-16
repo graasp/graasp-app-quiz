@@ -8,7 +8,6 @@ import {
   ReactQueryDevtools,
 } from '../config/queryClient';
 
-
 export class Quiz extends Component {
   constructor() {
     super();
