@@ -1,5 +1,12 @@
 const buildDatabase = (appContext) => ({
-    appData: [],
+    appData: [{
+      id:'id',
+      data: {
+        question:'',
+        choices: []
+      },
+      type:'question'
+    }],
     members: [
       {
         id: appContext.memberId,
