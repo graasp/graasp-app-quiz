@@ -3,8 +3,7 @@ const buildDatabase = (appContext) => ({
       id:'id',
       data: {
         question:'',
-        answers: [],
-        correctAnswers: []
+        choices: []
       },
       type:'question'
     }],

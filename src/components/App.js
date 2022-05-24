@@ -1,6 +1,8 @@
-import { TextField, Fab, Grid, InputLabel, OutlinedInput, InputAdornment, FormControl, FormControlLabel, Button, Checkbox, Typography, Stepper, Step, StepLabel } from '@mui/material'
+import { TextField, Fab, Grid, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl, FormControlLabel, Button, Checkbox, Typography, Stepper, Step, StepLabel } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
+import CloseIcon from '@mui/icons-material/Close'
 import React, { useState } from "react"
+import { DEFAULT_QUESTION, DEFAULT_CHOICES, DEFAULT_CHOICE, APP_DATA_TYPE } from './constants'
 import { useAppData } from './context/hooks'
 import { MUTATION_KEYS, useMutation } from '../config/queryClient'
 
@@ -8,37 +10,29 @@ function App() {
   const { data } = useAppData()
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA)
 
-  const [question, setQuestion] = useState("");
-  const [choices, setChoices] = useState(["", ""]);
-
-  const [answers, setAnswers] = React.useState([{
-    answer: false
-  },
-  {
-    answer: false
-  }]);
+  const [question, setQuestion] = useState(DEFAULT_QUESTION);
+  const [choices, setChoices] = useState(DEFAULT_CHOICES);
 
   const handleAnswerCorrectnessChange = (index, e) => {
-    let newAnswers = [...answers]
-    newAnswers[index].answer = e.target.checked
-    setAnswers(newAnswers)
+    let newChoices = [...choices]
+    newChoices[index] = { ...choices[index], isCorrect: e.target.checked }
+    setChoices(newChoices)
   };
 
   const handleChoiceChange = (index, e) => {
     let newChoices = [...choices]
-    newChoices[index] = e.target.value
+    newChoices[index] = { ...choices[index], choice: e.target.value }
     setChoices(newChoices)
   }
 
   const addAnswer = () => {
-    setChoices([...choices, ""])
-    setAnswers([...answers, { answer: false }])
+    setChoices([...choices, DEFAULT_CHOICE])
   }
 
-  function getCorrectAnswersIndices(answers) {
-    let correctAnswers = []
-    answers.forEach((answer, index) => { if (answer.answer == true) correctAnswers.push(index) })
-    return correctAnswers
+  const removeAnswer = (index) => {
+    let newChoices = [...choices]
+    newChoices.splice(index, 1)
+    setChoices(newChoices)
   }
 
   const onSave = () => {
@@ -46,12 +40,13 @@ function App() {
       id: data?.get(0).id,
       data: {
         question: question,
-        answers: choices,
-        correctAnswers: getCorrectAnswersIndices(answers)
+        choices: choices
       },
-      type: 'question'
+      type: APP_DATA_TYPE
     })
   }
+
+  const readableIndex = (index => index + 1)
 
   return (
     <div align="center">
@@ -93,33 +88,44 @@ function App() {
           <div key={index}>
             <Grid container direction={"column"} columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} align="left">
               <Grid item sx={{ pt: 2 }}>
-                <Typography> Enter Choice {index + 1}:</Typography>
+                <Typography> Enter Choice {readableIndex(index)}:</Typography>
               </Grid>
-              <Grid item variant="outlined" sx={{ pt: 2 }}>
-                <FormControl variant="outlined">
-                  <InputLabel >Choice {index + 1}</InputLabel>
-                  <OutlinedInput
-                    type={'text'}
-                    label={`Choice ${index + 1}`}
-                    value={choice}
-                    placeholder={`Enter Choice ${index + 1}`}
-                    onChange={(e) => handleChoiceChange(index, e)}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={answers[index].name}
-                              onChange={(e) => handleAnswerCorrectnessChange(index, e)}
-                              name="answer"
-                              edge="end"
-                            />
-                          }
-                        />
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
+              <Grid container direction={"row"}>
+                <Grid item variant="outlined" sx={{ pt: 2 }}>
+                  <FormControl variant="outlined">
+                    <InputLabel >Choice {readableIndex(index)}</InputLabel>
+                    <OutlinedInput
+                      type={'text'}
+                      label={`Choice ${readableIndex(index)}`}
+                      value={choice.choice}
+                      placeholder={`Enter Choice ${readableIndex(index)}`}
+                      onChange={(e) => handleChoiceChange(index, e)}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={choices[index].isCorrect}
+                                onChange={(e) => handleAnswerCorrectnessChange(index, e)}
+                                name="answer"
+                                edge="end"
+                              />
+                            }
+                          />
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item sx={{ pt: 2.75, pl: 1 }}>
+                  {
+                    index > 1 ?
+                      <IconButton type="button" onClick={() => removeAnswer(index)}>
+                        <CloseIcon />
+                      </IconButton>
+                      : null
+                  }
+                </Grid>
               </Grid>
             </Grid>
           </div>
