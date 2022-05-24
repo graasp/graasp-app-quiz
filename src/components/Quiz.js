@@ -8,34 +8,9 @@ import {
   ReactQueryDevtools,
 } from '../config/queryClient';
 
-
-
-const questionAPI = () => { }
-
 export class Quiz extends Component {
   constructor() {
     super();
-    this.state = {
-      questionBank: [],
-      score: 0,
-      responses: 0
-    };
-  }
-
-
-  // Function to get question from ./question
-  getQuestions = () => {
-  };
-
-  // Set state back to default and call function
-  playAgain = () => {
-    this.getQuestions();
-    this.setState({ score: 0, responses: 0 });
-  };
-
-  // componentDidMount function to get question
-  componentDidMount() {
-    this.getQuestions();
   }
 
   render() {
