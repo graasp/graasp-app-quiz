@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { TokenProvider } from './context/TokenContext';
 import { ContextProvider } from './context/ContextContext';
 import App from './App'
+import Play from './Play'
 import {
   queryClient,
   QueryClientProvider,
   ReactQueryDevtools,
 } from '../config/queryClient';
+import { PlayArrow } from "@mui/icons-material";
 
 
 
@@ -41,7 +43,7 @@ export class Quiz extends Component {
   render() {
     const quiz = (<div className="container">
       <div className="title">
-        <App />
+        <Play />
       </div>
 
     </div>)
