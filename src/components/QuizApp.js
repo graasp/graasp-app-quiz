@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { TokenProvider } from './context/TokenContext';
 import { ContextProvider } from './context/ContextContext';
-import App from './App'
+import Create from './Create'
 import Play from './Play'
 import {
   queryClient,
@@ -10,7 +10,7 @@ import {
 } from '../config/queryClient';
 import { PlayArrow } from "@mui/icons-material";
 
-export class Quiz extends Component {
+export class QuizApp extends Component {
   constructor() {
     super();
   }
@@ -18,7 +18,7 @@ export class Quiz extends Component {
   render() {
     const quiz = (<div className="container">
       <div className="title">
-        <Play />
+        <Create />
       </div>
 
     </div>)

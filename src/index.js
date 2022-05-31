@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { mockServer, buildMockLocalContext } from '@graasp/apps-query-client';
 import buildDatabase from './data/db';
 import './index.css'
-import {Quiz} from './components/Quiz'
+import {QuizApp} from './components/QuizApp'
 
 
 const MOCK_API = process.env.REACT_APP_MOCK_API
@@ -20,4 +20,4 @@ if (MOCK_API) {
   mockServer({ database, appContext });
 }
   
-ReactDOM.render(<div id="root"><Quiz/></div>, document.getElementById("root"));
+ReactDOM.render(<div id="root"><QuizApp/></div>, document.getElementById("root"));
