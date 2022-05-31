@@ -5,6 +5,8 @@ import React, { useState } from "react"
 import { DEFAULT_QUESTION, DEFAULT_CHOICES, DEFAULT_CHOICE, APP_DATA_TYPE } from './constants'
 import { useAppData } from './context/hooks'
 import { MUTATION_KEYS, useMutation } from '../config/queryClient'
+import MultipleChoice from './MultipleChoice'
+import TextInput from './TextInput'
 
 function Create() {
   const { data } = useAppData()
@@ -12,32 +14,9 @@ function Create() {
 
   const [question, setQuestion] = useState(DEFAULT_QUESTION);
   const [type, setType] = useState('Multiple Choice')
-  const [choices, setChoices] = useState(DEFAULT_CHOICES);
-
-  const handleAnswerCorrectnessChange = (index, e) => {
-    let newChoices = [...choices]
-    newChoices[index] = { ...choices[index], isCorrect: e.target.checked }
-    setChoices(newChoices)
-  };
-
-  const handleChoiceChange = (index, e) => {
-    let newChoices = [...choices]
-    newChoices[index] = { ...choices[index], choice: e.target.value }
-    setChoices(newChoices)
-  }
 
   const handleTypeSelect = (event) => {
     setType(event.target.value)
-  }
-
-  const addAnswer = () => {
-    setChoices([...choices, DEFAULT_CHOICE])
-  }
-
-  const removeAnswer = (index) => {
-    let newChoices = [...choices]
-    newChoices.splice(index, 1)
-    setChoices(newChoices)
   }
 
   const onSave = () => {
@@ -45,7 +24,7 @@ function Create() {
       id: data?.get(0).id,
       data: {
         question: question,
-        choices: choices
+        choices: [] //choices
       },
       type: APP_DATA_TYPE
     })
@@ -102,65 +81,12 @@ function Create() {
             }}
           />
         </Grid>
-        <Grid item>
-          <Typography variant="p1"> Answers:</Typography>
-        </Grid>
-        {choices.map((choice, index) => {
-          const readableIndex = index + 1;
-          return (
-            <div key={index}>
-              <Grid container direction={"column"} columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} align="left">
-                <Grid item sx={{ pt: 2 }}>
-                  <Typography> Enter Choice {readableIndex}:</Typography>
-                </Grid>
-                <Grid container direction={"row"}>
-                  <Grid item variant="outlined" sx={{ pt: 2 }}>
-                    <FormControl variant="outlined">
-                      <InputLabel >Choice {readableIndex}</InputLabel>
-                      <OutlinedInput
-                        type={'text'}
-                        label={`Choice ${readableIndex}`}
-                        value={choice.choice}
-                        placeholder={`Enter Choice ${readableIndex}`}
-                        onChange={(e) => handleChoiceChange(index, e)}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={choices[index].isCorrect}
-                                  onChange={(e) => handleAnswerCorrectnessChange(index, e)}
-                                  name="answer"
-                                  edge="end"
-                                />
-                              }
-                            />
-                          </InputAdornment>
-                        }
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item sx={{ pt: 2.75, pl: 1 }}>
-                    {
-                      index > 1 ?
-                        <IconButton type="button" onClick={() => removeAnswer(index)}>
-                          <CloseIcon />
-                        </IconButton>
-                        : null
-                    }
-                  </Grid>
-                </Grid>
-              </Grid>
-            </div>
-          )
-        })}
-
-
-        <Grid item sx={{ pt: 2 }} align="left">
-          <Fab color="primary" aria-label="add" onClick={addAnswer}>
-            <AddIcon />
-          </Fab>
-        </Grid>
+        {
+          {
+            'Multiple Choice': <MultipleChoice/>,
+            'Text Input': <TextInput/>
+          }[type]
+        }
         <Grid container direction={"row"} spacing={2} sx={{ py: 2 }} align="center">
           <Grid item sx={{ pr: 5 }}>
             <Button variant="contained" color="info">
