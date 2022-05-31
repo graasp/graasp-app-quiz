@@ -7,6 +7,7 @@ import { useAppData } from './context/hooks'
 import { MUTATION_KEYS, useMutation } from '../config/queryClient'
 import MultipleChoice from './MultipleChoice'
 import TextInput from './TextInput'
+import Slide from './Slide'
 
 function Create() {
   const { data } = useAppData()
@@ -84,7 +85,8 @@ function Create() {
         {
           {
             'Multiple Choice': <MultipleChoice/>,
-            'Text Input': <TextInput/>
+            'Text Input': <TextInput/>,
+            'Slide': <Slide/>
           }[type]
         }
         <Grid container direction={"row"} spacing={2} sx={{ py: 2 }} align="center">

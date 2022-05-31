@@ -18,7 +18,7 @@ export class QuizApp extends Component {
   render() {
     const quiz = (<div className="container">
       <div className="title">
-        <Create />
+        <Play />
       </div>
 
     </div>)
