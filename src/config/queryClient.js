@@ -2,7 +2,7 @@ import {
   configureQueryClient,
   buildMockLocalContext,
   buildMockParentWindow,
-} from '@graasp/apps-query-client';
+} from "@graasp/apps-query-client";
 
 const {
   queryClient,
@@ -15,7 +15,7 @@ const {
   HOOK_KEYS,
 } = configureQueryClient({
   notifier: (data) => {
-    console.log('notifier: ', data);
+    console.log("notifier: ", data);
   },
   enableWebsocket: true,
   keepPreviousData: true,

@@ -1,36 +1,99 @@
-import { TextField, Fab, Grid, Box, InputLabel, OutlinedInput, IconButton, MenuItem, InputAdornment, FormControl, FormControlLabel, Button, Checkbox, Typography, Stepper, Step, StepLabel, Select } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add'
-import CloseIcon from '@mui/icons-material/Close'
-import React, { useState } from "react"
-import { DEFAULT_QUESTION, DEFAULT_CHOICES, DEFAULT_CHOICE, APP_DATA_TYPE } from './constants'
-import { useAppData } from './context/hooks'
-import { MUTATION_KEYS, useMutation } from '../config/queryClient'
-import MultipleChoice from './MultipleChoice'
-import TextInput from './TextInput'
-import Slide from './Slide'
+import {
+  TextField,
+  Fab,
+  Grid,
+  Box,
+  InputLabel,
+  OutlinedInput,
+  IconButton,
+  MenuItem,
+  InputAdornment,
+  FormControl,
+  FormControlLabel,
+  Button,
+  Checkbox,
+  Typography,
+  Stepper,
+  Step,
+  StepLabel,
+  Select,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import React, { useState } from "react";
+import {
+  DEFAULT_TEXT,
+  DEFAULT_CHOICES,
+  DEFAULT_CHOICE,
+  APP_DATA_TYPE,
+  MULTIPLE_CHOICE,
+  TEXT_INPUT,
+  SLIDER,
+  QUESTION_TYPE,
+} from "./constants";
+import { useAppData } from "./context/hooks";
+import { MUTATION_KEYS, useMutation } from "../config/queryClient";
+import MultipleChoice from "./MultipleChoice";
+import TextInput from "./TextInput";
+import Slider from "./Slide";
 
 function Create() {
-  const { data } = useAppData()
-  const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA)
+  const { data } = useAppData();
+  const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
 
-  const [question, setQuestion] = useState(DEFAULT_QUESTION);
-  const [type, setType] = useState('Multiple Choice')
+  const [question, setQuestion] = useState(DEFAULT_TEXT);
+  const [type, setType] = useState(MULTIPLE_CHOICE);
+
+  const [choices, setChoices] = useState(DEFAULT_CHOICES);
+  const [text, setText] = useState(DEFAULT_TEXT);
+  const [sliderLeftText, setSLT] = useState(DEFAULT_TEXT);
+  const [sliderRightText, setSRT] = useState(DEFAULT_TEXT);
 
   const handleTypeSelect = (event) => {
-    setType(event.target.value)
-  }
+    setType(event.target.value);
+  };
 
   const onSave = () => {
-    postAppData({
-      id: data?.get(0).id,
-      data: {
-        question: question,
-        choices: [] //choices
-      },
-      type: APP_DATA_TYPE
-    })
-  }
-
+    switch(type) {
+      case MULTIPLE_CHOICE: {
+        postAppData({
+          id: data?.get(0).id,
+          data: {
+            question: question,
+            questionType: MULTIPLE_CHOICE,
+            choices: choices,
+          },
+          type: QUESTION_TYPE,
+        });
+        break;
+      }
+      case TEXT_INPUT: {
+        postAppData({
+          id: data?.get(0).id,
+          data: {
+            question: question,
+            questionType: TEXT_INPUT,
+            answer: text,
+          },
+          type: QUESTION_TYPE,
+        });
+        break;
+      }
+      case SLIDER: {
+        postAppData({
+          id: data?.get(0).id,
+          data: {
+            question: question,
+            questionType: SLIDER,
+            leftText: sliderLeftText,
+            rightText: sliderRightText,
+          },
+          type: QUESTION_TYPE,
+        });
+        break;
+      }
+    }
+  };
   return (
     <div align="center">
       <Grid container direction={"column"} alignItems="center" sx={{ p: 2 }}>
@@ -46,8 +109,15 @@ function Create() {
           </Step>
         </Stepper>
       </Grid>
-      <Typography variant="h1" fontSize={40} sx={{ pb: 4 }}> Create your quiz </Typography>
-      <Grid container direction={"column"} align="left" columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+      <Typography variant="h1" fontSize={40} sx={{ pb: 4 }}>
+        Create your quiz
+      </Typography>
+      <Grid
+        container
+        direction={"column"}
+        align="left"
+        columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}
+      >
         <Grid item sx={{ pb: 2 }}>
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
@@ -59,9 +129,9 @@ function Create() {
                 label="Type"
                 onChange={handleTypeSelect}
               >
-                <MenuItem value={'Multiple Choice'}>Multiple Choice</MenuItem>
-                <MenuItem value={'Text Input'}>Text Input</MenuItem>
-                <MenuItem value={'Slider'}>Slider</MenuItem>
+                <MenuItem value={MULTIPLE_CHOICE}>Multiple Choice</MenuItem>
+                <MenuItem value={TEXT_INPUT}>Text Input</MenuItem>
+                <MenuItem value={SLIDER}>Slider</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -70,44 +140,58 @@ function Create() {
           <Typography variant="p1"> Question:</Typography>
         </Grid>
         <Grid item sx={{ pb: 2 }}>
-
           <TextField
             value={question}
             placeholder="Enter Question"
             label="Question"
             name="quizQuestion"
             variant="outlined"
-            onChange={t => {
-              setQuestion(t.target.value)
+            onChange={(t) => {
+              setQuestion(t.target.value);
             }}
           />
         </Grid>
         {
-          {
-            'Multiple Choice': <MultipleChoice/>,
-            'Text Input': <TextInput/>,
-            'Slide': <Slide/>
-          }[type]
-        }
-        <Grid container direction={"row"} spacing={2} sx={{ py: 2 }} align="center">
-          <Grid item sx={{ pr: 5 }}>
+          (() => {
+              switch(type) {
+                case MULTIPLE_CHOICE: {
+                return <MultipleChoice choices={choices} setChoices={setChoices} />;
+                }
+                case TEXT_INPUT: {
+                return <TextInput text={text} setText={setText} />;
+                }
+                case SLIDER: {
+                return <Slider leftText={sliderLeftText} setLeftText={setSLT} rightText={sliderRightText} setRightText={setSRT} />;
+                }
+                default: return <MultipleChoice choices={choices} setChoices={setChoices} />;
+              }
+            })()
+            }
+        <Grid
+          container
+          direction={"row"}
+          spacing={8}
+          sx={{ py: 2 }}
+          align="center"
+        >
+          <Grid item>
             <Button variant="contained" color="info">
               Prev
             </Button>
           </Grid>
-          <Grid item sx={{ pr: 5 }}>
+          <Grid item>
             <Button onClick={onSave} variant="contained" color="success">
               Save
             </Button>
           </Grid>
-          <Grid item >
+          <Grid item>
             <Button variant="contained" color="info">
               Next
             </Button>
           </Grid>
         </Grid>
       </Grid>
-    </div >
+    </div>
   );
 }
 
