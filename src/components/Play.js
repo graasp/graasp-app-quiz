@@ -62,20 +62,56 @@ function Play() {
     }
   }, [data]);*/
 
-  const onSubmit = () => {
-    setSubmitted(!submitted); // TODO: if statement post / patch based on memberID
-    postAppData({
-      id: data?.get(1).id,
-      data: {
-        answers: answers,
-      },
-      type: "answer",
-    });
-    let newResults = [];
-    for (let i = 0; i < results.length; i++) {
-      newResults[i] = computeCorrectness(i);
+  // TODO: outlined color once selected
+  function computeCorrectness(index) {
+    if (choices[index].isCorrect !== answers[index]) {
+      return "false";
+    } else if (choices[index].isCorrect && answers[index]) {
+      return "true";
+    } else {
+      return "neutral";
     }
-    setResults(newResults);
+  }
+
+  const onSubmit = () => {
+    setSubmitted(true); // TODO: if statement post / patch based on memberID
+    switch(type) {
+      case MULTIPLE_CHOICE: {
+        postAppData({
+          id: data?.get(1).id,
+          data: {
+            questionType: MULTIPLE_CHOICE,
+            answers: answers,
+          },
+          type: "answer",
+        });
+        let newResults = [];
+        for (let i = 0; i < results.length; i++) {
+          newResults[i] = computeCorrectness(i);
+        }
+        setResults(newResults);
+      }
+      case TEXT_INPUT: {
+        postAppData({
+          id: data?.get(1).id,
+          data: {
+            questionType: TEXT_INPUT,
+            answer: text,
+          },
+          type: "answer",
+        });
+      }
+      case SLIDER: {
+        postAppData({
+          id: data?.get(1).id,
+          data: {
+            questionType: SLIDER,
+            value: sliderValue,
+          },
+          type: "answer",
+        });
+      }
+    }
   };
 
   return (

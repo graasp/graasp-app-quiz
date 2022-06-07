@@ -44,17 +44,6 @@ import {
         setAnswers(newAnswers);
       };
     
-      // TODO: outlined color once selected
-      function computeCorrectness(index) {
-        if (choices[index].isCorrect !== answers[index]) {
-          return "false";
-        } else if (choices[index].isCorrect && answers[index]) {
-          return "true";
-        } else {
-          return "neutral";
-        }
-      }
-    
       function selectColor(index) {
         if (submitted) {
           switch (results[index]) {
@@ -72,7 +61,7 @@ import {
 
     return (
         <div>
-          <Grid container direction={"column"} alignItems="center" sx={{ p: 2 }}>
+          <Grid container direction={"column"} sx={{ p: 2 }}>
           {choices?.map((choice, index) => (
         <div key={index}>
           <Grid
