@@ -53,15 +53,14 @@ function Play() {
       .fill()
       .map(() => "neutral")
   );
-  const [text, setText] = React.useState(DEFAULT_TEXT)
+  const [text, setText] = React.useState(DEFAULT_TEXT);
   const answer = data?.get(0)?.data?.answer;
-  const [sliderValue, setSliderValue] = React.useState(0)
+  const [sliderValue, setSliderValue] = React.useState(0);
   const [submitted, setSubmitted] = React.useState(false);
-
 
   const onSubmit = () => {
     setSubmitted(true); // TODO: if statement post / patch based on memberID
-    switch(type) {
+    switch (type) {
       case MULTIPLE_CHOICE: {
         postAppData({
           id: data?.get(1).id,
@@ -97,26 +96,55 @@ function Play() {
 
   return (
     <div>
-      < QuestionTopBar currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} />
+      <QuestionTopBar
+        currentQuestion={currentQuestion}
+        setCurrentQuestion={setCurrentQuestion}
+      />
       <Typography variant="h1" fontSize={45} sx={{ pb: 4 }}>
         {question}
       </Typography>
-      {
-          (() => {
-              switch(type) {
-                case MULTIPLE_CHOICE: {
-                return <PlayMultipleChoice choices={choices} answers={answers} setAnswers={setAnswers} results={results} setResults={setResults} submitted={submitted} setSubmitted={setSubmitted} />;
-                }
-                case TEXT_INPUT: {
-                return <PlayTextInput text={text} setText={setText} answer={answer} />;
-                }
-                case SLIDER: {
-                return <PlaySlider sliderValue={sliderValue} setSliderValue={setSliderValue} />;
-                }
-                default: return <PlayMultipleChoice choices={choices} answers={answers} setAnswers={setAnswers} results={results} setResults={setResults} submitted={submitted} setSubmitted={setSubmitted} />;
-              }
-            })()
-            }
+      {(() => {
+        switch (type) {
+          case MULTIPLE_CHOICE: {
+            return (
+              <PlayMultipleChoice
+                choices={choices}
+                answers={answers}
+                setAnswers={setAnswers}
+                results={results}
+                setResults={setResults}
+                submitted={submitted}
+                setSubmitted={setSubmitted}
+              />
+            );
+          }
+          case TEXT_INPUT: {
+            return (
+              <PlayTextInput text={text} setText={setText} answer={answer} />
+            );
+          }
+          case SLIDER: {
+            return (
+              <PlaySlider
+                sliderValue={sliderValue}
+                setSliderValue={setSliderValue}
+              />
+            );
+          }
+          default:
+            return (
+              <PlayMultipleChoice
+                choices={choices}
+                answers={answers}
+                setAnswers={setAnswers}
+                results={results}
+                setResults={setResults}
+                submitted={submitted}
+                setSubmitted={setSubmitted}
+              />
+            );
+        }
+      })()}
       <Grid
         container
         direction={"row"}

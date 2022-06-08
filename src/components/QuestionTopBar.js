@@ -1,18 +1,21 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { useAppData } from "./context/hooks";
 import { MUTATION_KEYS, useMutation } from "../config/queryClient";
 
-const steps = ['Question 1', 'Question 2', 'Question 3'];
+const steps = ["Question 1", "Question 2", "Question 3"];
 
-export default function QuestionTopBar({currentQuestion, setCurrentQuestion}) {
-    const { data, isSuccess } = useAppData();
-    const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
+export default function QuestionTopBar({
+  currentQuestion,
+  setCurrentQuestion,
+}) {
+  const { data, isSuccess } = useAppData();
+  const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
 
   const [completed, setCompleted] = React.useState({});
 
@@ -63,7 +66,7 @@ export default function QuestionTopBar({currentQuestion, setCurrentQuestion}) {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: "100%" }}>
       <Stepper nonLinear alternativeLabel activeStep={currentQuestion}>
         {steps.map((label, index) => (
           <Step key={label} completed={completed[index]}>
@@ -79,14 +82,16 @@ export default function QuestionTopBar({currentQuestion, setCurrentQuestion}) {
             <Typography sx={{ mt: 2, mb: 1 }}>
               All steps completed - you&apos;re finished
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ flex: "1 1 auto" }} />
               <Button onClick={handleReset}>Reset</Button>
             </Box>
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>Question {currentQuestion + 1}</Typography>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              Question {currentQuestion + 1}
+            </Typography>
             {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button
                 color="inherit"

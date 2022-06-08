@@ -28,8 +28,7 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-function Slide({leftText, setLeftText, rightText, setRightText}) {
-
+function Slide({ leftText, setLeftText, rightText, setRightText }) {
   return (
     <div align="center">
       <Grid
@@ -43,7 +42,7 @@ function Slide({leftText, setLeftText, rightText, setRightText}) {
             aria-label="Custom marks"
             defaultValue={20}
             valueLabelDisplay="auto"
-            style ={{width: '75%'}}
+            style={{ width: "75%" }}
           />
         </Grid>
         <Grid item sx={{ pb: 2 }}>
@@ -53,30 +52,30 @@ function Slide({leftText, setLeftText, rightText, setRightText}) {
             columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}
           >
             <Grid item align="left">
-            <TextField
-              value={leftText}
-              placeholder="Enter Field"
-              label="Left Field"
-              name="quiz text answer"
-              variant="outlined"
-              style ={{width: '50%'}}
-              onChange={(t) => {
-                setLeftText(t.target.value);
-              }}
-            />
+              <TextField
+                value={leftText}
+                placeholder="Enter Field"
+                label="Left Field"
+                name="quiz text answer"
+                variant="outlined"
+                style={{ width: "50%" }}
+                onChange={(t) => {
+                  setLeftText(t.target.value);
+                }}
+              />
             </Grid>
             <Grid item>
-            <TextField
-              value={rightText}
-              placeholder="Enter Field"
-              label="Right Field"
-              name="quiz text answer"
-              variant="outlined"
-              style ={{width: '50%'}}
-              onChange={(t) => {
-                setRightText(t.target.value);
-              }}
-            />
+              <TextField
+                value={rightText}
+                placeholder="Enter Field"
+                label="Right Field"
+                name="quiz text answer"
+                variant="outlined"
+                style={{ width: "50%" }}
+                onChange={(t) => {
+                  setRightText(t.target.value);
+                }}
+              />
             </Grid>
           </Grid>
         </Grid>

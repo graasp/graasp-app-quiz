@@ -54,7 +54,7 @@ function Create() {
   };
 
   const onSave = () => {
-    switch(type) {
+    switch (type) {
       case MULTIPLE_CHOICE: {
         postAppData({
           id: data?.get(0).id,
@@ -151,22 +151,32 @@ function Create() {
             }}
           />
         </Grid>
-        {
-          (() => {
-              switch(type) {
-                case MULTIPLE_CHOICE: {
-                return <MultipleChoice choices={choices} setChoices={setChoices} />;
-                }
-                case TEXT_INPUT: {
-                return <TextInput text={text} setText={setText} />;
-                }
-                case SLIDER: {
-                return <Slider leftText={sliderLeftText} setLeftText={setSLT} rightText={sliderRightText} setRightText={setSRT} />;
-                }
-                default: return <MultipleChoice choices={choices} setChoices={setChoices} />;
-              }
-            })()
+        {(() => {
+          switch (type) {
+            case MULTIPLE_CHOICE: {
+              return (
+                <MultipleChoice choices={choices} setChoices={setChoices} />
+              );
             }
+            case TEXT_INPUT: {
+              return <TextInput text={text} setText={setText} />;
+            }
+            case SLIDER: {
+              return (
+                <Slider
+                  leftText={sliderLeftText}
+                  setLeftText={setSLT}
+                  rightText={sliderRightText}
+                  setRightText={setSRT}
+                />
+              );
+            }
+            default:
+              return (
+                <MultipleChoice choices={choices} setChoices={setChoices} />
+              );
+          }
+        })()}
         <Grid
           container
           direction={"row"}

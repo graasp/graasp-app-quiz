@@ -16,6 +16,7 @@ const buildDatabase = (appContext) => ({
       },
       type: "question",
     },
+    ,
     /*{
       id: "id",
       data: {
@@ -34,8 +35,7 @@ const buildDatabase = (appContext) => ({
         answer: "kitten",
       },
       type: "question",
-    }*/,
-    {
+    }*/ {
       id: "id2",
       //memberId: '',
       data: {
