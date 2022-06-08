@@ -28,7 +28,7 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-function Slide({ leftText, setLeftText, rightText, setRightText }) {
+function Slide({ leftText, setLeftText, rightText, setRightText, sliderCorrectValue, setSliderCorrectValue }) {
   return (
     <div align="center">
       <Grid
@@ -38,11 +38,17 @@ function Slide({ leftText, setLeftText, rightText, setRightText }) {
         columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}
       >
         <Grid item sx={{ pb: 2 }}>
+          <Typography variant="p1"> Slide the ball to the correct value:</Typography>
+        </Grid>
+        <Grid item sx={{ pb: 2 }}>
           <Slider
             aria-label="Custom marks"
             defaultValue={20}
             valueLabelDisplay="auto"
-            style={{ width: "75%" }}
+            value={sliderCorrectValue}
+            onChange={(_, val) => {
+              setSliderCorrectValue(val);
+            }}
           />
         </Grid>
         <Grid item sx={{ pb: 2 }}>
@@ -64,7 +70,7 @@ function Slide({ leftText, setLeftText, rightText, setRightText }) {
                 }}
               />
             </Grid>
-            <Grid item>
+            <Grid item align = "right">
               <TextField
                 value={rightText}
                 placeholder="Enter Field"

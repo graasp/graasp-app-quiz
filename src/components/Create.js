@@ -48,6 +48,7 @@ function Create() {
   const [text, setText] = useState(DEFAULT_TEXT);
   const [sliderLeftText, setSLT] = useState(DEFAULT_TEXT);
   const [sliderRightText, setSRT] = useState(DEFAULT_TEXT);
+  const [sliderCorrectValue, setSliderCorrectValue] = useState(0)
 
   const handleTypeSelect = (event) => {
     setType(event.target.value);
@@ -87,6 +88,7 @@ function Create() {
             questionType: SLIDER,
             leftText: sliderLeftText,
             rightText: sliderRightText,
+            correctValue: sliderCorrectValue,
           },
           type: QUESTION_TYPE,
         });
@@ -168,6 +170,8 @@ function Create() {
                   setLeftText={setSLT}
                   rightText={sliderRightText}
                   setRightText={setSRT}
+                  sliderCorrectValue={sliderCorrectValue}
+                  setSliderCorrectValue={setSliderCorrectValue}
                 />
               );
             }

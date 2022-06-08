@@ -56,6 +56,7 @@ function Play() {
   const [text, setText] = React.useState(DEFAULT_TEXT);
   const answer = data?.get(0)?.data?.answer;
   const [sliderValue, setSliderValue] = React.useState(0);
+  const sliderCorrectValue = data?.get(0)?.data?.correctValue;
   const [submitted, setSubmitted] = React.useState(false);
 
   const onSubmit = () => {
@@ -128,6 +129,8 @@ function Play() {
               <PlaySlider
                 sliderValue={sliderValue}
                 setSliderValue={setSliderValue}
+                sliderCorrectValue={sliderCorrectValue}
+                submitted={submitted}
               />
             );
           }

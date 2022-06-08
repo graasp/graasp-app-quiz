@@ -16,17 +16,18 @@ const buildDatabase = (appContext) => ({
       },
       type: "question",
     },*/
-    /*{
+    {
       id: "id",
       data: {
         question: "How happy are you?",
         questionType: SLIDER,
         leftText: "Sad",
         rightText: "Happy",
+        correctValue: 20,
       },
       type: "question",
-    },*/
-    {
+    },
+    /*{
       id: "id",
       data: {
         question: "What is a baby cat called?",
@@ -34,7 +35,7 @@ const buildDatabase = (appContext) => ({
         answer: "kitten",
       },
       type: "question",
-    }, 
+    }, */
     {
       id: "id2",
       //memberId: '',
