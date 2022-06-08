@@ -11,18 +11,14 @@ import {
   ReactQueryDevtools,
 } from "../config/queryClient";
 import { PlayArrow } from "@mui/icons-material";
+import View from "./View";
 
-export class QuizApp extends Component {
-  constructor() {
-    super();
-  }
-
-  return() {
-    const context = useContext(Context);
+export const QuizApp = () => {
+    
     const quiz = (
       <div className="container">
         <div className="title">
-          {() => {
+          {/* {() => {
             switch (context.get('permission')) {
               case PERMISSION_LEVELS.ADMIN:
               case PERMISSION_LEVELS.WRITE:
@@ -32,7 +28,8 @@ export class QuizApp extends Component {
               default:
                 return <Play />;
             }
-          }}()
+          }}() */}
+          < View />
         </div>
       </div>
     );
@@ -46,5 +43,4 @@ export class QuizApp extends Component {
       </QueryClientProvider>
     );
     return app;
-  }
 }
