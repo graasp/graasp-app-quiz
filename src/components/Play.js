@@ -120,7 +120,7 @@ function Play() {
           }
           case TEXT_INPUT: {
             return (
-              <PlayTextInput text={text} setText={setText} answer={answer} />
+              <PlayTextInput text={text} setText={setText} answer={answer} submitted={submitted} />
             );
           }
           case SLIDER: {
