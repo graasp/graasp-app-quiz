@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import { TokenProvider } from "./context/TokenContext";
 import { ContextProvider } from "./context/ContextContext";
 import Create from "./Create";
 import Play from "./Play";
+import { Context } from './context/ContextContext';
+import { PERMISSION_LEVELS } from './config/settings';
 import {
   queryClient,
   QueryClientProvider,
@@ -15,11 +17,22 @@ export class QuizApp extends Component {
     super();
   }
 
-  render() {
+  return() {
+    const context = useContext(Context);
     const quiz = (
       <div className="container">
         <div className="title">
-          <Play />
+          {() => {
+            switch (context.get('permission')) {
+              case PERMISSION_LEVELS.ADMIN:
+              case PERMISSION_LEVELS.WRITE:
+                return <Create />;
+          
+              case PERMISSION_LEVELS.READ:
+              default:
+                return <Play />;
+            }
+          }}()
         </div>
       </div>
     );
