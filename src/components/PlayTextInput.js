@@ -66,7 +66,7 @@ function PlayTextInput({ text, setText, answer, submitted }) {
   });
 
   // TODO: outlined color once selected
-  function computeCorrectness() {
+  function answerIsCorrect() {
     return answer.toLowerCase() === text.toLowerCase();
   }
 
@@ -78,7 +78,7 @@ function PlayTextInput({ text, setText, answer, submitted }) {
         </Grid>
           {(() => {
             if (submitted) {
-              if (computeCorrectness()) {
+              if (answerIsCorrect()) {
                 return (<TextField
                   label="Correct"
                   required
