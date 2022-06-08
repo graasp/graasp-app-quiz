@@ -33,10 +33,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import PlayMultipleChoice from "./PlayMultipleChoice";
 import PlayTextInput from "./PlayTextInput";
 import PlaySlider from "./PlaySlider";
+import QuestionTopBar from "./QuestionTopBar";
 
 function Play() {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
+  const [currentQuestion, setCurrentQuestion] = React.useState(0);
 
   const question = data?.get(0)?.data?.question;
   const type = data?.get(0)?.data?.questionType;
@@ -55,23 +57,7 @@ function Play() {
   const answer = data?.get(0)?.data?.answer;
   const [sliderValue, setSliderValue] = React.useState(0)
   const [submitted, setSubmitted] = React.useState(false);
-/*
-  useEffect(() => {
-    if (data) {
-      setResults(data);
-    }
-  }, [data]);*/
 
-  // TODO: outlined color once selected
-  function computeCorrectness(index) {
-    if (choices[index].isCorrect !== answers[index]) {
-      return "false";
-    } else if (choices[index].isCorrect && answers[index]) {
-      return "true";
-    } else {
-      return "neutral";
-    }
-  }
 
   const onSubmit = () => {
     setSubmitted(true); // TODO: if statement post / patch based on memberID
@@ -85,11 +71,6 @@ function Play() {
           },
           type: "answer",
         });
-        let newResults = [];
-        for (let i = 0; i < results.length; i++) {
-          newResults[i] = computeCorrectness(i);
-        }
-        setResults(newResults);
       }
       case TEXT_INPUT: {
         postAppData({
@@ -116,19 +97,7 @@ function Play() {
 
   return (
     <div>
-      <Grid container direction={"column"} alignItems="center" sx={{ p: 2 }}>
-        <Stepper alternativeLabel activeStep={1}>
-          <Step completed>
-            <StepLabel>Question 1</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Question 2</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Question 3</StepLabel>
-          </Step>
-        </Stepper>
-      </Grid>
+      < QuestionTopBar currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} />
       <Typography variant="h1" fontSize={45} sx={{ pb: 4 }}>
         {question}
       </Typography>

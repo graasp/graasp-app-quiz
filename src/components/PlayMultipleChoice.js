@@ -16,10 +16,11 @@ import {
     StepLabel,
     Select,
   } from "@mui/material";
+  import { useAppData } from "./context/hooks";
   import AddIcon from "@mui/icons-material/Add";
   import CloseIcon from "@mui/icons-material/Close";
   import { question, setQuestion } from "./Create.js";
-  import React, { useState } from "react";
+  import React, { useState, useEffect } from "react";
   import { createTheme, ThemeProvider } from "@mui/material/styles";
   import {
     DEFAULT_TEXT,
@@ -38,10 +39,28 @@ import {
 
   function PlayMultipleChoice({choices, answers, setAnswers, results, setResults, submitted, setSubmitted}) {
 
+    const { data, isSuccess } = useAppData();
+
+  // TODO: outlined color once selected
+  function computeCorrectness(answer, isCorrect) {
+    console.log(answer)
+    console.log(isCorrect)
+    if (isCorrect !== answer) {
+      return "false";
+    } else if (isCorrect && answer) {
+      return "true";
+    } else {
+      return "neutral";
+    }
+  }
+
     const onSelect = (index) => {
         let newAnswers = [...answers];
         newAnswers[index] = !answers[index];
         setAnswers(newAnswers);
+        let newResults = [...results];
+        newResults[index] = computeCorrectness(newAnswers[index], choices[index].isCorrect);
+        setResults(newResults);
       };
     
       function selectColor(index) {
@@ -58,6 +77,14 @@ import {
           return answers[index] ? "secondary" : "primary";
         }
       }
+
+      useEffect(() => {
+        if (choices) {
+          setAnswers(Array(choices?.length)
+          .fill()
+          .map(() => false));
+        }
+      }, [choices]);
 
     return (
         <div>

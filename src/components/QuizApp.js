@@ -9,6 +9,7 @@ import {
   ReactQueryDevtools,
 } from "../config/queryClient";
 import { PlayArrow } from "@mui/icons-material";
+import QuestionTopBar from "./QuestionTopBar";
 
 export class QuizApp extends Component {
   constructor() {
