@@ -66,6 +66,7 @@ function Play() {
     } else {
       setQid(qid+1)
     }
+    setSubmitted(false)
   }
 
   const onSubmit = () => {

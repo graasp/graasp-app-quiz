@@ -28,6 +28,7 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
+
 function Slide({ leftText, setLeftText, rightText, setRightText, sliderCorrectValue, setSliderCorrectValue }) {
   return (
     <div align="center">
