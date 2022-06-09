@@ -1,7 +1,7 @@
-import React, { createContext } from 'react';
-import qs from 'qs';
-import PropTypes from 'prop-types';
-import { hooks } from '../../config/queryClient';
+import React, { createContext } from "react";
+import qs from "qs";
+import PropTypes from "prop-types";
+import { hooks } from "../../config/queryClient";
 
 const TokenContext = createContext();
 
@@ -12,7 +12,7 @@ const TokenProvider = ({ children }) => {
   const { data, isLoading, isError } = hooks.useAuthToken(itemId);
 
   if (isLoading) {
-    return "Loading"
+    return "Loading";
   }
 
   if (isError) {

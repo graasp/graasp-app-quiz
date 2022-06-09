@@ -1,7 +1,7 @@
-import React, { createContext, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import qs from 'qs';
-import { hooks } from '../../config/queryClient';
+import React, { createContext, useEffect } from "react";
+import PropTypes from "prop-types";
+import qs from "qs";
+import { hooks } from "../../config/queryClient";
 
 const Context = createContext();
 
@@ -15,13 +15,12 @@ const ContextProvider = ({ children }) => {
     isError,
   } = hooks.useGetLocalContext(itemId);
 
-
   if (isLoading) {
-    return "Loading"
+    return "Loading";
   }
 
   if (isError) {
-    console.log("error")
+    console.log("error");
   }
 
   const value = context ?? {};

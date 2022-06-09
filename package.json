@@ -17,7 +17,9 @@
     "start": "env-cmd -f ./.env.local react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint .",
+    "prettier:write": "prettier --write ./src"
   },
   "eslintConfig": {
     "extends": [
@@ -39,9 +41,14 @@
   },
   "packageManager": "yarn@3.2.0",
   "devDependencies": {
+    "@babel/eslint-parser": "7.17.0",
+    "@babel/eslint-plugin": "7.16.5",
+    "@babel/preset-react": "7.16.7",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
-    "env-cmd": "10.1.0"
+    "env-cmd": "10.1.0",
+    "eslint": "8.16.0",
+    "prettier": "2.6.2"
   }
 }
