@@ -27,8 +27,7 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-function MultipleChoice({choices, setChoices}) {
-
+function MultipleChoice({ choices, setChoices }) {
   const handleAnswerCorrectnessChange = (index, e) => {
     let newChoices = [...choices];
     newChoices[index] = { ...choices[index], isCorrect: e.target.checked };

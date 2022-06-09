@@ -27,7 +27,8 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-function TextInput({text, setText}) {
+
+function TextInput({ text, setText }) {
   return (
     <div align="center">
       <Grid
@@ -47,7 +48,10 @@ function TextInput({text, setText}) {
             name="quiz text answer"
             variant="outlined"
             onChange={(t) => {
-              {setText(t.target.value)};
+
+              {
+                setText(t.target.value);
+              }
             }}
           />
         </Grid>
