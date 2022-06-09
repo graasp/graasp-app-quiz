@@ -39,10 +39,11 @@ function Play() {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
+  const [qid, setQid] = useState(0)
 
-  const question = data?.get(0)?.data?.question;
-  const type = data?.get(0)?.data?.questionType;
-  const choices = data?.get(0)?.data?.choices;
+  const question = data?.get(qid)?.data?.question;
+  const type = data?.get(qid)?.data?.questionType;
+  const choices = data?.get(qid)?.data?.choices;
   const [answers, setAnswers] = React.useState(
     Array(choices?.length)
       .fill()
@@ -54,17 +55,25 @@ function Play() {
       .map(() => "neutral")
   );
   const [text, setText] = React.useState(DEFAULT_TEXT);
-  const answer = data?.get(0)?.data?.answer;
+  const answer = data?.get(qid)?.data?.answer;
   const [sliderValue, setSliderValue] = React.useState(0);
-  const sliderCorrectValue = data?.get(0)?.data?.correctValue;
+  const sliderCorrectValue = data?.get(qid)?.data?.correctValue;
   const [submitted, setSubmitted] = React.useState(false);
+
+  const onSkip = () => {
+    if (qid === 2) {
+      setQid(0)
+    } else {
+      setQid(qid+1)
+    }
+  }
 
   const onSubmit = () => {
     setSubmitted(true); // TODO: if statement post / patch based on memberID
     switch (type) {
       case MULTIPLE_CHOICE: {
         postAppData({
-          id: data?.get(1).id,
+          id: data?.get(3).id,
           data: {
             questionType: MULTIPLE_CHOICE,
             answers: answers,
@@ -74,7 +83,7 @@ function Play() {
       }
       case TEXT_INPUT: {
         postAppData({
-          id: data?.get(1).id,
+          id: data?.get(3).id,
           data: {
             questionType: TEXT_INPUT,
             answer: text,
@@ -84,7 +93,7 @@ function Play() {
       }
       case SLIDER: {
         postAppData({
-          id: data?.get(1).id,
+          id: data?.get(3).id,
           data: {
             questionType: SLIDER,
             value: sliderValue,
@@ -166,7 +175,7 @@ function Play() {
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="info">
+          <Button variant="contained" color="info" onClick={onSkip}>
             Skip
           </Button>
         </Grid>

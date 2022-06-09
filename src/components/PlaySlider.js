@@ -31,8 +31,8 @@ import {
 
 function PlaySlider({ sliderValue, setSliderValue, sliderCorrectValue, submitted }) {
   const { data, isSuccess } = useAppData();
-  const leftLabel = data?.get(0)?.data?.leftText;
-  const rightLabel = data?.get(0)?.data?.rightText;
+  const leftLabel = data?.get(1)?.data?.leftText;
+  const rightLabel = data?.get(1)?.data?.rightText;
   const marks = [
     { value: 0, label: `${leftLabel}` },
     {
@@ -58,6 +58,7 @@ function PlaySlider({ sliderValue, setSliderValue, sliderCorrectValue, submitted
               setSliderValue(val);
             }}
             marks={marks}
+            marks
             valueLabelDisplay="on"
           />
         </Grid>
