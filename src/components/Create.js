@@ -48,16 +48,26 @@ function Create() {
   const [text, setText] = useState(DEFAULT_TEXT);
   const [sliderLeftText, setSLT] = useState(DEFAULT_TEXT);
   const [sliderRightText, setSRT] = useState(DEFAULT_TEXT);
+  const [sliderCorrectValue, setSliderCorrectValue] = useState(0)
+  const [qid, setQid] = useState(0)
 
   const handleTypeSelect = (event) => {
     setType(event.target.value);
   };
 
+  const onNext = () => {
+    if (qid === 2) {
+      setQid(0)
+    } else {
+      setQid(qid+1)
+    }
+  }
+
   const onSave = () => {
     switch (type) {
       case MULTIPLE_CHOICE: {
         postAppData({
-          id: data?.get(0).id,
+          id: data?.get(qid).id,
           data: {
             question: question,
             questionType: MULTIPLE_CHOICE,
@@ -69,7 +79,7 @@ function Create() {
       }
       case TEXT_INPUT: {
         postAppData({
-          id: data?.get(0).id,
+          id: data?.get(qid).id,
           data: {
             question: question,
             questionType: TEXT_INPUT,
@@ -81,12 +91,13 @@ function Create() {
       }
       case SLIDER: {
         postAppData({
-          id: data?.get(0).id,
+          id: data?.get(qid).id,
           data: {
             question: question,
             questionType: SLIDER,
             leftText: sliderLeftText,
             rightText: sliderRightText,
+            correctValue: sliderCorrectValue,
           },
           type: QUESTION_TYPE,
         });
@@ -168,6 +179,8 @@ function Create() {
                   setLeftText={setSLT}
                   rightText={sliderRightText}
                   setRightText={setSRT}
+                  sliderCorrectValue={sliderCorrectValue}
+                  setSliderCorrectValue={setSliderCorrectValue}
                 />
               );
             }
@@ -195,7 +208,7 @@ function Create() {
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="info">
+            <Button variant="contained" color="info" onClick={onNext}>
               Next
             </Button>
           </Grid>

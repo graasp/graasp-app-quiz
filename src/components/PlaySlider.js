@@ -29,27 +29,20 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-function PlaySlider({ sliderValue, setSliderValue }) {
+function PlaySlider({ sliderValue, setSliderValue, sliderCorrectValue, submitted }) {
   const { data, isSuccess } = useAppData();
-  const leftLabel = data?.get(0)?.data?.leftText;
-  const rightLabel = data?.get(0)?.data?.rightText;
+  const leftLabel = data?.get(1)?.data?.leftText;
+  const rightLabel = data?.get(1)?.data?.rightText;
   const marks = [
     { value: 0, label: `${leftLabel}` },
     {
       value: 100,
       label: `${rightLabel}`,
-    },
+    }
   ];
 
-  // TODO: outlined color once selected
-  function computeCorrectness(index) {
-    if (choices[index].isCorrect !== answers[index]) {
-      return "false";
-    } else if (choices[index].isCorrect && answers[index]) {
-      return "true";
-    } else {
-      return "neutral";
-    }
+  function answerIsCorrect() {
+    return sliderValue === sliderCorrectValue;
   }
 
   return (
@@ -60,13 +53,31 @@ function PlaySlider({ sliderValue, setSliderValue }) {
             aria-label="Custom marks"
             defaultValue={50}
             valueLabelDisplay="auto"
-            value={sliderValue}
+            value={submitted? [sliderValue, sliderCorrectValue] : sliderValue}
             onChange={(e, val) => {
               setSliderValue(val);
             }}
             marks={marks}
+            marks
+            valueLabelDisplay="on"
           />
         </Grid>
+        {(() => {
+          if (submitted) {
+            if (answerIsCorrect()) {
+              return(
+                <Typography variant="p1" color = "success.main"> Correct! </Typography>
+              )
+            } else {
+              return (
+                <div>
+                <Typography variant="subtitle1" color="error"> Incorrect! </Typography>
+                <Typography variant="subtitle2"> Correct value was: {sliderCorrectValue} </Typography>
+                </div>
+              )
+            }
+          }
+        })()}
       </Grid>
     </div>
   );

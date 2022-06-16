@@ -33,6 +33,10 @@ const theme = createTheme({
   palette: {
     secondary: {
       main: "#FFFFFF",
+      notchedOutline: {
+        borderWidth: '5px',
+        borderColor: 'green !important'
+      }
     },
   },
 });
@@ -81,10 +85,10 @@ function PlayMultipleChoice({
         case "false":
           return "error";
         default:
-          return "primary";
+          return "secondary";
       }
     } else {
-      return answers[index] ? "secondary" : "primary";
+      return answers[index] ? "primary" : "secondary";
     }
   }
 
@@ -117,7 +121,7 @@ function PlayMultipleChoice({
                     onClick={() => onSelect(index)}
                     variant="contained"
                     color={selectColor(index)}
-                    sx={{ py: 2, borderColor: "black" }}
+                    sx={{ py: 2, borderColor: 'black' }}
                     fullWidth
                   >
                     {choice.choice}

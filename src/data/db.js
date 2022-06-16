@@ -3,7 +3,7 @@ import { MULTIPLE_CHOICE, SLIDER, TEXT_INPUT } from "../components/constants";
 const buildDatabase = (appContext) => ({
   appData: [
     {
-      id: "id",
+      id: "id4",
       data: {
         question: "What is the capital of France?",
         questionType: MULTIPLE_CHOICE,
@@ -16,18 +16,18 @@ const buildDatabase = (appContext) => ({
       },
       type: "question",
     },
-    ,
-    /*{
-      id: "id",
+    {
+      id: "id5",
       data: {
         question: "How happy are you?",
         questionType: SLIDER,
         leftText: "Sad",
         rightText: "Happy",
+        correctValue: 20,
       },
       type: "question",
-    },*/
-    /*{
+    },
+    {
       id: "id",
       data: {
         question: "What is a baby cat called?",
@@ -35,7 +35,8 @@ const buildDatabase = (appContext) => ({
         answer: "kitten",
       },
       type: "question",
-    }*/ {
+    },
+    {
       id: "id2",
       //memberId: '',
       data: {

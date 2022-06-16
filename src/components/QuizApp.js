@@ -1,26 +1,35 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import { TokenProvider } from "./context/TokenContext";
 import { ContextProvider } from "./context/ContextContext";
 import Create from "./Create";
 import Play from "./Play";
+import { Context } from './context/ContextContext';
+import { PERMISSION_LEVELS } from './config/settings';
 import {
   queryClient,
   QueryClientProvider,
   ReactQueryDevtools,
 } from "../config/queryClient";
 import { PlayArrow } from "@mui/icons-material";
-import QuestionTopBar from "./QuestionTopBar";
+import View from "./View";
 
-export class QuizApp extends Component {
-  constructor() {
-    super();
-  }
-
-  render() {
+export const QuizApp = () => {
+    
     const quiz = (
       <div className="container">
         <div className="title">
-          <Play />
+          {/* {() => {
+            switch (context.get('permission')) {
+              case PERMISSION_LEVELS.ADMIN:
+              case PERMISSION_LEVELS.WRITE:
+                return <Create />;
+          
+              case PERMISSION_LEVELS.READ:
+              default:
+                return <Play />;
+            }
+          }}() */}
+          < View />
         </div>
       </div>
     );
@@ -34,5 +43,4 @@ export class QuizApp extends Component {
       </QueryClientProvider>
     );
     return app;
-  }
 }
