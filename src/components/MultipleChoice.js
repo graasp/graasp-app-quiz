@@ -104,7 +104,7 @@ function MultipleChoice({ choices, setChoices }) {
                     </FormControl>
                   </Grid>
                   <Grid item sx={{ pt: 2.75, pl: 1 }}>
-                    {index > 1 ? (
+                    {choices.length > 2 ? (
                       <IconButton
                         type="button"
                         onClick={() => removeAnswer(index)}

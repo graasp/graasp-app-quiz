@@ -36,6 +36,8 @@ import { MUTATION_KEYS, useMutation } from "../config/queryClient";
 import MultipleChoice from "./MultipleChoice";
 import TextInput from "./TextInput";
 import Slider from "./Slide";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function Create() {
   const { data } = useAppData();
@@ -43,6 +45,7 @@ function Create() {
 
   const [question, setQuestion] = useState(DEFAULT_TEXT);
   const [type, setType] = useState(MULTIPLE_CHOICE);
+  var id = 5
 
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [text, setText] = useState(DEFAULT_TEXT);
@@ -51,9 +54,28 @@ function Create() {
   const [sliderCorrectValue, setSliderCorrectValue] = useState(0)
   const [qid, setQid] = useState(0)
 
+  const buttonTheme = createTheme({
+    palette: {
+      secondary: {
+        main: "#000000",
+      },
+    },
+  });
+
+  const myStyle = {
+    maxHeight: "20px",
+    minHeight: "20px",
+    minWidth: "20px",
+    maxWidth: "20px",
+};
+
   const handleTypeSelect = (event) => {
     setType(event.target.value);
   };
+
+  const generateId = () => {
+    return `${id++}`; // can be made asynchronous
+  }
 
   const onNext = () => {
     if (qid === 2) {
@@ -67,7 +89,7 @@ function Create() {
     switch (type) {
       case MULTIPLE_CHOICE: {
         postAppData({
-          id: data?.get(qid).id,
+          id: generateId(),
           data: {
             question: question,
             questionType: MULTIPLE_CHOICE,
@@ -79,7 +101,7 @@ function Create() {
       }
       case TEXT_INPUT: {
         postAppData({
-          id: data?.get(qid).id,
+          id: generateId(),
           data: {
             question: question,
             questionType: TEXT_INPUT,
@@ -91,7 +113,7 @@ function Create() {
       }
       case SLIDER: {
         postAppData({
-          id: data?.get(qid).id,
+          id: generateId(),
           data: {
             question: question,
             questionType: SLIDER,
@@ -107,7 +129,8 @@ function Create() {
   };
   return (
     <div align="center">
-      <Grid container direction={"column"} alignItems="center" sx={{ p: 2 }}>
+      <Grid container direction={"row"} alignItems="center" sx={{ p: 2 }}>
+        <Grid item>
         <Stepper alternativeLabel activeStep={1}>
           <Step completed>
             <StepLabel>Question 1</StepLabel>
@@ -119,10 +142,30 @@ function Create() {
             <StepLabel>Question 3</StepLabel>
           </Step>
         </Stepper>
+        </Grid>
+        <Grid item align="right">
+        <ThemeProvider theme ={buttonTheme} >
+        <Button color = "secondary" size="small" startIcon={<Fab color="primary" aria-label="add" style={myStyle}>
+            <AddIcon style={myStyle} />
+          </Fab>}>
+          Add Question
+        </Button>
+        </ ThemeProvider>
+        </ Grid>
       </Grid>
-      <Typography variant="h1" fontSize={40} sx={{ pb: 4 }}>
+      <Typography variant="h1" fontSize={40} sx={{ pb: 1 }}>
         Create your quiz
       </Typography>
+      <Grid container direction={"row"} spacing={4.5} sx={{ pb: 2 }}>
+        <ThemeProvider theme ={buttonTheme} >
+        
+        <Grid item align="left">
+        <Button color ="secondary" size="small" endIcon={<DeleteIcon color="primary"/>}>
+          Remove Question
+        </Button>
+        </ Grid>
+        </ThemeProvider>
+      </Grid>
       <Grid
         container
         direction={"column"}
@@ -193,7 +236,7 @@ function Create() {
         <Grid
           container
           direction={"row"}
-          spacing={8}
+          spacing={4}
           sx={{ py: 2 }}
           align="center"
         >
@@ -205,6 +248,11 @@ function Create() {
           <Grid item>
             <Button onClick={onSave} variant="contained" color="success">
               Save
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button color ="error" variant="outlined" startIcon={<DeleteIcon />}>
+              Delete
             </Button>
           </Grid>
           <Grid item>
