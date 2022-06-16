@@ -38,10 +38,12 @@ import TextInput from "./TextInput";
 import Slider from "./Slide";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import QuestionTopBar from "./QuestionTopBar";
 
 function Create() {
   const { data } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
+  const [currentQuestion, setCurrentQuestion] = React.useState(0);
 
   const [question, setQuestion] = useState(DEFAULT_TEXT);
   const [type, setType] = useState(MULTIPLE_CHOICE);
@@ -53,21 +55,6 @@ function Create() {
   const [sliderRightText, setSRT] = useState(DEFAULT_TEXT);
   const [sliderCorrectValue, setSliderCorrectValue] = useState(0)
   const [qid, setQid] = useState(0)
-
-  const buttonTheme = createTheme({
-    palette: {
-      secondary: {
-        main: "#000000",
-      },
-    },
-  });
-
-  const myStyle = {
-    maxHeight: "20px",
-    minHeight: "20px",
-    minWidth: "20px",
-    maxWidth: "20px",
-};
 
   const handleTypeSelect = (event) => {
     setType(event.target.value);
@@ -129,43 +116,17 @@ function Create() {
   };
   return (
     <div align="center">
-      <Grid container direction={"row"} alignItems="center" sx={{ p: 2 }}>
+      <Grid container direction={"row"} alignItems="right" sx={{ p: 2 }}>
         <Grid item>
-        <Stepper alternativeLabel activeStep={1}>
-          <Step completed>
-            <StepLabel>Question 1</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Question 2</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Question 3</StepLabel>
-          </Step>
-        </Stepper>
+        <QuestionTopBar
+          currentQuestion={currentQuestion}
+          setCurrentQuestion={setCurrentQuestion}
+        />
         </Grid>
-        <Grid item align="right">
-        <ThemeProvider theme ={buttonTheme} >
-        <Button color = "secondary" size="small" startIcon={<Fab color="primary" aria-label="add" style={myStyle}>
-            <AddIcon style={myStyle} />
-          </Fab>}>
-          Add Question
-        </Button>
-        </ ThemeProvider>
-        </ Grid>
       </Grid>
-      <Typography variant="h1" fontSize={40} sx={{ pb: 1 }}>
+      <Typography variant="h1" fontSize={40} sx={{ pb: 4 }}>
         Create your quiz
       </Typography>
-      <Grid container direction={"row"} spacing={4.5} sx={{ pb: 2 }}>
-        <ThemeProvider theme ={buttonTheme} >
-        
-        <Grid item align="left">
-        <Button color ="secondary" size="small" endIcon={<DeleteIcon color="primary"/>}>
-          Remove Question
-        </Button>
-        </ Grid>
-        </ThemeProvider>
-      </Grid>
       <Grid
         container
         direction={"column"}
@@ -246,13 +207,13 @@ function Create() {
             </Button>
           </Grid>
           <Grid item>
-            <Button onClick={onSave} variant="contained" color="success">
-              Save
+            <Button color ="error" variant="contained" startIcon={<DeleteIcon />}>
+              Delete
             </Button>
           </Grid>
           <Grid item>
-            <Button color ="error" variant="outlined" startIcon={<DeleteIcon />}>
-              Delete
+            <Button onClick={onSave} variant="contained" color="success">
+              Save
             </Button>
           </Grid>
           <Grid item>
