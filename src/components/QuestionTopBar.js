@@ -25,26 +25,13 @@ import { useAppData } from "./context/hooks";
 import { MUTATION_KEYS, useMutation } from "../config/queryClient";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const buttonTheme = createTheme({
-  palette: {
-    secondary: {
-      main: "#000000",
-    },
-  },
-});
-
-const myStyle = {
-  maxHeight: "35px",
-  minHeight: "35px",
-  minWidth: "35x",
-  maxWidth: "35px",
-};
-
 const steps = ["Question 1", "Question 2", "Question 3"];
 
 export default function QuestionTopBar({
-  currentQuestion,
-  setCurrentQuestion,
+  currentQuestionIndex,
+  setCurrentQuestionIndex,
+  questionList,
+  setQuestionList,
 }) {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
@@ -52,7 +39,7 @@ export default function QuestionTopBar({
   const [completed, setCompleted] = React.useState({});
 
   const totalSteps = () => {
-    return steps.length;
+    return questionList ? questionList.length : 0;
   };
 
   const completedSteps = () => {
@@ -60,7 +47,7 @@ export default function QuestionTopBar({
   };
 
   const isLastStep = () => {
-    return currentQuestion === totalSteps() - 1;
+    return currentQuestionIndex === totalSteps() - 1;
   };
 
   const allStepsCompleted = () => {
@@ -72,58 +59,52 @@ export default function QuestionTopBar({
       isLastStep() && !allStepsCompleted()
         ? // It's the last step, but not all steps have been completed,
           // find the first step that has been completed
-          steps.findIndex((step, i) => !(i in completed))
-        : currentQuestion + 1;
-    setCurrentQuestion(newActiveStep);
+          questionList
+          ? questionList.findIndex((step, i) => !(i in completed))
+          : currentQuestionIndex + 1
+        : currentQuestionIndex + 1;
+    setCurrentQuestionIndex(newActiveStep);
   };
 
   const handleBack = () => {
-    setCurrentQuestion((prevActiveStep) => prevActiveStep - 1);
+    setCurrentQuestionIndex((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleStep = (step) => () => {
-    setCurrentQuestion(step);
+    setCurrentQuestionIndex(step);
   };
 
   const handleComplete = () => {
     const newCompleted = completed;
-    newCompleted[currentQuestion] = true;
+    newCompleted[currentQuestionIndex] = true;
     setCompleted(newCompleted);
     handleNext();
   };
 
   const handleReset = () => {
-    setCurrentQuestion(0);
+    setCurrentQuestionIndex(0);
     setCompleted({});
   };
 
   return (
-      <div>
-        <Grid container direction={"row"}>
-          <Grid item>
-            <Stepper nonLinear alternativeLabel activeStep={currentQuestion}>
-              {steps.map((label, index) => (
-                <Step key={label} completed={completed[index]}>
-                  <StepButton color="inherit" onClick={handleStep(index)}>
-                    {label}
-                  </StepButton>
-                </Step>
-              ))}
-            </Stepper>
-          </Grid>
-          <Grid item>
-          <ThemeProvider theme ={buttonTheme} >
-            <Button color = "secondary" startIcon={<Fab color="primary" aria-label="add" style={myStyle}>
-                <AddIcon />
-              </Fab>}>
-            </Button>
-            </ ThemeProvider>
-          </Grid>
+    <div>
+      <Grid container direction={"row"}>
+        <Grid item>
+          <Stepper nonLinear alternativeLabel activeStep={currentQuestionIndex}>
+            {questionList?.map((label, index) => (
+              <Step key={label} completed={completed[index]}>
+                <StepButton color="inherit" onClick={handleStep(index)}>
+                  {`Question ${index + 1}`}
+                </StepButton>
+              </Step>
+            ))}
+          </Stepper>
         </Grid>
+      </Grid>
 
-        <Grid container direction={"row"} alignItems="left">
+      <Grid container direction={"row"} alignItems="left">
         {allStepsCompleted() ? (
-            <Grid item>
+          <Grid item>
             <Typography sx={{ mt: 2, mb: 1 }}>
               All steps completed - you&apos;re finished
             </Typography>
@@ -131,9 +112,9 @@ export default function QuestionTopBar({
               <Box sx={{ flex: "1 1 auto" }} />
               <Button onClick={handleReset}>Reset</Button>
             </Box>
-            </Grid>
+          </Grid>
         ) : null}
-        </Grid> 
-      </div>
+      </Grid>
+    </div>
   );
 }

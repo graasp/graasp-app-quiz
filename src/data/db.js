@@ -3,6 +3,13 @@ import { MULTIPLE_CHOICE, SLIDER, TEXT_INPUT } from "../components/constants";
 const buildDatabase = (appContext) => ({
   appData: [
     {
+      id: "0",
+      data: {
+        list: ["id4", "id5", "id"],
+      },
+      type: "questionList",
+    },
+    {
       id: "id4",
       data: {
         question: "What is the capital of France?",

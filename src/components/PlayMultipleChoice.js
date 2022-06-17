@@ -34,9 +34,9 @@ const theme = createTheme({
     secondary: {
       main: "#FFFFFF",
       notchedOutline: {
-        borderWidth: '5px',
-        borderColor: 'green !important'
-      }
+        borderWidth: "5px",
+        borderColor: "green !important",
+      },
     },
   },
 });
@@ -121,7 +121,7 @@ function PlayMultipleChoice({
                     onClick={() => onSelect(index)}
                     variant="contained"
                     color={selectColor(index)}
-                    sx={{ py: 2, borderColor: 'black' }}
+                    sx={{ py: 2, borderColor: "black" }}
                     fullWidth
                   >
                     {choice.choice}

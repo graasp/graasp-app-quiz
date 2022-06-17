@@ -10,7 +10,13 @@ export const useAppData = () => {
   return query;
 };
 //return { ...query, data: query.data?.filter}
+export const getDataWithId = (id) => {
+  const query = useAppData();
+  //return { ...query, data: query.data?.filter(_.id === id )}
+  return query.data?.filter((d) => d.id === id);
+};
 
+// react contexts
 export const useAppSettings = () => {
   const context = useContext(Context);
   const token = useContext(TokenContext);

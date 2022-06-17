@@ -27,7 +27,9 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-function MultipleChoice({ choices, setChoices }) {
+function MultipleChoice({ choices, setChoices, currentQuestionData }) {
+  const dataChoices = currentQuestionData?.choices;
+
   const handleAnswerCorrectnessChange = (index, e) => {
     let newChoices = [...choices];
     newChoices[index] = { ...choices[index], isCorrect: e.target.checked };
@@ -81,6 +83,7 @@ function MultipleChoice({ choices, setChoices }) {
                       <OutlinedInput
                         type={"text"}
                         label={`Choice ${readableIndex}`}
+                        defaultValue={dataChoices ? dataChoices[index] : ""}
                         value={choice.choice}
                         placeholder={`Enter Choice ${readableIndex}`}
                         onChange={(e) => handleChoiceChange(index, e)}

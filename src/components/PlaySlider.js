@@ -29,7 +29,12 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-function PlaySlider({ sliderValue, setSliderValue, sliderCorrectValue, submitted }) {
+function PlaySlider({
+  sliderValue,
+  setSliderValue,
+  sliderCorrectValue,
+  submitted,
+}) {
   const { data, isSuccess } = useAppData();
   const leftLabel = data?.get(1)?.data?.leftText;
   const rightLabel = data?.get(1)?.data?.rightText;
@@ -38,7 +43,7 @@ function PlaySlider({ sliderValue, setSliderValue, sliderCorrectValue, submitted
     {
       value: 100,
       label: `${rightLabel}`,
-    }
+    },
   ];
 
   function answerIsCorrect() {
@@ -53,7 +58,7 @@ function PlaySlider({ sliderValue, setSliderValue, sliderCorrectValue, submitted
             aria-label="Custom marks"
             defaultValue={50}
             valueLabelDisplay="auto"
-            value={submitted? [sliderValue, sliderCorrectValue] : sliderValue}
+            value={submitted ? [sliderValue, sliderCorrectValue] : sliderValue}
             onChange={(e, val) => {
               setSliderValue(val);
             }}
@@ -65,16 +70,25 @@ function PlaySlider({ sliderValue, setSliderValue, sliderCorrectValue, submitted
         {(() => {
           if (submitted) {
             if (answerIsCorrect()) {
-              return(
-                <Typography variant="p1" color = "success.main"> Correct! </Typography>
-              )
+              return (
+                <Typography variant="p1" color="success.main">
+                  {" "}
+                  Correct!{" "}
+                </Typography>
+              );
             } else {
               return (
                 <div>
-                <Typography variant="subtitle1" color="error"> Incorrect! </Typography>
-                <Typography variant="subtitle2"> Correct value was: {sliderCorrectValue} </Typography>
+                  <Typography variant="subtitle1" color="error">
+                    {" "}
+                    Incorrect!{" "}
+                  </Typography>
+                  <Typography variant="subtitle2">
+                    {" "}
+                    Correct value was: {sliderCorrectValue}{" "}
+                  </Typography>
                 </div>
-              )
+              );
             }
           }
         })()}

@@ -27,7 +27,6 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-
 function TextInput({ text, setText }) {
   return (
     <div align="center">
@@ -48,7 +47,6 @@ function TextInput({ text, setText }) {
             name="quiz text answer"
             variant="outlined"
             onChange={(t) => {
-
               {
                 setText(t.target.value);
               }

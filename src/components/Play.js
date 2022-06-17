@@ -39,7 +39,7 @@ function Play() {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
-  const [qid, setQid] = useState(0)
+  const [qid, setQid] = useState(0);
 
   const question = data?.get(qid)?.data?.question;
   const type = data?.get(qid)?.data?.questionType;
@@ -62,12 +62,12 @@ function Play() {
 
   const onSkip = () => {
     if (qid === 2) {
-      setQid(0)
+      setQid(0);
     } else {
-      setQid(qid+1)
+      setQid(qid + 1);
     }
-    setSubmitted(false)
-  }
+    setSubmitted(false);
+  };
 
   const onSubmit = () => {
     setSubmitted(true); // TODO: if statement post / patch based on memberID
@@ -131,7 +131,12 @@ function Play() {
           }
           case TEXT_INPUT: {
             return (
-              <PlayTextInput text={text} setText={setText} answer={answer} submitted={submitted} />
+              <PlayTextInput
+                text={text}
+                setText={setText}
+                answer={answer}
+                submitted={submitted}
+              />
             );
           }
           case SLIDER: {
