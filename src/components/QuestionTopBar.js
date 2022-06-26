@@ -27,11 +27,34 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const steps = ["Question 1", "Question 2", "Question 3"];
 
+const buttonStyle = {
+  maxHeight: "23px",
+  minHeight: "23px",
+  minWidth: "23px",
+  maxWidth: "23px",
+};
+
+const addStyle = {
+  maxHeight: "20px",
+  minHeight: "20px",
+  minWidth: "20px",
+  maxWidth: "20px",
+};
+
+const buttonTheme = createTheme({
+  palette: {
+    secondary: {
+      main: "#000000",
+    },
+  },
+});
+
 export default function QuestionTopBar({
   currentQuestionIndex,
   setCurrentQuestionIndex,
   questionList,
   setQuestionList,
+  onAddQuestion
 }) {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
@@ -98,6 +121,23 @@ export default function QuestionTopBar({
                 </StepButton>
               </Step>
             ))}
+            <Step key="plus">
+              <StepLabel
+              icon={<ThemeProvider theme={buttonTheme}>
+              <Fab
+                color="primary"
+                aria-label="add"
+                justify-content="center"
+                style={buttonStyle}
+                onClick={onAddQuestion}
+                align="center"
+              >
+                <AddIcon style={addStyle} />
+              </Fab>
+            </ThemeProvider>}
+              >
+             </StepLabel>
+           </Step>
           </Stepper>
         </Grid>
       </Grid>

@@ -30,8 +30,11 @@ import {
   TEXT_INPUT,
   SLIDER,
   QUESTION_TYPE,
+  QUESTION_LIST_TYPE,
+  NEW_QUESTION_TYPE,
 } from "./constants";
-import { useAppData, getDataWithId } from "./context/hooks";
+import { useAppData } from "./context/hooks";
+import { getDataWithId, getDataWithType } from "./context/utilities";
 import { MUTATION_KEYS, useMutation } from "../config/queryClient";
 import MultipleChoice from "./MultipleChoice";
 import TextInput from "./TextInput";
@@ -41,40 +44,19 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import QuestionTopBar from "./QuestionTopBar";
 
 function Create() {
-  const buttonTheme = createTheme({
-    palette: {
-      secondary: {
-        main: "#000000",
-      },
-    },
-  });
-
-  const buttonStyle = {
-    maxHeight: "23px",
-    minHeight: "23px",
-    minWidth: "23px",
-    maxWidth: "23px",
-  };
-
-  const addStyle = {
-    maxHeight: "20px",
-    minHeight: "20px",
-    minWidth: "20px",
-    maxWidth: "20px",
-  };
 
   const { data } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
+  const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
+  const [questionList, setQuestionList] = useState([]);
+  const [currentQuestionId, setCurrentQuestionId] = useState(null);
+  const [currentQuestionData, setCurrentQuestionData] = useState(null);
+  const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0)
 
   const [question, setQuestion] = useState(DEFAULT_TEXT);
   const [type, setType] = useState(MULTIPLE_CHOICE);
-  var id = 5;
-  const [questionList, setQuestionList] = useState(data?.get(0)?.data?.list);
-  const [currentQuestionId, setCurrentQuestionId] = useState(
-    questionList ? questionList[currentQuestionIndex] : null
-  );
-  const currentQuestionData = getDataWithId(currentQuestionId);
+  const [generatedId, setGeneratedId] = useState(5)
 
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [text, setText] = useState(DEFAULT_TEXT);
@@ -89,73 +71,171 @@ function Create() {
 
   useEffect(() => {
     if (data) {
-      setQuestionList(data?.get(0)?.data?.list);
+      console.log(data)
+      let newQuestionList = questionListData?.data?.list
+      setQuestionList(newQuestionList);
+      let newCurrentQuestionId = newQuestionList[currentQuestionIndex]
+      setCurrentQuestionId(newCurrentQuestionId);
+      let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId)
+      setCurrentQuestionData(newCurrentQuestionData)
+      if (newCurrentQuestionData) {
+        setQuestion(newCurrentQuestionData?.data?.question)
+        let newType = newCurrentQuestionData?.data?.questionType
+        setType(newType)
+        switch (newType) {
+          case MULTIPLE_CHOICE: {
+            setChoices(newCurrentQuestionData?.data?.choices)
+            break;
+          }
+          case TEXT_INPUT: {
+            setText(newCurrentQuestionData?.data?.answer)
+            break;
+          }
+          case SLIDER: {
+            setSLT(newCurrentQuestionData?.data?.leftText)
+            setSRT(newCurrentQuestionData?.data?.rightText)
+            setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue)
+            break;
+          }
+        }
+      } else {
+        setQuestion(DEFAULT_TEXT)
+        setType(MULTIPLE_CHOICE)
+        setChoices(DEFAULT_CHOICES)
+        setText(DEFAULT_TEXT)
+        setSLT(DEFAULT_TEXT)
+        setSRT(DEFAULT_TEXT)
+        setSliderCorrectValue(0)
+      }
     }
-  }, [data]);
+  }, [data, currentQuestionIndex]);
 
   const generateId = () => {
-    return `${id++}`; // can be made asynchronous
+    setGeneratedId(generatedId+1)
+    return `${generatedId}`; // can be made asynchronous
   };
 
   const onAddQuestion = () => {
     let newQuestionList = [...questionList];
-    newQuestionList.splice(currentQuestionIndex, 0, generateId());
+    // uncomment when using real database:
+    /*
+    postAppData({
+      type: NEW_QUESTION_TYPE
+    })
+    const id = getDataWithType(data, NEW_QUESTION_TYPE)?.get(0)?.id
+    newQuestionList.splice(currentQuestionIndex, 0, id);
+    */
+    newQuestionList.splice(currentQuestionIndex, 0, generateId()); // comment when using real database
     setQuestionList(newQuestionList);
+    onSave(newQuestionList)
+    console.log(newQuestionList)
   };
 
   const onDeleteQuestion = () => {
-    let newQuestionList = [...questionList];
-    newQuestionList.splice(currentQuestionIndex, 1);
-    setQuestionList(newQuestionList);
-  };
-
-  const onNext = () => {
-    if (qid === 2) {
-      setQid(0);
-    } else {
-      setQid(qid + 1);
+    if (questionList.length > 1) {
+      let newQuestionList = [...questionList];
+      newQuestionList.splice(currentQuestionIndex, 1);
+      setQuestionList(newQuestionList);
+      onSave(newQuestionList)
+      onPrev()
     }
   };
 
-  const onSave = () => {
+  const onNext = () => {
+    onSave()
+    if (currentQuestionIndex+1 < questionList.length) {
+      setCurrentQuestionIndex(currentQuestionIndex+1)
+    }
+  };
+
+  const onPrev = () => {
+    onSave()
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex-1)
+    }
+  }
+
+  const onSave = (qList) => {
+    patchAppData({
+      id: questionListData?.id,
+      data: {
+        list: qList ? qList : questionList,
+      },
+      type: QUESTION_LIST_TYPE,
+    });
     switch (type) {
       case MULTIPLE_CHOICE: {
         //patch
-        postAppData({
-          id: questionList ? questionList[currentQuestionIndex] : generateId(),
-          data: {
-            question: question,
-            questionType: MULTIPLE_CHOICE,
-            choices: choices,
-          },
-          type: QUESTION_TYPE,
-        });
+        if (questionList.length == 0) {
+          postAppData({
+            data: {
+              question: question,
+              questionType: MULTIPLE_CHOICE,
+              choices: choices,
+            },
+            type: QUESTION_TYPE,
+          });
+        } else {
+          patchAppData({
+            id: questionList[currentQuestionIndex],
+            data: {
+              question: question,
+              questionType: MULTIPLE_CHOICE,
+              choices: choices,
+            },
+            type: QUESTION_TYPE,
+          });
+        }
         break;
       }
       case TEXT_INPUT: {
-        postAppData({
-          id: questionList ? questionList[currentQuestionIndex] : generateId(),
-          data: {
-            question: question,
-            questionType: TEXT_INPUT,
-            answer: text,
-          },
-          type: QUESTION_TYPE,
-        });
+        if (questionList.length == 0){
+          postAppData({
+            data: {
+              question: question,
+              questionType: TEXT_INPUT,
+              answer: text,
+            },
+            type: QUESTION_TYPE,
+          });
+        } else {
+          patchAppData({
+            id: questionList[currentQuestionIndex],
+            data: {
+              question: question,
+              questionType: TEXT_INPUT,
+              answer: text,
+            },
+            type: QUESTION_TYPE,
+          });
+        }
         break;
       }
       case SLIDER: {
-        postAppData({
-          id: questionList ? questionList[currentQuestionIndex] : generateId(),
-          data: {
-            question: question,
-            questionType: SLIDER,
-            leftText: sliderLeftText,
-            rightText: sliderRightText,
-            correctValue: sliderCorrectValue,
-          },
-          type: QUESTION_TYPE,
-        });
+        if (questionList.length == 0){
+          postAppData({
+            data: {
+              question: question,
+              questionType: SLIDER,
+              leftText: sliderLeftText,
+              rightText: sliderRightText,
+              correctValue: sliderCorrectValue,
+            },
+            type: QUESTION_TYPE,
+          });
+        } else {
+          patchAppData({
+            id: questionList[currentQuestionIndex],
+            data: {
+              question: question,
+              questionType: SLIDER,
+              leftText: sliderLeftText,
+              rightText: sliderRightText,
+              correctValue: sliderCorrectValue,
+            },
+            type: QUESTION_TYPE,
+          });
+        }
         break;
       }
     }
@@ -170,20 +250,8 @@ function Create() {
             setCurrentQuestionIndex={setCurrentQuestionIndex}
             questionList={questionList}
             setQuestionList={setQuestionList}
+            onAddQuestion={onAddQuestion}
           />
-        </Grid>
-        <Grid item>
-          <ThemeProvider theme={buttonTheme}>
-            <Fab
-              color="primary"
-              aria-label="add"
-              justify="center"
-              style={buttonStyle}
-              onClick={onAddQuestion}
-            >
-              <AddIcon style={addStyle} />
-            </Fab>
-          </ThemeProvider>
         </Grid>
       </Grid>
       <Typography variant="h1" fontSize={40} sx={{ pb: 4 }}>
@@ -263,7 +331,7 @@ function Create() {
             }
             default:
               return (
-                <MultipleChoice choices={choices} setChoices={setChoices} />
+                <MultipleChoice choices={choices} setChoices={setChoices} currentQuestionData={currentQuestionData}/>
               );
           }
         })()}
@@ -275,7 +343,7 @@ function Create() {
           align="center"
         >
           <Grid item>
-            <Button variant="contained" color="info">
+            <Button variant="contained" color="info" onClick={onPrev}>
               Prev
             </Button>
           </Grid>
@@ -290,7 +358,7 @@ function Create() {
             </Button>
           </Grid>
           <Grid item>
-            <Button onClick={onSave} variant="contained" color="success">
+            <Button onClick={() => {onSave()}} variant="contained" color="success">
               Save
             </Button>
           </Grid>

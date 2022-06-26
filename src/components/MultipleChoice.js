@@ -83,7 +83,7 @@ function MultipleChoice({ choices, setChoices, currentQuestionData }) {
                       <OutlinedInput
                         type={"text"}
                         label={`Choice ${readableIndex}`}
-                        defaultValue={dataChoices ? dataChoices[index] : ""}
+                        //defaultValue={dataChoices ? dataChoices[index] : ""}
                         value={choice.choice}
                         placeholder={`Enter Choice ${readableIndex}`}
                         onChange={(e) => handleChoiceChange(index, e)}
@@ -107,14 +107,13 @@ function MultipleChoice({ choices, setChoices, currentQuestionData }) {
                     </FormControl>
                   </Grid>
                   <Grid item sx={{ pt: 2.75, pl: 1 }}>
-                    {choices.length > 2 ? (
+                    {
                       <IconButton
                         type="button"
-                        onClick={() => removeAnswer(index)}
+                        onClick={choices.length > 2 ? () => removeAnswer(index) : {}}
                       >
                         <CloseIcon />
-                      </IconButton>
-                    ) : null}
+                      </IconButton>}
                   </Grid>
                 </Grid>
               </Grid>
