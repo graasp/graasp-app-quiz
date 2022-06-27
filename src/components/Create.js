@@ -71,7 +71,6 @@ function Create() {
 
   useEffect(() => {
     if (data) {
-      console.log(data)
       let newQuestionList = questionListData?.data?.list
       setQuestionList(newQuestionList);
       let newCurrentQuestionId = newQuestionList[currentQuestionIndex]

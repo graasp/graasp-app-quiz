@@ -25,11 +25,13 @@ import {
   TEXT_INPUT,
   SLIDER,
   QUESTION_TYPE,
+  QUESTION_LIST_TYPE,
 } from "./constants";
 import { useAppData } from "./context/hooks";
 import { MUTATION_KEYS, useMutation } from "../config/queryClient";
 import { HdrOnSelectRounded } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { getDataWithId, getDataWithType } from "./context/utilities";
 import PlayMultipleChoice from "./PlayMultipleChoice";
 import PlayTextInput from "./PlayTextInput";
 import PlaySlider from "./PlaySlider";
@@ -39,7 +41,12 @@ function Play() {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
-  const [qid, setQid] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
+  const [questionList, setQuestionList] = useState([]);
+  const [currentQuestionId, setCurrentQuestionId] = useState(null);
+  const [currentQuestionData, setCurrentQuestionData] = useState(null);
+  const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0)
+  const [qid, setQid] = useState(2);
 
   const question = data?.get(qid)?.data?.question;
   const type = data?.get(qid)?.data?.questionType;
@@ -60,6 +67,17 @@ function Play() {
   const sliderCorrectValue = data?.get(qid)?.data?.correctValue;
   const [submitted, setSubmitted] = React.useState(false);
 
+  useEffect(() => {
+    if (data) {
+      let newQuestionList = questionListData?.data?.list
+      setQuestionList(newQuestionList);
+      let newCurrentQuestionId = newQuestionList[currentQuestionIndex]
+      setCurrentQuestionId(newCurrentQuestionId);
+      let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId)
+      setCurrentQuestionData(newCurrentQuestionData)
+    }
+  }, [data, currentQuestionIndex]);
+
   const onSkip = () => {
     if (qid === 2) {
       setQid(0);
@@ -71,6 +89,7 @@ function Play() {
 
   const onSubmit = () => {
     setSubmitted(true); // TODO: if statement post / patch based on memberID
+    /*
     switch (type) {
       case MULTIPLE_CHOICE: {
         postAppData({
@@ -102,15 +121,21 @@ function Play() {
           type: "answer",
         });
       }
-    }
+    }*/
   };
 
   return (
-    <div>
-      <QuestionTopBar
-        currentQuestion={currentQuestion}
-        setCurrentQuestion={setCurrentQuestion}
-      />
+    <div align="center">
+      <Grid container direction={"row"} alignItems="center" justifyContent="center" sx={{ p: 2 }}>
+        <Grid item>
+          <QuestionTopBar
+            currentQuestionIndex={currentQuestionIndex}
+            setCurrentQuestionIndex={setCurrentQuestionIndex}
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+          />
+        </Grid>
+      </Grid>
       <Typography variant="h1" fontSize={45} sx={{ pb: 4 }}>
         {question}
       </Typography>
