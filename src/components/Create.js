@@ -136,8 +136,7 @@ function Create() {
       let newQuestionList = [...questionList];
       newQuestionList.splice(currentQuestionIndex, 1);
       setQuestionList(newQuestionList);
-      onSave(newQuestionList)
-      onPrev()
+      onPrev(newQuestionList)
     }
   };
 
@@ -148,8 +147,8 @@ function Create() {
     }
   };
 
-  const onPrev = () => {
-    onSave()
+  const onPrev = (newQuestionList) => {
+    onSave(newQuestionList)
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex-1)
     }
@@ -343,7 +342,7 @@ function Create() {
           align="center"
         >
           <Grid item>
-            <Button variant="contained" color="info" onClick={onPrev}>
+            <Button variant="contained" color="info" onClick={() => {onPrev()}}>
               Prev
             </Button>
           </Grid>
