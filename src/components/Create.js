@@ -32,6 +32,7 @@ import {
   QUESTION_TYPE,
   QUESTION_LIST_TYPE,
   NEW_QUESTION_TYPE,
+  CREATE,
 } from "./constants";
 import { useAppData } from "./context/hooks";
 import { getDataWithId, getDataWithType } from "./context/utilities";
@@ -44,22 +45,22 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import QuestionTopBar from "./QuestionTopBar";
 
 function Create() {
-
   const { data } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
   const { mutate: deleteAppData } = useMutation(MUTATION_KEYS.DELETE_APP_DATA);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [questionList, setQuestionList] = useState([]);
+  const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
-  const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0)
   // Flag to indictate whether the current question is a new one, ie. not present in the database.
-  const [newQuestion, setNewQuestion] = useState(false)
+  const [newQuestion, setNewQuestion] = useState(false);
 
   const [question, setQuestion] = useState(DEFAULT_TEXT);
   const [type, setType] = useState(MULTIPLE_CHOICE);
-  const [generatedId, setGeneratedId] = useState(5)
+  const screenType = CREATE;
+  const [generatedId, setGeneratedId] = useState(5);
 
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [text, setText] = useState(DEFAULT_TEXT);
@@ -74,46 +75,46 @@ function Create() {
 
   useEffect(() => {
     if (data) {
-      let newQuestionList = questionListData?.data?.list
+      let newQuestionList = questionListData?.data?.list;
       setQuestionList(newQuestionList);
-      let newCurrentQuestionId = newQuestionList[currentQuestionIndex]
+      let newCurrentQuestionId = newQuestionList[currentQuestionIndex];
       setCurrentQuestionId(newCurrentQuestionId);
-      let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId)
-      setCurrentQuestionData(newCurrentQuestionData)
+      let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId);
+      setCurrentQuestionData(newCurrentQuestionData);
       if (newCurrentQuestionData) {
-        setQuestion(newCurrentQuestionData?.data?.question)
-        let newType = newCurrentQuestionData?.data?.questionType
-        setType(newType)
+        setQuestion(newCurrentQuestionData?.data?.question);
+        let newType = newCurrentQuestionData?.data?.questionType;
+        setType(newType);
         switch (newType) {
           case MULTIPLE_CHOICE: {
-            setChoices(newCurrentQuestionData?.data?.choices)
+            setChoices(newCurrentQuestionData?.data?.choices);
             break;
           }
           case TEXT_INPUT: {
-            setText(newCurrentQuestionData?.data?.answer)
+            setText(newCurrentQuestionData?.data?.answer);
             break;
           }
           case SLIDER: {
-            setSLT(newCurrentQuestionData?.data?.leftText)
-            setSRT(newCurrentQuestionData?.data?.rightText)
-            setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue)
+            setSLT(newCurrentQuestionData?.data?.leftText);
+            setSRT(newCurrentQuestionData?.data?.rightText);
+            setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue);
             break;
           }
         }
       } else {
-        setQuestion(DEFAULT_TEXT)
-        setType(MULTIPLE_CHOICE)
-        setChoices(DEFAULT_CHOICES)
-        setText(DEFAULT_TEXT)
-        setSLT(DEFAULT_TEXT)
-        setSRT(DEFAULT_TEXT)
-        setSliderCorrectValue(0)
+        setQuestion(DEFAULT_TEXT);
+        setType(MULTIPLE_CHOICE);
+        setChoices(DEFAULT_CHOICES);
+        setText(DEFAULT_TEXT);
+        setSLT(DEFAULT_TEXT);
+        setSRT(DEFAULT_TEXT);
+        setSliderCorrectValue(0);
       }
     }
   }, [data, currentQuestionIndex]);
 
   const generateId = () => {
-    setGeneratedId(generatedId+1)
+    setGeneratedId(generatedId + 1);
     return `${generatedId}`; // can be made asynchronous
   };
 
@@ -128,11 +129,11 @@ function Create() {
     const newQuestionIndex = currentQuestionIndex+1
     newQuestionList.splice(newQuestionIndex, 0, id);
     */
-    const newQuestionIndex = currentQuestionIndex+1
+    const newQuestionIndex = currentQuestionIndex + 1;
     newQuestionList.splice(newQuestionIndex, 0, generateId()); // comment when using real database
     setQuestionList(newQuestionList);
-    onNext(newQuestionList)
-    setNewQuestion(true) // delete newQuestion flag when using real db
+    onNext(newQuestionList);
+    setNewQuestion(true); // delete newQuestion flag when using real db
   };
 
   const onDeleteQuestion = () => {
@@ -141,24 +142,26 @@ function Create() {
       let newQuestionList = [...questionList];
       newQuestionList.splice(currentQuestionIndex, 1);
       setQuestionList(newQuestionList);
-      onPrev(newQuestionList)
+      onPrev(newQuestionList);
     }
   };
 
   const onNext = (newQuestionList) => {
-    onSave(newQuestionList)
-    const questionListLength = newQuestionList ? newQuestionList.length : questionList.length
-    if (currentQuestionIndex+1 < questionListLength) {
-      setCurrentQuestionIndex(currentQuestionIndex+1)
+    onSave(newQuestionList);
+    const questionListLength = newQuestionList
+      ? newQuestionList.length
+      : questionList.length;
+    if (currentQuestionIndex + 1 < questionListLength) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
   const onPrev = (newQuestionList) => {
-    onSave(newQuestionList)
+    onSave(newQuestionList);
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex-1)
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
-  }
+  };
 
   const onSave = (qList) => {
     patchAppData({
@@ -180,7 +183,7 @@ function Create() {
             },
             type: QUESTION_TYPE,
           });
-          setNewQuestion(false)
+          setNewQuestion(false);
         } else {
           patchAppData({
             id: currentQuestionId,
@@ -195,7 +198,7 @@ function Create() {
         break;
       }
       case TEXT_INPUT: {
-        if (questionList.length == 0 || newQuestion){
+        if (questionList.length == 0 || newQuestion) {
           postAppData({
             id: currentQuestionId, // delete when using the true database
             data: {
@@ -205,7 +208,7 @@ function Create() {
             },
             type: QUESTION_TYPE,
           });
-          setNewQuestion(false)
+          setNewQuestion(false);
         } else {
           patchAppData({
             id: currentQuestionId,
@@ -220,7 +223,7 @@ function Create() {
         break;
       }
       case SLIDER: {
-        if (questionList.length == 0 || newQuestion){
+        if (questionList.length == 0 || newQuestion) {
           postAppData({
             id: currentQuestionId, // delete when using the true database
             data: {
@@ -232,7 +235,7 @@ function Create() {
             },
             type: QUESTION_TYPE,
           });
-          setNewQuestion(false)
+          setNewQuestion(false);
         } else {
           patchAppData({
             id: currentQuestionId,
@@ -253,13 +256,19 @@ function Create() {
   // useEffect always
   return (
     <div align="center">
-      <Grid container direction={"row"} alignItems="center" justifyContent="center" sx={{ p: 2 }}>
+      <Grid
+        container
+        direction={"row"}
+        alignItems="center"
+        justifyContent="center"
+        sx={{ p: 2 }}
+      >
         <Grid item>
           <QuestionTopBar
+            screenType={screenType}
             currentQuestionIndex={currentQuestionIndex}
             setCurrentQuestionIndex={setCurrentQuestionIndex}
             questionList={questionList}
-            setQuestionList={setQuestionList}
             onAddQuestion={onAddQuestion}
           />
         </Grid>
@@ -341,7 +350,11 @@ function Create() {
             }
             default:
               return (
-                <MultipleChoice choices={choices} setChoices={setChoices} currentQuestionData={currentQuestionData}/>
+                <MultipleChoice
+                  choices={choices}
+                  setChoices={setChoices}
+                  currentQuestionData={currentQuestionData}
+                />
               );
           }
         })()}
@@ -368,7 +381,11 @@ function Create() {
             </Button>
           </Grid>
           <Grid item>
-            <Button onClick={() => onSave()} variant="contained" color="success">
+            <Button
+              onClick={() => onSave()}
+              variant="contained"
+              color="success"
+            >
               Save
             </Button>
           </Grid>

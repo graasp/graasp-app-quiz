@@ -110,10 +110,13 @@ function MultipleChoice({ choices, setChoices, currentQuestionData }) {
                     {
                       <IconButton
                         type="button"
-                        onClick={choices.length > 2 ? () => removeAnswer(index) : {}}
+                        onClick={
+                          choices.length > 2 ? () => removeAnswer(index) : {}
+                        }
                       >
                         <CloseIcon />
-                      </IconButton>}
+                      </IconButton>
+                    }
                   </Grid>
                 </Grid>
               </Grid>

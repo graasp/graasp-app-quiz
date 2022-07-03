@@ -26,6 +26,7 @@ import {
   SLIDER,
   QUESTION_TYPE,
   QUESTION_LIST_TYPE,
+  PLAY,
 } from "./constants";
 import { useAppData } from "./context/hooks";
 import { MUTATION_KEYS, useMutation } from "../config/queryClient";
@@ -40,17 +41,20 @@ import QuestionTopBar from "./QuestionTopBar";
 function Play() {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
-  const [currentQuestion, setCurrentQuestion] = React.useState(0);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [questionList, setQuestionList] = useState([]);
+  const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0);
+  const [question, setQuestion] = React.useState(DEFAULT_TEXT);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
-  const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0)
+  const screenType = PLAY;
   const [qid, setQid] = useState(2);
 
-  const question = data?.get(qid)?.data?.question;
-  const type = data?.get(qid)?.data?.questionType;
-  const choices = data?.get(qid)?.data?.choices;
+  const [type, setType] = useState(MULTIPLE_CHOICE);
+  const [choices, setChoices] = useState(DEFAULT_CHOICES);
+  const [answer, setAnswer] = useState(DEFAULT_TEXT);
+  const [sliderCorrectValue, setSliderCorrectValue] = useState(0);
+  
   const [answers, setAnswers] = React.useState(
     Array(choices?.length)
       .fill()
@@ -62,33 +66,87 @@ function Play() {
       .map(() => "neutral")
   );
   const [text, setText] = React.useState(DEFAULT_TEXT);
-  const answer = data?.get(qid)?.data?.answer;
   const [sliderValue, setSliderValue] = React.useState(0);
-  const sliderCorrectValue = data?.get(qid)?.data?.correctValue;
   const [submitted, setSubmitted] = React.useState(false);
+  const [completedQuestions, setCompletedQuestions] = React.useState(Array(questionList.length)
+  .fill()
+  .map(() => false));
+  const [viewedQuestions, setViewedQuestions] = React.useState(Array(questionList.length)
+  .fill()
+  .map(() => false));
 
   useEffect(() => {
     if (data) {
-      let newQuestionList = questionListData?.data?.list
+      viewQuestion();
+      setSubmitted(completedQuestions[currentQuestionIndex])
+      let newQuestionList = questionListData?.data?.list;
       setQuestionList(newQuestionList);
-      let newCurrentQuestionId = newQuestionList[currentQuestionIndex]
+      let newCurrentQuestionId = newQuestionList[currentQuestionIndex];
       setCurrentQuestionId(newCurrentQuestionId);
-      let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId)
-      setCurrentQuestionData(newCurrentQuestionData)
+      let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId);
+      setCurrentQuestionData(newCurrentQuestionData);
+      if (newCurrentQuestionData) {
+        setQuestion(newCurrentQuestionData?.data?.question);
+        let newType = newCurrentQuestionData?.data?.questionType;
+        setType(newType);
+        switch (newType) {
+          case MULTIPLE_CHOICE: {
+            setChoices(newCurrentQuestionData?.data?.choices);
+            break;
+          }
+          case TEXT_INPUT: {
+            setAnswer(newCurrentQuestionData?.data?.answer);
+            break;
+          }
+          case SLIDER: {
+            setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue);
+            break;
+          }
+        }
+      } else {
+        setQuestion(DEFAULT_TEXT);
+        setType(MULTIPLE_CHOICE);
+        setChoices(DEFAULT_CHOICES);
+        setAnswer(DEFAULT_TEXT);
+        setSliderCorrectValue(0);
+      }
     }
   }, [data, currentQuestionIndex]);
 
-  const onSkip = () => {
-    if (qid === 2) {
-      setQid(0);
-    } else {
-      setQid(qid + 1);
+  const onNext = () => {
+    if (currentQuestionIndex + 1 < questionList.length) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
     setSubmitted(false);
   };
 
+  const isLastQuestion = () => {
+    return currentQuestionIndex === questionList.length - 1;
+  };
+
+  const completeQuestion = () => {
+    let newCompletedQuestions = completedQuestions
+    newCompletedQuestions[currentQuestionIndex] = true;
+    setCompletedQuestions(newCompletedQuestions);
+  };
+
+  const viewQuestion = () => {
+    let newViewedQuestions = viewedQuestions
+    newViewedQuestions[currentQuestionIndex] = true;
+    setViewedQuestions(newViewedQuestions);
+  };
+
+  const getMiddleButtonText = () => {
+    return isLastQuestion() ? "Finish" : "Submit"
+  }
+
+  const getRightButtonText = () => {
+    return submitted ? "Next" : "Skip"
+  }
+
   const onSubmit = () => {
     setSubmitted(true); // TODO: if statement post / patch based on memberID
+    completeQuestion()
     /*
     switch (type) {
       case MULTIPLE_CHOICE: {
@@ -126,13 +184,21 @@ function Play() {
 
   return (
     <div align="center">
-      <Grid container direction={"row"} alignItems="center" justifyContent="center" sx={{ p: 2 }}>
+      <Grid
+        container
+        direction={"row"}
+        alignItems="center"
+        justifyContent="center"
+        sx={{ p: 2 }}
+      >
         <Grid item>
           <QuestionTopBar
+            screenType={screenType}
             currentQuestionIndex={currentQuestionIndex}
             setCurrentQuestionIndex={setCurrentQuestionIndex}
             questionList={questionList}
-            setQuestionList={setQuestionList}
+            completedQuestions={completedQuestions}
+            viewedQuestions={viewedQuestions}
           />
         </Grid>
       </Grid>
@@ -202,13 +268,13 @@ function Play() {
         </Grid>
         <Grid item sx={{ pr: 20 }}>
           <Button onClick={onSubmit} variant="contained" color="success">
-            Submit
+            {getMiddleButtonText()}
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="info" onClick={onSkip}>
-            Skip
-          </Button>
+          {!isLastQuestion() ? (<Button variant="contained" color="info" onClick={onNext}>
+            {getRightButtonText()}
+          </Button>) : null}
         </Grid>
       </Grid>
     </div>

@@ -28,7 +28,7 @@ export const QuizApp = () => {
                 return <Play />;
             }
           }}() */}
-        <Create />
+        <Play />
       </div>
     </div>
   );
