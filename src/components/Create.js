@@ -1,25 +1,14 @@
 import {
   TextField,
-  Fab,
   Grid,
   Box,
   InputLabel,
-  OutlinedInput,
-  IconButton,
   MenuItem,
-  InputAdornment,
   FormControl,
-  FormControlLabel,
   Button,
-  Checkbox,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
   Select,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 import React, { useState, useEffect } from "react";
 import {
   DEFAULT_TEXT,
@@ -41,46 +30,49 @@ import MultipleChoice from "./MultipleChoice";
 import TextInput from "./TextInput";
 import Slider from "./Slide";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import QuestionTopBar from "./QuestionTopBar";
 
 function Create() {
   const { data } = useAppData();
-  const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
+  const { mutateAsync: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
   const { mutate: deleteAppData } = useMutation(MUTATION_KEYS.DELETE_APP_DATA);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
+  
   const [questionList, setQuestionList] = useState([]);
-  const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
-  const [currentQuestionData, setCurrentQuestionData] = useState(null);
-  // Flag to indictate whether the current question is a new one, ie. not present in the database.
+  // Flag to indictate whether the current question is a new one, ie. not present in the database. Unused when using the real database
   const [newQuestion, setNewQuestion] = useState(false);
 
+  const screenType = CREATE;
   const [question, setQuestion] = useState(DEFAULT_TEXT);
   const [type, setType] = useState(MULTIPLE_CHOICE);
-  const screenType = CREATE;
-  const [generatedId, setGeneratedId] = useState(5);
 
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [text, setText] = useState(DEFAULT_TEXT);
-  const [sliderLeftText, setSLT] = useState(DEFAULT_TEXT);
-  const [sliderRightText, setSRT] = useState(DEFAULT_TEXT);
+  const [sliderLeftText, setSliderLeftText] = useState(DEFAULT_TEXT);
+  const [sliderRightText, setSliderRightText] = useState(DEFAULT_TEXT);
   const [sliderCorrectValue, setSliderCorrectValue] = useState(0);
-  const [qid, setQid] = useState(0);
 
+  /**
+   * Sets the {type} parameter to the dropdown menu's selected question type.
+   * 
+   * @param {object} event The question type menu change event.
+   */
   const handleTypeSelect = (event) => {
     setType(event.target.value);
   };
 
   useEffect(() => {
+    // Initializes multiple quiz creation screen parameters to their current database values once the database's app data is fetched, or once the current question's index changes (ie. the user navigates to another question).
     if (data) {
-      let newQuestionList = questionListData?.data?.list;
+      // Fetches the database's question list.
+      let newQuestionList = getDataWithType(data, QUESTION_LIST_TYPE)?.first()?.data?.list;
       setQuestionList(newQuestionList);
       let newCurrentQuestionId = newQuestionList[currentQuestionIndex];
       setCurrentQuestionId(newCurrentQuestionId);
+      // The database data structure of the current question.
       let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId);
-      setCurrentQuestionData(newCurrentQuestionData);
       if (newCurrentQuestionData) {
         setQuestion(newCurrentQuestionData?.data?.question);
         let newType = newCurrentQuestionData?.data?.questionType;
@@ -95,8 +87,8 @@ function Create() {
             break;
           }
           case SLIDER: {
-            setSLT(newCurrentQuestionData?.data?.leftText);
-            setSRT(newCurrentQuestionData?.data?.rightText);
+            setSliderLeftText(newCurrentQuestionData?.data?.leftText);
+            setSliderRightText(newCurrentQuestionData?.data?.rightText);
             setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue);
             break;
           }
@@ -106,36 +98,39 @@ function Create() {
         setType(MULTIPLE_CHOICE);
         setChoices(DEFAULT_CHOICES);
         setText(DEFAULT_TEXT);
-        setSLT(DEFAULT_TEXT);
-        setSRT(DEFAULT_TEXT);
+        setSliderLeftText(DEFAULT_TEXT);
+        setSliderRightText(DEFAULT_TEXT);
         setSliderCorrectValue(0);
       }
     }
   }, [data, currentQuestionIndex]);
 
-  const generateId = () => {
-    setGeneratedId(generatedId + 1);
-    return `${generatedId}`; // can be made asynchronous
-  };
-
-  const onAddQuestion = () => {
-    let newQuestionList = [...questionList];
-    // uncomment when using real database:
-    /*
-    postAppData({
-      type: NEW_QUESTION_TYPE
+  /**
+   * Creates a new question and navigates to it.
+   */
+  const onAddQuestion = async () => {
+    const {id: newAppDataId} = await postAppData({
+      data: {
+        question: '',
+        questionType: MULTIPLE_CHOICE,
+        choices: DEFAULT_CHOICES,
+      },
+      type: QUESTION_TYPE,
     })
-    const id = getDataWithType(data, NEW_QUESTION_TYPE)?.get(0)?.id
+    let newQuestionList = [...questionList];
+    // Temporary item to be added to the database with a distinct type, in order to fetch its ID upon cre
+    //console.log(newAppDataId)
+    //const id = getDataWithType(data, NEW_QUESTION_TYPE)?.first()?.id
     const newQuestionIndex = currentQuestionIndex+1
-    newQuestionList.splice(newQuestionIndex, 0, id);
-    */
-    const newQuestionIndex = currentQuestionIndex + 1;
-    newQuestionList.splice(newQuestionIndex, 0, generateId()); // comment when using real database
+    newQuestionList.splice(newQuestionIndex, 0, newAppDataId);
     setQuestionList(newQuestionList);
     onNext(newQuestionList);
     setNewQuestion(true); // delete newQuestion flag when using real db
   };
 
+  /**
+   * Deletes the current question and navigates to the previous one, or the next one if there are none.
+   */
   const onDeleteQuestion = () => {
     if (questionList.length > 1) {
       deleteAppData({ currentQuestionId });
@@ -146,6 +141,10 @@ function Create() {
     }
   };
 
+  /**
+   * 
+   * @param {*} newQuestionList 
+   */
   const onNext = (newQuestionList) => {
     onSave(newQuestionList);
     const questionListLength = newQuestionList
@@ -156,6 +155,10 @@ function Create() {
     }
   };
 
+  /**
+   * 
+   * @param {*} newQuestionList 
+   */
   const onPrev = (newQuestionList) => {
     onSave(newQuestionList);
     if (currentQuestionIndex > 0) {
@@ -163,9 +166,13 @@ function Create() {
     }
   };
 
+  /**
+   * 
+   * @param {*} qList 
+   */
   const onSave = (qList) => {
     patchAppData({
-      id: questionListData?.id,
+      id: getDataWithType(data, QUESTION_LIST_TYPE)?.first()?.id,
       data: {
         list: qList ? qList : questionList,
       },
@@ -173,9 +180,8 @@ function Create() {
     });
     switch (type) {
       case MULTIPLE_CHOICE: {
-        if (questionList.length == 0 || newQuestion) {
+        if (questionList.length == 0) {
           postAppData({
-            id: currentQuestionId, // delete when using the true database
             data: {
               question: question,
               questionType: MULTIPLE_CHOICE,
@@ -200,7 +206,6 @@ function Create() {
       case TEXT_INPUT: {
         if (questionList.length == 0 || newQuestion) {
           postAppData({
-            id: currentQuestionId, // delete when using the true database
             data: {
               question: question,
               questionType: TEXT_INPUT,
@@ -225,7 +230,6 @@ function Create() {
       case SLIDER: {
         if (questionList.length == 0 || newQuestion) {
           postAppData({
-            id: currentQuestionId, // delete when using the true database
             data: {
               question: question,
               questionType: SLIDER,
@@ -253,7 +257,7 @@ function Create() {
       }
     }
   };
-  // useEffect always
+
   return (
     <div align="center">
       <Grid
@@ -322,7 +326,6 @@ function Create() {
                 <MultipleChoice
                   choices={choices}
                   setChoices={setChoices}
-                  currentQuestionData={currentQuestionData}
                 />
               );
             }
@@ -339,9 +342,9 @@ function Create() {
               return (
                 <Slider
                   leftText={sliderLeftText}
-                  setLeftText={setSLT}
+                  setLeftText={setSliderLeftText}
                   rightText={sliderRightText}
-                  setRightText={setSRT}
+                  setRightText={setSliderRightText}
                   sliderCorrectValue={sliderCorrectValue}
                   setSliderCorrectValue={setSliderCorrectValue}
                   currentQuestion={currentQuestionIndex}
@@ -353,7 +356,6 @@ function Create() {
                 <MultipleChoice
                   choices={choices}
                   setChoices={setChoices}
-                  currentQuestionData={currentQuestionData}
                 />
               );
           }

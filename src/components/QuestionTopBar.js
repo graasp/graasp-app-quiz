@@ -70,7 +70,7 @@ export default function QuestionTopBar({
         <Grid item>
           <Stepper nonLinear alternativeLabel activeStep={currentQuestionIndex}>
             {questionList?.map((label, index) => (
-              <Step key={label} completed={completedQuestions[index]}>
+              <Step key={label} completed={completedQuestions? completedQuestions[index] : false}>
                 <StepButton color="inherit" onClick={handleStep(index)}>
                   {`Question ${index + 1}`}
                 </StepButton>
@@ -86,7 +86,7 @@ export default function QuestionTopBar({
                         aria-label="add"
                         justify-content="center"
                         style={buttonStyle}
-                        onClick={onAddQuestion}
+                        onClick={async () => { await onAddQuestion()}}
                         align="center"
                       >
                         <AddIcon style={addStyle} />

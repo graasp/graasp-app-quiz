@@ -27,8 +27,7 @@ import {
   APP_DATA_TYPE,
 } from "./constants";
 
-function MultipleChoice({ choices, setChoices, currentQuestionData }) {
-  const dataChoices = currentQuestionData?.choices;
+function MultipleChoice({ choices, setChoices }) {
 
   const handleAnswerCorrectnessChange = (index, e) => {
     let newChoices = [...choices];
