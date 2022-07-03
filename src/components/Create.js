@@ -48,11 +48,14 @@ function Create() {
   const { data } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
+  const { mutate: deleteAppData } = useMutation(MUTATION_KEYS.DELETE_APP_DATA);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [questionList, setQuestionList] = useState([]);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
   const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0)
+  // Flag to indictate whether the current question is a new one, ie. not present in the database.
+  const [newQuestion, setNewQuestion] = useState(false)
 
   const [question, setQuestion] = useState(DEFAULT_TEXT);
   const [type, setType] = useState(MULTIPLE_CHOICE);
@@ -122,16 +125,19 @@ function Create() {
       type: NEW_QUESTION_TYPE
     })
     const id = getDataWithType(data, NEW_QUESTION_TYPE)?.get(0)?.id
-    newQuestionList.splice(currentQuestionIndex, 0, id);
+    const newQuestionIndex = currentQuestionIndex+1
+    newQuestionList.splice(newQuestionIndex, 0, id);
     */
-    newQuestionList.splice(currentQuestionIndex, 0, generateId()); // comment when using real database
+    const newQuestionIndex = currentQuestionIndex+1
+    newQuestionList.splice(newQuestionIndex, 0, generateId()); // comment when using real database
     setQuestionList(newQuestionList);
-    onSave(newQuestionList)
-    console.log(newQuestionList)
+    onNext(newQuestionList)
+    setNewQuestion(true) // delete newQuestion flag when using real db
   };
 
   const onDeleteQuestion = () => {
     if (questionList.length > 1) {
+      deleteAppData({ currentQuestionId });
       let newQuestionList = [...questionList];
       newQuestionList.splice(currentQuestionIndex, 1);
       setQuestionList(newQuestionList);
@@ -139,9 +145,10 @@ function Create() {
     }
   };
 
-  const onNext = () => {
-    onSave()
-    if (currentQuestionIndex+1 < questionList.length) {
+  const onNext = (newQuestionList) => {
+    onSave(newQuestionList)
+    const questionListLength = newQuestionList ? newQuestionList.length : questionList.length
+    if (currentQuestionIndex+1 < questionListLength) {
       setCurrentQuestionIndex(currentQuestionIndex+1)
     }
   };
@@ -163,9 +170,9 @@ function Create() {
     });
     switch (type) {
       case MULTIPLE_CHOICE: {
-        //patch
-        if (questionList.length == 0) {
+        if (questionList.length == 0 || newQuestion) {
           postAppData({
+            id: currentQuestionId, // delete when using the true database
             data: {
               question: question,
               questionType: MULTIPLE_CHOICE,
@@ -173,9 +180,10 @@ function Create() {
             },
             type: QUESTION_TYPE,
           });
+          setNewQuestion(false)
         } else {
           patchAppData({
-            id: questionList[currentQuestionIndex],
+            id: currentQuestionId,
             data: {
               question: question,
               questionType: MULTIPLE_CHOICE,
@@ -187,8 +195,9 @@ function Create() {
         break;
       }
       case TEXT_INPUT: {
-        if (questionList.length == 0){
+        if (questionList.length == 0 || newQuestion){
           postAppData({
+            id: currentQuestionId, // delete when using the true database
             data: {
               question: question,
               questionType: TEXT_INPUT,
@@ -196,9 +205,10 @@ function Create() {
             },
             type: QUESTION_TYPE,
           });
+          setNewQuestion(false)
         } else {
           patchAppData({
-            id: questionList[currentQuestionIndex],
+            id: currentQuestionId,
             data: {
               question: question,
               questionType: TEXT_INPUT,
@@ -210,8 +220,9 @@ function Create() {
         break;
       }
       case SLIDER: {
-        if (questionList.length == 0){
+        if (questionList.length == 0 || newQuestion){
           postAppData({
+            id: currentQuestionId, // delete when using the true database
             data: {
               question: question,
               questionType: SLIDER,
@@ -221,9 +232,10 @@ function Create() {
             },
             type: QUESTION_TYPE,
           });
+          setNewQuestion(false)
         } else {
           patchAppData({
-            id: questionList[currentQuestionIndex],
+            id: currentQuestionId,
             data: {
               question: question,
               questionType: SLIDER,
@@ -341,7 +353,7 @@ function Create() {
           align="center"
         >
           <Grid item>
-            <Button variant="contained" color="info" onClick={() => {onPrev()}}>
+            <Button variant="contained" color="info" onClick={() => onPrev()}>
               Prev
             </Button>
           </Grid>
@@ -356,12 +368,12 @@ function Create() {
             </Button>
           </Grid>
           <Grid item>
-            <Button onClick={() => {onSave()}} variant="contained" color="success">
+            <Button onClick={() => onSave()} variant="contained" color="success">
               Save
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="info" onClick={onNext}>
+            <Button variant="contained" color="info" onClick={() => onNext()}>
               Next
             </Button>
           </Grid>
