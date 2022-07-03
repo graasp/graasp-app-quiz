@@ -27,6 +27,7 @@ import {
   QUESTION_TYPE,
   QUESTION_LIST_TYPE,
   PLAY,
+  ANSWER_TYPE,
 } from "./constants";
 import { useAppData } from "./context/hooks";
 import { MUTATION_KEYS, useMutation } from "../config/queryClient";
@@ -48,7 +49,6 @@ function Play() {
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
   const screenType = PLAY;
-  const [qid, setQid] = useState(2);
 
   const [type, setType] = useState(MULTIPLE_CHOICE);
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
@@ -145,41 +145,45 @@ function Play() {
   }
 
   const onSubmit = () => {
-    setSubmitted(true); // TODO: if statement post / patch based on memberID
-    completeQuestion()
-    /*
-    switch (type) {
-      case MULTIPLE_CHOICE: {
-        postAppData({
-          id: data?.get(3).id,
-          data: {
-            questionType: MULTIPLE_CHOICE,
-            answers: answers,
-          },
-          type: "answer",
-        });
+    if (!completedQuestions[currentQuestionIndex]) {
+      setSubmitted(true);
+      completeQuestion()
+      switch (type) {
+        case MULTIPLE_CHOICE: {
+          postAppData({
+            questionID: currentQuestionId,
+            data: {
+              questionType: MULTIPLE_CHOICE,
+              answers: answers,
+            },
+            type: ANSWER_TYPE,
+          });
+          break;
+        }
+        case TEXT_INPUT: {
+          postAppData({
+            questionID: currentQuestionId,
+            data: {
+              questionType: TEXT_INPUT,
+              answer: text,
+            },
+            type: ANSWER_TYPE,
+          });
+          break;
+        }
+        case SLIDER: {
+          postAppData({
+            questionID: currentQuestionId,
+            data: {
+              questionType: SLIDER,
+              value: sliderValue,
+            },
+            type: ANSWER_TYPE,
+          });
+          break;
+        }
       }
-      case TEXT_INPUT: {
-        postAppData({
-          id: data?.get(3).id,
-          data: {
-            questionType: TEXT_INPUT,
-            answer: text,
-          },
-          type: "answer",
-        });
-      }
-      case SLIDER: {
-        postAppData({
-          id: data?.get(3).id,
-          data: {
-            questionType: SLIDER,
-            value: sliderValue,
-          },
-          type: "answer",
-        });
-      }
-    }*/
+    }
   };
 
   return (
