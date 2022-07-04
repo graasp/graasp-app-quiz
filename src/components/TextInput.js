@@ -21,7 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { question, setQuestion } from "./Create.js";
 import React, { useState } from "react";
 
-function TextInput({ text, setText }) {
+function TextInput({ text, setText, setDataChanged }) {
   return (
     <div align="center">
       <Grid
@@ -42,6 +42,7 @@ function TextInput({ text, setText }) {
             variant="outlined"
             onChange={(t) => {
               {
+                setDataChanged(true);
                 setText(t.target.value);
               }
             }}

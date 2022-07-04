@@ -3,7 +3,6 @@ import { APP_DATA_TYPES, QUESTION_TYPES } from "../components/constants";
 const buildDatabase = (appContext) => ({
   appData: [
     {
-      id: "0",
       data: {
         list: ["id4", "id5", "id"],
       },

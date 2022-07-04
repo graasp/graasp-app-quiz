@@ -36,7 +36,10 @@ function Play() {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const [questionList, setQuestionList] = useState([]);
-  const questionListData = getDataWithType(data, APP_DATA_TYPES.QUESTION_LIST)?.get(0);
+  const questionListData = getDataWithType(
+    data,
+    APP_DATA_TYPES.QUESTION_LIST
+  )?.get(0);
   const [question, setQuestion] = React.useState(DEFAULT_TEXT);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
@@ -47,7 +50,7 @@ function Play() {
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [answer, setAnswer] = useState(DEFAULT_TEXT);
   const [sliderCorrectValue, setSliderCorrectValue] = useState(0);
-  
+
   const [answers, setAnswers] = React.useState(
     Array(choices?.length)
       .fill()
@@ -61,17 +64,21 @@ function Play() {
   const [text, setText] = React.useState(DEFAULT_TEXT);
   const [sliderValue, setSliderValue] = React.useState(0);
   const [submitted, setSubmitted] = React.useState(false);
-  const [completedQuestions, setCompletedQuestions] = React.useState(Array(questionList.length)
-  .fill()
-  .map(() => false));
-  const [viewedQuestions, setViewedQuestions] = React.useState(Array(questionList.length)
-  .fill()
-  .map(() => false));
+  const [completedQuestions, setCompletedQuestions] = React.useState(
+    Array(questionList.length)
+      .fill()
+      .map(() => false)
+  );
+  const [viewedQuestions, setViewedQuestions] = React.useState(
+    Array(questionList.length)
+      .fill()
+      .map(() => false)
+  );
 
   useEffect(() => {
     if (data) {
       viewQuestion();
-      setSubmitted(completedQuestions[currentQuestionIndex])
+      setSubmitted(completedQuestions[currentQuestionIndex]);
       let newQuestionList = questionListData?.data?.list;
       setQuestionList(newQuestionList);
       let newCurrentQuestionId = newQuestionList[currentQuestionIndex];
@@ -118,29 +125,29 @@ function Play() {
   };
 
   const completeQuestion = () => {
-    let newCompletedQuestions = completedQuestions
+    let newCompletedQuestions = completedQuestions;
     newCompletedQuestions[currentQuestionIndex] = true;
     setCompletedQuestions(newCompletedQuestions);
   };
 
   const viewQuestion = () => {
-    let newViewedQuestions = viewedQuestions
+    let newViewedQuestions = viewedQuestions;
     newViewedQuestions[currentQuestionIndex] = true;
     setViewedQuestions(newViewedQuestions);
   };
 
   const getMiddleButtonText = () => {
-    return isLastQuestion() ? "Finish" : "Submit"
-  }
+    return isLastQuestion() ? "Finish" : "Submit";
+  };
 
   const getRightButtonText = () => {
-    return submitted ? "Next" : "Skip"
-  }
+    return submitted ? "Next" : "Skip";
+  };
 
   const onSubmit = () => {
     if (!completedQuestions[currentQuestionIndex]) {
       setSubmitted(true);
-      completeQuestion()
+      completeQuestion();
       switch (type) {
         case QUESTION_TYPES.MULTIPLE_CHOICE: {
           postAppData({
@@ -269,9 +276,11 @@ function Play() {
           </Button>
         </Grid>
         <Grid item>
-          {!isLastQuestion() ? (<Button variant="contained" color="info" onClick={onNext}>
-            {getRightButtonText()}
-          </Button>) : null}
+          {!isLastQuestion() ? (
+            <Button variant="contained" color="info" onClick={onNext}>
+              {getRightButtonText()}
+            </Button>
+          ) : null}
         </Grid>
       </Grid>
     </div>

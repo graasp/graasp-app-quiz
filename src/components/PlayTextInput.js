@@ -70,34 +70,7 @@ function PlayTextInput({ text, setText, answer, submitted }) {
           <Typography variant="p1"> Type Answer here:</Typography>
         </Grid>
         {(() => {
-          if (submitted) {
-            if (answerIsCorrect()) {
-              return (
-                <TextField
-                  label="Correct"
-                  required
-                  variant="outlined"
-                  defaultValue={text}
-                  color="success"
-                  focused
-                  inputProps={{ readOnly: true }}
-                  id="validation-outlined-input"
-                />
-              );
-            } else {
-              return (
-                <TextField
-                  error
-                  id="outlined-error-heper-text"
-                  label="Incorrect"
-                  defaultValue={text}
-                  helperText={`Correct Answer: ${answer}`}
-                  focused
-                  inputProps={{ readOnly: true }}
-                />
-              );
-            }
-          } else {
+          if (!submitted) {
             return (
               <TextField
                 value={text}
@@ -113,6 +86,33 @@ function PlayTextInput({ text, setText, answer, submitted }) {
               />
             );
           }
+
+          if (answerIsCorrect()) {
+            return (
+              <TextField
+                label="Correct"
+                required
+                variant="outlined"
+                defaultValue={text}
+                color="success"
+                focused
+                inputProps={{ readOnly: true }}
+                id="validation-outlined-input"
+              />
+            );
+          }
+
+          return (
+            <TextField
+              error
+              id="outlined-error-heper-text"
+              label="Incorrect"
+              defaultValue={text}
+              helperText={`Correct Answer: ${answer}`}
+              focused
+              inputProps={{ readOnly: true }}
+            />
+          );
         })()}
       </Grid>
     </div>

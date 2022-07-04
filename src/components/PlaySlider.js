@@ -66,20 +66,17 @@ function PlaySlider({
             if (answerIsCorrect()) {
               return (
                 <Typography variant="p1" color="success.main">
-                  {" "}
-                  Correct!{" "}
+                  Correct!
                 </Typography>
               );
             } else {
               return (
                 <div>
                   <Typography variant="subtitle1" color="error">
-                    {" "}
-                    Incorrect!{" "}
+                    Incorrect!
                   </Typography>
                   <Typography variant="subtitle2">
-                    {" "}
-                    Correct value was: {sliderCorrectValue}{" "}
+                    Correct value was: {sliderCorrectValue}
                   </Typography>
                 </div>
               );

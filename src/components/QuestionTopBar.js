@@ -57,9 +57,11 @@ export default function QuestionTopBar({
   completedQuestions,
   viewedQuestions,
 }) {
-
   const handleStep = (step) => () => {
-    if (screenType === SCREEN_TYPES.CREATE || (screenType === SCREEN_TYPES.PLAY && viewedQuestions[step])) {
+    if (
+      screenType === SCREEN_TYPES.CREATE ||
+      (screenType === SCREEN_TYPES.PLAY && viewedQuestions[step])
+    ) {
       setCurrentQuestionIndex(step);
     }
   };
@@ -70,7 +72,12 @@ export default function QuestionTopBar({
         <Grid item>
           <Stepper nonLinear alternativeLabel activeStep={currentQuestionIndex}>
             {questionList?.map((label, index) => (
-              <Step key={label} completed={completedQuestions? completedQuestions[index] : false}>
+              <Step
+                key={label}
+                completed={
+                  completedQuestions ? completedQuestions[index] : false
+                }
+              >
                 <StepButton color="inherit" onClick={handleStep(index)}>
                   {`Question ${index + 1}`}
                 </StepButton>

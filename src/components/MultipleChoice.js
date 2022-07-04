@@ -20,29 +20,30 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { question, setQuestion } from "./Create.js";
 import React, { useState } from "react";
-import {
-  DEFAULT_CHOICE,
-} from "./constants";
+import { DEFAULT_CHOICE } from "./constants";
 
-function MultipleChoice({ choices, setChoices }) {
-
+function MultipleChoice({ choices, setChoices, setDataChanged }) {
   const handleAnswerCorrectnessChange = (index, e) => {
+    setDataChanged(true);
     let newChoices = [...choices];
     newChoices[index] = { ...choices[index], isCorrect: e.target.checked };
     setChoices(newChoices);
   };
 
   const handleChoiceChange = (index, e) => {
+    setDataChanged(true);
     let newChoices = [...choices];
     newChoices[index] = { ...choices[index], choice: e.target.value };
     setChoices(newChoices);
   };
 
   const addAnswer = () => {
+    setDataChanged(true);
     setChoices([...choices, DEFAULT_CHOICE]);
   };
 
   const removeAnswer = (index) => {
+    setDataChanged(true);
     let newChoices = [...choices];
     newChoices.splice(index, 1);
     setChoices(newChoices);
@@ -77,9 +78,8 @@ function MultipleChoice({ choices, setChoices }) {
                     <FormControl variant="outlined">
                       <InputLabel>Choice {readableIndex}</InputLabel>
                       <OutlinedInput
-                        type={"text"}
+                        type="text"
                         label={`Choice ${readableIndex}`}
-                        //defaultValue={dataChoices ? dataChoices[index] : ""}
                         value={choice.choice}
                         placeholder={`Enter Choice ${readableIndex}`}
                         onChange={(e) => handleChoiceChange(index, e)}
@@ -106,6 +106,7 @@ function MultipleChoice({ choices, setChoices }) {
                     {
                       <IconButton
                         type="button"
+                        disabled={choices.length <= 2}
                         onClick={
                           choices.length > 2 ? () => removeAnswer(index) : {}
                         }

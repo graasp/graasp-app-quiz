@@ -29,6 +29,7 @@ function Slide({
   setRightText,
   sliderCorrectValue,
   setSliderCorrectValue,
+  setDataChanged,
 }) {
   return (
     <div align="center">
@@ -50,6 +51,7 @@ function Slide({
             valueLabelDisplay="auto"
             value={sliderCorrectValue}
             onChange={(_, val) => {
+              setDataChanged(true);
               setSliderCorrectValue(val);
             }}
           />
@@ -69,6 +71,7 @@ function Slide({
                 variant="outlined"
                 style={{ width: "50%" }}
                 onChange={(t) => {
+                  setDataChanged(true);
                   setLeftText(t.target.value);
                 }}
               />
@@ -82,6 +85,7 @@ function Slide({
                 variant="outlined"
                 style={{ width: "50%" }}
                 onChange={(t) => {
+                  setDataChanged(true);
                   setRightText(t.target.value);
                 }}
               />

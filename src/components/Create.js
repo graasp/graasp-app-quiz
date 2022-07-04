@@ -31,7 +31,7 @@ function Create() {
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
   const { mutate: deleteAppData } = useMutation(MUTATION_KEYS.DELETE_APP_DATA);
-  
+
   const [questionList, setQuestionList] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
@@ -41,9 +41,11 @@ function Create() {
   const screenType = SCREEN_TYPES.CREATE;
   const [question, setQuestion] = useState(DEFAULT_TEXT);
   const [type, setType] = useState(QUESTION_TYPES.MULTIPLE_CHOICE);
+  // Flag to indicate whether any of the create screen's current data has changed, if set to false the save button will be disabled
+  const [dataChanged, setDataChanged] = useState(true);
   // Flag to block useEffect until an operation completes
   //const [update, setUpdate] = useState(true)
-  var update = true
+  var update = true;
 
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [text, setText] = useState(DEFAULT_TEXT);
@@ -53,21 +55,29 @@ function Create() {
 
   /**
    * Sets the {type} parameter to the dropdown menu's selected question type.
-   * 
+   *
    * @param {object} event The question type menu change event.
    */
   const handleTypeSelect = (event) => {
+    setDataChanged(true);
     setType(event.target.value);
   };
 
   useEffect(() => {
+    setDataChanged(true);
+  }, [currentQuestionIndex]);
+
+  useEffect(() => {
     // Initializes multiple quiz creation screen parameters to their current database values once the database's app data is fetched, or once the current question's index changes (ie. the user navigates to another question).
     if (data) {
-      console.log("first called")
-      console.log(data)
-      console.log(questionList)
+      console.log("first called");
+      console.log(data);
+      console.log(questionList);
       // Fetches the database's question list.
-      let newQuestionList = getDataWithType(data, APP_DATA_TYPES.QUESTION_LIST)?.first()?.data?.list;
+      let newQuestionList = getDataWithType(
+        data,
+        APP_DATA_TYPES.QUESTION_LIST
+      )?.first()?.data?.list;
       setQuestionList(newQuestionList);
       let newCurrentQuestionId = newQuestionList[currentQuestionIndex];
       setCurrentQuestionId(newCurrentQuestionId);
@@ -75,11 +85,15 @@ function Create() {
       let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId);
       if (newCurrentQuestionData) {
         setQuestion(newCurrentQuestionData?.data?.question ?? DEFAULT_TEXT);
-        let newType = newCurrentQuestionData?.data?.questionType ?? QUESTION_TYPES.MULTIPLE_CHOICE;
+        let newType =
+          newCurrentQuestionData?.data?.questionType ??
+          QUESTION_TYPES.MULTIPLE_CHOICE;
         setType(newType);
         switch (newType) {
           case QUESTION_TYPES.MULTIPLE_CHOICE: {
-            setChoices(newCurrentQuestionData?.data?.choices ?? DEFAULT_CHOICES);
+            setChoices(
+              newCurrentQuestionData?.data?.choices ?? DEFAULT_CHOICES
+            );
             break;
           }
           case QUESTION_TYPES.TEXT_INPUT: {
@@ -87,9 +101,15 @@ function Create() {
             break;
           }
           case QUESTION_TYPES.SLIDER: {
-            setSliderLeftText(newCurrentQuestionData?.data?.leftText ?? DEFAULT_TEXT);
-            setSliderRightText(newCurrentQuestionData?.data?.rightText ?? DEFAULT_TEXT);
-            setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue ?? 0);
+            setSliderLeftText(
+              newCurrentQuestionData?.data?.leftText ?? DEFAULT_TEXT
+            );
+            setSliderRightText(
+              newCurrentQuestionData?.data?.rightText ?? DEFAULT_TEXT
+            );
+            setSliderCorrectValue(
+              newCurrentQuestionData?.data?.correctValue ?? 0
+            );
             break;
           }
         }
@@ -106,32 +126,37 @@ function Create() {
   }, [data, currentQuestionIndex]);
 
   useEffect(() => {
+    setDataChanged(true);
     if (newQuestion) {
-      console.log("called")
-      setNewQuestion(false)
-      const id = getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)?.first()?.id
+      console.log("called");
+      setNewQuestion(false);
+      const id = getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)?.first()
+        ?.id;
       let newQuestionList = [...questionList];
-      const newQuestionIndex = currentQuestionIndex+1
+      const newQuestionIndex = currentQuestionIndex + 1;
+      // Adds the newly created question's ID right after the current question's one in the question list.
       newQuestionList.splice(newQuestionIndex, 0, id);
       setQuestionList(newQuestionList);
       handleNext(newQuestionList);
     }
-  }, [getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)])
+  }, [getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)]);
   /**
    * Creates a new question and navigates to it.
    */
   const onAddQuestion = () => {
-    setNewQuestion(true)
+    setDataChanged(true);
+    setNewQuestion(true);
     // Temporary item to be added to the database with a distinct type, in order to fetch its ID upon creation
     postAppData({
       type: APP_DATA_TYPES.NEW_QUESTION,
-    })
+    });
   };
 
   /**
    * Deletes the current question and navigates to the previous one, or the next one if there are none.
    */
   const deleteQuestion = () => {
+    setDataChanged(true);
     // We do not allow the deletion of all questions of the quiz, there should be at least one visible, but maybe we could add a screen for when no quiz questions have been created.
     if (questionList.length > 1) {
       //deleteAppData({ currentQuestionId }); The question should be deleted from the database as well using a variant of this method.
@@ -144,8 +169,8 @@ function Create() {
   };
 
   /**
-   * 
-   * @param {*} newQuestionList 
+   *
+   * @param {*} newQuestionList
    */
   const handleNext = (newQuestionList) => {
     handleSave(newQuestionList);
@@ -158,8 +183,8 @@ function Create() {
   };
 
   /**
-   * 
-   * @param {*} newQuestionList 
+   *
+   * @param {*} newQuestionList
    */
   const handlePrevious = (newQuestionList) => {
     handleSave(newQuestionList);
@@ -169,58 +194,52 @@ function Create() {
   };
 
   /**
-   * 
-   * @param {*} qList 
+   *
+   * @param {*} qList
    */
   const handleSave = (qList) => {
-    let questionListDBId = getDataWithType(data, APP_DATA_TYPES.QUESTION_LIST)?.first()?.id
-    if (questionListDBId) {
-      patchAppData({
-        id: questionListDBId,
-        data: {
-          list: qList ?? questionList,
-        },
-        type: APP_DATA_TYPES.QUESTION_LIST,
-      });
-    }
-    switch (type) {
-      case QUESTION_TYPES.MULTIPLE_CHOICE: {
-        if (questionList.length == 0) {
-          postAppData({
-            data: {
-              question: question,
-              questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
-              choices: choices,
-            },
-            type: APP_DATA_TYPES.QUESTION,
-          });
-        } else {
-          postAppData({
-            id: currentQuestionId,
-            data: {
-              question: question,
-              questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
-              choices: choices,
-            },
-            type: APP_DATA_TYPES.QUESTION,
-          });
-        }
-        break;
+    // Only save the data if it has changed
+    if (dataChanged) {
+      let questionListDBId = getDataWithType(
+        data,
+        APP_DATA_TYPES.QUESTION_LIST
+      )?.first()?.id;
+      if (questionListDBId) {
+        patchAppData({
+          id: questionListDBId,
+          data: {
+            list: qList ?? questionList,
+          },
+          type: APP_DATA_TYPES.QUESTION_LIST,
+        });
       }
-      case QUESTION_TYPES.TEXT_INPUT: {
-        if (questionList.length == 0 || newQuestion) {
-          postAppData({
-            data: {
-              question: question,
-              questionType: QUESTION_TYPES.TEXT_INPUT,
-              answer: text,
-            },
-            type: APP_DATA_TYPES.QUESTION,
-          });
-        } else {
-          if (currentQuestionId) {
-            patchAppData({
+      switch (type) {
+        case QUESTION_TYPES.MULTIPLE_CHOICE: {
+          if (!questionList.length) {
+            postAppData({
+              data: {
+                question: question,
+                questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
+                choices: choices,
+              },
+              type: APP_DATA_TYPES.QUESTION,
+            });
+          } else {
+            postAppData({
               id: currentQuestionId,
+              data: {
+                question: question,
+                questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
+                choices: choices,
+              },
+              type: APP_DATA_TYPES.QUESTION,
+            });
+          }
+          break;
+        }
+        case QUESTION_TYPES.TEXT_INPUT: {
+          if (!questionList.length) {
+            postAppData({
               data: {
                 question: question,
                 questionType: QUESTION_TYPES.TEXT_INPUT,
@@ -228,26 +247,24 @@ function Create() {
               },
               type: APP_DATA_TYPES.QUESTION,
             });
+          } else {
+            if (currentQuestionId) {
+              patchAppData({
+                id: currentQuestionId,
+                data: {
+                  question: question,
+                  questionType: QUESTION_TYPES.TEXT_INPUT,
+                  answer: text,
+                },
+                type: APP_DATA_TYPES.QUESTION,
+              });
+            }
           }
+          break;
         }
-        break;
-      }
-      case QUESTION_TYPES.SLIDER: {
-        if (questionList.length == 0 || newQuestion) {
-          postAppData({
-            data: {
-              question: question,
-              questionType: QUESTION_TYPES.SLIDER,
-              leftText: sliderLeftText,
-              rightText: sliderRightText,
-              correctValue: sliderCorrectValue,
-            },
-            type: APP_DATA_TYPES.QUESTION,
-          });
-        } else {
-          if (currentQuestionId) {
-            patchAppData({
-              id: currentQuestionId,
+        case QUESTION_TYPES.SLIDER: {
+          if (!questionList.length) {
+            postAppData({
               data: {
                 question: question,
                 questionType: QUESTION_TYPES.SLIDER,
@@ -257,10 +274,25 @@ function Create() {
               },
               type: APP_DATA_TYPES.QUESTION,
             });
+          } else {
+            if (currentQuestionId) {
+              patchAppData({
+                id: currentQuestionId,
+                data: {
+                  question: question,
+                  questionType: QUESTION_TYPES.SLIDER,
+                  leftText: sliderLeftText,
+                  rightText: sliderRightText,
+                  correctValue: sliderCorrectValue,
+                },
+                type: APP_DATA_TYPES.QUESTION,
+              });
+            }
           }
+          break;
         }
-        break;
       }
+      setDataChanged(false);
     }
   };
 
@@ -303,8 +335,12 @@ function Create() {
                 label="Type"
                 onChange={handleTypeSelect}
               >
-                <MenuItem value={QUESTION_TYPES.MULTIPLE_CHOICE}>Multiple Choice</MenuItem>
-                <MenuItem value={QUESTION_TYPES.TEXT_INPUT}>Text Input</MenuItem>
+                <MenuItem value={QUESTION_TYPES.MULTIPLE_CHOICE}>
+                  Multiple Choice
+                </MenuItem>
+                <MenuItem value={QUESTION_TYPES.TEXT_INPUT}>
+                  Text Input
+                </MenuItem>
                 <MenuItem value={QUESTION_TYPES.SLIDER}>Slider</MenuItem>
               </Select>
             </FormControl>
@@ -321,6 +357,7 @@ function Create() {
             name="quizQuestion"
             variant="outlined"
             onChange={(t) => {
+              setDataChanged(true);
               setQuestion(t.target.value);
             }}
           />
@@ -332,6 +369,7 @@ function Create() {
                 <MultipleChoice
                   choices={choices}
                   setChoices={setChoices}
+                  setDataChanged={setDataChanged}
                 />
               );
             }
@@ -341,6 +379,7 @@ function Create() {
                   text={text}
                   setText={setText}
                   currentQuestion={currentQuestionIndex}
+                  setDataChanged={setDataChanged}
                 />
               );
             }
@@ -354,6 +393,7 @@ function Create() {
                   sliderCorrectValue={sliderCorrectValue}
                   setSliderCorrectValue={setSliderCorrectValue}
                   currentQuestion={currentQuestionIndex}
+                  setDataChanged={setDataChanged}
                 />
               );
             }
@@ -362,6 +402,7 @@ function Create() {
                 <MultipleChoice
                   choices={choices}
                   setChoices={setChoices}
+                  setDataChanged={setDataChanged}
                 />
               );
           }
@@ -374,7 +415,12 @@ function Create() {
           align="center"
         >
           <Grid item>
-            <Button variant="contained" color="info" onClick={() => handlePrevious()}>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => handlePrevious()}
+              disabled={currentQuestionIndex === 0}
+            >
               Prev
             </Button>
           </Grid>
@@ -384,6 +430,7 @@ function Create() {
               variant="contained"
               startIcon={<DeleteIcon />}
               onClick={deleteQuestion}
+              disabled={questionList.length <= 1}
             >
               Delete
             </Button>
@@ -393,12 +440,18 @@ function Create() {
               onClick={() => handleSave()}
               variant="contained"
               color="success"
+              disabled={!dataChanged}
             >
               Save
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="info" onClick={() => handleNext()}>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => handleNext()}
+              disabled={currentQuestionIndex === questionList.length - 1}
+            >
               Next
             </Button>
           </Grid>
