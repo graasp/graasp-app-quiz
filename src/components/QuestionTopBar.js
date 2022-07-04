@@ -86,7 +86,7 @@ export default function QuestionTopBar({
                         aria-label="add"
                         justify-content="center"
                         style={buttonStyle}
-                        onClick={async () => { await onAddQuestion()}}
+                        onClick={onAddQuestion}
                         align="center"
                       >
                         <AddIcon style={addStyle} />

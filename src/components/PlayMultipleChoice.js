@@ -54,8 +54,6 @@ function PlayMultipleChoice({
 
   // TODO: outlined color once selected
   function computeCorrectness(answer, isCorrect) {
-    console.log(answer);
-    console.log(isCorrect);
     if (isCorrect !== answer) {
       return "false";
     } else if (isCorrect && answer) {

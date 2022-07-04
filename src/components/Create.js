@@ -34,7 +34,7 @@ import QuestionTopBar from "./QuestionTopBar";
 
 function Create() {
   const { data } = useAppData();
-  const { mutateAsync: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
+  const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
   const { mutate: deleteAppData } = useMutation(MUTATION_KEYS.DELETE_APP_DATA);
   
@@ -47,6 +47,9 @@ function Create() {
   const screenType = CREATE;
   const [question, setQuestion] = useState(DEFAULT_TEXT);
   const [type, setType] = useState(MULTIPLE_CHOICE);
+  // Flag to block useEffect until an operation completes
+  //const [update, setUpdate] = useState(true)
+  var update = true
 
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [text, setText] = useState(DEFAULT_TEXT);
@@ -74,22 +77,22 @@ function Create() {
       // The database data structure of the current question.
       let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId);
       if (newCurrentQuestionData) {
-        setQuestion(newCurrentQuestionData?.data?.question);
-        let newType = newCurrentQuestionData?.data?.questionType;
+        setQuestion(newCurrentQuestionData?.data?.question ?? DEFAULT_TEXT);
+        let newType = newCurrentQuestionData?.data?.questionType ?? MULTIPLE_CHOICE;
         setType(newType);
         switch (newType) {
           case MULTIPLE_CHOICE: {
-            setChoices(newCurrentQuestionData?.data?.choices);
+            setChoices(newCurrentQuestionData?.data?.choices ?? DEFAULT_CHOICES);
             break;
           }
           case TEXT_INPUT: {
-            setText(newCurrentQuestionData?.data?.answer);
+            setText(newCurrentQuestionData?.data?.answer ?? DEFAULT_TEXT);
             break;
           }
           case SLIDER: {
-            setSliderLeftText(newCurrentQuestionData?.data?.leftText);
-            setSliderRightText(newCurrentQuestionData?.data?.rightText);
-            setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue);
+            setSliderLeftText(newCurrentQuestionData?.data?.leftText ?? DEFAULT_TEXT);
+            setSliderRightText(newCurrentQuestionData?.data?.rightText ?? DEFAULT_TEXT);
+            setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue ?? 0);
             break;
           }
         }
@@ -105,27 +108,26 @@ function Create() {
     }
   }, [data, currentQuestionIndex]);
 
+  useEffect(() => {
+    if (newQuestion){
+      setNewQuestion(false)
+      const id = getDataWithType(data, NEW_QUESTION_TYPE)?.first()?.id
+      let newQuestionList = [...questionList];
+      const newQuestionIndex = currentQuestionIndex+1
+      newQuestionList.splice(newQuestionIndex, 0, id);
+      setQuestionList(newQuestionList);
+      onNext(newQuestionList);
+    }
+  }, [getDataWithType(data, NEW_QUESTION_TYPE)])
   /**
    * Creates a new question and navigates to it.
    */
-  const onAddQuestion = async () => {
-    const {id: newAppDataId} = await postAppData({
-      data: {
-        question: '',
-        questionType: MULTIPLE_CHOICE,
-        choices: DEFAULT_CHOICES,
-      },
-      type: QUESTION_TYPE,
+  const onAddQuestion = () => {
+    setNewQuestion(true)
+    // Temporary item to be added to the database with a distinct type, in order to fetch its ID upon creation
+    postAppData({
+      type: NEW_QUESTION_TYPE,
     })
-    let newQuestionList = [...questionList];
-    // Temporary item to be added to the database with a distinct type, in order to fetch its ID upon cre
-    //console.log(newAppDataId)
-    //const id = getDataWithType(data, NEW_QUESTION_TYPE)?.first()?.id
-    const newQuestionIndex = currentQuestionIndex+1
-    newQuestionList.splice(newQuestionIndex, 0, newAppDataId);
-    setQuestionList(newQuestionList);
-    onNext(newQuestionList);
-    setNewQuestion(true); // delete newQuestion flag when using real db
   };
 
   /**
@@ -133,7 +135,7 @@ function Create() {
    */
   const onDeleteQuestion = () => {
     if (questionList.length > 1) {
-      deleteAppData({ currentQuestionId });
+      //deleteAppData({ currentQuestionId }); The question should be deleted from the database as well using a variant of this method.
       let newQuestionList = [...questionList];
       newQuestionList.splice(currentQuestionIndex, 1);
       setQuestionList(newQuestionList);
@@ -181,6 +183,7 @@ function Create() {
     switch (type) {
       case MULTIPLE_CHOICE: {
         if (questionList.length == 0) {
+          /*
           postAppData({
             data: {
               question: question,
@@ -188,10 +191,9 @@ function Create() {
               choices: choices,
             },
             type: QUESTION_TYPE,
-          });
-          setNewQuestion(false);
+          });*/
         } else {
-          patchAppData({
+          postAppData({
             id: currentQuestionId,
             data: {
               question: question,
@@ -213,7 +215,6 @@ function Create() {
             },
             type: QUESTION_TYPE,
           });
-          setNewQuestion(false);
         } else {
           patchAppData({
             id: currentQuestionId,
@@ -239,7 +240,6 @@ function Create() {
             },
             type: QUESTION_TYPE,
           });
-          setNewQuestion(false);
         } else {
           patchAppData({
             id: currentQuestionId,
