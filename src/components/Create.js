@@ -69,6 +69,9 @@ function Create() {
   useEffect(() => {
     // Initializes multiple quiz creation screen parameters to their current database values once the database's app data is fetched, or once the current question's index changes (ie. the user navigates to another question).
     if (data) {
+      console.log("first called")
+      console.log(data)
+      console.log(questionList)
       // Fetches the database's question list.
       let newQuestionList = getDataWithType(data, QUESTION_LIST_TYPE)?.first()?.data?.list;
       setQuestionList(newQuestionList);
@@ -109,14 +112,15 @@ function Create() {
   }, [data, currentQuestionIndex]);
 
   useEffect(() => {
-    if (newQuestion){
+    if (newQuestion) {
+      console.log("called")
       setNewQuestion(false)
       const id = getDataWithType(data, NEW_QUESTION_TYPE)?.first()?.id
       let newQuestionList = [...questionList];
       const newQuestionIndex = currentQuestionIndex+1
       newQuestionList.splice(newQuestionIndex, 0, id);
       setQuestionList(newQuestionList);
-      onNext(newQuestionList);
+      handleNext(newQuestionList);
     }
   }, [getDataWithType(data, NEW_QUESTION_TYPE)])
   /**
@@ -133,13 +137,15 @@ function Create() {
   /**
    * Deletes the current question and navigates to the previous one, or the next one if there are none.
    */
-  const onDeleteQuestion = () => {
+  const deleteQuestion = () => {
+    // We do not allow the deletion of all questions of the quiz, there should be at least one visible, but maybe we could add a screen for when no quiz questions have been created.
     if (questionList.length > 1) {
       //deleteAppData({ currentQuestionId }); The question should be deleted from the database as well using a variant of this method.
       let newQuestionList = [...questionList];
+      // Deletes current question
       newQuestionList.splice(currentQuestionIndex, 1);
       setQuestionList(newQuestionList);
-      onPrev(newQuestionList);
+      handlePrevious(newQuestionList);
     }
   };
 
@@ -147,8 +153,8 @@ function Create() {
    * 
    * @param {*} newQuestionList 
    */
-  const onNext = (newQuestionList) => {
-    onSave(newQuestionList);
+  const handleNext = (newQuestionList) => {
+    handleSave(newQuestionList);
     const questionListLength = newQuestionList
       ? newQuestionList.length
       : questionList.length;
@@ -161,8 +167,8 @@ function Create() {
    * 
    * @param {*} newQuestionList 
    */
-  const onPrev = (newQuestionList) => {
-    onSave(newQuestionList);
+  const handlePrevious = (newQuestionList) => {
+    handleSave(newQuestionList);
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
@@ -172,18 +178,20 @@ function Create() {
    * 
    * @param {*} qList 
    */
-  const onSave = (qList) => {
-    patchAppData({
-      id: getDataWithType(data, QUESTION_LIST_TYPE)?.first()?.id,
-      data: {
-        list: qList ? qList : questionList,
-      },
-      type: QUESTION_LIST_TYPE,
-    });
+  const handleSave = (qList) => {
+    let questionListDBId = getDataWithType(data, QUESTION_LIST_TYPE)?.first()?.id
+    if (questionListDBId) {
+      patchAppData({
+        id: questionListDBId,
+        data: {
+          list: qList ?? questionList,
+        },
+        type: QUESTION_LIST_TYPE,
+      });
+    }
     switch (type) {
       case MULTIPLE_CHOICE: {
         if (questionList.length == 0) {
-          /*
           postAppData({
             data: {
               question: question,
@@ -191,7 +199,7 @@ function Create() {
               choices: choices,
             },
             type: QUESTION_TYPE,
-          });*/
+          });
         } else {
           postAppData({
             id: currentQuestionId,
@@ -216,15 +224,17 @@ function Create() {
             type: QUESTION_TYPE,
           });
         } else {
-          patchAppData({
-            id: currentQuestionId,
-            data: {
-              question: question,
-              questionType: TEXT_INPUT,
-              answer: text,
-            },
-            type: QUESTION_TYPE,
-          });
+          if (currentQuestionId) {
+            patchAppData({
+              id: currentQuestionId,
+              data: {
+                question: question,
+                questionType: TEXT_INPUT,
+                answer: text,
+              },
+              type: QUESTION_TYPE,
+            });
+          }
         }
         break;
       }
@@ -241,17 +251,19 @@ function Create() {
             type: QUESTION_TYPE,
           });
         } else {
-          patchAppData({
-            id: currentQuestionId,
-            data: {
-              question: question,
-              questionType: SLIDER,
-              leftText: sliderLeftText,
-              rightText: sliderRightText,
-              correctValue: sliderCorrectValue,
-            },
-            type: QUESTION_TYPE,
-          });
+          if (currentQuestionId) {
+            patchAppData({
+              id: currentQuestionId,
+              data: {
+                question: question,
+                questionType: SLIDER,
+                leftText: sliderLeftText,
+                rightText: sliderRightText,
+                correctValue: sliderCorrectValue,
+              },
+              type: QUESTION_TYPE,
+            });
+          }
         }
         break;
       }
@@ -368,7 +380,7 @@ function Create() {
           align="center"
         >
           <Grid item>
-            <Button variant="contained" color="info" onClick={() => onPrev()}>
+            <Button variant="contained" color="info" onClick={() => handlePrevious()}>
               Prev
             </Button>
           </Grid>
@@ -377,14 +389,14 @@ function Create() {
               color="error"
               variant="contained"
               startIcon={<DeleteIcon />}
-              onClick={onDeleteQuestion}
+              onClick={deleteQuestion}
             >
               Delete
             </Button>
           </Grid>
           <Grid item>
             <Button
-              onClick={() => onSave()}
+              onClick={() => handleSave()}
               variant="contained"
               color="success"
             >
@@ -392,7 +404,7 @@ function Create() {
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="info" onClick={() => onNext()}>
+            <Button variant="contained" color="info" onClick={() => handleNext()}>
               Next
             </Button>
           </Grid>

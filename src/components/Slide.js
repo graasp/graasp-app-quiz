@@ -46,7 +46,6 @@ function Slide({
       >
         <Grid item sx={{ pb: 2 }}>
           <Typography variant="p1">
-            {" "}
             Slide the ball to the correct value:
           </Typography>
         </Grid>
