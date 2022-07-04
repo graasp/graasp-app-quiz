@@ -20,12 +20,6 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { question, setQuestion } from "./Create.js";
 import React, { useState } from "react";
-import {
-  DEFAULT_TEXT,
-  DEFAULT_CHOICES,
-  DEFAULT_CHOICE,
-  APP_DATA_TYPE,
-} from "./constants";
 
 function TextInput({ text, setText }) {
   return (

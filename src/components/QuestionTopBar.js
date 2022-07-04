@@ -24,7 +24,7 @@ import StepButton from "@mui/material/StepButton";
 import { useAppData } from "./context/hooks";
 import { MUTATION_KEYS, useMutation } from "../config/queryClient";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CREATE, PLAY } from "./constants";
+import { SCREEN_TYPES } from "./constants";
 
 const buttonStyle = {
   maxHeight: "23px",
@@ -59,7 +59,7 @@ export default function QuestionTopBar({
 }) {
 
   const handleStep = (step) => () => {
-    if (screenType === CREATE || (screenType === PLAY && viewedQuestions[step])) {
+    if (screenType === SCREEN_TYPES.CREATE || (screenType === SCREEN_TYPES.PLAY && viewedQuestions[step])) {
       setCurrentQuestionIndex(step);
     }
   };
@@ -76,7 +76,7 @@ export default function QuestionTopBar({
                 </StepButton>
               </Step>
             ))}
-            {screenType === CREATE ? (
+            {screenType === SCREEN_TYPES.CREATE ? (
               <Step key="plus">
                 <StepLabel
                   icon={

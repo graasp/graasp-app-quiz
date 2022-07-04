@@ -19,15 +19,8 @@ import React, { useEffect, useState } from "react";
 import {
   DEFAULT_TEXT,
   DEFAULT_CHOICES,
-  DEFAULT_CHOICE,
-  APP_DATA_TYPE,
-  MULTIPLE_CHOICE,
-  TEXT_INPUT,
-  SLIDER,
-  QUESTION_TYPE,
-  QUESTION_LIST_TYPE,
-  PLAY,
-  ANSWER_TYPE,
+  SCREEN_TYPES,
+  APP_DATA_TYPES,
 } from "./constants";
 import { useAppData } from "./context/hooks";
 import { MUTATION_KEYS, useMutation } from "../config/queryClient";
@@ -43,14 +36,14 @@ function Play() {
   const { data, isSuccess } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const [questionList, setQuestionList] = useState([]);
-  const questionListData = getDataWithType(data, QUESTION_LIST_TYPE)?.get(0);
+  const questionListData = getDataWithType(data, APP_DATA_TYPES.QUESTION_LIST)?.get(0);
   const [question, setQuestion] = React.useState(DEFAULT_TEXT);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
-  const screenType = PLAY;
+  const screenType = SCREEN_TYPES.PLAY;
 
-  const [type, setType] = useState(MULTIPLE_CHOICE);
+  const [type, setType] = useState(QUESTION_TYPES.MULTIPLE_CHOICE);
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [answer, setAnswer] = useState(DEFAULT_TEXT);
   const [sliderCorrectValue, setSliderCorrectValue] = useState(0);
@@ -90,22 +83,22 @@ function Play() {
         let newType = newCurrentQuestionData?.data?.questionType;
         setType(newType);
         switch (newType) {
-          case MULTIPLE_CHOICE: {
+          case QUESTION_TYPES.MULTIPLE_CHOICE: {
             setChoices(newCurrentQuestionData?.data?.choices);
             break;
           }
-          case TEXT_INPUT: {
+          case QUESTION_TYPES.TEXT_INPUT: {
             setAnswer(newCurrentQuestionData?.data?.answer);
             break;
           }
-          case SLIDER: {
+          case QUESTION_TYPES.SLIDER: {
             setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue);
             break;
           }
         }
       } else {
         setQuestion(DEFAULT_TEXT);
-        setType(MULTIPLE_CHOICE);
+        setType(QUESTION_TYPES.MULTIPLE_CHOICE);
         setChoices(DEFAULT_CHOICES);
         setAnswer(DEFAULT_TEXT);
         setSliderCorrectValue(0);
@@ -149,36 +142,36 @@ function Play() {
       setSubmitted(true);
       completeQuestion()
       switch (type) {
-        case MULTIPLE_CHOICE: {
+        case QUESTION_TYPES.MULTIPLE_CHOICE: {
           postAppData({
             questionID: currentQuestionId,
             data: {
-              questionType: MULTIPLE_CHOICE,
+              questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
               answers: answers,
             },
-            type: ANSWER_TYPE,
+            type: APP_DATA_TYPES.ANSWER,
           });
           break;
         }
-        case TEXT_INPUT: {
+        case QUESTION_TYPES.TEXT_INPUT: {
           postAppData({
             questionID: currentQuestionId,
             data: {
-              questionType: TEXT_INPUT,
+              questionType: QUESTION_TYPES.TEXT_INPUT,
               answer: text,
             },
-            type: ANSWER_TYPE,
+            type: APP_DATA_TYPES.ANSWER,
           });
           break;
         }
-        case SLIDER: {
+        case QUESTION_TYPES.SLIDER: {
           postAppData({
             questionID: currentQuestionId,
             data: {
-              questionType: SLIDER,
+              questionType: QUESTION_TYPES.SLIDER,
               value: sliderValue,
             },
-            type: ANSWER_TYPE,
+            type: APP_DATA_TYPES.ANSWER,
           });
           break;
         }
@@ -211,7 +204,7 @@ function Play() {
       </Typography>
       {(() => {
         switch (type) {
-          case MULTIPLE_CHOICE: {
+          case QUESTION_TYPES.MULTIPLE_CHOICE: {
             return (
               <PlayMultipleChoice
                 choices={choices}
@@ -224,7 +217,7 @@ function Play() {
               />
             );
           }
-          case TEXT_INPUT: {
+          case QUESTION_TYPES.TEXT_INPUT: {
             return (
               <PlayTextInput
                 text={text}
@@ -234,7 +227,7 @@ function Play() {
               />
             );
           }
-          case SLIDER: {
+          case QUESTION_TYPES.SLIDER: {
             return (
               <PlaySlider
                 sliderValue={sliderValue}

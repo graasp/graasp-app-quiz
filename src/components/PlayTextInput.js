@@ -21,12 +21,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { question, setQuestion } from "./Create.js";
 import React, { useState } from "react";
 import { alpha, styled } from "@mui/material/styles";
-import {
-  DEFAULT_TEXT,
-  DEFAULT_CHOICES,
-  DEFAULT_CHOICE,
-  APP_DATA_TYPE,
-} from "./constants";
 
 function PlayTextInput({ text, setText, answer, submitted }) {
   const CssTextField = styled(TextField)({

@@ -22,12 +22,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { question, setQuestion } from "./Create.js";
 import React, { useState } from "react";
 import { useAppData } from "./context/hooks";
-import {
-  DEFAULT_TEXT,
-  DEFAULT_CHOICES,
-  DEFAULT_CHOICE,
-  APP_DATA_TYPE,
-} from "./constants";
 
 function PlaySlider({
   sliderValue,

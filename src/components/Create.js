@@ -13,15 +13,9 @@ import React, { useState, useEffect } from "react";
 import {
   DEFAULT_TEXT,
   DEFAULT_CHOICES,
-  DEFAULT_CHOICE,
-  APP_DATA_TYPE,
-  MULTIPLE_CHOICE,
-  TEXT_INPUT,
-  SLIDER,
-  QUESTION_TYPE,
-  QUESTION_LIST_TYPE,
-  NEW_QUESTION_TYPE,
-  CREATE,
+  APP_DATA_TYPES,
+  QUESTION_TYPES,
+  SCREEN_TYPES,
 } from "./constants";
 import { useAppData } from "./context/hooks";
 import { getDataWithId, getDataWithType } from "./context/utilities";
@@ -44,9 +38,9 @@ function Create() {
   // Flag to indictate whether the current question is a new one, ie. not present in the database. Unused when using the real database
   const [newQuestion, setNewQuestion] = useState(false);
 
-  const screenType = CREATE;
+  const screenType = SCREEN_TYPES.CREATE;
   const [question, setQuestion] = useState(DEFAULT_TEXT);
-  const [type, setType] = useState(MULTIPLE_CHOICE);
+  const [type, setType] = useState(QUESTION_TYPES.MULTIPLE_CHOICE);
   // Flag to block useEffect until an operation completes
   //const [update, setUpdate] = useState(true)
   var update = true
@@ -73,7 +67,7 @@ function Create() {
       console.log(data)
       console.log(questionList)
       // Fetches the database's question list.
-      let newQuestionList = getDataWithType(data, QUESTION_LIST_TYPE)?.first()?.data?.list;
+      let newQuestionList = getDataWithType(data, APP_DATA_TYPES.QUESTION_LIST)?.first()?.data?.list;
       setQuestionList(newQuestionList);
       let newCurrentQuestionId = newQuestionList[currentQuestionIndex];
       setCurrentQuestionId(newCurrentQuestionId);
@@ -81,18 +75,18 @@ function Create() {
       let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId);
       if (newCurrentQuestionData) {
         setQuestion(newCurrentQuestionData?.data?.question ?? DEFAULT_TEXT);
-        let newType = newCurrentQuestionData?.data?.questionType ?? MULTIPLE_CHOICE;
+        let newType = newCurrentQuestionData?.data?.questionType ?? QUESTION_TYPES.MULTIPLE_CHOICE;
         setType(newType);
         switch (newType) {
-          case MULTIPLE_CHOICE: {
+          case QUESTION_TYPES.MULTIPLE_CHOICE: {
             setChoices(newCurrentQuestionData?.data?.choices ?? DEFAULT_CHOICES);
             break;
           }
-          case TEXT_INPUT: {
+          case QUESTION_TYPES.TEXT_INPUT: {
             setText(newCurrentQuestionData?.data?.answer ?? DEFAULT_TEXT);
             break;
           }
-          case SLIDER: {
+          case QUESTION_TYPES.SLIDER: {
             setSliderLeftText(newCurrentQuestionData?.data?.leftText ?? DEFAULT_TEXT);
             setSliderRightText(newCurrentQuestionData?.data?.rightText ?? DEFAULT_TEXT);
             setSliderCorrectValue(newCurrentQuestionData?.data?.correctValue ?? 0);
@@ -115,14 +109,14 @@ function Create() {
     if (newQuestion) {
       console.log("called")
       setNewQuestion(false)
-      const id = getDataWithType(data, NEW_QUESTION_TYPE)?.first()?.id
+      const id = getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)?.first()?.id
       let newQuestionList = [...questionList];
       const newQuestionIndex = currentQuestionIndex+1
       newQuestionList.splice(newQuestionIndex, 0, id);
       setQuestionList(newQuestionList);
       handleNext(newQuestionList);
     }
-  }, [getDataWithType(data, NEW_QUESTION_TYPE)])
+  }, [getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)])
   /**
    * Creates a new question and navigates to it.
    */
@@ -130,7 +124,7 @@ function Create() {
     setNewQuestion(true)
     // Temporary item to be added to the database with a distinct type, in order to fetch its ID upon creation
     postAppData({
-      type: NEW_QUESTION_TYPE,
+      type: APP_DATA_TYPES.NEW_QUESTION,
     })
   };
 
@@ -179,49 +173,49 @@ function Create() {
    * @param {*} qList 
    */
   const handleSave = (qList) => {
-    let questionListDBId = getDataWithType(data, QUESTION_LIST_TYPE)?.first()?.id
+    let questionListDBId = getDataWithType(data, APP_DATA_TYPES.QUESTION_LIST)?.first()?.id
     if (questionListDBId) {
       patchAppData({
         id: questionListDBId,
         data: {
           list: qList ?? questionList,
         },
-        type: QUESTION_LIST_TYPE,
+        type: APP_DATA_TYPES.QUESTION_LIST,
       });
     }
     switch (type) {
-      case MULTIPLE_CHOICE: {
+      case QUESTION_TYPES.MULTIPLE_CHOICE: {
         if (questionList.length == 0) {
           postAppData({
             data: {
               question: question,
-              questionType: MULTIPLE_CHOICE,
+              questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
               choices: choices,
             },
-            type: QUESTION_TYPE,
+            type: APP_DATA_TYPES.QUESTION,
           });
         } else {
           postAppData({
             id: currentQuestionId,
             data: {
               question: question,
-              questionType: MULTIPLE_CHOICE,
+              questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
               choices: choices,
             },
-            type: QUESTION_TYPE,
+            type: APP_DATA_TYPES.QUESTION,
           });
         }
         break;
       }
-      case TEXT_INPUT: {
+      case QUESTION_TYPES.TEXT_INPUT: {
         if (questionList.length == 0 || newQuestion) {
           postAppData({
             data: {
               question: question,
-              questionType: TEXT_INPUT,
+              questionType: QUESTION_TYPES.TEXT_INPUT,
               answer: text,
             },
-            type: QUESTION_TYPE,
+            type: APP_DATA_TYPES.QUESTION,
           });
         } else {
           if (currentQuestionId) {
@@ -229,26 +223,26 @@ function Create() {
               id: currentQuestionId,
               data: {
                 question: question,
-                questionType: TEXT_INPUT,
+                questionType: QUESTION_TYPES.TEXT_INPUT,
                 answer: text,
               },
-              type: QUESTION_TYPE,
+              type: APP_DATA_TYPES.QUESTION,
             });
           }
         }
         break;
       }
-      case SLIDER: {
+      case QUESTION_TYPES.SLIDER: {
         if (questionList.length == 0 || newQuestion) {
           postAppData({
             data: {
               question: question,
-              questionType: SLIDER,
+              questionType: QUESTION_TYPES.SLIDER,
               leftText: sliderLeftText,
               rightText: sliderRightText,
               correctValue: sliderCorrectValue,
             },
-            type: QUESTION_TYPE,
+            type: APP_DATA_TYPES.QUESTION,
           });
         } else {
           if (currentQuestionId) {
@@ -256,12 +250,12 @@ function Create() {
               id: currentQuestionId,
               data: {
                 question: question,
-                questionType: SLIDER,
+                questionType: QUESTION_TYPES.SLIDER,
                 leftText: sliderLeftText,
                 rightText: sliderRightText,
                 correctValue: sliderCorrectValue,
               },
-              type: QUESTION_TYPE,
+              type: APP_DATA_TYPES.QUESTION,
             });
           }
         }
@@ -309,9 +303,9 @@ function Create() {
                 label="Type"
                 onChange={handleTypeSelect}
               >
-                <MenuItem value={MULTIPLE_CHOICE}>Multiple Choice</MenuItem>
-                <MenuItem value={TEXT_INPUT}>Text Input</MenuItem>
-                <MenuItem value={SLIDER}>Slider</MenuItem>
+                <MenuItem value={QUESTION_TYPES.MULTIPLE_CHOICE}>Multiple Choice</MenuItem>
+                <MenuItem value={QUESTION_TYPES.TEXT_INPUT}>Text Input</MenuItem>
+                <MenuItem value={QUESTION_TYPES.SLIDER}>Slider</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -333,7 +327,7 @@ function Create() {
         </Grid>
         {(() => {
           switch (type) {
-            case MULTIPLE_CHOICE: {
+            case QUESTION_TYPES.MULTIPLE_CHOICE: {
               return (
                 <MultipleChoice
                   choices={choices}
@@ -341,7 +335,7 @@ function Create() {
                 />
               );
             }
-            case TEXT_INPUT: {
+            case QUESTION_TYPES.TEXT_INPUT: {
               return (
                 <TextInput
                   text={text}
@@ -350,7 +344,7 @@ function Create() {
                 />
               );
             }
-            case SLIDER: {
+            case QUESTION_TYPES.SLIDER: {
               return (
                 <Slider
                   leftText={sliderLeftText}
