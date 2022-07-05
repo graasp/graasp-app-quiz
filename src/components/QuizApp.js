@@ -1,34 +1,20 @@
-import React, { Component, useContext } from "react";
+import React from "react";
 import { TokenProvider } from "./context/TokenContext";
 import { ContextProvider } from "./context/ContextContext";
-import Create from "./Create";
-import Play from "./Play";
-import { Context } from "./context/ContextContext";
-import { PERMISSION_LEVELS } from "./config/settings";
+import Create from "./create/Create";
+import Play from "./play/Play";
 import {
   queryClient,
   QueryClientProvider,
   ReactQueryDevtools,
 } from "../config/queryClient";
-import { PlayArrow } from "@mui/icons-material";
-import View from "./View";
+import View from "./views/View";
 
 export const QuizApp = () => {
   const quiz = (
     <div className="container">
       <div className="title">
-        {/* {() => {
-            switch (context.get('permission')) {
-              case PERMISSION_LEVELS.ADMIN:
-              case PERMISSION_LEVELS.WRITE:
-                return <Create />;
-          
-              case PERMISSION_LEVELS.READ:
-              default:
-                return <Play />;
-            }
-          }}() */}
-        <Create />
+        <View />
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import {
-  TextField,
   Fab,
   Grid,
   InputLabel,
@@ -8,19 +7,13 @@ import {
   InputAdornment,
   FormControl,
   FormControlLabel,
-  Button,
   Checkbox,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  Select,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import { question, setQuestion } from "./Create.js";
-import React, { useState } from "react";
-import { DEFAULT_CHOICE } from "./constants";
+import React from "react";
+import { DEFAULT_CHOICE } from "../constants/constants";
 
 function MultipleChoice({ choices, setChoices, setDataChanged }) {
   const handleAnswerCorrectnessChange = (index, e) => {

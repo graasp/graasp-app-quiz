@@ -1,10 +1,10 @@
-import { APP_DATA_TYPES, QUESTION_TYPES } from "../components/constants";
+import { APP_DATA_TYPES, QUESTION_TYPES } from "../components/constants/constants";
 
 const buildDatabase = (appContext) => ({
   appData: [
     {
       data: {
-        list: ["id4", "id5", "id"],
+        list: ["id4", "id5", "id6"],
       },
       type: APP_DATA_TYPES.QUESTION_LIST,
     },
@@ -34,21 +34,13 @@ const buildDatabase = (appContext) => ({
       type: APP_DATA_TYPES.QUESTION,
     },
     {
-      id: "id",
+      id: "id6",
       data: {
         question: "What is a baby cat called?",
         questionType: QUESTION_TYPES.TEXT_INPUT,
         answer: "kitten",
       },
       type: APP_DATA_TYPES.QUESTION,
-    },
-    {
-      id: "id2",
-      //memberId: '',
-      data: {
-        answers: [],
-      },
-      type: APP_DATA_TYPES.ANSWER,
     },
   ],
   members: [

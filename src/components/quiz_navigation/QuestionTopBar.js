@@ -1,30 +1,15 @@
 import * as React from "react";
 import {
-  TextField,
   Fab,
   Grid,
-  Box,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  MenuItem,
-  InputAdornment,
-  FormControl,
-  FormControlLabel,
-  Button,
-  Checkbox,
-  Typography,
   Stepper,
   Step,
   StepLabel,
-  Select,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import StepButton from "@mui/material/StepButton";
-import { useAppData } from "./context/hooks";
-import { MUTATION_KEYS, useMutation } from "../config/queryClient";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { SCREEN_TYPES } from "./constants";
+import { SCREEN_TYPES } from "../constants/constants";
 
 const buttonStyle = {
   maxHeight: "23px",
@@ -57,7 +42,15 @@ export default function QuestionTopBar({
   completedQuestions,
   viewedQuestions,
 }) {
+
+  /**
+   * Navigates to the given step in the question list top bar. In the Play screen, this is only possible if the step's question has been already viewed by the player.
+   * 
+   * @param {number} step The question top bar step to switch to
+   * @returns 
+   */
   const handleStep = (step) => () => {
+    console.log(typeof step)
     if (
       screenType === SCREEN_TYPES.CREATE ||
       (screenType === SCREEN_TYPES.PLAY && viewedQuestions[step])

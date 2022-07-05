@@ -1,64 +1,13 @@
 import {
   TextField,
-  Fab,
   Grid,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  InputAdornment,
-  FormControl,
-  FormControlLabel,
-  Button,
-  Checkbox,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  Select,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
-import { question, setQuestion } from "./Create.js";
-import React, { useState } from "react";
-import { alpha, styled } from "@mui/material/styles";
+import React from "react";
+import { styled } from "@mui/material/styles";
 
 function PlayTextInput({ text, setText, answer, submitted }) {
-  const CssTextField = styled(TextField)({
-    "& label.Mui-focused": {
-      color: "green",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "green",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "red",
-      },
-      "&:hover fieldset": {
-        borderColor: "yellow",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "green",
-      },
-    },
-  });
 
-  const ValidationTextField = styled(TextField)({
-    "& input:valid + fieldset": {
-      borderColor: "green",
-      borderWidth: 2,
-    },
-    "& input:invalid + fieldset": {
-      borderColor: "red",
-      borderWidth: 2,
-    },
-    "& input:valid:focus + fieldset": {
-      borderLeftWidth: 6,
-      padding: "4px !important", // override inline-style
-    },
-  });
-
-  // TODO: outlined color once selected
   function answerIsCorrect() {
     return answer.toLowerCase() === text.toLowerCase();
   }

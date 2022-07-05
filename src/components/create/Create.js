@@ -16,17 +16,23 @@ import {
   APP_DATA_TYPES,
   QUESTION_TYPES,
   SCREEN_TYPES,
-} from "./constants";
-import { useAppData } from "./context/hooks";
-import { getDataWithId, getDataWithType } from "./context/utilities";
-import { MUTATION_KEYS, useMutation } from "../config/queryClient";
+} from "../constants/constants";
+import { useAppData } from "../context/hooks";
+import { getDataWithId, getDataWithType } from "../context/utilities";
+import { MUTATION_KEYS, useMutation } from "../../config/queryClient";
 import MultipleChoice from "./MultipleChoice";
 import TextInput from "./TextInput";
 import Slider from "./Slide";
 import DeleteIcon from "@mui/icons-material/Delete";
-import QuestionTopBar from "./QuestionTopBar";
+import QuestionTopBar from "../quiz_navigation/QuestionTopBar";
 
+/**
+ * Component displaying the quiz creation screen elements.
+ * 
+ * @returns {React.ReactElement} The quiz creation screen.
+ */
 function Create() {
+  // The data of the database
   const { data } = useAppData();
   const { mutateAsync: postAppDataAsync } = useMutation(
     MUTATION_KEYS.POST_APP_DATA
@@ -38,8 +44,6 @@ function Create() {
   const [questionList, setQuestionList] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
-  // Flag to indictate whether the current question is a new one, ie. not present in the database. Unused when using the real database
-  const [newQuestion, setNewQuestion] = useState(false);
 
   const screenType = SCREEN_TYPES.CREATE;
   const [question, setQuestion] = useState(DEFAULT_TEXT);
@@ -48,9 +52,6 @@ function Create() {
   const [dataChanged, setDataChanged] = useState(true);
   // Flag to indicate whether the data has been initially fetched from the database.
   const [fetched, setFetched] = useState(0);
-  // Flag to block useEffect until an operation completes
-  //const [update, setUpdate] = useState(true)
-  var update = true;
 
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [text, setText] = useState(DEFAULT_TEXT);
@@ -122,7 +123,7 @@ function Create() {
   };
 
   /**
-   * Sets the {type} parameter to the dropdown menu's selected question type.
+   * Sets the type parameter to the dropdown menu's selected question type.
    *
    * @param {object} event The question type menu change event.
    */
@@ -143,22 +144,11 @@ function Create() {
     }
   }, [data]);
 
-  /*
-  useEffect(() => {
-    setDataChanged(true);
-    if (newQuestion) {
-      setNewQuestion(false);
-      const id = getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)?.first()
-        ?.id;
-      let newQuestionList = [...questionList];
-      const newQuestionIndex = currentQuestionIndex + 1;
-      // Adds the newly created question's ID right after the current question's one in the question list.
-      newQuestionList.splice(newQuestionIndex, 0, id);
-      setQuestionList(newQuestionList);
-      handleNext(newQuestionList);
-    }
-  }, [getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)]);*/
-
+  /**
+   * Creates a question and adds it to the database, then runs the provided callback function.
+   * 
+   * @param {(number) => ()} callback callback function to be called with the id of the newly created question.
+   */
   const createQuestion = async (callback) => {
     const { id: newAppDataId } = await postAppDataAsync({
       data: {
@@ -177,32 +167,18 @@ function Create() {
    */
   const onAddQuestion = () => {
     setDataChanged(true);
-    /*
-    setNewQuestion(true);
-    // Temporary item to be added to the database with a distinct type, in order to fetch its ID upon creation
-    postAppData({
-      type: APP_DATA_TYPES.NEW_QUESTION,
-    });*/
-    /*
-    const {id: newAppDataId} = postAppDataAsync({
-      data: {
-        question: DEFAULT_TEXT,
-        questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
-        choices: DEFAULT_CHOICES,
-      },
-      type: APP_DATA_TYPES.QUESTION
-    })*/
     createQuestion((id) => {
       let newQuestionList = [...questionList];
       const newQuestionIndex = currentQuestionIndex + 1;
       // Adds the newly created question's ID right after the current question's one in the question list.
       newQuestionList.splice(newQuestionIndex, 0, id);
       setQuestionList(newQuestionList);
+      // Save the new question list.
       handleSave(newQuestionList);
     });
     let newQuestionList = [...questionList];
     const newQuestionIndex = currentQuestionIndex + 1;
-    // Adds the newly created question's ID right after the current question's one in the question list.
+    // Adds a temporary empty ID right after the current question's one in the question list, to be changed once the actual ID is fetched at the end of the createQuestion asynchronous function. This temporary ID prevents blocking the screen until retrieveing the new ID for the purpose of improving the user experience.
     newQuestionList.splice(newQuestionIndex, 0, "");
     setQuestionList(newQuestionList);
     handleNext(newQuestionList);
@@ -215,7 +191,7 @@ function Create() {
     setDataChanged(true);
     // We do not allow the deletion of all questions of the quiz, there should be at least one visible, but maybe we could add a screen for when no quiz questions have been created.
     if (questionList.length > 1) {
-      //deleteAppData({ currentQuestionId }); The question should be deleted from the database as well using a variant of this method.
+      deleteAppData({ currentQuestionId });
       let newQuestionList = [...questionList];
       // Deletes current question
       newQuestionList.splice(currentQuestionIndex, 1);
@@ -225,8 +201,9 @@ function Create() {
   };
 
   /**
-   *
-   * @param {*} newQuestionList
+   * Saves the current quiz state to the database and navigates to the next question.
+   * 
+   * @param {number[]} newQuestionList the current question ID list.
    */
   const handleNext = (newQuestionList) => {
     handleSave(newQuestionList);
@@ -237,8 +214,9 @@ function Create() {
   };
 
   /**
-   *
-   * @param {*} newQuestionList
+   * Saves the current quiz state to the database and navigates to the previous question.
+   * 
+   * @param {number[]} newQuestionList the current question ID list.
    */
   const handlePrevious = (newQuestionList) => {
     handleSave(newQuestionList);
@@ -250,8 +228,9 @@ function Create() {
   };
 
   /**
-   *
-   * @param {*} qList
+   * Saves the question list and question data to the database if the data is stale.
+   * 
+   * @param {number[]} newQuestionList the current question ID list.
    */
   const handleSave = (qList) => {
     // Only save the data if it has changed
@@ -281,7 +260,7 @@ function Create() {
               type: APP_DATA_TYPES.QUESTION,
             });
           } else {
-            postAppData({
+            patchAppData({
               id: currentQuestionId,
               data: {
                 question: question,

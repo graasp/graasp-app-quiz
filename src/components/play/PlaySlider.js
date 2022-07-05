@@ -1,42 +1,27 @@
 import {
-  TextField,
-  Fab,
   Grid,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  InputAdornment,
-  FormControl,
-  FormControlLabel,
-  Button,
-  Checkbox,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  Select,
   Slider,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
-import { question, setQuestion } from "./Create.js";
-import React, { useState } from "react";
-import { useAppData } from "./context/hooks";
+import React from "react";
+import { useAppData } from "../context/hooks";
+import { getDataWithId } from "../context/utilities";
 
 function PlaySlider({
+  currentQuestionId,
   sliderValue,
   setSliderValue,
   sliderCorrectValue,
   submitted,
 }) {
-  const { data, isSuccess } = useAppData();
-  const leftLabel = data?.get(1)?.data?.leftText;
-  const rightLabel = data?.get(1)?.data?.rightText;
+  const { data } = useAppData();
+  const leftLabel = getDataWithId(data, currentQuestionId)?.data?.leftText;
+  const rightLabel = getDataWithId(data, currentQuestionId)?.data?.rightText;
   const marks = [
-    { value: 0, label: `${leftLabel}` },
+    { value: 0, label: leftLabel },
     {
       value: 100,
-      label: `${rightLabel}`,
+      label: rightLabel,
     },
   ];
 
@@ -51,14 +36,12 @@ function PlaySlider({
           <Slider
             aria-label="Custom marks"
             defaultValue={50}
-            valueLabelDisplay="auto"
+            valueLabelDisplay="on"
             value={submitted ? [sliderValue, sliderCorrectValue] : sliderValue}
             onChange={(e, val) => {
               setSliderValue(val);
             }}
             marks={marks}
-            marks
-            valueLabelDisplay="on"
           />
         </Grid>
         {(() => {

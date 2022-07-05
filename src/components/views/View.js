@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Context } from "./context/ContextContext";
-import { PERMISSION_LEVELS } from "./config/settings";
-import Create from "./Create";
-import Play from "./Play";
+import { Context } from "../context/ContextContext";
+import { PERMISSION_LEVELS } from "../config/settings";
+import Create from "../create/Create";
+import Play from "../play/Play";
 
 const View = () => {
   const context = useContext(Context);

@@ -1,19 +1,7 @@
 import {
-  TextField,
-  Fab,
   Grid,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  InputAdornment,
-  FormControl,
-  FormControlLabel,
   Button,
-  Checkbox,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
@@ -21,34 +9,32 @@ import {
   DEFAULT_CHOICES,
   SCREEN_TYPES,
   APP_DATA_TYPES,
-} from "./constants";
-import { useAppData } from "./context/hooks";
-import { MUTATION_KEYS, useMutation } from "../config/queryClient";
-import { HdrOnSelectRounded } from "@mui/icons-material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { getDataWithId, getDataWithType } from "./context/utilities";
+  QUESTION_TYPES,
+} from "../constants/constants";
+import { useAppData } from "../context/hooks";
+import { MUTATION_KEYS, useMutation } from "../../config/queryClient";
+import { getDataWithId, getDataWithType } from "../context/utilities";
 import PlayMultipleChoice from "./PlayMultipleChoice";
 import PlayTextInput from "./PlayTextInput";
 import PlaySlider from "./PlaySlider";
-import QuestionTopBar from "./QuestionTopBar";
+import QuestionTopBar from "../quiz_navigation/QuestionTopBar";
 
 function Play() {
-  const { data, isSuccess } = useAppData();
+  const { data } = useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const [questionList, setQuestionList] = useState([]);
   const questionListData = getDataWithType(
     data,
     APP_DATA_TYPES.QUESTION_LIST
-  )?.get(0);
+  )?.first();
   const [question, setQuestion] = React.useState(DEFAULT_TEXT);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
-  const [currentQuestionData, setCurrentQuestionData] = useState(null);
   const screenType = SCREEN_TYPES.PLAY;
 
   const [type, setType] = useState(QUESTION_TYPES.MULTIPLE_CHOICE);
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
-  const [answer, setAnswer] = useState(DEFAULT_TEXT);
+  const [textQuestionAnswer, setTextQuestionAnswer] = useState(DEFAULT_TEXT);
   const [sliderCorrectValue, setSliderCorrectValue] = useState(0);
 
   const [answers, setAnswers] = React.useState(
@@ -62,19 +48,22 @@ function Play() {
       .map(() => "neutral")
   );
   const [text, setText] = React.useState(DEFAULT_TEXT);
-  const [sliderValue, setSliderValue] = React.useState(0);
+  const [sliderValue, setSliderValue] = React.useState(50);
   const [submitted, setSubmitted] = React.useState(false);
+  // An array of boolean where a boolean at an index is true if the question at that index has been completed (ie. submitted). This is usefeful for checking the completed questions in the top question navigation bar.
   const [completedQuestions, setCompletedQuestions] = React.useState(
     Array(questionList.length)
       .fill()
       .map(() => false)
   );
+  // An array of boolean where a boolean at an index is true if the question at that index has been already seen by the player.
   const [viewedQuestions, setViewedQuestions] = React.useState(
     Array(questionList.length)
       .fill()
       .map(() => false)
   );
 
+  // Initializes the question list and current question local data if the database's data or question index changes.
   useEffect(() => {
     if (data) {
       viewQuestion();
@@ -84,7 +73,6 @@ function Play() {
       let newCurrentQuestionId = newQuestionList[currentQuestionIndex];
       setCurrentQuestionId(newCurrentQuestionId);
       let newCurrentQuestionData = getDataWithId(data, newCurrentQuestionId);
-      setCurrentQuestionData(newCurrentQuestionData);
       if (newCurrentQuestionData) {
         setQuestion(newCurrentQuestionData?.data?.question);
         let newType = newCurrentQuestionData?.data?.questionType;
@@ -95,7 +83,7 @@ function Play() {
             break;
           }
           case QUESTION_TYPES.TEXT_INPUT: {
-            setAnswer(newCurrentQuestionData?.data?.answer);
+            setTextQuestionAnswer(newCurrentQuestionData?.data?.answer);
             break;
           }
           case QUESTION_TYPES.SLIDER: {
@@ -107,7 +95,7 @@ function Play() {
         setQuestion(DEFAULT_TEXT);
         setType(QUESTION_TYPES.MULTIPLE_CHOICE);
         setChoices(DEFAULT_CHOICES);
-        setAnswer(DEFAULT_TEXT);
+        setTextQuestionAnswer(DEFAULT_TEXT);
         setSliderCorrectValue(0);
       }
     }
@@ -229,7 +217,7 @@ function Play() {
               <PlayTextInput
                 text={text}
                 setText={setText}
-                answer={answer}
+                answer={textQuestionAnswer}
                 submitted={submitted}
               />
             );
@@ -237,6 +225,7 @@ function Play() {
           case QUESTION_TYPES.SLIDER: {
             return (
               <PlaySlider
+              currentQuestionId={currentQuestionId}
                 sliderValue={sliderValue}
                 setSliderValue={setSliderValue}
                 sliderCorrectValue={sliderCorrectValue}
