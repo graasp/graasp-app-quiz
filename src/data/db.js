@@ -1,12 +1,18 @@
-import { MULTIPLE_CHOICE, SLIDER, TEXT_INPUT } from "../components/constants";
+import { APP_DATA_TYPES, QUESTION_TYPES } from "../components/constants/constants";
 
 const buildDatabase = (appContext) => ({
   appData: [
     {
+      data: {
+        list: ["id4", "id5", "id6"],
+      },
+      type: APP_DATA_TYPES.QUESTION_LIST,
+    },
+    {
       id: "id4",
       data: {
         question: "What is the capital of France?",
-        questionType: MULTIPLE_CHOICE,
+        questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
         choices: [
           { choice: "London", isCorrect: false },
           { choice: "Paris", isCorrect: true },
@@ -14,35 +20,27 @@ const buildDatabase = (appContext) => ({
           { choice: "Tokyo", isCorrect: false },
         ],
       },
-      type: "question",
+      type: APP_DATA_TYPES.QUESTION,
     },
     {
       id: "id5",
       data: {
         question: "How happy are you?",
-        questionType: SLIDER,
+        questionType: QUESTION_TYPES.SLIDER,
         leftText: "Sad",
         rightText: "Happy",
         correctValue: 20,
       },
-      type: "question",
+      type: APP_DATA_TYPES.QUESTION,
     },
     {
-      id: "id",
+      id: "id6",
       data: {
         question: "What is a baby cat called?",
-        questionType: TEXT_INPUT,
+        questionType: QUESTION_TYPES.TEXT_INPUT,
         answer: "kitten",
       },
-      type: "question",
-    },
-    {
-      id: "id2",
-      //memberId: '',
-      data: {
-        answers: [],
-      },
-      type: "answer",
+      type: APP_DATA_TYPES.QUESTION,
     },
   ],
   members: [

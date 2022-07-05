@@ -1,35 +1,20 @@
 import {
   TextField,
-  Fab,
   Grid,
   Slider,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  InputAdornment,
-  FormControl,
-  FormControlLabel,
-  Button,
-  Checkbox,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  Select,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
-import { question, setQuestion } from "./Create.js";
-import React, { useState } from "react";
-import {
-  DEFAULT_TEXT,
-  DEFAULT_CHOICES,
-  DEFAULT_CHOICE,
-  APP_DATA_TYPE,
-} from "./constants";
+import React from "react";
 
-
-function Slide({ leftText, setLeftText, rightText, setRightText, sliderCorrectValue, setSliderCorrectValue }) {
+function Slide({
+  leftText,
+  setLeftText,
+  rightText,
+  setRightText,
+  sliderCorrectValue,
+  setSliderCorrectValue,
+  setDataChanged,
+}) {
   return (
     <div align="center">
       <Grid
@@ -39,7 +24,9 @@ function Slide({ leftText, setLeftText, rightText, setRightText, sliderCorrectVa
         columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}
       >
         <Grid item sx={{ pb: 2 }}>
-          <Typography variant="p1"> Slide the ball to the correct value:</Typography>
+          <Typography variant="p1">
+            Slide the ball to the correct value:
+          </Typography>
         </Grid>
         <Grid item sx={{ pb: 2 }}>
           <Slider
@@ -48,6 +35,7 @@ function Slide({ leftText, setLeftText, rightText, setRightText, sliderCorrectVa
             valueLabelDisplay="auto"
             value={sliderCorrectValue}
             onChange={(_, val) => {
+              setDataChanged(true);
               setSliderCorrectValue(val);
             }}
           />
@@ -67,11 +55,12 @@ function Slide({ leftText, setLeftText, rightText, setRightText, sliderCorrectVa
                 variant="outlined"
                 style={{ width: "50%" }}
                 onChange={(t) => {
+                  setDataChanged(true);
                   setLeftText(t.target.value);
                 }}
               />
             </Grid>
-            <Grid item align = "right">
+            <Grid item align="right">
               <TextField
                 value={rightText}
                 placeholder="Enter Field"
@@ -80,6 +69,7 @@ function Slide({ leftText, setLeftText, rightText, setRightText, sliderCorrectVa
                 variant="outlined"
                 style={{ width: "50%" }}
                 onChange={(t) => {
+                  setDataChanged(true);
                   setRightText(t.target.value);
                 }}
               />

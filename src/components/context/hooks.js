@@ -9,8 +9,8 @@ export const useAppData = () => {
   const query = hooks.useAppData({ token, itemId: context?.get("itemId") });
   return query;
 };
-//return { ...query, data: query.data?.filter}
 
+// react contexts
 export const useAppSettings = () => {
   const context = useContext(Context);
   const token = useContext(TokenContext);

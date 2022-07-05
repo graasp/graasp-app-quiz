@@ -1,34 +1,11 @@
 import {
   TextField,
-  Fab,
   Grid,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  InputAdornment,
-  FormControl,
-  FormControlLabel,
-  Button,
-  Checkbox,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  Select,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
-import { question, setQuestion } from "./Create.js";
-import React, { useState } from "react";
-import {
-  DEFAULT_TEXT,
-  DEFAULT_CHOICES,
-  DEFAULT_CHOICE,
-  APP_DATA_TYPE,
-} from "./constants";
+import React from "react";
 
-
-function TextInput({ text, setText }) {
+function TextInput({ text, setText, setDataChanged }) {
   return (
     <div align="center">
       <Grid
@@ -48,8 +25,8 @@ function TextInput({ text, setText }) {
             name="quiz text answer"
             variant="outlined"
             onChange={(t) => {
-
               {
+                setDataChanged(true);
                 setText(t.target.value);
               }
             }}

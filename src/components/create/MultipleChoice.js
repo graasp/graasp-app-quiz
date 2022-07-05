@@ -1,5 +1,4 @@
 import {
-  TextField,
   Fab,
   Grid,
   InputLabel,
@@ -8,43 +7,36 @@ import {
   InputAdornment,
   FormControl,
   FormControlLabel,
-  Button,
   Checkbox,
   Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  Select,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import { question, setQuestion } from "./Create.js";
-import React, { useState } from "react";
-import {
-  DEFAULT_TEXT,
-  DEFAULT_CHOICES,
-  DEFAULT_CHOICE,
-  APP_DATA_TYPE,
-} from "./constants";
+import React from "react";
+import { DEFAULT_CHOICE } from "../constants/constants";
 
-function MultipleChoice({ choices, setChoices }) {
+function MultipleChoice({ choices, setChoices, setDataChanged }) {
   const handleAnswerCorrectnessChange = (index, e) => {
+    setDataChanged(true);
     let newChoices = [...choices];
     newChoices[index] = { ...choices[index], isCorrect: e.target.checked };
     setChoices(newChoices);
   };
 
   const handleChoiceChange = (index, e) => {
+    setDataChanged(true);
     let newChoices = [...choices];
     newChoices[index] = { ...choices[index], choice: e.target.value };
     setChoices(newChoices);
   };
 
   const addAnswer = () => {
+    setDataChanged(true);
     setChoices([...choices, DEFAULT_CHOICE]);
   };
 
   const removeAnswer = (index) => {
+    setDataChanged(true);
     let newChoices = [...choices];
     newChoices.splice(index, 1);
     setChoices(newChoices);
@@ -79,7 +71,7 @@ function MultipleChoice({ choices, setChoices }) {
                     <FormControl variant="outlined">
                       <InputLabel>Choice {readableIndex}</InputLabel>
                       <OutlinedInput
-                        type={"text"}
+                        type="text"
                         label={`Choice ${readableIndex}`}
                         value={choice.choice}
                         placeholder={`Enter Choice ${readableIndex}`}
@@ -104,14 +96,17 @@ function MultipleChoice({ choices, setChoices }) {
                     </FormControl>
                   </Grid>
                   <Grid item sx={{ pt: 2.75, pl: 1 }}>
-                    {index > 1 ? (
+                    {
                       <IconButton
                         type="button"
-                        onClick={() => removeAnswer(index)}
+                        disabled={choices.length <= 2}
+                        onClick={
+                          choices.length > 2 ? () => removeAnswer(index) : {}
+                        }
                       >
                         <CloseIcon />
                       </IconButton>
-                    ) : null}
+                    }
                   </Grid>
                 </Grid>
               </Grid>
