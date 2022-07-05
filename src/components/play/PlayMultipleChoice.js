@@ -14,6 +14,9 @@ const theme = createTheme({
         borderColor: "green !important",
       },
     },
+    primary: {
+      main: "#555BD9"
+    }
   },
 });
 
