@@ -28,6 +28,9 @@ import QuestionTopBar from "./QuestionTopBar";
 
 function Create() {
   const { data } = useAppData();
+  const { mutateAsync: postAppDataAsync } = useMutation(
+    MUTATION_KEYS.POST_APP_DATA
+  );
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
   const { mutate: deleteAppData } = useMutation(MUTATION_KEYS.DELETE_APP_DATA);
@@ -43,6 +46,8 @@ function Create() {
   const [type, setType] = useState(QUESTION_TYPES.MULTIPLE_CHOICE);
   // Flag to indicate whether any of the create screen's current data has changed, if set to false the save button will be disabled
   const [dataChanged, setDataChanged] = useState(true);
+  // Flag to indicate whether the data has been initially fetched from the database.
+  const [fetched, setFetched] = useState(0);
   // Flag to block useEffect until an operation completes
   //const [update, setUpdate] = useState(true)
   var update = true;
@@ -53,32 +58,29 @@ function Create() {
   const [sliderRightText, setSliderRightText] = useState(DEFAULT_TEXT);
   const [sliderCorrectValue, setSliderCorrectValue] = useState(0);
 
-  /**
-   * Sets the {type} parameter to the dropdown menu's selected question type.
-   *
-   * @param {object} event The question type menu change event.
-   */
-  const handleTypeSelect = (event) => {
-    setDataChanged(true);
-    setType(event.target.value);
+  /** Initializes all of the screen's values to their default ones. */
+  const initializeValues = (type) => {
+    setQuestion(DEFAULT_TEXT);
+    setType(type ?? QUESTION_TYPES.MULTIPLE_CHOICE);
+    setChoices(DEFAULT_CHOICES);
+    setText(DEFAULT_TEXT);
+    setSliderLeftText(DEFAULT_TEXT);
+    setSliderRightText(DEFAULT_TEXT);
+    setSliderCorrectValue(0);
   };
 
-  useEffect(() => {
-    setDataChanged(true);
-  }, [currentQuestionIndex]);
-
-  useEffect(() => {
-    // Initializes multiple quiz creation screen parameters to their current database values once the database's app data is fetched, or once the current question's index changes (ie. the user navigates to another question).
+  /** Fetches the question list's and current question's data from the database and initializes their respective local values.  */
+  const fetchData = (qList) => {
     if (data) {
-      console.log("first called");
-      console.log(data);
-      console.log(questionList);
-      // Fetches the database's question list.
-      let newQuestionList = getDataWithType(
-        data,
-        APP_DATA_TYPES.QUESTION_LIST
-      )?.first()?.data?.list;
-      setQuestionList(newQuestionList);
+      let newQuestionList = qList ?? questionList;
+      // Fetches the database's question list only when the data is loaded for the first time.
+      if (fetched < 2) {
+        newQuestionList = getDataWithType(
+          data,
+          APP_DATA_TYPES.QUESTION_LIST
+        )?.first()?.data?.list;
+        setQuestionList(newQuestionList);
+      }
       let newCurrentQuestionId = newQuestionList[currentQuestionIndex];
       setCurrentQuestionId(newCurrentQuestionId);
       // The database data structure of the current question.
@@ -114,21 +116,37 @@ function Create() {
           }
         }
       } else {
-        setQuestion(DEFAULT_TEXT);
-        setType(MULTIPLE_CHOICE);
-        setChoices(DEFAULT_CHOICES);
-        setText(DEFAULT_TEXT);
-        setSliderLeftText(DEFAULT_TEXT);
-        setSliderRightText(DEFAULT_TEXT);
-        setSliderCorrectValue(0);
+        initializeValues();
       }
     }
-  }, [data, currentQuestionIndex]);
+  };
+
+  /**
+   * Sets the {type} parameter to the dropdown menu's selected question type.
+   *
+   * @param {object} event The question type menu change event.
+   */
+  const handleTypeSelect = (event) => {
+    setDataChanged(true);
+    initializeValues(event.target.value);
+  };
 
   useEffect(() => {
     setDataChanged(true);
+    fetchData();
+  }, [currentQuestionIndex]);
+
+  useEffect(() => {
+    if (fetched < 2) {
+      fetchData();
+      setFetched(fetched + 1);
+    }
+  }, [data]);
+
+  /*
+  useEffect(() => {
+    setDataChanged(true);
     if (newQuestion) {
-      console.log("called");
       setNewQuestion(false);
       const id = getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)?.first()
         ?.id;
@@ -139,17 +157,55 @@ function Create() {
       setQuestionList(newQuestionList);
       handleNext(newQuestionList);
     }
-  }, [getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)]);
+  }, [getDataWithType(data, APP_DATA_TYPES.NEW_QUESTION)]);*/
+
+  const createQuestion = async (callback) => {
+    const { id: newAppDataId } = await postAppDataAsync({
+      data: {
+        question: DEFAULT_TEXT,
+        questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
+        choices: DEFAULT_CHOICES,
+      },
+      type: APP_DATA_TYPES.QUESTION,
+    });
+    setDataChanged(true);
+    callback(newAppDataId);
+  };
+
   /**
    * Creates a new question and navigates to it.
    */
   const onAddQuestion = () => {
     setDataChanged(true);
+    /*
     setNewQuestion(true);
     // Temporary item to be added to the database with a distinct type, in order to fetch its ID upon creation
     postAppData({
       type: APP_DATA_TYPES.NEW_QUESTION,
+    });*/
+    /*
+    const {id: newAppDataId} = postAppDataAsync({
+      data: {
+        question: DEFAULT_TEXT,
+        questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
+        choices: DEFAULT_CHOICES,
+      },
+      type: APP_DATA_TYPES.QUESTION
+    })*/
+    createQuestion((id) => {
+      let newQuestionList = [...questionList];
+      const newQuestionIndex = currentQuestionIndex + 1;
+      // Adds the newly created question's ID right after the current question's one in the question list.
+      newQuestionList.splice(newQuestionIndex, 0, id);
+      setQuestionList(newQuestionList);
+      handleSave(newQuestionList);
     });
+    let newQuestionList = [...questionList];
+    const newQuestionIndex = currentQuestionIndex + 1;
+    // Adds the newly created question's ID right after the current question's one in the question list.
+    newQuestionList.splice(newQuestionIndex, 0, "");
+    setQuestionList(newQuestionList);
+    handleNext(newQuestionList);
   };
 
   /**
@@ -174,9 +230,7 @@ function Create() {
    */
   const handleNext = (newQuestionList) => {
     handleSave(newQuestionList);
-    const questionListLength = newQuestionList
-      ? newQuestionList.length
-      : questionList.length;
+    const questionListLength = newQuestionList?.length ?? questionList.length;
     if (currentQuestionIndex + 1 < questionListLength) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
@@ -191,6 +245,8 @@ function Create() {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
+    // To handle the case of the current index not changing (ie. is 0) and no call to useEffect
+    fetchData(newQuestionList);
   };
 
   /**
