@@ -255,7 +255,7 @@ function Play() {
         alignItems="center"
       >
         <Grid item sx={{ pr: 20 }}>
-          <Button variant="contained" color="info">
+          <Button variant="contained" color="primary">
             Leave
           </Button>
         </Grid>
@@ -266,7 +266,7 @@ function Play() {
         </Grid>
         <Grid item>
           {!isLastQuestion() ? (
-            <Button variant="contained" color="info" onClick={onNext}>
+            <Button variant="contained" color="primary" onClick={onNext}>
               {getRightButtonText()}
             </Button>
           ) : null}

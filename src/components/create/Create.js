@@ -452,7 +452,7 @@ function Create() {
           <Grid item>
             <Button
               variant="contained"
-              color="info"
+              color="primary"
               onClick={() => handlePrevious()}
               disabled={currentQuestionIndex === 0}
             >
@@ -483,7 +483,7 @@ function Create() {
           <Grid item>
             <Button
               variant="contained"
-              color="info"
+              color="primary"
               onClick={() => handleNext()}
               disabled={currentQuestionIndex === questionList.length - 1}
             >

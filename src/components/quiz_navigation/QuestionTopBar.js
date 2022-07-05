@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import StepButton from "@mui/material/StepButton";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { SCREEN_TYPES } from "../constants/constants";
 
 const buttonStyle = {
@@ -24,14 +23,6 @@ const addStyle = {
   minWidth: "20px",
   maxWidth: "20px",
 };
-
-const buttonTheme = createTheme({
-  palette: {
-    secondary: {
-      main: "#000000",
-    },
-  },
-});
 
 export default function QuestionTopBar({
   screenType,
@@ -80,7 +71,6 @@ export default function QuestionTopBar({
               <Step key="plus">
                 <StepLabel
                   icon={
-                    <ThemeProvider theme={buttonTheme}>
                       <Fab
                         color="primary"
                         aria-label="add"
@@ -91,7 +81,6 @@ export default function QuestionTopBar({
                       >
                         <AddIcon style={addStyle} />
                       </Fab>
-                    </ThemeProvider>
                   }
                 ></StepLabel>
               </Step>
