@@ -1,38 +1,33 @@
-import {
-  Grid,
-  Button,
-  Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import {
-  DEFAULT_TEXT,
-  DEFAULT_CHOICES,
-  SCREEN_TYPES,
-  APP_DATA_TYPES,
-  QUESTION_TYPES,
-} from "../constants/constants";
-import { useAppData } from "../context/hooks";
-import { MUTATION_KEYS, useMutation } from "../../config/queryClient";
-import { getDataWithId, getDataWithType } from "../context/utilities";
-import PlayMultipleChoice from "./PlayMultipleChoice";
-import PlayTextInput from "./PlayTextInput";
-import PlaySlider from "./PlaySlider";
-import QuestionTopBar from "../quiz_navigation/QuestionTopBar";
+import React, { useEffect, useState } from 'react';
 
-function Play() {
-  const { data } = useAppData();
+import { Button, Grid, Typography } from '@mui/material';
+
+import {
+  APP_SETTING_NAMES,
+  DEFAULT_CHOICES,
+  DEFAULT_TEXT,
+  QUESTION_TYPES,
+} from '../../config/constants';
+import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
+import { getDataWithId, getDataWithType } from '../context/utilities';
+import QuestionTopBar from '../navigation/QuestionTopBar';
+import PlayMultipleChoice from './PlayMultipleChoice';
+import PlaySlider from './PlaySlider';
+import PlayTextInput from './PlayTextInput';
+
+const PlayView = () => {
+  const { data } = hooks.useAppData();
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const [questionList, setQuestionList] = useState([]);
   const questionListData = getDataWithType(
     data,
-    APP_DATA_TYPES.QUESTION_LIST
+    APP_SETTING_NAMES.QUESTION_LIST
   )?.first();
   const [question, setQuestion] = React.useState(DEFAULT_TEXT);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(null);
-  const screenType = SCREEN_TYPES.PLAY;
 
-  const [type, setType] = useState(QUESTION_TYPES.MULTIPLE_CHOICE);
+  const [type, setType] = useState(QUESTION_TYPES.MULTIPLE_CHOICES);
   const [choices, setChoices] = useState(DEFAULT_CHOICES);
   const [textQuestionAnswer, setTextQuestionAnswer] = useState(DEFAULT_TEXT);
   const [sliderCorrectValue, setSliderCorrectValue] = useState(0);
@@ -45,7 +40,7 @@ function Play() {
   const [results, setResults] = React.useState(
     Array(choices?.length)
       .fill()
-      .map(() => "neutral")
+      .map(() => 'neutral')
   );
   const [text, setText] = React.useState(DEFAULT_TEXT);
   const [sliderValue, setSliderValue] = React.useState(50);
@@ -78,7 +73,7 @@ function Play() {
         let newType = newCurrentQuestionData?.data?.questionType;
         setType(newType);
         switch (newType) {
-          case QUESTION_TYPES.MULTIPLE_CHOICE: {
+          case QUESTION_TYPES.MULTIPLE_CHOICES: {
             setChoices(newCurrentQuestionData?.data?.choices);
             break;
           }
@@ -93,7 +88,7 @@ function Play() {
         }
       } else {
         setQuestion(DEFAULT_TEXT);
-        setType(QUESTION_TYPES.MULTIPLE_CHOICE);
+        setType(QUESTION_TYPES.MULTIPLE_CHOICES);
         setChoices(DEFAULT_CHOICES);
         setTextQuestionAnswer(DEFAULT_TEXT);
         setSliderCorrectValue(0);
@@ -125,11 +120,11 @@ function Play() {
   };
 
   const getMiddleButtonText = () => {
-    return isLastQuestion() ? "Finish" : "Submit";
+    return isLastQuestion() ? 'Finish' : 'Submit';
   };
 
   const getRightButtonText = () => {
-    return submitted ? "Next" : "Skip";
+    return submitted ? 'Next' : 'Skip';
   };
 
   const onSubmit = () => {
@@ -137,14 +132,14 @@ function Play() {
       setSubmitted(true);
       completeQuestion();
       switch (type) {
-        case QUESTION_TYPES.MULTIPLE_CHOICE: {
+        case QUESTION_TYPES.MULTIPLE_CHOICES: {
           postAppData({
             questionID: currentQuestionId,
             data: {
-              questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
+              questionType: QUESTION_TYPES.MULTIPLE_CHOICES,
               answers: answers,
             },
-            type: APP_DATA_TYPES.ANSWER,
+            type: APP_SETTING_NAMES.ANSWER,
           });
           break;
         }
@@ -155,7 +150,7 @@ function Play() {
               questionType: QUESTION_TYPES.TEXT_INPUT,
               answer: text,
             },
-            type: APP_DATA_TYPES.ANSWER,
+            type: APP_SETTING_NAMES.ANSWER,
           });
           break;
         }
@@ -166,7 +161,7 @@ function Play() {
               questionType: QUESTION_TYPES.SLIDER,
               value: sliderValue,
             },
-            type: APP_DATA_TYPES.ANSWER,
+            type: APP_SETTING_NAMES.ANSWER,
           });
           break;
         }
@@ -178,14 +173,13 @@ function Play() {
     <div align="center">
       <Grid
         container
-        direction={"row"}
+        direction={'row'}
         alignItems="center"
         justifyContent="center"
         sx={{ p: 2 }}
       >
         <Grid item>
           <QuestionTopBar
-            screenType={screenType}
             currentQuestionIndex={currentQuestionIndex}
             setCurrentQuestionIndex={setCurrentQuestionIndex}
             questionList={questionList}
@@ -199,7 +193,7 @@ function Play() {
       </Typography>
       {(() => {
         switch (type) {
-          case QUESTION_TYPES.MULTIPLE_CHOICE: {
+          case QUESTION_TYPES.MULTIPLE_CHOICES: {
             return (
               <PlayMultipleChoice
                 choices={choices}
@@ -225,7 +219,7 @@ function Play() {
           case QUESTION_TYPES.SLIDER: {
             return (
               <PlaySlider
-              currentQuestionId={currentQuestionId}
+                currentQuestionId={currentQuestionId}
                 sliderValue={sliderValue}
                 setSliderValue={setSliderValue}
                 sliderCorrectValue={sliderCorrectValue}
@@ -249,7 +243,7 @@ function Play() {
       })()}
       <Grid
         container
-        direction={"row"}
+        direction={'row'}
         spacing={2}
         sx={{ pt: 2 }}
         alignItems="center"
@@ -274,6 +268,6 @@ function Play() {
       </Grid>
     </div>
   );
-}
+};
 
-export default Play;
+export default PlayView;

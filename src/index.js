@@ -1,27 +1,40 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import { mockServer, buildMockLocalContext } from "@graasp/apps-query-client";
-import buildDatabase from "./data/db";
-import "./index.css";
-import { QuizApp } from "./components/QuizApp";
+import { createRoot } from 'react-dom/client';
 
-const MOCK_API = process.env.REACT_APP_MOCK_API;
+import { buildMockLocalContext, mockApi } from '@graasp/apps-query-client';
 
-if (MOCK_API) {
+import App from './components/App';
+import buildDatabase from './data/db';
+import './index.css';
+
+const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API;
+
+if (ENABLE_MOCK_API) {
   const appContext = buildMockLocalContext(window.appContext);
   // automatically append item id as a query string
   const searchParams = new URLSearchParams(window.location.search);
-  if (!searchParams.get("itemId")) {
-    searchParams.set("itemId", appContext.itemId);
+  if (!searchParams.get('itemId')) {
+    searchParams.set('itemId', appContext.itemId);
     window.location.search = searchParams.toString();
   }
-  const database = window.Cypress ? window.database : buildDatabase(appContext);
-  mockServer({ database, appContext });
+  mockApi({
+    appContext: window.Cypress ? window.appContext : undefined,
+    database: window.Cypress ? window.database : buildDatabase(appContext),
+  });
 }
 
-ReactDOM.render(
-  <div id="root">
-    <QuizApp />
-  </div>,
-  document.getElementById("root")
-);
+const root = createRoot(document.getElementById('root'));
+
+const renderApp = (Component) => {
+  root.render(<Component />);
+};
+
+// render app to the dom
+renderApp(App);
+
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+    // eslint-disable-next-line global-require
+    const NextRoot = require('./components/App').default;
+    renderApp(NextRoot);
+  });
+}

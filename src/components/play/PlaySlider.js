@@ -1,11 +1,9 @@
-import {
-  Grid,
-  Typography,
-  Slider,
-} from "@mui/material";
-import React from "react";
-import { useAppData } from "../context/hooks";
-import { getDataWithId } from "../context/utilities";
+import React from 'react';
+
+import { Grid, Slider, Typography } from '@mui/material';
+
+import { hooks } from '../../config/queryClient';
+import { getDataWithId } from '../context/utilities';
 
 function PlaySlider({
   currentQuestionId,
@@ -14,7 +12,7 @@ function PlaySlider({
   sliderCorrectValue,
   submitted,
 }) {
-  const { data } = useAppData();
+  const { data } = hooks.useAppData();
   const leftLabel = getDataWithId(data, currentQuestionId)?.data?.leftText;
   const rightLabel = getDataWithId(data, currentQuestionId)?.data?.rightText;
   const marks = [
@@ -31,7 +29,7 @@ function PlaySlider({
 
   return (
     <div>
-      <Grid container direction={"column"} sx={{ p: 2 }}>
+      <Grid container direction={'column'} sx={{ p: 2 }}>
         <Grid item sx={{ pb: 2 }}>
           <Slider
             aria-label="Custom marks"

@@ -1,22 +1,20 @@
-import {
-  Grid,
-  Button,
-} from "@mui/material";
-import React, { useEffect } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React, { useEffect } from 'react';
+
+import { Button, Grid } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
     secondary: {
-      main: "#FFFFFF",
+      main: '#FFFFFF',
       notchedOutline: {
-        borderWidth: "5px",
-        borderColor: "green !important",
+        borderWidth: '5px',
+        borderColor: 'green !important',
       },
     },
     primary: {
-      main: "#555BD9"
-    }
+      main: '#555BD9',
+    },
   },
 });
 
@@ -28,15 +26,14 @@ function PlayMultipleChoice({
   setResults,
   submitted,
 }) {
-
   // TODO: outlined color once selected
   function computeCorrectness(answer, isCorrect) {
     if (isCorrect !== answer) {
-      return "false";
+      return 'false';
     } else if (isCorrect && answer) {
-      return "true";
+      return 'true';
     } else {
-      return "neutral";
+      return 'neutral';
     }
   }
 
@@ -55,15 +52,15 @@ function PlayMultipleChoice({
   function selectColor(index) {
     if (submitted) {
       switch (results[index]) {
-        case "true":
-          return "success";
-        case "false":
-          return "error";
+        case 'true':
+          return 'success';
+        case 'false':
+          return 'error';
         default:
-          return "secondary";
+          return 'secondary';
       }
     } else {
-      return answers[index] ? "primary" : "secondary";
+      return answers[index] ? 'primary' : 'secondary';
     }
   }
 
@@ -79,12 +76,12 @@ function PlayMultipleChoice({
 
   return (
     <div>
-      <Grid container direction={"column"} sx={{ p: 2 }}>
+      <Grid container direction={'column'} sx={{ p: 2 }}>
         {choices?.map((choice, index) => (
           <div key={index}>
             <Grid
               container
-              direction={"column"}
+              direction={'column'}
               sx={{ pb: 3 }}
               align="center"
               columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}
@@ -96,7 +93,7 @@ function PlayMultipleChoice({
                     onClick={() => onSelect(index)}
                     variant="contained"
                     color={selectColor(index)}
-                    sx={{ py: 2, borderColor: "black" }}
+                    sx={{ py: 2, borderColor: 'black' }}
                     fullWidth
                   >
                     {choice.choice}

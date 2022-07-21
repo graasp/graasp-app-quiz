@@ -8,9 +8,13 @@
     "@graasp/apps-query-client": "github:graasp/graasp-apps-query-client.git",
     "@mui/icons-material": "5.6.2",
     "@mui/material": "^5.5.3",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "5.0.0",
+    "i18next": "21.8.8",
+    "prop-types": "15.8.1",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-i18next": "11.17.0",
+    "react-scripts": "5.0.1",
+    "react-toastify": "9.0.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -19,13 +23,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "prettier:write": "prettier --write ./src"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "prettier:write": "prettier --write '{src,cypress}/**/*.js'",
+    "build:local": "env-cmd -f ./.env.local yarn build",
+    "build:dev": "env-cmd -f ./.env.dev yarn build",
+    "build:prod": "env-cmd -f ./.env.prod yarn build"
   },
   "browserslist": {
     "production": [
@@ -39,16 +40,21 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@3.2.0",
   "devDependencies": {
-    "@babel/eslint-parser": "7.17.0",
-    "@babel/eslint-plugin": "7.16.5",
-    "@babel/preset-react": "7.16.7",
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/eslint-plugin": "7.17.7",
+    "@babel/preset-react": "7.17.12",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "@trivago/prettier-plugin-sort-imports": "3.2.0",
     "env-cmd": "10.1.0",
-    "eslint": "8.16.0",
+    "eslint": "8.17.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-config-react-app": "7.0.1",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-react": "^7.27.1",
     "prettier": "2.6.2"
-  }
+  },
+  "packageManager": "yarn@3.2.1"
 }

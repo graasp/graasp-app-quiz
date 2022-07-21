@@ -1,20 +1,28 @@
-import React, { useContext } from "react";
-import { Context } from "../context/ContextContext";
-import { PERMISSION_LEVELS } from "../config/settings";
-import Create from "../create/Create";
-import Play from "../play/Play";
+import React, { useContext } from 'react';
+
+import { Context } from '@graasp/apps-query-client';
+
+import { PERMISSION_LEVELS } from '../../config/settings';
+import { QuizProvider } from '../context/QuizContext';
+import CreateView from '../create/CreateView';
+import PlayView from '../play/PlayView';
 
 const View = () => {
   const context = useContext(Context);
-  switch (context.get("permission")) {
-    case PERMISSION_LEVELS.ADMIN:
-    case PERMISSION_LEVELS.WRITE:
-      return <Create />;
 
-    case PERMISSION_LEVELS.READ:
-    default:
-      return <Play />;
-  }
+  const renderContent = () => {
+    switch (context.get('permission')) {
+      case PERMISSION_LEVELS.ADMIN:
+      case PERMISSION_LEVELS.WRITE:
+      case PERMISSION_LEVELS.READ:
+        return <CreateView />;
+
+      default:
+        return <PlayView />;
+    }
+  };
+
+  return <QuizProvider>{renderContent()}</QuizProvider>;
 };
 
 export default View;

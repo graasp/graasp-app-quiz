@@ -1,31 +1,30 @@
-import {
-  TextField,
-  Grid,
-  Typography,
-} from "@mui/material";
-import React from "react";
-import { styled } from "@mui/material/styles";
+import PropTypes from 'prop-types';
 
-function PlayTextInput({ text, setText, answer, submitted }) {
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-  function answerIsCorrect() {
+import { Grid, TextField, Typography } from '@mui/material';
+
+const PlayTextInput = ({ text, setText, answer, submitted }) => {
+  const { t } = useTranslation();
+
+  const answerIsCorrect = () => {
     return answer.toLowerCase() === text.toLowerCase();
-  }
+  };
 
   return (
-    <div>
-      <Grid container direction={"column"} alignItems="center" sx={{ p: 2 }}>
+    <>
+      <Grid container direction={'column'} alignItems="center" sx={{ p: 2 }}>
         <Grid item sx={{ pb: 2 }}>
-          <Typography variant="p1"> Type Answer here:</Typography>
+          <Typography variant="p1">{t('Type your answer')}</Typography>
         </Grid>
         {(() => {
           if (!submitted) {
             return (
               <TextField
                 value={text}
-                placeholder="Enter Answer"
-                label="Answer"
-                name="quiz text answer"
+                placeholder={t('Enter Answer')}
+                label={t('Answer')}
                 variant="outlined"
                 onChange={(t) => {
                   {
@@ -39,14 +38,13 @@ function PlayTextInput({ text, setText, answer, submitted }) {
           if (answerIsCorrect()) {
             return (
               <TextField
-                label="Correct"
+                label={t('Correct')}
                 required
                 variant="outlined"
                 defaultValue={text}
                 color="success"
                 focused
                 inputProps={{ readOnly: true }}
-                id="validation-outlined-input"
               />
             );
           }
@@ -54,18 +52,24 @@ function PlayTextInput({ text, setText, answer, submitted }) {
           return (
             <TextField
               error
-              id="outlined-error-heper-text"
-              label="Incorrect"
+              label={t('Incorrect')}
               defaultValue={text}
-              helperText={`Correct Answer: ${answer}`}
+              helperText={t(`Correct Answer: ${answer}`)}
               focused
               inputProps={{ readOnly: true }}
             />
           );
         })()}
       </Grid>
-    </div>
+    </>
   );
-}
+};
+
+PlayTextInput.propTypes = {
+  text: PropTypes.string,
+  setText: PropTypes.func.isRequired,
+  answer: PropTypes.string,
+  submitted: PropTypes.bool,
+};
 
 export default PlayTextInput;
