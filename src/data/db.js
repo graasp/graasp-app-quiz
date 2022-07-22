@@ -9,10 +9,22 @@ const buildDatabase = (appContext) => ({
       createdAt: '2022-07-22T12:35:50.195Z',
       updatedAt: '2022-07-22T12:36:51.741Z',
       data: {
-        questionId: 'id5',
-        value: 90,
+        questionId: 'id4',
+        choices: ['London'],
       },
-      id: '1',
+      id: '2',
+    },
+    {
+      itemId: 'mock-item-id',
+      memberId: 'mock-member-id',
+      creator: 'mock-member-id',
+      createdAt: '2022-07-22T12:35:50.195Z',
+      updatedAt: '2022-07-22T12:36:51.741Z',
+      data: {
+        questionId: 'id6',
+        text: '90',
+      },
+      id: '3',
     },
   ],
   appSettings: [

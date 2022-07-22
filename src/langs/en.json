@@ -1,7 +1,6 @@
 {
   "translations": {
-    "Create your quiz":"Create your quiz",
-    "Type":"Type",
+    "Answer Type":"Answer Type",
     "Multiple Choice":"Multiple Choice",
     "Text Input":"Text Input",
     "Slider":"Slider",
@@ -10,6 +9,19 @@
     "Previous":"Previous",
     "Delete":"Delete",
     "Save":"Save",
-    "Next":"Next"
+    "Prev":"Prev",
+    "Next":"Next",
+    "Submit":"Submit",
+    "Type your answer":"Type your answer",
+    "Correct Answer":"Correct Answer: {{answer}}",
+    "Answer" :"Answer",
+    "Answer nb": "Answer {{nb}}",
+    "Add new question":"Add new question",
+    "Answers":"Answers",
+    "Add Answer":"Add Answer",
+    "Maximum":"Maximum",
+    "Minimum":"Minimum",
+    "Slide the cursor to the correct value":"Slide the cursor to the correct value",
+    "Add a new question":"Add a new question"
   }
 }

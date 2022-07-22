@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 
+import { Container } from '@mui/material';
+
 import { Context } from '@graasp/apps-query-client';
 
 import { PERMISSION_LEVELS } from '../../config/settings';
@@ -11,18 +13,26 @@ const View = () => {
   const context = useContext(Context);
 
   const renderContent = () => {
+    if (context.get('context') === 'player') {
+      return <PlayView />;
+    }
+
     switch (context.get('permission')) {
       case PERMISSION_LEVELS.ADMIN:
       case PERMISSION_LEVELS.WRITE:
+      case PERMISSION_LEVELS.READ:
         return <CreateView />;
 
-      case PERMISSION_LEVELS.READ:
       default:
         return <PlayView />;
     }
   };
 
-  return <QuizProvider>{renderContent()}</QuizProvider>;
+  return (
+    <Container maxWidth="md">
+      <QuizProvider>{renderContent()}</QuizProvider>
+    </Container>
+  );
 };
 
 export default View;

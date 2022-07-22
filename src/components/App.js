@@ -1,6 +1,7 @@
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 
+import { CircularProgress } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 
 import { withContext, withToken } from '@graasp/apps-query-client';
@@ -17,7 +18,7 @@ import View from './views/View';
 
 export const App = () => {
   const AppWithContext = withToken(View, {
-    LoadingComponent: 'Loading...',
+    LoadingComponent: <CircularProgress />,
     useAuthToken: hooks.useAuthToken,
     onError: () => {
       console.log('An error occured while requesting the token.');
@@ -25,7 +26,7 @@ export const App = () => {
   });
 
   const AppWithContextAndToken = withContext(AppWithContext, {
-    LoadingComponent: 'Loading...',
+    LoadingComponent: <CircularProgress />,
     useGetLocalContext: hooks.useGetLocalContext,
     onError: () => {
       console.log('An error occured while fetching the context.');

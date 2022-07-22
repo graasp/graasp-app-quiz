@@ -1,4 +1,4 @@
-import { QUESTION_TYPES } from '../../config/constants';
+import { FAILURE_MESSAGES, QUESTION_TYPES } from '../../config/constants';
 
 export const getDataWithId = (data, id) => {
   return data?.filter((d) => d.id === id)?.first();
@@ -23,8 +23,8 @@ export const computeCorrectness = (data, correctData) => {
 
       return correctData.choices.every(({ choice, isCorrect }) =>
         isCorrect
-          ? data.choices.contains(choice)
-          : !data.choices.contains(choice)
+          ? data.choices.includes(choice)
+          : !data.choices.includes(choice)
       );
     }
     case QUESTION_TYPES.TEXT_INPUT:
@@ -42,4 +42,37 @@ export const getAppDataByQuestionId = (appData, qId) => {
       },
     }
   );
+};
+
+export const validateQuestionData = (data) => {
+  if (!data?.question) {
+    throw FAILURE_MESSAGES.EMPTY_QUESTION;
+  }
+
+  switch (data.type) {
+    case QUESTION_TYPES.SLIDER:
+      if (data?.min >= data?.max) {
+        throw FAILURE_MESSAGES.SLIDER_MIN_SMALLER_THAN_MAX;
+      }
+      break;
+    case QUESTION_TYPES.MULTIPLE_CHOICES:
+      if (data?.choices?.length < 2) {
+        throw FAILURE_MESSAGES.MULTIPLE_CHOICES_ANSWER_COUNT;
+      }
+      if (!data?.choices?.some(({ isCorrect }) => isCorrect)) {
+        throw FAILURE_MESSAGES.MULTIPLE_CHOICES_CORRECT_ANSWER;
+      }
+      if (data?.choices?.some(({ choice }) => !choice)) {
+        throw FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE;
+      }
+
+      break;
+    case QUESTION_TYPES.TEXT_INPUT:
+      if (!data?.text?.length) {
+        throw FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY;
+      }
+      break;
+    default:
+      return true;
+  }
 };

@@ -23,10 +23,12 @@ const PlayTextInput = ({ values, response, setResponse, showCorrection }) => {
   return (
     <TextField
       fullWidth
-      value={response.text}
+      value={response.text ?? ''}
       placeholder={t('Type your answer')}
       helperText={
-        showCorrection && !isCorrect && t(`Correct Answer: ${values.text}`)
+        showCorrection &&
+        !isCorrect &&
+        t('Correct Answer', { answer: values.text })
       }
       label={t('Answer')}
       variant="outlined"

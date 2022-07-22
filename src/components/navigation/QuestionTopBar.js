@@ -3,8 +3,18 @@ import { useTranslation } from 'react-i18next';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, Grid, Step, StepLabel, Stepper } from '@mui/material';
+import {
+  Button,
+  Grid,
+  Step,
+  StepButton,
+  StepLabel,
+  Stepper,
+} from '@mui/material';
 
+import { Context } from '@graasp/apps-query-client';
+
+import { VIEWS } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
 import { QuizContext } from '../context/QuizContext';
 import {
@@ -23,6 +33,7 @@ export default function QuestionTopBar({ additionalSteps }) {
     order,
     moveToNextQuestion,
   } = useContext(QuizContext);
+  const context = useContext(Context);
   const { data: appData, isLoading } = hooks.useAppData();
 
   if (isLoading) {
@@ -32,9 +43,17 @@ export default function QuestionTopBar({ additionalSteps }) {
   const renderLabel = (questionId, index) => {
     const response = getAppDataByQuestionId(appData, questionId);
     const question = getDataWithId(questions, questionId);
-    const isCorrect = computeCorrectness(response.data, question.data);
+
+    if (context.get('context') === VIEWS.BUILDER) {
+      return (
+        <StepButton onClick={() => setCurrentIdx(index)}>
+          {question.data.question}
+        </StepButton>
+      );
+    }
 
     // show correctness in label only if a response exists
+    const isCorrect = computeCorrectness(response.data, question.data);
     const props = !response.id
       ? {}
       : {

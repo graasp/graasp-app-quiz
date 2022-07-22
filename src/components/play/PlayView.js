@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Alert, Button, Grid, Typography } from '@mui/material';
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Grid,
+  Typography,
+} from '@mui/material';
 
 import { APP_SETTING_NAMES, QUESTION_TYPES } from '../../config/constants';
 import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
@@ -22,11 +28,15 @@ const PlayView = () => {
 
   const [showCorrection, setShowCorrection] = React.useState(false);
 
-  const [newResponse, setNewResponse] = useState(null);
+  const [newResponse, setNewResponse] = useState(
+    getAppDataByQuestionId(responses, currentQuestion?.id)
+  );
 
   useEffect(() => {
-    // assume there's only one response for a question
-    setNewResponse(getAppDataByQuestionId(responses, currentQuestion.id));
+    if (responses && currentQuestion) {
+      // assume there's only one response for a question
+      setNewResponse(getAppDataByQuestionId(responses, currentQuestion.id));
+    }
   }, [responses, currentQuestion]);
 
   useEffect(() => {
@@ -49,7 +59,7 @@ const PlayView = () => {
   };
 
   if (isLoading) {
-    return 'loading app data';
+    return <CircularProgress />;
   }
 
   if (!currentQuestion) {
@@ -57,13 +67,7 @@ const PlayView = () => {
   }
 
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      spacing={2}
-    >
+    <Grid container direction="column" alignItems="center" spacing={2}>
       <Grid item>
         <QuestionTopBar />
       </Grid>
@@ -137,7 +141,7 @@ const PlayView = () => {
         })()}
       </Grid>
       <Grid item xs={12}>
-        <Button onClick={onSubmit} variant="contained" color="success">
+        <Button onClick={onSubmit} variant="contained">
           {t('Submit')}
         </Button>
       </Grid>

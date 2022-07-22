@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
-import { Button, Grid, Typography } from '@mui/material';
+import { Alert, Button, Grid, Typography } from '@mui/material';
 
 import { QUESTION_TYPES } from '../../config/constants';
 import { QuizContext } from '../context/QuizContext';
-import { isDifferent } from '../context/utilities';
+import { isDifferent, validateQuestionData } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
 import QuestionTopBar from '../navigation/QuestionTopBar';
 import MultipleChoices from './MultipleChoices';
@@ -22,10 +22,36 @@ const CreateView = () => {
     useContext(QuizContext);
 
   const [newData, setNewData] = useState(currentQuestion?.data);
+  const [errorMessage, setErrorMessage] = useState();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     setNewData(currentQuestion?.data);
   }, [currentQuestion]);
+
+  // validate data to enable save
+  useEffect(() => {
+    if (isSubmitted) {
+      try {
+        validateQuestionData(newData);
+        setErrorMessage(null);
+      } catch (e) {
+        setErrorMessage(e);
+      }
+    }
+  }, [newData, isSubmitted]);
+
+  const saveNewQuestion = () => {
+    setIsSubmitted(true);
+    try {
+      validateQuestionData(newData);
+      setErrorMessage(null);
+      saveQuestion(newData);
+    } catch (e) {
+      console.log(e);
+      setErrorMessage(e);
+    }
+  };
 
   return (
     <>
@@ -106,6 +132,11 @@ const CreateView = () => {
             }
           })()}
         </Grid>
+        {errorMessage && (
+          <Grid item>
+            <Alert severity="error">{t(errorMessage)}</Alert>
+          </Grid>
+        )}
         <Grid container spacing={2} sx={{ pt: 2 }} justifyContent="center">
           <Grid item>
             <Button
@@ -113,17 +144,20 @@ const CreateView = () => {
               variant="contained"
               startIcon={<DeleteIcon />}
               onClick={deleteQuestion(currentQuestion?.id)}
+              disabled={!currentQuestion.id}
             >
               {t('Delete')}
             </Button>
           </Grid>
           <Grid item>
             <Button
-              onClick={saveQuestion(newData)}
+              onClick={saveNewQuestion}
               variant="contained"
               color="success"
               startIcon={<SaveIcon />}
-              disabled={!isDifferent(newData, currentQuestion?.data)}
+              disabled={
+                !isDifferent(newData, currentQuestion?.data) || errorMessage
+              }
             >
               {t('Save')}
             </Button>

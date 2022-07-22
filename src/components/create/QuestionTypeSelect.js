@@ -13,12 +13,14 @@ function QuestionTypeSelect({ value, onChange }) {
   return (
     <Box>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">{t('Type')}</InputLabel>
+        <InputLabel id="demo-simple-select-label">
+          {t('Answer Type')}
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={type}
-          label={t('Type')}
+          label={t('Answer Type')}
           onChange={(e) => onChange(e.target.value)}
         >
           <MenuItem value={QUESTION_TYPES.MULTIPLE_CHOICES}>

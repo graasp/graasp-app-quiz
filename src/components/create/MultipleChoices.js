@@ -1,3 +1,5 @@
+import clonedeep from 'lodash.clonedeep';
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,24 +20,23 @@ import {
 
 import { DEFAULT_CHOICE } from '../../config/constants';
 
-// TODO: use clonedeep
 const MultipleChoices = ({ choices, setChoices }) => {
   const { t } = useTranslation();
 
   const handleAnswerCorrectnessChange = (index, e) => {
-    let newChoices = [...choices];
+    let newChoices = clonedeep(choices);
     newChoices[index] = { ...choices[index], isCorrect: e.target.checked };
     setChoices(newChoices);
   };
 
   const handleChoiceChange = (index, e) => {
-    let newChoices = [...choices];
+    let newChoices = clonedeep(choices);
     newChoices[index] = { ...choices[index], choice: e.target.value };
     setChoices(newChoices);
   };
 
   const addAnswer = () => {
-    setChoices([...(choices ?? []), DEFAULT_CHOICE]);
+    setChoices([...choices, DEFAULT_CHOICE]);
   };
 
   const onDelete = (index) => () => {
@@ -44,7 +45,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
       return;
     }
 
-    let newChoices = [...choices];
+    let newChoices = clonedeep(choices);
     newChoices.splice(index, 1);
     setChoices(newChoices);
   };
@@ -66,7 +67,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
           >
             <Grid item variant="outlined" xs={11}>
               <FormControl variant="outlined" fullWidth>
-                <InputLabel>{t(`Answer ${readableIndex}`)}</InputLabel>
+                <InputLabel>{t('Answer nb', { nb: readableIndex })}</InputLabel>
                 <OutlinedInput
                   type="text"
                   label={`Answer ${readableIndex}`}
@@ -93,7 +94,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={1} sx={{ textAlign: 'center' }}>
               {
                 <IconButton
                   type="button"
@@ -108,7 +109,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
         );
       })}
       <Button variant="text" onClick={addAnswer}>
-        <AddIcon fontSize="small" /> {t('add answer')}
+        <AddIcon fontSize="small" /> {t('Add Answer')}
       </Button>
     </>
   );

@@ -4,7 +4,6 @@ import { buildMockLocalContext, mockApi } from '@graasp/apps-query-client';
 
 import App from './components/App';
 import buildDatabase from './data/db';
-import './index.css';
 
 const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API;
 

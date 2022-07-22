@@ -12,7 +12,7 @@ const TextInput = ({ text, onChangeData }) => {
     <TextField
       fullWidth
       value={value}
-      placeholder={t('Enter Answer')}
+      placeholder={t('Type your answer')}
       label={t('Answer')}
       variant="outlined"
       onChange={(t) => onChangeData(t.target.value)}

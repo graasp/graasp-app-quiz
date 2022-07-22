@@ -5,7 +5,6 @@ import React from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, Grid } from '@mui/material';
 
-// TODO: use clonedeep
 const PlayMultipleChoices = ({
   choices,
   response,
@@ -25,35 +24,41 @@ const PlayMultipleChoices = ({
     setResponse(newResponse);
   };
 
-  function selectColor({ choice, isCorrect }) {
+  const computeStyles = ({ choice, isCorrect }) => {
     const isSelected = response.choices?.includes(choice);
     if (showCorrection) {
       switch (true) {
         case isCorrect && isSelected:
-          return 'success';
+          return {
+            color: 'success',
+            variant: 'contained',
+            endIcon: <CheckIcon />,
+          };
         case isCorrect && !isSelected:
+          return {
+            color: 'error',
+            variant: 'contained',
+            endIcon: <CheckIcon />,
+          };
         case !isCorrect && isSelected:
-          return 'error';
+          return { color: 'error', variant: 'contained' };
         default:
-          'primary';
+          return { color: 'primary', variant: 'outlined' };
       }
     }
 
-    return isSelected ? 'secondary' : 'primary';
-  }
+    return { color: 'primary', variant: isSelected ? 'contained' : 'outlined' };
+  };
 
   return (
     <Grid container direction={'column'} spacing={2}>
       {choices?.map((choice) => (
-        <Grid item key={choice}>
+        <Grid item key={choice.choice}>
           <Button
             value={choice.choice}
             onClick={onResponseClick}
-            variant="contained"
-            color={selectColor(choice)}
-            sx={{ py: 2, borderColor: 'black' }}
-            endIcon={showCorrection && choice.isCorrect && <CheckIcon />}
             fullWidth
+            {...computeStyles(choice)}
           >
             {choice.choice}
           </Button>

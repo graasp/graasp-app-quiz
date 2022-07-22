@@ -45,7 +45,7 @@ function PlaySlider({ values, response, setResponse, showCorrection }) {
       <Grid item sx={{ pb: 2 }}>
         <Slider
           aria-label="Custom marks"
-          defaultValue={max - min}
+          defaultValue={(max - min) / 2 + min}
           valueLabelDisplay="on"
           onChange={(e, val) => {
             setResponse(val);

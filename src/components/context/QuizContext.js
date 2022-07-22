@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { CircularProgress } from '@mui/material';
+
 import { APP_SETTING_NAMES, DEFAULT_QUESTION } from '../../config/constants';
 import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
 import { getSettingByName } from './utilities';
@@ -34,14 +36,14 @@ export const QuizProvider = ({ children }) => {
     // there should be at least one visible
     // but maybe we could add a screen for when no quiz questions have been created.
     if (order.length > 1) {
-      // delete question
-      deleteAppSetting({ id: questionId });
-
       // update list order
       let newOrder = [...order];
       const idx = order.findIndex((id) => id === questionId);
       newOrder.splice(idx, 1);
       patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
+
+      // delete question
+      deleteAppSetting({ id: questionId });
 
       // change current idx
       // go to previous, bound by number of questions
@@ -54,7 +56,7 @@ export const QuizProvider = ({ children }) => {
     setCurrentIdx(-1);
   };
 
-  const saveQuestion = (newData) => async () => {
+  const saveQuestion = async (newData) => {
     // add new question
     if (!currentQuestion?.id) {
       const newQuestion = await postAppSettingAsync({
@@ -94,6 +96,7 @@ export const QuizProvider = ({ children }) => {
     setCurrentIdxBounded(currentIdx - 1);
   };
 
+  // initialize order
   useEffect(() => {
     if (settings) {
       const newOrderSetting = getSettingByName(
@@ -105,6 +108,7 @@ export const QuizProvider = ({ children }) => {
     }
   }, [settings]);
 
+  // set current question
   useEffect(() => {
     const questions = getSettingByName(settings, APP_SETTING_NAMES.QUESTION);
     if (
@@ -138,7 +142,7 @@ export const QuizProvider = ({ children }) => {
   }, [currentIdx, order, currentQuestion]);
 
   if (isLoading) {
-    return 'Loading quiz...';
+    return <CircularProgress />;
   }
 
   if (isError) {

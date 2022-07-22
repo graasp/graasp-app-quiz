@@ -5,17 +5,9 @@ import AddIcon from '@mui/icons-material/Add';
 import { Fab, Step, StepLabel } from '@mui/material';
 
 const buttonStyle = {
-  maxHeight: '23px',
+  height: '23px',
   minHeight: '23px',
-  minWidth: '23px',
-  maxWidth: '23px',
-};
-
-const addStyle = {
-  maxHeight: '20px',
-  minHeight: '20px',
-  minWidth: '20px',
-  maxWidth: '20px',
+  width: '23px',
 };
 
 const PlusStep = ({ onClick }) => {
@@ -27,13 +19,13 @@ const PlusStep = ({ onClick }) => {
         icon={
           <Fab
             color="success"
-            aria-label={t('add')}
+            aria-label={t('Add new question')}
             justify-content="center"
             style={buttonStyle}
             onClick={onClick}
             align="center"
           >
-            <AddIcon style={addStyle} />
+            <AddIcon />
           </Fab>
         }
       ></StepLabel>

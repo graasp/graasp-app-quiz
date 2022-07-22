@@ -25,7 +25,7 @@ const Slider = ({ data, onChangeData }) => {
       <Grid container direction={'column'} align="left">
         <Grid item sx={{ pb: 2 }}>
           <Typography variant="body1">
-            {t('Slide the cursor to the correct value:')}
+            {t('Slide the cursor to the correct value')}
           </Typography>
         </Grid>
         <Grid item sx={{ pb: 1, pt: 4 }}>
@@ -67,14 +67,6 @@ const Slider = ({ data, onChangeData }) => {
       </Grid>
     </div>
   );
-};
-
-Slider.handleSave = ({ id, saveFn, data, type }) => {
-  saveFn({
-    data,
-    id,
-    type,
-  });
 };
 
 export default Slider;
