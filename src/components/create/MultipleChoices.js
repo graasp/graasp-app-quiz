@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Button,
   Checkbox,
-  Fab,
   FormControl,
   FormControlLabel,
   Grid,
@@ -18,6 +18,7 @@ import {
 
 import { DEFAULT_CHOICE } from '../../config/constants';
 
+// TODO: use clonedeep
 const MultipleChoices = ({ choices, setChoices }) => {
   const { t } = useTranslation();
 
@@ -34,7 +35,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
   };
 
   const addAnswer = () => {
-    setChoices([...(choices?.choices ?? []), DEFAULT_CHOICE]);
+    setChoices([...(choices ?? []), DEFAULT_CHOICE]);
   };
 
   const onDelete = (index) => () => {
@@ -49,10 +50,10 @@ const MultipleChoices = ({ choices, setChoices }) => {
   };
 
   return (
-    <Grid container direction={'column'}>
-      <Grid item sx={{ pb: 2 }}>
-        <Typography variant="h6">{t('Answers')}</Typography>
-      </Grid>
+    <>
+      <Typography variant="h6" sx={{ pb: 2 }}>
+        {t('Answers')}
+      </Typography>
       {choices?.map((choice, index) => {
         const readableIndex = index + 1;
         return (
@@ -65,12 +66,12 @@ const MultipleChoices = ({ choices, setChoices }) => {
           >
             <Grid item variant="outlined" xs={11}>
               <FormControl variant="outlined" fullWidth>
-                <InputLabel>{t(`Choice ${readableIndex}`)}</InputLabel>
+                <InputLabel>{t(`Answer ${readableIndex}`)}</InputLabel>
                 <OutlinedInput
                   type="text"
-                  label={`Choice ${readableIndex}`}
+                  label={`Answer ${readableIndex}`}
                   value={choice.choice}
-                  placeholder={`Enter Choice ${readableIndex}`}
+                  placeholder={`Enter Answer ${readableIndex}`}
                   onChange={(e) => handleChoiceChange(index, e)}
                   endAdornment={
                     <InputAdornment position="end">
@@ -83,6 +84,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
                             }
                             name="answer"
                             edge="end"
+                            sx={{ p: 0 }}
                           />
                         }
                       />
@@ -105,23 +107,18 @@ const MultipleChoices = ({ choices, setChoices }) => {
           </Grid>
         );
       })}
-
-      <Grid item sx={{ pt: 2 }} align="left">
-        <Fab color="primary" aria-label="add" onClick={addAnswer}>
-          <AddIcon />
-        </Fab>
-      </Grid>
-    </Grid>
+      <Button variant="text" onClick={addAnswer}>
+        <AddIcon fontSize="small" /> {t('add answer')}
+      </Button>
+    </>
   );
 };
 
-MultipleChoices.handleSave = ({ saveFn, id, data, type }) => {
-  console.log(data, 'save');
-  saveFn({
-    id,
-    data,
-    type,
-  });
+MultipleChoices.defaultProps = {
+  choices: [
+    { choice: '', isCorrect: true },
+    { choice: '', isCorrect: false },
+  ],
 };
 
 export default MultipleChoices;

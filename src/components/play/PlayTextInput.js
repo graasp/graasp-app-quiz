@@ -1,75 +1,52 @@
-import PropTypes from 'prop-types';
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, TextField, Typography } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import { TextField } from '@mui/material';
 
-const PlayTextInput = ({ text, setText, answer, submitted }) => {
+import { computeCorrectness } from '../context/utilities';
+
+const PlayTextInput = ({ values, response, setResponse, showCorrection }) => {
+  const [isCorrect, setIsCorrect] = useState();
   const { t } = useTranslation();
 
-  const answerIsCorrect = () => {
-    return answer.toLowerCase() === text.toLowerCase();
+  useEffect(() => {
+    if (showCorrection) {
+      setIsCorrect(computeCorrectness(response, values));
+    }
+  }, [showCorrection, response]);
+
+  const computeColor = () => {
+    return isCorrect ? 'success' : 'error';
   };
 
   return (
-    <>
-      <Grid container direction={'column'} alignItems="center" sx={{ p: 2 }}>
-        <Grid item sx={{ pb: 2 }}>
-          <Typography variant="p1">{t('Type your answer')}</Typography>
-        </Grid>
-        {(() => {
-          if (!submitted) {
-            return (
-              <TextField
-                value={text}
-                placeholder={t('Enter Answer')}
-                label={t('Answer')}
-                variant="outlined"
-                onChange={(t) => {
-                  {
-                    setText(t.target.value);
-                  }
-                }}
-              />
-            );
+    <TextField
+      fullWidth
+      value={response.text}
+      placeholder={t('Type your answer')}
+      helperText={
+        showCorrection && !isCorrect && t(`Correct Answer: ${values.text}`)
+      }
+      label={t('Answer')}
+      variant="outlined"
+      onChange={(t) => {
+        setResponse(t.target.value);
+      }}
+      color={showCorrection && computeColor()}
+      InputProps={{
+        endAdornment: showCorrection && isCorrect && (
+          <CheckIcon color="success" />
+        ),
+      }}
+      // set error prop only if we show the correction
+      {...(showCorrection
+        ? {
+            error: !isCorrect,
           }
-
-          if (answerIsCorrect()) {
-            return (
-              <TextField
-                label={t('Correct')}
-                required
-                variant="outlined"
-                defaultValue={text}
-                color="success"
-                focused
-                inputProps={{ readOnly: true }}
-              />
-            );
-          }
-
-          return (
-            <TextField
-              error
-              label={t('Incorrect')}
-              defaultValue={text}
-              helperText={t(`Correct Answer: ${answer}`)}
-              focused
-              inputProps={{ readOnly: true }}
-            />
-          );
-        })()}
-      </Grid>
-    </>
+        : {})}
+    />
   );
-};
-
-PlayTextInput.propTypes = {
-  text: PropTypes.string,
-  setText: PropTypes.func.isRequired,
-  answer: PropTypes.string,
-  submitted: PropTypes.bool,
 };
 
 export default PlayTextInput;

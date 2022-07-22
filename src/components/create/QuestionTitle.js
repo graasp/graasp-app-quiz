@@ -6,7 +6,7 @@ import { Grid, TextField } from '@mui/material';
 function QuestionTitle({ title, onChange }) {
   const { t } = useTranslation();
 
-  const text = useMemo(() => title, [title]);
+  const text = useMemo(() => title ?? '', [title]);
 
   return (
     <Grid item>
@@ -16,7 +16,7 @@ function QuestionTitle({ title, onChange }) {
         label={t('Question')}
         variant="outlined"
         fullWidth
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         InputLabelProps={{ shrink: Boolean(text) }}
       />
     </Grid>

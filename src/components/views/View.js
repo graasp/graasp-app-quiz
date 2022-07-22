@@ -14,9 +14,9 @@ const View = () => {
     switch (context.get('permission')) {
       case PERMISSION_LEVELS.ADMIN:
       case PERMISSION_LEVELS.WRITE:
-      case PERMISSION_LEVELS.READ:
         return <CreateView />;
 
+      case PERMISSION_LEVELS.READ:
       default:
         return <PlayView />;
     }

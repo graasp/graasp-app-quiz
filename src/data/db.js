@@ -1,11 +1,25 @@
 import { APP_SETTING_NAMES, QUESTION_TYPES } from '../config/constants';
 
 const buildDatabase = (appContext) => ({
+  appData: [
+    {
+      itemId: 'mock-item-id',
+      memberId: 'mock-member-id',
+      creator: 'mock-member-id',
+      createdAt: '2022-07-22T12:35:50.195Z',
+      updatedAt: '2022-07-22T12:36:51.741Z',
+      data: {
+        questionId: 'id5',
+        value: 90,
+      },
+      id: '1',
+    },
+  ],
   appSettings: [
     {
       id: 'question-list',
       data: {
-        list: ['id6', 'id5', 'id4'],
+        list: ['id5', 'id6', 'id4'],
       },
       name: APP_SETTING_NAMES.QUESTION_LIST,
     },
@@ -39,7 +53,7 @@ const buildDatabase = (appContext) => ({
       data: {
         question: 'What is a baby cat called?',
         type: QUESTION_TYPES.TEXT_INPUT,
-        answer: 'kitten',
+        text: 'kitten',
       },
       name: APP_SETTING_NAMES.QUESTION,
     },

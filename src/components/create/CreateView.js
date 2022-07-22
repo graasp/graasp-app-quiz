@@ -1,15 +1,13 @@
-/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
+import { Button, Grid, Typography } from '@mui/material';
 
-import { APP_SETTING_NAMES, QUESTION_TYPES } from '../../config/constants';
-import { hooks } from '../../config/queryClient';
-import { MUTATION_KEYS, useMutation } from '../../config/queryClient';
+import { QUESTION_TYPES } from '../../config/constants';
 import { QuizContext } from '../context/QuizContext';
-import { getDataWithType, isDifferent } from '../context/utilities';
+import { isDifferent } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
 import QuestionTopBar from '../navigation/QuestionTopBar';
 import MultipleChoices from './MultipleChoices';
@@ -20,142 +18,17 @@ import TextInput from './TextInput';
 
 const CreateView = () => {
   const { t } = useTranslation();
-  const {
-    currentQuestion,
-    deleteQuestion,
-    moveToPreviousQuestion,
-    moveToNextQuestion,
-    currentIdx,
-    order,
-  } = useContext(QuizContext);
-  const { mutateAsync: postAppSettingAsync } = useMutation(
-    MUTATION_KEYS.POST_APP_SETTING
-  );
-  const { mutate: postAppSetting } = useMutation(
-    MUTATION_KEYS.POST_APP_SETTING
-  );
-  const { mutate: patchAppSetting } = useMutation(
-    MUTATION_KEYS.PATCH_APP_SETTING
-  );
+  const { currentQuestion, deleteQuestion, addQuestion, saveQuestion } =
+    useContext(QuizContext);
 
-  const [changes, setChanges] = useState(currentQuestion);
-
-  // Flag to indicate whether any of the create screen's current data has changed, if set to false the save button will be disabled
-  const [dataChanged, setDataChanged] = useState(true);
+  const [newData, setNewData] = useState(currentQuestion?.data);
 
   useEffect(() => {
-    setChanges(currentQuestion);
+    setNewData(currentQuestion?.data);
   }, [currentQuestion]);
 
-  /**
-   * Sets the type parameter to the dropdown menu's selected question type.
-   *
-   * @param {object} event The question type menu change event.
-   */
-  const handleTypeSelect = (event) => {
-    setDataChanged(true);
-  };
-
-  /**
-   * Creates a question and adds it to the database, then runs the provided callback function.
-   *
-   * @param {(number) => ()} callback callback function to be called with the id of the newly created question.
-   */
-  const createQuestion = async (callback) => {
-    //   const { id: newAppDataId } = await postAppSettingAsync({
-    //     data: {
-    //       question: DEFAULT_TEXT,
-    //       questionType: QUESTION_TYPES.MULTIPLE_CHOICES,
-    //       choices: DEFAULT_CHOICES,
-    //     },
-    //     type: APP_SETTING_NAMES.QUESTION,
-    //   });
-    //   callback(newAppDataId);
-  };
-
-  /**
-   * Creates a new question and navigates to it.
-   */
-  const onAddQuestion = () => {
-    // createQuestion((id) => {
-    //   let newQuestionList = [...questionList];
-    //   const newQuestionIndex = currentQuestionIndex + 1;
-    //   // Adds the newly created question's ID right after the current question's one in the question list.
-    //   newQuestionList.splice(newQuestionIndex, 0, id);
-    //   setQuestionList(newQuestionList);
-    //   // Save the new question list.
-    //   handleSave(newQuestionList);
-    // });
-    // let newQuestionList = [...questionList];
-    // const newQuestionIndex = currentQuestionIndex + 1;
-    // // Adds a temporary empty ID right after the current question's one in the question list, to be changed once the actual ID is fetched at the end of the createQuestion asynchronous function. This temporary ID prevents blocking the screen until retrieveing the new ID for the purpose of improving the user experience.
-    // newQuestionList.splice(newQuestionIndex, 0, '');
-    // setQuestionList(newQuestionList);
-    // handleNext(newQuestionList);
-  };
-
-  /**
-   * Saves the question list and question data to the database if the data is stale.
-   *
-   * @param {number[]} newQuestionList the current question ID list.
-   */
-  const handleSave = (qList) => {
-    // Only save the data if it has changed
-    if (dataChanged) {
-      // todo: patch question in order
-      // if (questionListDBId) {
-      //   patchAppSetting({
-      //     id: questionListDBId,
-      //     data: {
-      //       list: qList ?? questionList,
-      //     },
-      //     type: APP_SETTING_NAMES.QUESTION_LIST,
-      //   });
-      // }
-
-      const saveFn = () => {
-        if (!currentQuestion.id) {
-          return postAppSetting;
-        } else {
-          return patchAppSetting;
-        }
-      };
-
-      switch (changes?.data?.type) {
-        case QUESTION_TYPES.MULTIPLE_CHOICES: {
-          MultipleChoices.handleSave({
-            saveFn: saveFn(),
-            id: currentQuestion.id,
-            data: changes.data,
-            type: APP_SETTING_NAMES.QUESTION,
-          });
-          break;
-        }
-        case QUESTION_TYPES.TEXT_INPUT: {
-          TextInput.handleSave({
-            id: currentQuestion.id,
-            data: changes.data,
-            saveFn: saveFn(),
-            type: APP_SETTING_NAMES.QUESTION,
-          });
-          break;
-        }
-        case QUESTION_TYPES.SLIDER: {
-          Slider.handleSave({
-            saveFn: saveFn(),
-            id: currentQuestion.id,
-            data: changes.data,
-            type: APP_SETTING_NAMES.QUESTION,
-          });
-          break;
-        }
-      }
-      setDataChanged(false);
-    }
-  };
-
   return (
-    <div align="center">
+    <>
       <Grid
         container
         direction={'row'}
@@ -163,41 +36,44 @@ const CreateView = () => {
         justifyContent="center"
       >
         <Grid item>
-          <QuestionTopBar additionalSteps={<PlusStep />} />
-        </Grid>
-      </Grid>
-      <Typography variant="h2" sx={{ pb: 4 }}>
-        {t('Create your quiz')}
-      </Typography>
-      <Grid container direction={'column'} align="left" spacing={3}>
-        <Grid item>
-          <QuestionTypeSelect
-            value={currentQuestion?.data?.type}
-            onChange={handleTypeSelect}
+          <QuestionTopBar
+            additionalSteps={<PlusStep onClick={addQuestion} />}
           />
         </Grid>
-
-        <QuestionTitle
-          title={currentQuestion?.data?.question}
-          onChange={(t) => {
-            console.log('t: ', t);
-            setChanges({ ...changes, question: t });
-          }}
-        />
+      </Grid>
+      {!currentQuestion?.id && (
+        <Typography variant="h4" sx={{ pb: 4 }}>
+          {t('Add a new question')}
+        </Typography>
+      )}
+      <Grid container direction={'column'} align="left" spacing={3}>
+        <Grid item>
+          <QuestionTitle
+            title={newData?.question}
+            onChange={(question) => {
+              setNewData({ ...newData, question });
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <QuestionTypeSelect
+            value={newData?.type}
+            onChange={(newType) => {
+              setNewData({ ...newData, type: newType });
+            }}
+          />
+        </Grid>
         <Grid item>
           {(() => {
-            switch (currentQuestion?.data?.type) {
+            switch (newData?.type) {
               case QUESTION_TYPES.TEXT_INPUT: {
                 return (
                   <TextInput
-                    text={changes?.data?.answer}
-                    onChangeData={(answer) => {
-                      setChanges({
-                        ...changes,
-                        data: {
-                          ...(changes?.data ?? {}),
-                          answer,
-                        },
+                    text={newData?.value}
+                    onChangeData={(value) => {
+                      setNewData({
+                        ...newData,
+                        value,
                       });
                     }}
                   />
@@ -206,14 +82,11 @@ const CreateView = () => {
               case QUESTION_TYPES.SLIDER: {
                 return (
                   <Slider
-                    data={changes?.data}
-                    onChangeData={(newData) => {
-                      setChanges({
-                        ...changes,
-                        data: {
-                          ...(changes?.data ?? {}),
-                          ...newData,
-                        },
+                    data={newData}
+                    onChangeData={(d) => {
+                      setNewData({
+                        ...newData,
+                        ...d,
                       });
                     }}
                   />
@@ -223,12 +96,9 @@ const CreateView = () => {
               default: {
                 return (
                   <MultipleChoices
-                    choices={changes?.data?.choices}
+                    choices={newData?.choices}
                     setChoices={(newChoices) =>
-                      setChanges({
-                        ...changes,
-                        data: { ...changes.data, choices: newChoices },
-                      })
+                      setNewData({ ...newData, choices: newChoices })
                     }
                   />
                 );
@@ -236,23 +106,7 @@ const CreateView = () => {
             }
           })()}
         </Grid>
-        <Grid
-          container
-          direction={'row'}
-          spacing={4}
-          sx={{ py: 2 }}
-          align="center"
-        >
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={moveToPreviousQuestion}
-              disabled={currentIdx === 0}
-            >
-              {t('Previous')}
-            </Button>
-          </Grid>
+        <Grid container spacing={2} sx={{ pt: 2 }} justifyContent="center">
           <Grid item>
             <Button
               color="error"
@@ -265,27 +119,18 @@ const CreateView = () => {
           </Grid>
           <Grid item>
             <Button
-              onClick={() => handleSave()}
+              onClick={saveQuestion(newData)}
               variant="contained"
               color="success"
-              disabled={!isDifferent(changes, currentQuestion)}
+              startIcon={<SaveIcon />}
+              disabled={!isDifferent(newData, currentQuestion?.data)}
             >
               {t('Save')}
             </Button>
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={moveToNextQuestion}
-              disabled={currentIdx === order.length - 1}
-            >
-              {t('Next')}
-            </Button>
-          </Grid>
         </Grid>
       </Grid>
-    </div>
+    </>
   );
 };
 

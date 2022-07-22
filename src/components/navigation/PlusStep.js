@@ -18,22 +18,19 @@ const addStyle = {
   maxWidth: '20px',
 };
 
-const PlusStep = () => {
+const PlusStep = ({ onClick }) => {
   const { t } = useTranslation();
-  const onAddQuestion = () => {
-    console.log('add question');
-  };
 
   return (
     <Step key="plus">
       <StepLabel
         icon={
           <Fab
-            color="primary"
+            color="success"
             aria-label={t('add')}
             justify-content="center"
             style={buttonStyle}
-            onClick={onAddQuestion}
+            onClick={onClick}
             align="center"
           >
             <AddIcon style={addStyle} />

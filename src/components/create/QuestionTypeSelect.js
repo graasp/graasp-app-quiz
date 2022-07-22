@@ -19,7 +19,7 @@ function QuestionTypeSelect({ value, onChange }) {
           id="demo-simple-select"
           value={type}
           label={t('Type')}
-          onChange={onChange}
+          onChange={(e) => onChange(e.target.value)}
         >
           <MenuItem value={QUESTION_TYPES.MULTIPLE_CHOICES}>
             {t('Multiple Choice')}
