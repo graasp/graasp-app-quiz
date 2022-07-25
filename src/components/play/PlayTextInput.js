@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import CheckIcon from '@mui/icons-material/Check';
 import { TextField } from '@mui/material';
 
+import { PLAY_VIEW_TEXT_INPUT_CY } from '../../config/selectors';
 import { computeCorrectness } from '../context/utilities';
 
 const PlayTextInput = ({ values, response, setResponse, showCorrection }) => {
@@ -14,7 +15,7 @@ const PlayTextInput = ({ values, response, setResponse, showCorrection }) => {
     if (showCorrection) {
       setIsCorrect(computeCorrectness(response, values));
     }
-  }, [showCorrection, response]);
+  }, [showCorrection, response, values]);
 
   const computeColor = () => {
     return isCorrect ? 'success' : 'error';
@@ -22,6 +23,7 @@ const PlayTextInput = ({ values, response, setResponse, showCorrection }) => {
 
   return (
     <TextField
+      data-cy={PLAY_VIEW_TEXT_INPUT_CY}
       fullWidth
       value={response.text ?? ''}
       placeholder={t('Type your answer')}

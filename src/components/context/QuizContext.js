@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { CircularProgress } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 
 import { APP_SETTING_NAMES, DEFAULT_QUESTION } from '../../config/constants';
 import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
@@ -9,7 +10,8 @@ import { getSettingByName } from './utilities';
 export const QuizContext = React.createContext();
 
 export const QuizProvider = ({ children }) => {
-  const { data: settings, isLoading, isError } = hooks.useAppSettings();
+  const { t } = useTranslation();
+  const { data: settings, isLoading, isError, error } = hooks.useAppSettings();
   const { mutate: deleteAppSetting } = useMutation(
     MUTATION_KEYS.DELETE_APP_SETTING
   );
@@ -45,7 +47,6 @@ export const QuizProvider = ({ children }) => {
     // go to previous, bound by number of questions
     // unless there's no more questions -> create new question screen
     if (!newOrder.length) {
-      console.log('wioefjkl');
       setCurrentIdx(-1);
     } else {
       setCurrentIdxBounded(currentIdx - 1);
@@ -113,14 +114,19 @@ export const QuizProvider = ({ children }) => {
   useEffect(() => {
     const questions = getSettingByName(settings, APP_SETTING_NAMES.QUESTION);
 
-let newValue;
-// set current question if current idx, quesitons and order are correctly defined
-    if(questions && !questions.isEmpty() && order?.length && currentIdx !== -1 && currentIdx < order.length) {
-     newValue = questions.find(({ id }) => id === order[currentIdx])
+    let newValue;
+    // set current question if current idx, quesitons and order are correctly defined
+    if (
+      questions &&
+      !questions.isEmpty() &&
+      order?.length &&
+      currentIdx !== -1 &&
+      currentIdx < order.length
+    ) {
+      newValue = questions.find(({ id }) => id === order[currentIdx]);
     }
-    setCurrentQuestion(newValue??DEFAULT_QUESTION);
-    
-  }, [order, currentIdx]);
+    setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
+  }, [order, currentIdx, settings]);
 
   const value = useMemo(() => {
     return {
@@ -135,6 +141,7 @@ let newValue;
       addQuestion,
       saveQuestion,
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIdx, order, currentQuestion]);
 
   if (isLoading) {
@@ -142,7 +149,8 @@ let newValue;
   }
 
   if (isError) {
-    return 'Error while loading the quiz';
+    console.error(error);
+    return <Alert severity="error">{t('Error while loading the quiz')}</Alert>;
   }
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

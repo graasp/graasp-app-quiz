@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Grid,
+  Skeleton,
   Step,
   StepButton,
   StepLabel,
@@ -43,7 +44,7 @@ export default function QuestionTopBar({ additionalSteps }) {
   const { data: appData, isLoading } = hooks.useAppData();
 
   if (isLoading) {
-    return 'is loading app data';
+    return <Skeleton variant="rect" width="100%" height={70} />;
   }
 
   const renderLabel = (questionId, index) => {

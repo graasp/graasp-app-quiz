@@ -18,7 +18,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { DEFAULT_CHOICE } from '../../config/constants';
+import { DEFAULT_CHOICE, DEFAULT_QUESTION } from '../../config/constants';
 import {
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
@@ -37,7 +37,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
 
   const handleChoiceChange = (index, e) => {
     let newChoices = clonedeep(choices);
-    newChoices[index] = { ...choices[index], choice: e.target.value };
+    newChoices[index] = { ...choices[index], value: e.target.value };
     setChoices(newChoices);
   };
 
@@ -61,7 +61,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
       <Typography variant="h6" sx={{ pb: 2 }}>
         {t('Answers')}
       </Typography>
-      {choices?.map((choice, index) => {
+      {choices?.map(({ value, isCorrect }, index) => {
         const readableIndex = index + 1;
         return (
           <Grid
@@ -78,7 +78,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
                   data-cy={buildMultipleChoiceAnswerCy(index)}
                   type="text"
                   label={`Answer ${readableIndex}`}
-                  value={choice.choice}
+                  value={value}
                   placeholder={`Enter Answer ${readableIndex}`}
                   onChange={(e) => handleChoiceChange(index, e)}
                   endAdornment={
@@ -89,7 +89,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
                             className={
                               MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME
                             }
-                            checked={choices[index].isCorrect}
+                            checked={isCorrect}
                             onChange={(e) =>
                               handleAnswerCorrectnessChange(index, e)
                             }
@@ -130,10 +130,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
 };
 
 MultipleChoices.defaultProps = {
-  choices: [
-    { choice: '', isCorrect: true },
-    { choice: '', isCorrect: false },
-  ],
+  choices: DEFAULT_QUESTION.data.choices,
 };
 
 export default MultipleChoices;

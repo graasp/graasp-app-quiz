@@ -9,8 +9,8 @@ import {
 } from '@mui/material';
 
 import {
-  SLIDER_DEFAULT_MAX_VALUE,
-  SLIDER_DEFAULT_MIN_VALUE,
+  DEFAULT_QUESTION_VALUES,
+  QUESTION_TYPES,
 } from '../../config/constants';
 import {
   SLIDER_CY,
@@ -21,16 +21,14 @@ import {
 const Slider = ({ data, onChangeData }) => {
   const { t } = useTranslation();
 
-  const values = useMemo(
-    () => ({
-      min: SLIDER_DEFAULT_MIN_VALUE,
-      max: SLIDER_DEFAULT_MAX_VALUE,
+  const values = useMemo(() => {
+    return {
+      ...DEFAULT_QUESTION_VALUES[QUESTION_TYPES.SLIDER],
       ...data,
-    }),
-    [data]
-  );
+    };
+  }, [data]);
 
-  const middleValue = values.max - values.min;
+  const middleValue = (values.max - values.min) / 2;
 
   return (
     <div align="center">
@@ -62,7 +60,6 @@ const Slider = ({ data, onChangeData }) => {
                 variant="outlined"
                 type="number"
                 onChange={(t) => {
-                  console.log(t.target.value);
                   onChangeData({ min: parseInt(t.target.value) });
                 }}
               />

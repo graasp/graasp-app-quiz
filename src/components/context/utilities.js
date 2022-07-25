@@ -21,10 +21,8 @@ export const computeCorrectness = (data, correctData) => {
         return false;
       }
 
-      return correctData.choices.every(({ choice, isCorrect }) =>
-        isCorrect
-          ? data.choices.includes(choice)
-          : !data.choices.includes(choice)
+      return correctData.choices.every(({ value, isCorrect }) =>
+        isCorrect ? data.choices.includes(value) : !data.choices.includes(value)
       );
     }
     case QUESTION_TYPES.TEXT_INPUT:
@@ -65,7 +63,7 @@ export const validateQuestionData = (data) => {
       if (!data?.choices?.some(({ isCorrect }) => isCorrect)) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_CORRECT_ANSWER;
       }
-      if (data?.choices?.some(({ choice }) => !choice)) {
+      if (data?.choices?.some(({ value }) => !value)) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE;
       }
 

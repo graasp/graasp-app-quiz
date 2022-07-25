@@ -6,7 +6,12 @@ module.exports = {
     jest: true, // Jest global variables like `it` etc.
     node: true, // Defines things like process.env when generating through node
   },
-  extends: ['prettier', 'eslint:recommended'],
+  extends: [
+    'prettier',
+    'eslint:recommended',
+    'plugin:cypress/recommended',
+    'react-app',
+  ],
   parser: '@babel/eslint-parser', // Uses babel-eslint transforms.
   parserOptions: {
     ecmaFeatures: {
@@ -15,6 +20,9 @@ module.exports = {
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: 'module', // Allows for the use of imports
     requireConfigFile: false,
+    babelOptions: {
+      presets: ['@babel/preset-react'],
+    },
   },
   plugins: ['import'],
   root: true, // For configuration cascading.

@@ -1,35 +1,27 @@
 import {
   APP_SETTING_NAMES,
   DEFAULT_QUESTION,
-  DEFAULT_QUESTION_TYPE,
   FAILURE_MESSAGES,
   PERMISSION_LEVELS,
   QUESTION_TYPES,
   VIEWS,
 } from '../../../src/config/constants';
+import i18n from '../../../src/config/i18n';
 import {
-  ADD_NEW_QUESTION_TITLE_CY,
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
-  MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
-  MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
-  QUESTION_BAR_ADD_NEW_BUTTON_CY,
-  QUESTION_BAR_CY,
-  QUESTION_BAR_NEXT_CY,
-  QUESTION_BAR_PREV_CY,
   SLIDER_CY,
-  SLIDER_FIELD_CY,
   SLIDER_MAX_FIELD_CY,
   SLIDER_MIN_FIELD_CY,
-  buildMultipleChoiceAnswerCy,
-  buildMultipleChoiceDeleteAnswerButtonCy,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
+
+const t = i18n.t;
 
 const newSliderData = {
   question: 'new question text',
@@ -98,21 +90,21 @@ describe('Slider', () => {
     fillSliderQuestion(new1, DEFAULT_QUESTION.data);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
-      FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX
+      t(FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX)
     );
     // empty max
     const new2 = { ...newSliderData, max: null };
     fillSliderQuestion(new2, new1, { shouldSave: false });
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
-      FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX
+      t(FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX)
     );
     // // min higher than max
     const new3 = { ...newSliderData, min: 100, max: 30 };
     fillSliderQuestion(new3, new2, { shouldSave: false });
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
-      FAILURE_MESSAGES.SLIDER_MIN_SMALLER_THAN_MAX
+      t(FAILURE_MESSAGES.SLIDER_MIN_SMALLER_THAN_MAX)
     );
 
     fillSliderQuestion(newSliderData, new3);

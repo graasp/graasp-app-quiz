@@ -9,8 +9,13 @@ import {
   Typography,
 } from '@mui/material';
 
-import { APP_SETTING_NAMES, QUESTION_TYPES } from '../../config/constants';
+import { APP_DATA_TYPES, QUESTION_TYPES } from '../../config/constants';
 import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
+import {
+  PLAY_VIEW_EMPTY_QUIZ_CY,
+  PLAY_VIEW_QUESTION_TITLE_CY,
+  PLAY_VIEW_SUBMIT_BUTTON_CY,
+} from '../../config/selectors';
 import { QuizContext } from '../context/QuizContext';
 import { getAppDataByQuestionId } from '../context/utilities';
 import QuestionTopBar from '../navigation/QuestionTopBar';
@@ -24,7 +29,7 @@ const PlayView = () => {
   const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
   const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
 
-  const { currentQuestion } = useContext(QuizContext);
+  const { currentQuestion, questions } = useContext(QuizContext);
 
   const [showCorrection, setShowCorrection] = React.useState(false);
 
@@ -53,13 +58,21 @@ const PlayView = () => {
     } else {
       postAppData({
         data: newResponse.data,
-        type: APP_SETTING_NAMES.RESPONSE,
+        type: APP_DATA_TYPES.RESPONSE,
       });
     }
   };
 
   if (isLoading) {
     return <CircularProgress />;
+  }
+
+  if (!questions || questions.isEmpty()) {
+    return (
+      <Alert severity="info" data-cy={PLAY_VIEW_EMPTY_QUIZ_CY}>
+        {t('The quiz has not been defined')}
+      </Alert>
+    );
   }
 
   if (!currentQuestion) {
@@ -72,7 +85,11 @@ const PlayView = () => {
         <QuestionTopBar />
       </Grid>
       <Grid item>
-        <Typography variant="h4" sx={{ pb: 2 }}>
+        <Typography
+          variant="h4"
+          sx={{ pb: 2 }}
+          data-cy={PLAY_VIEW_QUESTION_TITLE_CY}
+        >
           {currentQuestion.data.question}
         </Typography>
       </Grid>
@@ -141,7 +158,11 @@ const PlayView = () => {
         })()}
       </Grid>
       <Grid item xs={12}>
-        <Button onClick={onSubmit} variant="contained">
+        <Button
+          onClick={onSubmit}
+          variant="contained"
+          data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
+        >
           {t('Submit')}
         </Button>
       </Grid>

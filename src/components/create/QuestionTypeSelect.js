@@ -3,16 +3,25 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
-import { DEFAULT_QUESTION_TYPE, QUESTION_TYPES } from '../../config/constants';
+import {
+  DEFAULT_QUESTION_TYPE,
+  DEFAULT_QUESTION_VALUES,
+  QUESTION_TYPES_TO_NAME,
+} from '../../config/constants';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   buildQuestionTypeOption,
 } from '../../config/selectors';
 
-function QuestionTypeSelect({ value, onChange }) {
+const QuestionTypeSelect = ({ value, onChange }) => {
   const { t } = useTranslation();
 
   const type = useMemo(() => value ?? DEFAULT_QUESTION_TYPE, [value]);
+
+  const onTypeChange = (e) => {
+    const type = e.target.value;
+    onChange(DEFAULT_QUESTION_VALUES[type]);
+  };
 
   return (
     <Box>
@@ -22,30 +31,21 @@ function QuestionTypeSelect({ value, onChange }) {
           data-cy={CREATE_QUESTION_SELECT_TYPE_CY}
           value={type}
           label={t('Answer Type')}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={onTypeChange}
         >
-          <MenuItem
-            value={QUESTION_TYPES.MULTIPLE_CHOICES}
-            data-cy={buildQuestionTypeOption(QUESTION_TYPES.MULTIPLE_CHOICES)}
-          >
-            {t('Multiple Choice')}
-          </MenuItem>
-          <MenuItem
-            value={QUESTION_TYPES.TEXT_INPUT}
-            data-cy={buildQuestionTypeOption(QUESTION_TYPES.TEXT_INPUT)}
-          >
-            {t('Text Input')}
-          </MenuItem>
-          <MenuItem
-            value={QUESTION_TYPES.SLIDER}
-            data-cy={buildQuestionTypeOption(QUESTION_TYPES.SLIDER)}
-          >
-            {t('Slider')}
-          </MenuItem>
+          {Object.entries(QUESTION_TYPES_TO_NAME).map(([key, value]) => (
+            <MenuItem
+              key={key}
+              value={key}
+              data-cy={buildQuestionTypeOption(key)}
+            >
+              {t(value)}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>
   );
-}
+};
 
 export default QuestionTypeSelect;

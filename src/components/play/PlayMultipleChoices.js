@@ -5,6 +5,8 @@ import React from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, Grid } from '@mui/material';
 
+import { buildMultipleChoicesButtonCy } from '../../config/selectors';
+
 const PlayMultipleChoices = ({
   choices,
   response,
@@ -24,8 +26,9 @@ const PlayMultipleChoices = ({
     setResponse(newResponse);
   };
 
-  const computeStyles = ({ choice, isCorrect }) => {
-    const isSelected = response.choices?.includes(choice);
+  const computeStyles = ({ value, isCorrect }, idx) => {
+    const isSelected = Boolean(response.choices?.includes(value));
+    const dataCy = buildMultipleChoicesButtonCy(idx, isSelected);
     if (showCorrection) {
       switch (true) {
         case isCorrect && isSelected:
@@ -33,34 +36,40 @@ const PlayMultipleChoices = ({
             color: 'success',
             variant: 'contained',
             endIcon: <CheckIcon />,
+            'data-cy': dataCy,
           };
         case isCorrect && !isSelected:
           return {
             color: 'error',
             variant: 'contained',
             endIcon: <CheckIcon />,
+            'data-cy': dataCy,
           };
         case !isCorrect && isSelected:
-          return { color: 'error', variant: 'contained' };
+          return { color: 'error', variant: 'contained', 'data-cy': dataCy };
         default:
-          return { color: 'primary', variant: 'outlined' };
+          return { color: 'primary', variant: 'outlined', 'data-cy': dataCy };
       }
     }
 
-    return { color: 'primary', variant: isSelected ? 'contained' : 'outlined' };
+    return {
+      color: 'primary',
+      variant: isSelected ? 'contained' : 'outlined',
+      'data-cy': dataCy,
+    };
   };
 
   return (
     <Grid container direction={'column'} spacing={2}>
-      {choices?.map((choice) => (
-        <Grid item key={choice.choice}>
+      {choices?.map((choice, idx) => (
+        <Grid item key={choice.value}>
           <Button
-            value={choice.choice}
+            value={choice.value}
             onClick={onResponseClick}
             fullWidth
-            {...computeStyles(choice)}
+            {...computeStyles(choice, idx)}
           >
-            {choice.choice}
+            {choice.value}
           </Button>
         </Grid>
       ))}

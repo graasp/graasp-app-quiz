@@ -54,7 +54,6 @@ const CreateView = () => {
       setErrorMessage(null);
       saveQuestion(newData);
     } catch (e) {
-      console.log(e);
       setErrorMessage(e);
     }
   };
@@ -94,8 +93,8 @@ const CreateView = () => {
         <Grid item>
           <QuestionTypeSelect
             value={newData?.type}
-            onChange={(newType) => {
-              setNewData({ ...newData, type: newType });
+            onChange={(changes) => {
+              setNewData({ ...newData, ...changes });
             }}
           />
         </Grid>

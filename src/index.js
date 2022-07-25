@@ -3,8 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { buildMockLocalContext, mockApi } from '@graasp/apps-query-client';
 
 import App from './components/App';
-
-const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API;
+import { ENABLE_MOCK_API } from './config/settings';
 
 if (ENABLE_MOCK_API) {
   const appContext = buildMockLocalContext(window.appContext);
@@ -15,10 +14,9 @@ if (ENABLE_MOCK_API) {
     window.location.search = searchParams.toString();
   }
   mockApi({
-    appContext: window.Cypress ? window.appContext : undefined,
+    appContext: window.Cypress ? window.appContext : appContext,
     database: window.Cypress ? window.database : undefined,
     // enable next line to use mock data
-    // import buildDatabase from './data/db';
     // database: window.Cypress ? window.database : buildDatabase(appContext),
   });
 }

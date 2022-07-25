@@ -107,8 +107,6 @@ describe('Create View', () => {
       // fallback to new question screen if no more data
       cy.get(dataCyWrapper(CREATE_VIEW_DELETE_BUTTON_CY)).should('be.disabled');
       cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
-
-
     });
   });
 });

@@ -1,14 +1,12 @@
 import {
   APP_SETTING_NAMES,
-  DEFAULT_QUESTION,
-  DEFAULT_QUESTION_TYPE,
   FAILURE_MESSAGES,
   PERMISSION_LEVELS,
   QUESTION_TYPES,
   VIEWS,
 } from '../../../src/config/constants';
+import i18n from '../../../src/config/i18n';
 import {
-  ADD_NEW_QUESTION_TITLE_CY,
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
@@ -16,8 +14,6 @@ import {
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
-  QUESTION_BAR_ADD_NEW_BUTTON_CY,
-  QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
   buildMultipleChoiceAnswerCy,
@@ -26,6 +22,8 @@ import {
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
+
+const t = i18n.t;
 
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
@@ -37,19 +35,19 @@ const newMultipleChoiceData = {
   question: 'new question text',
   choices: [
     {
-      choice: 'new choice 1',
+      value: 'new choice 1',
       isCorrect: true,
     },
     {
-      choice: 'new choice 2',
+      value: 'new choice 2',
       isCorrect: true,
     },
     {
-      choice: 'new choice 3',
+      value: 'new choice 3',
       isCorrect: false,
     },
     {
-      choice: 'new choice 4',
+      value: 'new choice 4',
       isCorrect: false,
     },
   ],
@@ -57,7 +55,6 @@ const newMultipleChoiceData = {
 
 const fillMultipleChoiceQuestion = (
   { choices, question },
-  originalAppSettingData = DEFAULT_QUESTION.data,
   { shouldSave = true } = {}
 ) => {
   // fill question if not empty
@@ -87,14 +84,14 @@ const fillMultipleChoiceQuestion = (
       }
     });
 
-  choices.forEach(({ choice, isCorrect }, idx) => {
+  choices.forEach(({ value, isCorrect }, idx) => {
     cy.get(
       `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input[type="text"]`
     ).clear();
-    if (choice.length) {
+    if (value.length) {
       cy.get(
         `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input[type="text"]`
-      ).type(choice);
+      ).type(value);
     }
     // click if correctness is different from original data
 
@@ -130,10 +127,10 @@ describe('Multiple Choices', () => {
 
     // no question text
     const new1 = { ...newMultipleChoiceData, question: '' };
-    fillMultipleChoiceQuestion(new1, DEFAULT_QUESTION.data);
+    fillMultipleChoiceQuestion(new1);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
-      FAILURE_MESSAGES.EMPTY_QUESTION
+      t(FAILURE_MESSAGES.EMPTY_QUESTION)
     );
 
     // empty answer
@@ -141,31 +138,31 @@ describe('Multiple Choices', () => {
       ...newMultipleChoiceData,
       choices: [
         ...newMultipleChoiceData.choices,
-        { choice: '', isCorrect: true },
+        { value: '', isCorrect: true },
       ],
     };
-    fillMultipleChoiceQuestion(new2, new1, { shouldSave: false });
+    fillMultipleChoiceQuestion(new2, { shouldSave: false });
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
-      FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE
+      t(FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE)
     );
 
     // no correct answer
     const new3 = {
       ...newMultipleChoiceData,
       choices: [
-        { choice: 'choice1', isCorrect: false },
-        { choice: 'choice2', isCorrect: false },
-        { choice: 'choice2', isCorrect: false },
+        { value: 'choice1', isCorrect: false },
+        { value: 'choice2', isCorrect: false },
+        { value: 'choice2', isCorrect: false },
       ],
     };
-    fillMultipleChoiceQuestion(new3, new2, { shouldSave: false });
+    fillMultipleChoiceQuestion(new3, { shouldSave: false });
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
-      FAILURE_MESSAGES.MULTIPLE_CHOICES_CORRECT_ANSWER
+      t(FAILURE_MESSAGES.MULTIPLE_CHOICES_CORRECT_ANSWER)
     );
 
-    fillMultipleChoiceQuestion(newMultipleChoiceData, new3);
+    fillMultipleChoiceQuestion(newMultipleChoiceData);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
   });
 
@@ -195,10 +192,10 @@ describe('Multiple Choices', () => {
         .should('be.visible')
         .should('contain', data.question);
 
-      data.choices.forEach(({ choice, isCorrect }, idx) => {
+      data.choices.forEach(({ value, isCorrect }, idx) => {
         cy.get(
           `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input`
-        ).should('have.value', choice);
+        ).should('have.value', value);
         cy.get(
           `${dataCyWrapper(
             buildMultipleChoiceAnswerCy(idx)
@@ -206,7 +203,6 @@ describe('Multiple Choices', () => {
         ).should(isCorrect ? 'be.checked' : 'not.be.checked');
       });
       cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
-      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).should('be.disabled');
     });
 
     it('Update question', () => {
@@ -221,10 +217,10 @@ describe('Multiple Choices', () => {
         .should('be.visible')
         .should('contain', newMultipleChoiceData.question);
 
-      newMultipleChoiceData.choices.forEach(({ choice, isCorrect }, idx) => {
+      newMultipleChoiceData.choices.forEach(({ value, isCorrect }, idx) => {
         cy.get(
           `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input`
-        ).should('have.value', choice);
+        ).should('have.value', value);
         cy.get(
           `${dataCyWrapper(
             buildMultipleChoiceAnswerCy(idx)

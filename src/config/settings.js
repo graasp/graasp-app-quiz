@@ -29,4 +29,4 @@ export const SETTINGS = {
   HEADER_VISIBILITY: 'headerVisibility',
 };
 
-export const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API;
+export const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API === 'true';

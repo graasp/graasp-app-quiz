@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Grid, Slider } from '@mui/material';
 
+import { PLAY_VIEW_SLIDER_CY } from '../../config/selectors';
 import { computeCorrectness } from '../context/utilities';
 
 function PlaySlider({ values, response, setResponse, showCorrection }) {
@@ -34,7 +35,8 @@ function PlaySlider({ values, response, setResponse, showCorrection }) {
     }
 
     setMarks(newMarks);
-  }, [showCorrection, response]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCorrection, response, values]);
 
   const computeColor = () => {
     return isCorrect ? 'success' : 'error';
@@ -44,8 +46,9 @@ function PlaySlider({ values, response, setResponse, showCorrection }) {
     <Grid container direction={'column'} sx={{ p: 2 }}>
       <Grid item sx={{ pb: 2 }}>
         <Slider
+          data-cy={PLAY_VIEW_SLIDER_CY}
           aria-label="Custom marks"
-          defaultValue={(max - min) / 2 + min}
+          value={response?.value ?? (max - min) / 2 + min}
           valueLabelDisplay="on"
           onChange={(e, val) => {
             setResponse(val);

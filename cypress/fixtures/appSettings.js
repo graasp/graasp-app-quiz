@@ -8,19 +8,19 @@ export const MULTIPLE_CHOICES_APP_SETTING = {
     question: 'My multiple choice question',
     choices: [
       {
-        choice: 'choice 1',
+        value: 'choice 1',
         isCorrect: false,
       },
       {
-        choice: 'choice 2',
+        value: 'choice 2',
         isCorrect: true,
       },
       {
-        choice: 'choice 3',
+        value: 'choice 3',
         isCorrect: true,
       },
       {
-        choice: 'choice 4',
+        value: 'choice 4',
         isCorrect: false,
       },
     ],
@@ -42,7 +42,7 @@ export const SLIDER_APP_SETTING = {
   name: APP_SETTING_NAMES.QUESTION,
   data: {
     type: QUESTION_TYPES.SLIDER,
-    question: 'My text input question',
+    question: 'My slider question',
     min: 10,
     max: 110,
     value: 30,

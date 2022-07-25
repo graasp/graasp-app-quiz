@@ -1,32 +1,24 @@
 import {
   APP_SETTING_NAMES,
-  DEFAULT_QUESTION,
-  DEFAULT_QUESTION_TYPE,
   FAILURE_MESSAGES,
   PERMISSION_LEVELS,
   QUESTION_TYPES,
   VIEWS,
 } from '../../../src/config/constants';
+import i18n from '../../../src/config/i18n';
 import {
-  ADD_NEW_QUESTION_TITLE_CY,
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
-  MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
-  MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
-  QUESTION_BAR_ADD_NEW_BUTTON_CY,
-  QUESTION_BAR_CY,
-  QUESTION_BAR_NEXT_CY,
-  QUESTION_BAR_PREV_CY,
   TEXT_INPUT_FIELD_CY,
-  buildMultipleChoiceAnswerCy,
-  buildMultipleChoiceDeleteAnswerButtonCy,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
+
+const t = i18n.t;
 
 const newTextInputData = {
   question: 'new question text',
@@ -41,7 +33,6 @@ const { data, id } = APP_SETTINGS.find(
 
 const fillTextInputQuestion = (
   { text, question },
-  originalAppSettingData = DEFAULT_QUESTION.data,
   { shouldSave = true } = {}
 ) => {
   // fill question if not empty
@@ -79,13 +70,13 @@ describe('Text Input', () => {
 
     // empty answer
     const new1 = { ...newTextInputData, text: '' };
-    fillTextInputQuestion(new1, DEFAULT_QUESTION.data);
+    fillTextInputQuestion(new1);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
-      FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY
+      t(FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY)
     );
 
-    fillTextInputQuestion(newTextInputData, new1);
+    fillTextInputQuestion(newTextInputData);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
   });
 
