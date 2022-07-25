@@ -16,6 +16,12 @@ import { Context } from '@graasp/apps-query-client';
 
 import { VIEWS } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
+import {
+  QUESTION_BAR_CY,
+  QUESTION_BAR_NEXT_CY,
+  QUESTION_BAR_PREV_CY,
+  buildQuestionStepCy,
+} from '../../config/selectors';
 import { QuizContext } from '../context/QuizContext';
 import {
   computeCorrectness,
@@ -43,6 +49,10 @@ export default function QuestionTopBar({ additionalSteps }) {
   const renderLabel = (questionId, index) => {
     const response = getAppDataByQuestionId(appData, questionId);
     const question = getDataWithId(questions, questionId);
+
+    if (!question) {
+      return null;
+    }
 
     if (context.get('context') === VIEWS.BUILDER) {
       return (
@@ -81,6 +91,7 @@ export default function QuestionTopBar({ additionalSteps }) {
     >
       <Grid item>
         <Button
+          data-cy={QUESTION_BAR_PREV_CY}
           sx={{ p: 0 }}
           color="primary"
           onClick={moveToPreviousQuestion}
@@ -91,19 +102,23 @@ export default function QuestionTopBar({ additionalSteps }) {
       </Grid>
       <Grid item>
         <Stepper
+          data-cy={QUESTION_BAR_CY}
           nonLinear
           alternativeLabel
           activeStep={currentIdx}
           sx={{ pb: 3 }}
         >
           {order?.map((qId, index) => (
-            <Step key={qId}>{renderLabel(qId, index)}</Step>
+            <Step key={qId} data-cy={buildQuestionStepCy(qId)}>
+              {renderLabel(qId, index)}
+            </Step>
           ))}
           {additionalSteps}
         </Stepper>
       </Grid>
       <Grid item>
         <Button
+          data-cy={QUESTION_BAR_NEXT_CY}
           sx={{ p: 0 }}
           color="primary"
           onClick={moveToNextQuestion}

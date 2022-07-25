@@ -43,4 +43,12 @@ export const FAILURE_MESSAGES = {
   MULTIPLE_CHOICES_CORRECT_ANSWER: 'You must set at least one correct answer',
   MULTIPLE_CHOICES_EMPTY_CHOICE: 'An answer cannot be empty',
   TEXT_INPUT_NOT_EMPTY: 'Answer cannot be empty',
+  SLIDER_UNDEFINED_MIN_MAX: 'Minimum and maximum values should be defined',
+};
+
+// todo: use from graasp constants
+export const PERMISSION_LEVELS = {
+  WRITE: 'write',
+  READ: 'read',
+  ADMIN: 'admin',
 };

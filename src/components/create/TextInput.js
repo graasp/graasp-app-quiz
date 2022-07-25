@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { TextField } from '@mui/material';
 
+import { TEXT_INPUT_FIELD_CY } from '../../config/selectors';
+
 const TextInput = ({ text, onChangeData }) => {
   const { t } = useTranslation();
 
@@ -10,6 +12,7 @@ const TextInput = ({ text, onChangeData }) => {
 
   return (
     <TextField
+      data-cy={TEXT_INPUT_FIELD_CY}
       fullWidth
       value={value}
       placeholder={t('Type your answer')}

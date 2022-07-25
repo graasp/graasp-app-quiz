@@ -6,6 +6,12 @@ import SaveIcon from '@mui/icons-material/Save';
 import { Alert, Button, Grid, Typography } from '@mui/material';
 
 import { QUESTION_TYPES } from '../../config/constants';
+import {
+  ADD_NEW_QUESTION_TITLE_CY,
+  CREATE_VIEW_DELETE_BUTTON_CY,
+  CREATE_VIEW_ERROR_ALERT_CY,
+  CREATE_VIEW_SAVE_BUTTON_CY,
+} from '../../config/selectors';
 import { QuizContext } from '../context/QuizContext';
 import { isDifferent, validateQuestionData } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
@@ -68,7 +74,11 @@ const CreateView = () => {
         </Grid>
       </Grid>
       {!currentQuestion?.id && (
-        <Typography variant="h4" sx={{ pb: 4 }}>
+        <Typography
+          variant="h4"
+          sx={{ pb: 4 }}
+          data-cy={ADD_NEW_QUESTION_TITLE_CY}
+        >
           {t('Add a new question')}
         </Typography>
       )}
@@ -95,11 +105,11 @@ const CreateView = () => {
               case QUESTION_TYPES.TEXT_INPUT: {
                 return (
                   <TextInput
-                    text={newData?.value}
-                    onChangeData={(value) => {
+                    text={newData?.text}
+                    onChangeData={(text) => {
                       setNewData({
                         ...newData,
-                        value,
+                        text,
                       });
                     }}
                   />
@@ -134,12 +144,15 @@ const CreateView = () => {
         </Grid>
         {errorMessage && (
           <Grid item>
-            <Alert severity="error">{t(errorMessage)}</Alert>
+            <Alert severity="error" data-cy={CREATE_VIEW_ERROR_ALERT_CY}>
+              {t(errorMessage)}
+            </Alert>
           </Grid>
         )}
         <Grid container spacing={2} sx={{ pt: 2 }} justifyContent="center">
           <Grid item>
             <Button
+              data-cy={CREATE_VIEW_DELETE_BUTTON_CY}
               color="error"
               variant="contained"
               startIcon={<DeleteIcon />}
@@ -151,6 +164,7 @@ const CreateView = () => {
           </Grid>
           <Grid item>
             <Button
+              data-cy={CREATE_VIEW_SAVE_BUTTON_CY}
               onClick={saveNewQuestion}
               variant="contained"
               color="success"

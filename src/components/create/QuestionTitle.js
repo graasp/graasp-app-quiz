@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Grid, TextField } from '@mui/material';
 
+import { CREATE_QUESTION_TITLE_CY } from '../../config/selectors';
+
 function QuestionTitle({ title, onChange }) {
   const { t } = useTranslation();
 
@@ -11,6 +13,7 @@ function QuestionTitle({ title, onChange }) {
   return (
     <Grid item>
       <TextField
+        data-cy={CREATE_QUESTION_TITLE_CY}
         value={text}
         placeholder={t('Enter Question')}
         label={t('Question')}

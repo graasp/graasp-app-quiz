@@ -19,6 +19,12 @@ import {
 } from '@mui/material';
 
 import { DEFAULT_CHOICE } from '../../config/constants';
+import {
+  MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
+  MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
+  buildMultipleChoiceAnswerCy,
+  buildMultipleChoiceDeleteAnswerButtonCy,
+} from '../../config/selectors';
 
 const MultipleChoices = ({ choices, setChoices }) => {
   const { t } = useTranslation();
@@ -69,6 +75,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
               <FormControl variant="outlined" fullWidth>
                 <InputLabel>{t('Answer nb', { nb: readableIndex })}</InputLabel>
                 <OutlinedInput
+                  data-cy={buildMultipleChoiceAnswerCy(index)}
                   type="text"
                   label={`Answer ${readableIndex}`}
                   value={choice.choice}
@@ -79,11 +86,13 @@ const MultipleChoices = ({ choices, setChoices }) => {
                       <FormControlLabel
                         control={
                           <Checkbox
+                            className={
+                              MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME
+                            }
                             checked={choices[index].isCorrect}
                             onChange={(e) =>
                               handleAnswerCorrectnessChange(index, e)
                             }
-                            name="answer"
                             edge="end"
                             sx={{ p: 0 }}
                           />
@@ -97,6 +106,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
             <Grid item xs={1} sx={{ textAlign: 'center' }}>
               {
                 <IconButton
+                  data-cy={buildMultipleChoiceDeleteAnswerButtonCy(index)}
                   type="button"
                   disabled={choices.length <= 2}
                   onClick={onDelete(index)}
@@ -108,7 +118,11 @@ const MultipleChoices = ({ choices, setChoices }) => {
           </Grid>
         );
       })}
-      <Button variant="text" onClick={addAnswer}>
+      <Button
+        variant="text"
+        onClick={addAnswer}
+        data-cy={MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY}
+      >
         <AddIcon fontSize="small" /> {t('Add Answer')}
       </Button>
     </>

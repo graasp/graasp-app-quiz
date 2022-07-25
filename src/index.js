@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { buildMockLocalContext, mockApi } from '@graasp/apps-query-client';
 
 import App from './components/App';
-import buildDatabase from './data/db';
 
 const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API;
 
@@ -17,7 +16,10 @@ if (ENABLE_MOCK_API) {
   }
   mockApi({
     appContext: window.Cypress ? window.appContext : undefined,
-    database: window.Cypress ? window.database : buildDatabase(appContext),
+    database: window.Cypress ? window.database : undefined,
+    // enable next line to use mock data
+    // import buildDatabase from './data/db';
+    // database: window.Cypress ? window.database : buildDatabase(appContext),
   });
 }
 

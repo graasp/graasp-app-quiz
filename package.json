@@ -20,14 +20,21 @@
   },
   "scripts": {
     "start": "env-cmd -f ./.env.local react-scripts start",
+    "start:test": "env-cmd -f ./.env.test react-scripts -r @cypress/instrument-cra start",
+    "start:ci": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:once": "cross-env CI=true env-cmd ./.env.test react-scripts test --env=jsdom",
+    "test:coverage": "cross-env CI=true env-cmd ./.env.test react-scripts test --env=jsdom --coverage",
+    "test:ci": "run-s test:coverage report",
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "prettier:write": "prettier --write '{src,cypress}/**/*.js'",
     "build:local": "env-cmd -f ./.env.local yarn build",
     "build:dev": "env-cmd -f ./.env.dev yarn build",
-    "build:prod": "env-cmd -f ./.env.prod yarn build"
+    "build:prod": "env-cmd -f ./.env.prod yarn build",
+    "cypress:open": "cypress open",
+    "cypress:run": "env-cmd -f ./.env.test cypress run --headless --browser chrome --spec \"cypress/**/*.cy.js\""
   },
   "browserslist": {
     "production": [
@@ -45,10 +52,13 @@
     "@babel/eslint-parser": "^7.16.3",
     "@babel/eslint-plugin": "7.17.7",
     "@babel/preset-react": "7.17.12",
+    "@cypress/code-coverage": "3.10.0",
+    "@cypress/instrument-cra": "1.4.0",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "@trivago/prettier-plugin-sort-imports": "3.2.0",
+    "cypress": "10.3.1",
     "env-cmd": "10.1.0",
     "eslint": "8.17.0",
     "eslint-config-prettier": "8.5.0",

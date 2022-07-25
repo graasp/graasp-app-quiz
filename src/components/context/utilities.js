@@ -51,6 +51,9 @@ export const validateQuestionData = (data) => {
 
   switch (data.type) {
     case QUESTION_TYPES.SLIDER:
+      if (!Number.isInteger(data?.min) || !Number.isInteger(data?.max)) {
+        throw FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX;
+      }
       if (data?.min >= data?.max) {
         throw FAILURE_MESSAGES.SLIDER_MIN_SMALLER_THAN_MAX;
       }

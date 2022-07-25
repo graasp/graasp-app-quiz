@@ -32,21 +32,22 @@ export const QuizProvider = ({ children }) => {
   };
 
   const deleteQuestion = (questionId) => () => {
-    // We do not allow the deletion of all questions of the quiz
-    // there should be at least one visible
-    // but maybe we could add a screen for when no quiz questions have been created.
-    if (order.length > 1) {
-      // update list order
-      let newOrder = [...order];
-      const idx = order.findIndex((id) => id === questionId);
-      newOrder.splice(idx, 1);
-      patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
+    // update list order
+    let newOrder = [...order];
+    const idx = order.findIndex((id) => id === questionId);
+    newOrder.splice(idx, 1);
+    patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
 
-      // delete question
-      deleteAppSetting({ id: questionId });
+    // delete question
+    deleteAppSetting({ id: questionId });
 
-      // change current idx
-      // go to previous, bound by number of questions
+    // change current idx
+    // go to previous, bound by number of questions
+    // unless there's no more questions -> create new question screen
+    if (!newOrder.length) {
+      console.log('wioefjkl');
+      setCurrentIdx(-1);
+    } else {
       setCurrentIdxBounded(currentIdx - 1);
     }
   };
@@ -111,19 +112,14 @@ export const QuizProvider = ({ children }) => {
   // set current question
   useEffect(() => {
     const questions = getSettingByName(settings, APP_SETTING_NAMES.QUESTION);
-    if (
-      questions &&
-      !questions.isEmpty() &&
-      order?.length &&
-      currentIdx < order.length
-    ) {
-      const newValue =
-        // show mock data if idx is -1
-        currentIdx === -1
-          ? DEFAULT_QUESTION
-          : questions.find(({ id }) => id === order[currentIdx]);
-      setCurrentQuestion(newValue);
+
+let newValue;
+// set current question if current idx, quesitons and order are correctly defined
+    if(questions && !questions.isEmpty() && order?.length && currentIdx !== -1 && currentIdx < order.length) {
+     newValue = questions.find(({ id }) => id === order[currentIdx])
     }
+    setCurrentQuestion(newValue??DEFAULT_QUESTION);
+    
   }, [order, currentIdx]);
 
   const value = useMemo(() => {
