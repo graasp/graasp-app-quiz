@@ -31,7 +31,7 @@ const clickSelection = (selection) => {
 // verify all choices styles
 const checkCorrection = (selection) => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(1000);
+  cy.wait(1500);
   data.choices.forEach(({ isCorrect }, idx) => {
     const wasSelected = selection.includes(idx);
     const correction = (() => {

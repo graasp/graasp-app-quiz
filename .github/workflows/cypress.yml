@@ -31,7 +31,6 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 180
           browser: chrome
-          headless: true
           quiet: true
           config-file: cypress.config.js
 
