@@ -19,7 +19,6 @@ export const QUESTION_TYPES_TO_NAME = {
   [QUESTION_TYPES.SLIDER]: 'Slider',
 };
 
-export const DEFAULT_TEXT = '';
 export const DEFAULT_CHOICE = { value: '', isCorrect: false };
 
 export const SLIDER_DEFAULT_MAX_VALUE = 100;
@@ -72,3 +71,7 @@ export const VIEWS = {
   BUILDER: 'builder',
   PLAYER: 'player',
 };
+
+export const DEFAULT_LANG = 'en';
+
+export const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API === 'true';

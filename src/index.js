@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { buildMockLocalContext, mockApi } from '@graasp/apps-query-client';
 
 import App from './components/App';
-import { ENABLE_MOCK_API } from './config/settings';
+import { ENABLE_MOCK_API } from './config/constants';
 
 if (ENABLE_MOCK_API) {
   const appContext = buildMockLocalContext(window.appContext);

@@ -4,14 +4,19 @@ import { ROUTINES } from '@graasp/apps-query-client';
 
 import i18n from './i18n';
 
-const { postAppSettingRoutine, patchAppSettingRoutine } = ROUTINES;
+const {
+  postAppSettingRoutine,
+  patchAppSettingRoutine,
+  deleteAppSettingRoutine,
+} = ROUTINES;
 
 const notifier = ({ type, payload }) => {
   let message = null;
   switch (type) {
     // error messages
     case postAppSettingRoutine.FAILURE:
-    case patchAppSettingRoutine.FAILURE: {
+    case patchAppSettingRoutine.FAILURE:
+    case deleteAppSettingRoutine.FAILURE: {
       message = i18n.t(
         payload?.error?.response?.data?.message ?? 'An unexpected error occured'
       );
@@ -20,7 +25,7 @@ const notifier = ({ type, payload }) => {
     // success messages
     case postAppSettingRoutine.SUCCESS:
     case patchAppSettingRoutine.SUCCESS: {
-      // TODO
+      message = i18n.t('The question has been successfully saved');
       break;
     }
     default:

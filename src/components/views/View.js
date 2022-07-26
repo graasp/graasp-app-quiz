@@ -4,19 +4,19 @@ import { Container } from '@mui/material';
 
 import { Context } from '@graasp/apps-query-client';
 
+import { DEFAULT_LANG } from '../../config/constants';
+import { PERMISSION_LEVELS } from '../../config/constants';
 import i18n from '../../config/i18n';
-import { PERMISSION_LEVELS } from '../../config/settings';
 import { QuizProvider } from '../context/QuizContext';
 import CreateView from '../create/CreateView';
 import PlayView from '../play/PlayView';
 
 const View = () => {
   const context = useContext(Context);
-  console.log(context?.toJS());
 
   useEffect(() => {
     const lang = context.get('lang');
-    i18n.changeLanguage(lang ?? 'en');
+    i18n.changeLanguage(lang ?? DEFAULT_LANG);
   });
 
   const renderContent = () => {

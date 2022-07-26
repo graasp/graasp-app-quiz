@@ -4,9 +4,9 @@ import {
   configureQueryClient,
 } from '@graasp/apps-query-client';
 
+import { ENABLE_MOCK_API } from './constants';
 import { REACT_APP_GRAASP_APP_ID } from './env';
 import notifier from './notifier';
-import { ENABLE_MOCK_API } from './settings';
 
 const {
   queryClient,
