@@ -75,3 +75,10 @@ export const VIEWS = {
 export const DEFAULT_LANG = 'en';
 
 export const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API === 'true';
+export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
+
+export const ENV = {
+  DEVELOPMENT: 'development',
+  PRODUCTION: 'production',
+  TEST: 'test',
+};

@@ -2780,6 +2780,85 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/browser@npm:7.8.1":
+  version: 7.8.1
+  resolution: "@sentry/browser@npm:7.8.1"
+  dependencies:
+    "@sentry/core": 7.8.1
+    "@sentry/types": 7.8.1
+    "@sentry/utils": 7.8.1
+    tslib: ^1.9.3
+  checksum: 188d8b2d5b3e52d8682e35ca9d5a585d0ec060dccb08698f847d1701e45fe7057c779a61c7c120b03c90c5fec3cea94dbe5cd9ae4f2fc62affed936ea6165c89
+  languageName: node
+  linkType: hard
+
+"@sentry/core@npm:7.8.1":
+  version: 7.8.1
+  resolution: "@sentry/core@npm:7.8.1"
+  dependencies:
+    "@sentry/hub": 7.8.1
+    "@sentry/types": 7.8.1
+    "@sentry/utils": 7.8.1
+    tslib: ^1.9.3
+  checksum: 6fa019f49f4476a0d04b3efbe1d2f5b9ff5be14a5b2bff848ae97f7215113a6e768ac73d670f4d992af3e8defa495dfa31e5a9d3a6a38740f9b780ea088db172
+  languageName: node
+  linkType: hard
+
+"@sentry/hub@npm:7.8.1":
+  version: 7.8.1
+  resolution: "@sentry/hub@npm:7.8.1"
+  dependencies:
+    "@sentry/types": 7.8.1
+    "@sentry/utils": 7.8.1
+    tslib: ^1.9.3
+  checksum: a764749e311dd9e71cfe1fe2c6e781009ab4874e506e34615f723e11174a60ac97671b6f89de66cc3a208e64b4616d35901b5b231efe0785f54d60dc783b5014
+  languageName: node
+  linkType: hard
+
+"@sentry/react@npm:7.8.1":
+  version: 7.8.1
+  resolution: "@sentry/react@npm:7.8.1"
+  dependencies:
+    "@sentry/browser": 7.8.1
+    "@sentry/types": 7.8.1
+    "@sentry/utils": 7.8.1
+    hoist-non-react-statics: ^3.3.2
+    tslib: ^1.9.3
+  peerDependencies:
+    react: 15.x || 16.x || 17.x || 18.x
+  checksum: 61304accd5bee307ed4dd8f1f1fd330b156958e31d1b22b7e94b5924d1abf98d88597730859cfbc7cfe0787a2ac8013ae854d1d2c3c50320012e654952111f55
+  languageName: node
+  linkType: hard
+
+"@sentry/tracing@npm:7.8.1":
+  version: 7.8.1
+  resolution: "@sentry/tracing@npm:7.8.1"
+  dependencies:
+    "@sentry/hub": 7.8.1
+    "@sentry/types": 7.8.1
+    "@sentry/utils": 7.8.1
+    tslib: ^1.9.3
+  checksum: 30accfb7db611e04faccb32de46d7c9259a77f3a07a41f594b825bb7d26eb827c4dc3bcc7a3e39a4cb543edff588e0c38ba0927babfb4f9d549e3d8a578d8267
+  languageName: node
+  linkType: hard
+
+"@sentry/types@npm:7.8.1":
+  version: 7.8.1
+  resolution: "@sentry/types@npm:7.8.1"
+  checksum: b06961923034b46d75a4cc2aef6658d14899f45483ff2c159dee281ab32c1180a5c972bfc5b443deece75ea815f9c7d05f1a77b52b559204dea6cbf8173660a7
+  languageName: node
+  linkType: hard
+
+"@sentry/utils@npm:7.8.1":
+  version: 7.8.1
+  resolution: "@sentry/utils@npm:7.8.1"
+  dependencies:
+    "@sentry/types": 7.8.1
+    tslib: ^1.9.3
+  checksum: 7777e86885513fb5ef7baa22e71f0e4e8cbf8d00db6a00775444c2b3fe8d2935f39756374e058adb99673fb8618e0fb105d2f24f537ed60ce84977e68a2178f2
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.24.1":
   version: 0.24.20
   resolution: "@sinclair/typebox@npm:0.24.20"
@@ -8461,7 +8540,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.1":
+"hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -13230,6 +13309,8 @@ __metadata:
     "@graasp/apps-query-client": "github:graasp/graasp-apps-query-client.git"
     "@mui/icons-material": 5.6.2
     "@mui/material": ^5.5.3
+    "@sentry/react": 7.8.1
+    "@sentry/tracing": 7.8.1
     "@testing-library/jest-dom": ^5.16.3
     "@testing-library/react": ^12.1.4
     "@testing-library/user-event": ^13.5.0
@@ -15426,7 +15507,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.8.1":
+"tslib@npm:^1.8.1, tslib@npm:^1.9.3":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd

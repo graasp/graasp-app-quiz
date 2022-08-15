@@ -30,3 +30,4 @@ jobs:
       app-id: ${{ secrets.APP_ID }}
       graasp-domain: ${{ secrets.DEV_GRAASP_DOMAIN }}
       cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_DEV }}
+      sentry-dsn: ${{ secrets.SENTRY_DSN }}
