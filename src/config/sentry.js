@@ -1,9 +1,9 @@
-import { ENV, NODE_ENV } from './constants';
+import { ENV } from './constants';
 
 const generateSentryConfig = () => {
   let SENTRY_ENVIRONMENT = ENV.DEVELOPMENT;
   let SENTRY_TRACE_SAMPLE_RATE = 1.0;
-  switch (NODE_ENV) {
+  switch (process.env.NODE_ENV) {
     case ENV.PRODUCTION:
       SENTRY_ENVIRONMENT = ENV.PRODUCTION;
       SENTRY_TRACE_SAMPLE_RATE = 0.1;

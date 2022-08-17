@@ -67,6 +67,7 @@ export const PERMISSION_LEVELS = {
   READ: 'read',
   ADMIN: 'admin',
 };
+
 export const VIEWS = {
   BUILDER: 'builder',
   PLAYER: 'player',

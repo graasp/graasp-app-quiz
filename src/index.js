@@ -22,12 +22,6 @@ Sentry.init({
 
 if (ENABLE_MOCK_API) {
   const appContext = buildMockLocalContext(window.appContext);
-  // automatically append item id as a query string
-  const searchParams = new URLSearchParams(window.location.search);
-  if (!searchParams.get('itemId')) {
-    searchParams.set('itemId', appContext.itemId);
-    window.location.search = searchParams.toString();
-  }
   mockApi({
     appContext: window.Cypress ? window.appContext : appContext,
     database: window.Cypress ? window.database : undefined,

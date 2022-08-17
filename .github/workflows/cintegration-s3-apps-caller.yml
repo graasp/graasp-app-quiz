@@ -16,7 +16,7 @@ jobs:
     name: Quiz app
     # Replace 'main' with the hash of a commit, so it points to an specific version of the reusable workflow that is used
     # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3-apps.yml@3d7f758afdded7990378d28fbc35d76be495894b
+    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3-apps.yml@78c70b9b9e3b8c66b279a5d9378b2fcc6fa680fe
     # Replace input build-folder or version if needed
     with:
       build-folder: 'build'
@@ -27,7 +27,7 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
       aws-region: ${{ secrets.APPS_AWS_REGION }}
       aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_APPS_DEV }}
-      app-id: ${{ secrets.APP_ID }}
+      app-key: ${{ secrets.APP_KEY }}
       graasp-domain: ${{ secrets.DEV_GRAASP_DOMAIN }}
       cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_DEV }}
       sentry-dsn: ${{ secrets.SENTRY_DSN }}
