@@ -25,8 +25,13 @@ export const computeCorrectness = (data, correctData) => {
         isCorrect ? data.choices.includes(value) : !data.choices.includes(value)
       );
     }
-    case QUESTION_TYPES.TEXT_INPUT:
+    case QUESTION_TYPES.TEXT_INPUT: {
+      // allow empty correct response
+      if (!correctData.text) {
+        return true;
+      }
       return data?.text?.toLowerCase() === correctData.text.toLowerCase();
+    }
     default:
       return false;
   }
@@ -68,11 +73,12 @@ export const validateQuestionData = (data) => {
       }
 
       break;
-    case QUESTION_TYPES.TEXT_INPUT:
-      if (!data?.text?.length) {
-        throw FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY;
-      }
-      break;
+    // enable following lines to prevent empty correct answer
+    // case QUESTION_TYPES.TEXT_INPUT:
+    //   if (!data?.text?.length) {
+    //     throw FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY;
+    //   }
+    //   break;
     default:
       return true;
   }

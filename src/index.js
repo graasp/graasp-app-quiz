@@ -8,6 +8,7 @@ import { buildMockLocalContext, mockApi } from '@graasp/apps-query-client';
 import App from './components/App';
 import { ENABLE_MOCK_API, SENTRY_DSN } from './config/constants';
 import { SENTRY_ENVIRONMENT, SENTRY_TRACE_SAMPLE_RATE } from './config/sentry';
+import buildDatabase from './data/db';
 
 Sentry.init({
   dsn: SENTRY_DSN,
@@ -24,9 +25,9 @@ if (ENABLE_MOCK_API) {
   const appContext = buildMockLocalContext(window.appContext);
   mockApi({
     appContext: window.Cypress ? window.appContext : appContext,
-    database: window.Cypress ? window.database : undefined,
+    // database: window.Cypress ? window.database : undefined,
     // enable next line to use mock data
-    // database: window.Cypress ? window.database : buildDatabase(appContext),
+    database: window.Cypress ? window.database : buildDatabase(appContext),
   });
 }
 

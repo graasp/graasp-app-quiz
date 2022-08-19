@@ -30,6 +30,7 @@ const PlayTextInput = ({ values, response, setResponse, showCorrection }) => {
       helperText={
         showCorrection &&
         !isCorrect &&
+        values.text &&
         t('Correct Answer', { answer: values.text })
       }
       label={t('Answer')}

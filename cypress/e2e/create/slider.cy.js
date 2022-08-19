@@ -180,3 +180,4 @@ describe('Slider', () => {
     });
   });
 });
+// TODO: explanation

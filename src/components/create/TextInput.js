@@ -23,12 +23,4 @@ const TextInput = ({ text, onChangeData }) => {
   );
 };
 
-TextInput.handleSave = ({ saveFn, data, id, type }) => {
-  saveFn({
-    id,
-    data,
-    type,
-  });
-};
-
 export default TextInput;

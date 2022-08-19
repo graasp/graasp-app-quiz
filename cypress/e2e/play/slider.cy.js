@@ -110,3 +110,4 @@ describe('Slider', () => {
     });
   });
 });
+// TODO: show explanation

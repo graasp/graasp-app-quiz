@@ -157,6 +157,16 @@ const PlayView = () => {
           }
         })()}
       </Grid>
+      {showCorrection && currentQuestion.data.explanation && (
+        <Grid item xs={12} width={'100%'}>
+          <Typography variant="h6" mb={1}>
+            {t('Explanation')}
+          </Typography>
+          <Typography variant="body1" mb={1}>
+            {currentQuestion.data.explanation}
+          </Typography>
+        </Grid>
+      )}
       <Grid item xs={12}>
         <Button
           onClick={onSubmit}

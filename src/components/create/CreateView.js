@@ -16,6 +16,7 @@ import { QuizContext } from '../context/QuizContext';
 import { isDifferent, validateQuestionData } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
 import QuestionTopBar from '../navigation/QuestionTopBar';
+import Explanation from './Explanation';
 import MultipleChoices from './MultipleChoices';
 import QuestionTitle from './QuestionTitle';
 import QuestionTypeSelect from './QuestionTypeSelect';
@@ -140,6 +141,15 @@ const CreateView = () => {
               }
             }
           })()}
+        </Grid>
+
+        <Grid item>
+          <Explanation
+            value={newData?.explanation}
+            onChange={(explanation) => {
+              setNewData({ ...newData, explanation });
+            }}
+          />
         </Grid>
         {errorMessage && (
           <Grid item>
