@@ -4,7 +4,7 @@ export const getDataWithId = (data, id) => {
   return data?.filter((d) => d.id === id)?.first();
 };
 
-export const getSettingByName = (data, name) => {
+export const getSettingsByName = (data, name) => {
   return data?.filter((d) => d.name === name);
 };
 

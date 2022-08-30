@@ -4,8 +4,8 @@ import {
   FAILURE_MESSAGES,
   PERMISSION_LEVELS,
   QUESTION_TYPES,
-  VIEWS,
 } from '../../../src/config/constants';
+import { CONTEXTS } from '../../../src/config/contexts';
 import i18n from '../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -78,7 +78,7 @@ describe('Slider', () => {
       },
       appContext: {
         permission: PERMISSION_LEVELS.ADMIN,
-        context: VIEWS.BUILDER,
+        context: CONTEXTS.BUILDER,
       },
     });
     cy.visit('/');
@@ -119,7 +119,7 @@ describe('Slider', () => {
         },
         appContext: {
           permission: PERMISSION_LEVELS.ADMIN,
-          context: VIEWS.BUILDER,
+          context: CONTEXTS.BUILDER,
         },
       });
       cy.visit('/');

@@ -5,7 +5,7 @@ import { Alert, CircularProgress } from '@mui/material';
 
 import { APP_SETTING_NAMES, DEFAULT_QUESTION } from '../../config/constants';
 import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
-import { getSettingByName } from './utilities';
+import { getSettingsByName } from './utilities';
 
 export const QuizContext = React.createContext();
 
@@ -101,7 +101,7 @@ export const QuizProvider = ({ children }) => {
   // initialize order
   useEffect(() => {
     if (settings) {
-      const newOrderSetting = getSettingByName(
+      const newOrderSetting = getSettingsByName(
         settings,
         APP_SETTING_NAMES.QUESTION_LIST
       ).first();
@@ -112,10 +112,10 @@ export const QuizProvider = ({ children }) => {
 
   // set current question
   useEffect(() => {
-    const questions = getSettingByName(settings, APP_SETTING_NAMES.QUESTION);
+    const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
 
     let newValue;
-    // set current question if current idx, quesitons and order are correctly defined
+    // set current question if current idx, questions and order are correctly defined
     if (
       questions &&
       !questions.isEmpty() &&
@@ -128,10 +128,10 @@ export const QuizProvider = ({ children }) => {
     setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
   }, [order, currentIdx, settings]);
 
-  const value = useMemo(() => {
-    return {
+  const value = useMemo(
+    () => ({
       order,
-      questions: getSettingByName(settings, APP_SETTING_NAMES.QUESTION),
+      questions: getSettingsByName(settings, APP_SETTING_NAMES.QUESTION),
       currentQuestion,
       currentIdx,
       setCurrentIdx,
@@ -140,9 +140,10 @@ export const QuizProvider = ({ children }) => {
       moveToPreviousQuestion,
       addQuestion,
       saveQuestion,
-    };
+    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIdx, order, currentQuestion]);
+    [currentIdx, order, currentQuestion]
+  );
 
   if (isLoading) {
     return <CircularProgress />;

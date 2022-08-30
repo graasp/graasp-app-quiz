@@ -1,8 +1,8 @@
 import {
   DEFAULT_QUESTION_TYPE,
   PERMISSION_LEVELS,
-  VIEWS,
 } from '../../../src/config/constants';
+import { CONTEXTS } from '../../../src/config/contexts';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -24,7 +24,7 @@ describe('Create View', () => {
       },
       appContext: {
         permission: PERMISSION_LEVELS.ADMIN,
-        context: VIEWS.BUILDER,
+        context: CONTEXTS.BUILDER,
       },
     });
     cy.visit('/');
@@ -49,7 +49,7 @@ describe('Create View', () => {
         },
         appContext: {
           permission: PERMISSION_LEVELS.ADMIN,
-          context: VIEWS.BUILDER,
+          context: CONTEXTS.BUILDER,
         },
       });
       cy.visit('/');

@@ -43,7 +43,7 @@ function PlaySlider({ values, response, setResponse, showCorrection }) {
   };
 
   return (
-    <Grid container direction={'column'} sx={{ p: 2 }}>
+    <Grid container direction="column" sx={{ p: 2 }}>
       <Grid item sx={{ pb: 2 }}>
         <Slider
           data-cy={PLAY_VIEW_SLIDER_CY}

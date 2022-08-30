@@ -22,7 +22,7 @@ Cypress.Commands.add('setUpApi', ({ database = {}, appContext } = {}) => {
 Cypress.Commands.add('switchQuestionType', (type) => {
   // mock api and database
 
-  cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)}`).click();
+  cy.get(dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)).click();
   cy.get(dataCyWrapper(buildQuestionTypeOption(type))).click();
 });
 

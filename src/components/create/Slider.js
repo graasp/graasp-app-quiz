@@ -32,7 +32,7 @@ const Slider = ({ data, onChangeData }) => {
 
   return (
     <div align="center">
-      <Grid container direction={'column'} align="left">
+      <Grid container direction="column" align="left">
         <Grid item sx={{ pb: 2 }}>
           <Typography variant="body1">
             {t('Slide the cursor to the correct value')}

@@ -66,7 +66,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
         return (
           <Grid
             container
-            direction={'row'}
+            direction="row"
             key={index}
             alignItems="center"
             sx={{ pb: 2 }}

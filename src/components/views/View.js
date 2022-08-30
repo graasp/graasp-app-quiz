@@ -6,6 +6,7 @@ import { Context } from '@graasp/apps-query-client';
 
 import { DEFAULT_LANG } from '../../config/constants';
 import { PERMISSION_LEVELS } from '../../config/constants';
+import { CONTEXTS } from '../../config/contexts';
 import i18n from '../../config/i18n';
 import { QuizProvider } from '../context/QuizContext';
 import CreateView from '../create/CreateView';
@@ -21,7 +22,7 @@ const View = () => {
 
   const renderContent = () => {
     switch (context.get('context')) {
-      case 'builder': {
+      case CONTEXTS.BUILDER: {
         switch (context.get('permission')) {
           case PERMISSION_LEVELS.ADMIN:
           case PERMISSION_LEVELS.WRITE:

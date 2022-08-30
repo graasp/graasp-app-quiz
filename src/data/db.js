@@ -46,7 +46,7 @@ const buildDatabase = (appContext) => ({
           { value: 'New York', isCorrect: false },
           { value: 'Tokyo', isCorrect: false },
         ],
-        explanation: 'Paris is the capital of France.\n',
+        explanation: 'Paris is the capital of France.',
       },
       name: APP_SETTING_NAMES.QUESTION,
     },

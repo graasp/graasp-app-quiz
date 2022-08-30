@@ -14,7 +14,7 @@ const Explanation = ({ value: explanation, onChange }) => {
       {
         <Typography variant="body1" mb={1}>
           {t(
-            'Type you an explanation that will be displayed after an answer is submitted'
+            'Type here an explanation that will be displayed after an answer is submitted'
           )}
         </Typography>
       }

@@ -15,7 +15,7 @@ import {
 
 import { Context } from '@graasp/apps-query-client';
 
-import { VIEWS } from '../../config/constants';
+import { CONTEXTS } from '../../config/contexts';
 import { hooks } from '../../config/queryClient';
 import {
   QUESTION_BAR_CY,
@@ -55,7 +55,7 @@ export default function QuestionTopBar({ additionalSteps }) {
       return null;
     }
 
-    if (context.get('context') === VIEWS.BUILDER) {
+    if (context.get('context') === CONTEXTS.BUILDER) {
       return (
         <StepButton onClick={() => setCurrentIdx(index)}>
           {question.data.question}
@@ -86,7 +86,7 @@ export default function QuestionTopBar({ additionalSteps }) {
   return (
     <Grid
       container
-      direction={'row'}
+      direction="row"
       alignItems="flex-start"
       justifyContent="center"
     >

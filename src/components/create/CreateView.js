@@ -63,7 +63,7 @@ const CreateView = () => {
     <>
       <Grid
         container
-        direction={'row'}
+        direction="row"
         alignItems="center"
         justifyContent="center"
       >
@@ -82,7 +82,7 @@ const CreateView = () => {
           {t('Add a new question')}
         </Typography>
       )}
-      <Grid container direction={'column'} align="left" spacing={3}>
+      <Grid container direction="column" align="left" spacing={3}>
         <Grid item>
           <QuestionTitle
             title={newData?.question}

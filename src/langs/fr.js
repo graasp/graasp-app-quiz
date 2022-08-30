@@ -16,16 +16,15 @@ export default {
     Next: 'Suivant',
     Submit: 'Envoyer',
     'Type your answer': 'Entrer la réponse',
-    'Correct Answer': 'Réponse corrected: {{answer}}',
+    'Correct Answer': 'Réponse correcte: {{answer}}',
     Answer: 'Réponse',
     'Answer nb': 'Réponse: {{nb}}',
-    'Add new question': 'Add new question',
     Answers: 'Réponses',
     'Add Answer': 'Ajouter une réponse',
     Maximum: 'Maximum',
     Minimum: 'Minimum',
     'Slide the cursor to the correct value':
-      'Déplacer le cursor sur la réponse correcte',
+      'Déplacer le curseur sur la réponse correcte',
     'Add a new question': 'Ajouter une nouvelle question',
     [FAILURE_MESSAGES.EMPTY_QUESTION]: 'La question ne peut pas être vide',
     [FAILURE_MESSAGES.SLIDER_MIN_SMALLER_THAN_MAX]:

@@ -9,7 +9,7 @@ export const APP_DATA_TYPES = {
 
 export const QUESTION_TYPES = {
   MULTIPLE_CHOICES: 'multipleChoices',
-  TEXT_INPUT: 'TextInput',
+  TEXT_INPUT: 'textInput',
   SLIDER: 'slider',
 };
 
@@ -66,11 +66,6 @@ export const PERMISSION_LEVELS = {
   WRITE: 'write',
   READ: 'read',
   ADMIN: 'admin',
-};
-
-export const VIEWS = {
-  BUILDER: 'builder',
-  PLAYER: 'player',
 };
 
 export const DEFAULT_LANG = 'en';

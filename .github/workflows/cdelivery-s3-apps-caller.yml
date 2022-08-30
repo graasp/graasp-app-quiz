@@ -12,7 +12,7 @@ jobs:
     name: Quiz app
     # Replace 'main' with the hash of a commit, so it points to an specific version of the reusable workflow that is used
     # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-    uses: graasp/graasp-deploy/.github/workflows/cdelivery-s3-apps.yml@78c70b9b9e3b8c66b279a5d9378b2fcc6fa680fe
+    uses: graasp/graasp-deploy/.github/workflows/cdelivery-s3-apps.yml@2bde5c31cc2179d34ab063cc9b5a35bf364a2954
     # Replace input build-folder or version if needed
     with:
       build-folder: 'build'
