@@ -10,16 +10,18 @@ import { ENABLE_MOCK_API, SENTRY_DSN } from './config/constants';
 import { SENTRY_ENVIRONMENT, SENTRY_TRACE_SAMPLE_RATE } from './config/sentry';
 import buildDatabase from './data/db';
 
-Sentry.init({
-  dsn: SENTRY_DSN,
-  integrations: [new BrowserTracing()],
-  environment: SENTRY_ENVIRONMENT,
+if (SENTRY_DSN) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    integrations: [new BrowserTracing()],
+    environment: SENTRY_ENVIRONMENT,
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: SENTRY_TRACE_SAMPLE_RATE,
-});
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: SENTRY_TRACE_SAMPLE_RATE,
+  });
+}
 
 if (ENABLE_MOCK_API) {
   const appContext = buildMockLocalContext(window.appContext);
