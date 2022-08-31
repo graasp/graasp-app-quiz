@@ -2051,11 +2051,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/apps-query-client@github:graasp/graasp-apps-query-client.git#44-app-key":
+"@graasp/apps-query-client@github:graasp/graasp-apps-query-client.git":
   version: 0.2.0
-  resolution: "@graasp/apps-query-client@https://github.com/graasp/graasp-apps-query-client.git#commit=897e99c625a3e6c2b5c40e5e307389416944b75b"
+  resolution: "@graasp/apps-query-client@https://github.com/graasp/graasp-apps-query-client.git#commit=393d61cca45d06be40f277b9877ca378277ef2b3"
   dependencies:
-    "@graasp/sdk": "github:graasp/graasp-sdk"
+    "@graasp/utils": "github:graasp/graasp-utils"
     axios: 0.27.2
     http-status-codes: 2.2.0
     immutable: 4.1.0
@@ -2067,23 +2067,24 @@ __metadata:
     uuid: 8.3.2
   peerDependencies:
     react: ^17.0.0
-  checksum: 1312094736de9a8c409cbbc75606d7d915ff83800ff0b1dba42d5e5263fd9d90c2a53fdd96076e8c0055e5f847d84734c9f25e374a319b21c424e2debb3032f9
+  checksum: dad0d190ba817793d7b7cb69c91e96d51ea53f959dafdf22a78197bd38065aa96c2fe53d282726c372db52994365340a30b2fc39abe4c590c6ecd57ff33bdd03
   languageName: node
   linkType: hard
 
-"@graasp/sdk@github:graasp/graasp-sdk":
+"@graasp/utils@github:graasp/graasp-utils":
   version: 0.1.0
-  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=9b8bbbfa902c6c6157f4e3255e513c15d398ebe2"
+  resolution: "@graasp/utils@https://github.com/graasp/graasp-utils.git#commit=5170aab6390aa6deb16b9be559a359bdec050cc9"
   dependencies:
     "@fastify/secure-session": 5.2.0
     aws-sdk: 2.1111.0
     fastify: ^3.29.1
     fluent-json-schema: 3.1.0
+    immutable: 4.1.0
     js-cookie: 3.0.1
     qs: 6.11.0
     slonik: 28.1.1
     uuid: 8.3.2
-  checksum: 5bd019b105f58ee8ffdff527d9b6110a31d1d82e17101c41ee98e9dae9a75b972547a01e32c3587b8a89458cd738601de2eb48e4eddbc4d6893e01e4845fdbdf
+  checksum: 38d248843167117bb0636bf291110890d17ba81ac92b661f3a46a1b387fd965940e4720c4d6b84d9043ad2c3e340a4b92bc448f72ab1790205f9073bff472e2c
   languageName: node
   linkType: hard
 
@@ -13306,7 +13307,7 @@ __metadata:
     "@cypress/instrument-cra": 1.4.0
     "@emotion/react": ^11.8.2
     "@emotion/styled": ^11.8.1
-    "@graasp/apps-query-client": "github:graasp/graasp-apps-query-client.git#44-app-key"
+    "@graasp/apps-query-client": "github:graasp/graasp-apps-query-client.git"
     "@mui/icons-material": 5.6.2
     "@mui/material": ^5.5.3
     "@sentry/react": 7.8.1
