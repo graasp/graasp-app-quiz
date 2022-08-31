@@ -27,7 +27,7 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
       aws-region: ${{ secrets.APPS_AWS_REGION }}
       aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_APPS_DEV }}
-      app-key: ${{ secrets.APP_KEY }}
+      app-id: ${{ secrets.APP_ID }}
       graasp-domain: ${{ secrets.DEV_GRAASP_DOMAIN }}
       cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_DEV }}
       sentry-dsn: ${{ secrets.SENTRY_DSN }}

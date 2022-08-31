@@ -17,9 +17,6 @@ Cypress.Commands.add('setUpApi', ({ database = {}, appContext } = {}) => {
     });
     win.appContext = appContext;
   });
-
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(4000);
 });
 
 Cypress.Commands.add('switchQuestionType', (type) => {
