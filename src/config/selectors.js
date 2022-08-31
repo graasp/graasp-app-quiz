@@ -30,3 +30,5 @@ export const buildMultipleChoicesButtonCy = (idx, isSelected) =>
 export const PLAY_VIEW_SUBMIT_BUTTON_CY = 'playViewSubmitButton';
 export const PLAY_VIEW_SLIDER_CY = 'playViewSlider';
 export const PLAY_VIEW_TEXT_INPUT_CY = 'playViewTextInput';
+export const EXPLANATION_CY = 'explanation';
+export const EXPLANATION_PLAY_CY = 'explanationPlay';

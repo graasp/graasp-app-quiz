@@ -12,6 +12,7 @@ import {
 import { APP_DATA_TYPES, QUESTION_TYPES } from '../../config/constants';
 import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
 import {
+  EXPLANATION_PLAY_CY,
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
@@ -162,7 +163,7 @@ const PlayView = () => {
           <Typography variant="h6" mb={1}>
             {t('Explanation')}
           </Typography>
-          <Typography variant="body1" mb={1}>
+          <Typography variant="body1" mb={1} data-cy={EXPLANATION_PLAY_CY}>
             {currentQuestion.data.explanation}
           </Typography>
         </Grid>

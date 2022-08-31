@@ -1,16 +1,15 @@
 import {
   APP_SETTING_NAMES,
-  FAILURE_MESSAGES,
   PERMISSION_LEVELS,
   QUESTION_TYPES,
 } from '../../../src/config/constants';
 import { CONTEXTS } from '../../../src/config/contexts';
-import i18n from '../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
+  EXPLANATION_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   TEXT_INPUT_FIELD_CY,
   buildQuestionStepCy,
@@ -18,11 +17,10 @@ import {
 } from '../../../src/config/selectors';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
 
-const t = i18n.t;
-
 const newTextInputData = {
   question: 'new question text',
   text: 'new text',
+  explanation: 'my explanation',
 };
 
 const { data, id } = APP_SETTINGS.find(
@@ -32,7 +30,7 @@ const { data, id } = APP_SETTINGS.find(
 );
 
 const fillTextInputQuestion = (
-  { text, question },
+  { text, question, explanation },
   { shouldSave = true } = {}
 ) => {
   // fill question if not empty
@@ -46,6 +44,9 @@ const fillTextInputQuestion = (
   if (text.length) {
     cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).type(text);
   }
+
+  // fill explanation
+  cy.fillExplanation(explanation);
 
   // save
   if (shouldSave) {
@@ -69,12 +70,11 @@ describe('Text Input', () => {
     cy.switchQuestionType(QUESTION_TYPES.TEXT_INPUT);
 
     // empty answer
-    const new1 = { ...newTextInputData, text: '' };
+    const new1 = {
+      ...newTextInputData,
+      text: '',
+    };
     fillTextInputQuestion(new1);
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY)
-    );
 
     fillTextInputQuestion(newTextInputData);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
@@ -112,6 +112,8 @@ describe('Text Input', () => {
         'have.value',
         data.text
       );
+
+      cy.checkExplanationField(data.explanation);
     });
 
     it('Update question', () => {
@@ -130,9 +132,8 @@ describe('Text Input', () => {
         'have.value',
         newTextInputData.text
       );
+
+      cy.checkExplanationField(newTextInputData.explanation);
     });
   });
 });
-
-// TODO: allow no correct answer
-// TODO: explanation

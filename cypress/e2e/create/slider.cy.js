@@ -28,6 +28,7 @@ const newSliderData = {
   min: 0,
   max: 90,
   value: 40,
+  explanation: 'new explanation',
 };
 
 const { data, id } = APP_SETTINGS.find(
@@ -36,7 +37,7 @@ const { data, id } = APP_SETTINGS.find(
 );
 
 const fillSliderQuestion = (
-  { min, max, value, question },
+  { min, max, value, question, explanation },
   originalAppSettingData = DEFAULT_QUESTION.data,
   { shouldSave = true } = {}
 ) => {
@@ -63,6 +64,8 @@ const fillSliderQuestion = (
     const stepsString = direction.repeat(steps);
     cy.get(`${dataCyWrapper(SLIDER_CY)}`).type(stepsString);
   }
+
+  cy.fillExplanation(explanation);
 
   // save
   if (shouldSave) {
@@ -151,6 +154,7 @@ describe('Slider', () => {
         'have.value',
         data.value
       );
+      cy.checkExplanationField(data.explanation);
     });
 
     it('Update question', () => {
@@ -177,7 +181,7 @@ describe('Slider', () => {
         'not.have.value',
         data.value
       );
+      cy.checkExplanationField(newSliderData.explanation);
     });
   });
 });
-// TODO: explanation

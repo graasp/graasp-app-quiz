@@ -50,10 +50,11 @@ const newMultipleChoiceData = {
       isCorrect: false,
     },
   ],
+  explanation: 'my new explanation',
 };
 
 const fillMultipleChoiceQuestion = (
-  { choices, question },
+  { choices, question, explanation },
   { shouldSave = true } = {}
 ) => {
   // fill question if not empty
@@ -104,6 +105,8 @@ const fillMultipleChoiceQuestion = (
       }
     });
   });
+
+  cy.fillExplanation(explanation);
 
   // save
   if (shouldSave) {
@@ -163,6 +166,8 @@ describe('Multiple Choices', () => {
 
     fillMultipleChoiceQuestion(newMultipleChoiceData);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
+
+    cy.checkExplanationField(newMultipleChoiceData.explanation);
   });
 
   describe('Display saved settings', () => {
@@ -202,6 +207,8 @@ describe('Multiple Choices', () => {
         ).should(isCorrect ? 'be.checked' : 'not.be.checked');
       });
       cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
+
+      cy.checkExplanationField(data.explanation);
     });
 
     it('Update question', () => {
@@ -226,6 +233,8 @@ describe('Multiple Choices', () => {
           )} .${MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME} input`
         ).should(isCorrect ? 'be.checked' : 'not.be.checked');
       });
+
+      cy.checkExplanationField(newMultipleChoiceData.explanation);
     });
 
     it('Delete answers until two remain', () => {
@@ -247,4 +256,3 @@ describe('Multiple Choices', () => {
     });
   });
 });
-// TODO: explanation

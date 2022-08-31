@@ -2,6 +2,8 @@ import { buildDatabase } from '@graasp/apps-query-client';
 
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
+  EXPLANATION_CY,
+  EXPLANATION_PLAY_CY,
   buildQuestionStepCy,
   buildQuestionTypeOption,
   dataCyWrapper,
@@ -34,4 +36,29 @@ Cypress.Commands.add('checkStepStatus', (id, isCorrect) => {
       isCorrect ? 'success' : 'error'
     );
   });
+});
+
+Cypress.Commands.add('checkExplanationPlay', (explanation) => {
+  if (explanation) {
+    cy.get(`${dataCyWrapper(EXPLANATION_PLAY_CY)}`).should(
+      'contain',
+      explanation
+    );
+  } else {
+    cy.get(`${dataCyWrapper(EXPLANATION_PLAY_CY)}`).should('not.exist');
+  }
+});
+
+Cypress.Commands.add('checkExplanationField', (explanation) => {
+  cy.get(`${dataCyWrapper(EXPLANATION_CY)} textarea:first`).should(
+    'have.value',
+    explanation
+  );
+});
+
+Cypress.Commands.add('fillExplanation', (explanation) => {
+  cy.get(`${dataCyWrapper(EXPLANATION_CY)} textarea:first`).clear();
+  if (explanation.length) {
+    cy.get(`${dataCyWrapper(EXPLANATION_CY)} textarea:first`).type(explanation);
+  }
 });

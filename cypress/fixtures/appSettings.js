@@ -24,6 +24,7 @@ export const MULTIPLE_CHOICES_APP_SETTING = {
         isCorrect: false,
       },
     ],
+    explanation: 'my explanation for multiple choice',
   },
 };
 
@@ -34,6 +35,7 @@ export const TEXT_INPUT_APP_SETTING = {
     type: QUESTION_TYPES.TEXT_INPUT,
     question: 'My text input question',
     text: 'my text input',
+    explanation: 'my explanation for text input',
   },
 };
 
@@ -46,6 +48,7 @@ export const SLIDER_APP_SETTING = {
     min: 10,
     max: 110,
     value: 30,
+    explanation: 'my explanation for slider',
   },
 };
 

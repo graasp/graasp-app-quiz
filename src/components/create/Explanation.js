@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { TextField, Typography } from '@mui/material';
 
+import { EXPLANATION_CY } from '../../config/selectors';
+
 const Explanation = ({ value: explanation, onChange }) => {
   const { t } = useTranslation();
 
@@ -19,6 +21,7 @@ const Explanation = ({ value: explanation, onChange }) => {
         </Typography>
       }
       <TextField
+        data-cy={EXPLANATION_CY}
         fullWidth
         value={value}
         label={t('Explanation')}

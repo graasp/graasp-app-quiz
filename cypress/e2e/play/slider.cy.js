@@ -29,6 +29,7 @@ const checkCorrection = (responseData) => {
       data.value === responseData.value ? 'success' : 'error'
     );
   });
+  cy.checkExplanationPlay(data.explanation);
 };
 
 describe('Slider', () => {
@@ -58,6 +59,7 @@ describe('Slider', () => {
         'not.have.value',
         data.value
       );
+      cy.checkExplanationPlay(null);
     });
 
     it('Incorrect app data', () => {
@@ -110,4 +112,3 @@ describe('Slider', () => {
     });
   });
 });
-// TODO: show explanation

@@ -49,6 +49,8 @@ describe('Play Text Input', () => {
       cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).should(
         'be.empty'
       );
+
+      cy.checkExplanationPlay(null);
     });
 
     it('Correct app data', () => {
@@ -64,6 +66,8 @@ describe('Play Text Input', () => {
 
       // success displayed in question bar
       cy.checkStepStatus(id, true);
+
+      cy.checkExplanationPlay(data.explanation);
     });
 
     it('Incorrect app data', () => {
@@ -80,6 +84,8 @@ describe('Play Text Input', () => {
 
       // error displayed in question bar
       cy.checkStepStatus(id, false);
+
+      cy.checkExplanationPlay(data.explanation);
     });
   });
 
@@ -108,7 +114,8 @@ describe('Play Text Input', () => {
         'have.value',
         appData.data.text
       );
+
+      cy.checkExplanationPlay(appData.data.explanation);
     });
   });
 });
-// TODO: show explanation

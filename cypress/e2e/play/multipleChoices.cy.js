@@ -49,6 +49,7 @@ const checkCorrection = (selection) => {
       }
     );
   });
+  cy.checkExplanationPlay(data.explanation);
 };
 
 describe('Multiple Choices', () => {
@@ -74,6 +75,7 @@ describe('Multiple Choices', () => {
           'be.visible'
         );
       });
+      cy.checkExplanationPlay(null);
     });
 
     it('Incorrect app data', () => {
@@ -139,4 +141,3 @@ describe('Multiple Choices', () => {
     });
   });
 });
-// TODO: show explanation
