@@ -2,30 +2,42 @@
   "name": "quiz-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@graasp/apps-query-client": "github:graasp/graasp-apps-query-client.git",
     "@mui/icons-material": "5.6.2",
     "@mui/material": "^5.5.3",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "5.0.0",
+    "@sentry/react": "7.8.1",
+    "@sentry/tracing": "7.8.1",
+    "i18next": "21.8.8",
+    "lodash.clonedeep": "4.5.0",
+    "prop-types": "15.8.1",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-i18next": "11.17.0",
+    "react-scripts": "5.0.1",
+    "react-toastify": "9.0.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "env-cmd -f ./.env.local react-scripts start",
+    "start:test": "env-cmd -f ./.env.test react-scripts -r @cypress/instrument-cra start",
+    "start:ci": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:once": "cross-env CI=true env-cmd ./.env.test react-scripts test --env=jsdom",
+    "test:coverage": "cross-env CI=true env-cmd ./.env.test react-scripts test --env=jsdom --coverage",
+    "test:ci": "run-s test:coverage report",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "prettier:write": "prettier --write ./src"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "prettier:write": "prettier --write '{src,cypress}/**/*.js'",
+    "build:local": "env-cmd -f ./.env.local yarn build",
+    "build:dev": "env-cmd -f ./.env.dev yarn build",
+    "build:prod": "env-cmd -f ./.env.prod yarn build",
+    "cypress:open": "cypress open",
+    "cypress:run": "env-cmd -f ./.env.test cypress run --headless --browser chrome --spec \"cypress/**/*.cy.js\""
   },
   "browserslist": {
     "production": [
@@ -39,16 +51,24 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@3.2.0",
   "devDependencies": {
-    "@babel/eslint-parser": "7.17.0",
-    "@babel/eslint-plugin": "7.16.5",
-    "@babel/preset-react": "7.16.7",
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/eslint-plugin": "7.17.7",
+    "@babel/preset-react": "7.17.12",
+    "@cypress/code-coverage": "3.10.0",
+    "@cypress/instrument-cra": "1.4.0",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "@trivago/prettier-plugin-sort-imports": "3.2.0",
+    "cypress": "10.3.1",
     "env-cmd": "10.1.0",
-    "eslint": "8.16.0",
+    "eslint": "^8.3.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-config-react-app": "7.0.1",
+    "eslint-plugin-cypress": "2.12.1",
+    "eslint-plugin-import": "2.26.0",
     "prettier": "2.6.2"
-  }
+  },
+  "packageManager": "yarn@3.2.1"
 }

@@ -1,52 +1,81 @@
-import { APP_DATA_TYPES, QUESTION_TYPES } from "../components/constants/constants";
+import { APP_SETTING_NAMES, QUESTION_TYPES } from '../config/constants';
 
 const buildDatabase = (appContext) => ({
   appData: [
     {
+      itemId: 'mock-item-id',
+      memberId: 'mock-member-id',
+      creator: 'mock-member-id',
+      createdAt: '2022-07-22T12:35:50.195Z',
+      updatedAt: '2022-07-22T12:36:51.741Z',
       data: {
-        list: ["id4", "id5", "id6"],
+        questionId: 'id4',
+        choices: ['London'],
       },
-      type: APP_DATA_TYPES.QUESTION_LIST,
+      id: '2',
     },
     {
-      id: "id4",
+      itemId: 'mock-item-id',
+      memberId: 'mock-member-id',
+      creator: 'mock-member-id',
+      createdAt: '2022-07-22T12:35:50.195Z',
+      updatedAt: '2022-07-22T12:36:51.741Z',
       data: {
-        question: "What is the capital of France?",
-        questionType: QUESTION_TYPES.MULTIPLE_CHOICE,
+        questionId: 'id6',
+        text: '90',
+      },
+      id: '3',
+    },
+  ],
+  appSettings: [
+    {
+      id: 'question-list',
+      data: {
+        list: ['id5', 'id6', 'id4'],
+      },
+      name: APP_SETTING_NAMES.QUESTION_LIST,
+    },
+    {
+      id: 'id4',
+      data: {
+        question: 'What is the capital of France?',
+        type: QUESTION_TYPES.MULTIPLE_CHOICES,
         choices: [
-          { choice: "London", isCorrect: false },
-          { choice: "Paris", isCorrect: true },
-          { choice: "New York", isCorrect: false },
-          { choice: "Tokyo", isCorrect: false },
+          { value: 'London', isCorrect: false },
+          { value: 'Paris', isCorrect: true },
+          { value: 'New York', isCorrect: false },
+          { value: 'Tokyo', isCorrect: false },
         ],
+        explanation: 'Paris is the capital of France.',
       },
-      type: APP_DATA_TYPES.QUESTION,
+      name: APP_SETTING_NAMES.QUESTION,
     },
     {
-      id: "id5",
+      id: 'id5',
       data: {
-        question: "How happy are you?",
-        questionType: QUESTION_TYPES.SLIDER,
-        leftText: "Sad",
-        rightText: "Happy",
-        correctValue: 20,
+        question: 'How happy are you?',
+        type: QUESTION_TYPES.SLIDER,
+        min: 10,
+        max: 90,
+        value: 20,
+        explanation: 'Go to sleep.',
       },
-      type: APP_DATA_TYPES.QUESTION,
+      name: APP_SETTING_NAMES.QUESTION,
     },
     {
-      id: "id6",
+      id: 'id6',
       data: {
-        question: "What is a baby cat called?",
-        questionType: QUESTION_TYPES.TEXT_INPUT,
-        answer: "kitten",
+        question: 'What is a baby cat called?',
+        type: QUESTION_TYPES.TEXT_INPUT,
+        text: 'kitten',
       },
-      type: APP_DATA_TYPES.QUESTION,
+      name: APP_SETTING_NAMES.QUESTION,
     },
   ],
   members: [
     {
       id: appContext.memberId,
-      name: "mock-member",
+      name: 'mock-member',
     },
   ],
 });

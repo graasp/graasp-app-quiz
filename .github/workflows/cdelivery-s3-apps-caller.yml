@@ -1,0 +1,30 @@
+name: Deploy to staging environment
+
+# Controls when the action will run
+on:
+  # Triggers the workflow on repository-dispatch event
+  repository_dispatch:
+    types: [staging-deployment]
+
+# This workflow is made up of one job that calls the reusable workflow in graasp-deploy
+jobs:
+  graasp-deploy-s3-apps-workflow:
+    name: Quiz app
+    # Replace 'main' with the hash of a commit, so it points to an specific version of the reusable workflow that is used
+    # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
+    uses: graasp/graasp-deploy/.github/workflows/cdelivery-s3-apps.yml@2bde5c31cc2179d34ab063cc9b5a35bf364a2954
+    # Replace input build-folder or version if needed
+    with:
+      build-folder: 'build'
+      version: 'latest'
+      tag: ${{ github.event.client_payload.tag }}
+    # Insert required secrets based on repository with the following format: ${{ secrets.SECRET_NAME }}
+    secrets:
+      app-id: ${{ secrets.APP_ID }}
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_STAGE }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGE }}
+      aws-region: ${{ secrets.APPS_AWS_REGION }}
+      aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_APPS_STAGE }}
+      graasp-domain: ${{ secrets.PROD_GRAASP_DOMAIN }}
+      cloudfront-distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_STAGE }}
+      sentry-dsn: ${{ secrets.SENTRY_DSN }}

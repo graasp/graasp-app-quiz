@@ -1,71 +1,57 @@
-import {
-  TextField,
-  Grid,
-  Typography,
-} from "@mui/material";
-import React from "react";
-import { styled } from "@mui/material/styles";
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-function PlayTextInput({ text, setText, answer, submitted }) {
+import CheckIcon from '@mui/icons-material/Check';
+import { TextField } from '@mui/material';
 
-  function answerIsCorrect() {
-    return answer.toLowerCase() === text.toLowerCase();
-  }
+import { PLAY_VIEW_TEXT_INPUT_CY } from '../../config/selectors';
+import { computeCorrectness } from '../context/utilities';
+
+const PlayTextInput = ({ values, response, setResponse, showCorrection }) => {
+  const [isCorrect, setIsCorrect] = useState();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (showCorrection) {
+      setIsCorrect(computeCorrectness(response, values));
+    }
+  }, [showCorrection, response, values]);
+
+  const computeColor = () => {
+    return isCorrect ? 'success' : 'error';
+  };
 
   return (
-    <div>
-      <Grid container direction={"column"} alignItems="center" sx={{ p: 2 }}>
-        <Grid item sx={{ pb: 2 }}>
-          <Typography variant="p1"> Type Answer here:</Typography>
-        </Grid>
-        {(() => {
-          if (!submitted) {
-            return (
-              <TextField
-                value={text}
-                placeholder="Enter Answer"
-                label="Answer"
-                name="quiz text answer"
-                variant="outlined"
-                onChange={(t) => {
-                  {
-                    setText(t.target.value);
-                  }
-                }}
-              />
-            );
+    <TextField
+      data-cy={PLAY_VIEW_TEXT_INPUT_CY}
+      fullWidth
+      value={response.text ?? ''}
+      placeholder={t('Type your answer')}
+      helperText={
+        showCorrection &&
+        !isCorrect &&
+        values.text &&
+        t('Correct Answer', { answer: values.text })
+      }
+      label={t('Answer')}
+      variant="outlined"
+      onChange={(t) => {
+        setResponse(t.target.value);
+      }}
+      color={showCorrection && computeColor()}
+      InputProps={{
+        endAdornment: showCorrection && isCorrect && (
+          <CheckIcon color="success" />
+        ),
+      }}
+      // set error prop only if we show the correction
+      {...(showCorrection
+        ? {
+            error: !isCorrect,
           }
-
-          if (answerIsCorrect()) {
-            return (
-              <TextField
-                label="Correct"
-                required
-                variant="outlined"
-                defaultValue={text}
-                color="success"
-                focused
-                inputProps={{ readOnly: true }}
-                id="validation-outlined-input"
-              />
-            );
-          }
-
-          return (
-            <TextField
-              error
-              id="outlined-error-heper-text"
-              label="Incorrect"
-              defaultValue={text}
-              helperText={`Correct Answer: ${answer}`}
-              focused
-              inputProps={{ readOnly: true }}
-            />
-          );
-        })()}
-      </Grid>
-    </div>
+        : {})}
+    />
   );
-}
+};
 
 export default PlayTextInput;

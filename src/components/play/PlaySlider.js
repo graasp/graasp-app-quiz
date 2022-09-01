@@ -1,73 +1,66 @@
-import {
-  Grid,
-  Typography,
-  Slider,
-} from "@mui/material";
-import React from "react";
-import { useAppData } from "../context/hooks";
-import { getDataWithId } from "../context/utilities";
+import React, { useEffect, useState } from 'react';
 
-function PlaySlider({
-  currentQuestionId,
-  sliderValue,
-  setSliderValue,
-  sliderCorrectValue,
-  submitted,
-}) {
-  const { data } = useAppData();
-  const leftLabel = getDataWithId(data, currentQuestionId)?.data?.leftText;
-  const rightLabel = getDataWithId(data, currentQuestionId)?.data?.rightText;
-  const marks = [
-    { value: 0, label: leftLabel },
-    {
-      value: 100,
-      label: rightLabel,
-    },
-  ];
+import { Grid, Slider } from '@mui/material';
 
-  function answerIsCorrect() {
-    return sliderValue === sliderCorrectValue;
-  }
+import { PLAY_VIEW_SLIDER_CY } from '../../config/selectors';
+import { computeCorrectness } from '../context/utilities';
+
+function PlaySlider({ values, response, setResponse, showCorrection }) {
+  const min = values?.min;
+  const max = values?.max;
+  const [marks, setMarks] = useState([]);
+  const [isCorrect, setIsCorrect] = useState();
+
+  useEffect(() => {
+    let newMarks = [
+      { value: min, label: min },
+      {
+        value: max,
+        label: max,
+      },
+    ];
+
+    if (showCorrection) {
+      const isCorrect = computeCorrectness(response, values);
+      setIsCorrect(isCorrect);
+      if (!isCorrect) {
+        newMarks = [
+          ...newMarks,
+          {
+            value: values.value,
+            label: values.value,
+          },
+        ];
+      }
+    }
+
+    setMarks(newMarks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCorrection, response, values]);
+
+  const computeColor = () => {
+    return isCorrect ? 'success' : 'error';
+  };
 
   return (
-    <div>
-      <Grid container direction={"column"} sx={{ p: 2 }}>
-        <Grid item sx={{ pb: 2 }}>
-          <Slider
-            aria-label="Custom marks"
-            defaultValue={50}
-            valueLabelDisplay="on"
-            value={submitted ? [sliderValue, sliderCorrectValue] : sliderValue}
-            onChange={(e, val) => {
-              setSliderValue(val);
-            }}
-            marks={marks}
-          />
-        </Grid>
-        {(() => {
-          if (submitted) {
-            if (answerIsCorrect()) {
-              return (
-                <Typography variant="p1" color="success.main">
-                  Correct!
-                </Typography>
-              );
-            } else {
-              return (
-                <div>
-                  <Typography variant="subtitle1" color="error">
-                    Incorrect!
-                  </Typography>
-                  <Typography variant="subtitle2">
-                    Correct value was: {sliderCorrectValue}
-                  </Typography>
-                </div>
-              );
-            }
-          }
-        })()}
+    <Grid container direction="column" sx={{ p: 2 }}>
+      <Grid item sx={{ pb: 2 }}>
+        <Slider
+          data-cy={PLAY_VIEW_SLIDER_CY}
+          aria-label="Custom marks"
+          value={response?.value ?? (max - min) / 2 + min}
+          valueLabelDisplay="on"
+          onChange={(e, val) => {
+            setResponse(val);
+          }}
+          marks={marks}
+          min={min}
+          max={max}
+          // set color only if we show the correction
+          {...(showCorrection ? { color: computeColor() } : {})}
+        />
       </Grid>
-    </div>
+    </Grid>
   );
 }
 

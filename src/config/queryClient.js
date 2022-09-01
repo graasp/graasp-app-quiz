@@ -1,8 +1,12 @@
 import {
-  configureQueryClient,
   buildMockLocalContext,
   buildMockParentWindow,
-} from "@graasp/apps-query-client";
+  configureQueryClient,
+} from '@graasp/apps-query-client';
+
+import { ENABLE_MOCK_API } from './constants';
+import { REACT_APP_GRAASP_APP_ID } from './env';
+import notifier from './notifier';
 
 const {
   queryClient,
@@ -12,19 +16,16 @@ const {
   ReactQueryDevtools,
   API_ROUTES,
   MUTATION_KEYS,
-  HOOK_KEYS,
+  QUERY_KEYS,
+  useQuery,
 } = configureQueryClient({
-  notifier: (data) => {
-    console.log("notifier: ", data);
-  },
-  enableWebsocket: true,
+  notifier,
   keepPreviousData: true,
   // avoid refetching when same data are closely fetched
   staleTime: 1000, // ms
-  GRAASP_APP_ID: "id",
-  targetWindow: process.env.REACT_APP_MOCK_API
-    ? // build mock parent window given cypress context or mock data
-      buildMockParentWindow(buildMockLocalContext(window.appContext))
+  GRAASP_APP_ID: REACT_APP_GRAASP_APP_ID,
+  targetWindow: ENABLE_MOCK_API // build mock parent window given cypress context or mock data
+    ? buildMockParentWindow(buildMockLocalContext(window.appContext))
     : window.parent,
 });
 
@@ -36,5 +37,6 @@ export {
   ReactQueryDevtools,
   API_ROUTES,
   MUTATION_KEYS,
-  HOOK_KEYS,
+  QUERY_KEYS,
+  useQuery,
 };
