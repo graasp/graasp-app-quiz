@@ -115,7 +115,7 @@ describe('Play Text Input', () => {
         appData.data.text
       );
 
-      cy.checkExplanationPlay(appData.data.explanation);
+      cy.checkExplanationPlay(data.explanation);
     });
   });
 });
