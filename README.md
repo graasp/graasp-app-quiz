@@ -1,7 +1,9 @@
 # Graasp App: Quiz
 
-![Version](https://img.shields.io/github/package-json/v/graasp/graasp-app-quiz?color=17b558)
-[![License](https://img.shields.io/github/license/graasp/graasp-app-quiz?color=00bfff)](LICENSE)
+<div align="center">
+<img src="https://img.shields.io/github/package-json/v/graasp/graasp-app-quiz?color=17b558" alt="Version"/>
+<a href="https://choosealicense.com/licenses/agpl-3.0/#"><img src="https://img.shields.io/github/license/graasp/graasp-app-quiz?color=00bfff" alt="License"/></a>
+</div>
 
 An app to create interactive quizzes on the Graasp platform.
 
