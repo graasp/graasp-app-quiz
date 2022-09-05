@@ -9,7 +9,6 @@ import {
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
-  EXPLANATION_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   TEXT_INPUT_FIELD_CY,
   buildQuestionStepCy,
@@ -55,7 +54,7 @@ const fillTextInputQuestion = (
 };
 
 describe('Text Input', () => {
-  it('Start with empty data and save question', () => {
+  it('Start with empty data and save empty response', () => {
     cy.setUpApi({
       database: {
         appSettings: [],
@@ -75,6 +74,23 @@ describe('Text Input', () => {
       text: '',
     };
     fillTextInputQuestion(new1);
+
+    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
+  });
+
+  it('Start with empty data and save question with non-empty response', () => {
+    cy.setUpApi({
+      database: {
+        appSettings: [],
+      },
+      appContext: {
+        permission: PERMISSION_LEVELS.ADMIN,
+        context: CONTEXTS.BUILDER,
+      },
+    });
+    cy.visit('/');
+
+    cy.switchQuestionType(QUESTION_TYPES.TEXT_INPUT);
 
     fillTextInputQuestion(newTextInputData);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
