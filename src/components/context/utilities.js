@@ -30,7 +30,10 @@ export const computeCorrectness = (data, correctData) => {
       if (!correctData.text) {
         return true;
       }
-      return data?.text?.toLowerCase() === correctData.text.toLowerCase();
+      return (
+        data?.text?.toLowerCase().trim() ===
+        correctData.text.toLowerCase().trim()
+      );
     }
     default:
       return false;

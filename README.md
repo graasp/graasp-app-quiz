@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# Graasp App: Quiz
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
+<img src="https://img.shields.io/github/package-json/v/graasp/graasp-app-quiz?color=17b558" alt="Version"/>
+<a href="https://choosealicense.com/licenses/agpl-3.0/#"><img src="https://img.shields.io/github/license/graasp/graasp-app-quiz?color=00bfff" alt="License"/></a>
+</div>
 
-## Available Scripts
+An app to create interactive quizzes on the Graasp platform.
 
-In the project directory, you can run:
+![App Screenshots](docs/slider.png)
 
-### `npm start`
+The app support multiple types of questions:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- simple text responses
+- multiple answer questions
+- quantitative answers using a slider
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Usage
 
-### `npm test`
+If you wish to run the app in your local environnement you will need to have a `.env.local` file with the following content:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```sh
+# Domain for the react app
+REACT_APP_GRAASP_DOMAIN=localhost
+# ID of the app (can be generated online https://www.uuidgenerator.net/version4)
+# an example could be "5b321475-ecb8-4df2-9e32-f4a4cd444fa4"
+REACT_APP_GRAASP_APP_ID=<mock-id-you-need-to-generate>
+# Enable mock API (to use the app without the graasp backend)
+REACT_APP_ENABLE_MOCK_API=true
+# Address of the API host (graasp backend)
+REACT_APP_API_HOST=localhost:3000
+# Sentry DSN url (uncomment to use)
+# REACT_APP_SENTRY_DSN=
 
-### `npm run build`
+# Overwrite the default 3000 port
+PORT=3012
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Overwrite the "baseUrl" of Cypress to match the port used by the running local app
+CYPRESS_BASE_URL=http://localhost:3012
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To run the app locally:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+# install the dependencies
+yarn install # or "yarn"
+# run the app
+yarn start
+```
 
-### `npm run eject`
+To open Cypress to look at the tests:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+yarn cypress:open
+```

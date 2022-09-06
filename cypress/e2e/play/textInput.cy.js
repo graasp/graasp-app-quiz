@@ -87,6 +87,38 @@ describe('Play Text Input', () => {
 
       cy.checkExplanationPlay(data.explanation);
     });
+
+    it('Correct response but with unmatched case', () => {
+      cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).type(
+        `${data.text.toUpperCase()}`
+      );
+      cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
+      checkAnswer(true);
+    });
+
+    it('Correct response but with trailing space', () => {
+      cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).type(
+        `${data.text} `
+      );
+      cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
+      checkAnswer(true);
+    });
+
+    it('Correct response but with trailing newline', () => {
+      cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).type(
+        `${data.text}\n`
+      );
+      cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
+      checkAnswer(true);
+    });
+
+    it('Correct response but with starting space', () => {
+      cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).type(
+        ` ${data.text}`
+      );
+      cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
+      checkAnswer(true);
+    });
   });
 
   describe('Display saved settings', () => {

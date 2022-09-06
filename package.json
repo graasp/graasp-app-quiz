@@ -36,7 +36,7 @@
     "build:local": "env-cmd -f ./.env.local yarn build",
     "build:dev": "env-cmd -f ./.env.dev yarn build",
     "build:prod": "env-cmd -f ./.env.prod yarn build",
-    "cypress:open": "cypress open",
+    "cypress:open": "env-cmd -f ./.env.local cypress open",
     "cypress:run": "env-cmd -f ./.env.test cypress run --headless --browser chrome --spec \"cypress/**/*.cy.js\""
   },
   "browserslist": {
