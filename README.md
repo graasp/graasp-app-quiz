@@ -23,13 +23,14 @@ If you wish to run the app in your local environnement you will need to have a `
 # Domain for the react app
 REACT_APP_GRAASP_DOMAIN=localhost
 # ID of the app (can be generated online https://www.uuidgenerator.net/version4)
-REACT_APP_GRAASP_APP_ID=5b321475-ecb8-4df2-9e32-f4a4cd444fa4
+# an example could be "5b321475-ecb8-4df2-9e32-f4a4cd444fa4"
+REACT_APP_GRAASP_APP_ID=<mock-id-you-need-to-generate>
 # Enable mock API (to use the app without the graasp backend)
 REACT_APP_ENABLE_MOCK_API=true
 # Address of the API host (graasp backend)
 REACT_APP_API_HOST=localhost:3000
-# Sentry DSN url
-REACT_APP_SENTRY_DSN=""
+# Sentry DSN url (uncomment to use)
+# REACT_APP_SENTRY_DSN=
 
 # Overwrite the default 3000 port
 PORT=3012
