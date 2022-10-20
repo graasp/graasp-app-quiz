@@ -11,12 +11,14 @@ export const QUESTION_TYPES = {
   MULTIPLE_CHOICES: 'multipleChoices',
   TEXT_INPUT: 'textInput',
   SLIDER: 'slider',
+  FILL_IN_THE_BLANKS: 'fillInTheBlanks',
 };
 
 export const QUESTION_TYPES_TO_NAME = {
   [QUESTION_TYPES.MULTIPLE_CHOICES]: 'Multiple Choices',
   [QUESTION_TYPES.TEXT_INPUT]: 'Text Input',
   [QUESTION_TYPES.SLIDER]: 'Slider',
+  [QUESTION_TYPES.FILL_IN_THE_BLANKS]: 'Fill In The Blanks',
 };
 
 export const DEFAULT_CHOICE = { value: '', isCorrect: false };
