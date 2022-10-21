@@ -26,12 +26,24 @@ const buildDatabase = (appContext) => ({
       },
       id: '3',
     },
+    {
+      itemId: 'mock-item-id',
+      memberId: 'mock-member-id',
+      creator: 'mock-member-id',
+      createdAt: '2022-07-22T12:35:50.195Z',
+      updatedAt: '2022-07-22T12:36:51.741Z',
+      data: {
+        questionId: 'id7',
+        text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
+      },
+      id: '3',
+    },
   ],
   appSettings: [
     {
       id: 'question-list',
       data: {
-        list: ['id5', 'id6', 'id4'],
+        list: ['id7', 'id5', 'id6', 'id4'],
       },
       name: APP_SETTING_NAMES.QUESTION_LIST,
     },
@@ -68,6 +80,16 @@ const buildDatabase = (appContext) => ({
         question: 'What is a baby cat called?',
         type: QUESTION_TYPES.TEXT_INPUT,
         text: 'kitten',
+      },
+      name: APP_SETTING_NAMES.QUESTION,
+    },
+    {
+      id: 'id7',
+      data: {
+        question: 'Fill In The Blanks',
+
+        type: QUESTION_TYPES.FILL_BLANKS,
+        text: 'Lorem <ips um> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
       },
       name: APP_SETTING_NAMES.QUESTION,
     },

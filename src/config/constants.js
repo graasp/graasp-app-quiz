@@ -11,14 +11,14 @@ export const QUESTION_TYPES = {
   MULTIPLE_CHOICES: 'multipleChoices',
   TEXT_INPUT: 'textInput',
   SLIDER: 'slider',
-  FILL_IN_THE_BLANKS: 'fillInTheBlanks',
+  FILL_BLANKS: 'fillBlanks',
 };
 
 export const QUESTION_TYPES_TO_NAME = {
   [QUESTION_TYPES.MULTIPLE_CHOICES]: 'Multiple Choices',
   [QUESTION_TYPES.TEXT_INPUT]: 'Text Input',
   [QUESTION_TYPES.SLIDER]: 'Slider',
-  [QUESTION_TYPES.FILL_IN_THE_BLANKS]: 'Fill In The Blanks',
+  [QUESTION_TYPES.FILL_BLANKS]: 'Fill In The Blanks',
 };
 
 export const DEFAULT_CHOICE = { value: '', isCorrect: false };
@@ -44,6 +44,10 @@ export const DEFAULT_QUESTION_VALUES = {
     type: QUESTION_TYPES.TEXT_INPUT,
     text: '',
   },
+  [QUESTION_TYPES.FILL_BLANKS]: {
+    type: QUESTION_TYPES.FILL_BLANKS,
+    text: '',
+  },
 };
 
 export const DEFAULT_QUESTION_TYPE = QUESTION_TYPES.MULTIPLE_CHOICES;
@@ -61,6 +65,8 @@ export const FAILURE_MESSAGES = {
   MULTIPLE_CHOICES_CORRECT_ANSWER: 'MULTIPLE_CHOICES_CORRECT_ANSWER',
   MULTIPLE_CHOICES_EMPTY_CHOICE: 'MULTIPLE_CHOICES_EMPTY_CHOICE',
   TEXT_INPUT_NOT_EMPTY: 'TEXT_INPUT_NOT_EMPTY',
+  FILL_BLANKS_EMPTY_TEXT: 'FILL_BLANKS_EMPTY_TEXT',
+  FILL_BLANKS_UNMATCHING_TAGS: 'FILL_BLANKS_UNMATCHING_TAGS',
 };
 
 // todo: use from graasp constants
@@ -81,3 +87,11 @@ export const ENV = {
   PRODUCTION: 'production',
   TEST: 'test',
 };
+
+export const FILL_BLANKS_TYPE = {
+  WORD: 'word',
+  BLANK: 'blank',
+};
+
+export const FILL_BLANKS_DEFAULT_TEXT =
+  'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. Phasellus aliquam, arcu vel <hendrerit> hendrerit, dui nulla <vulputate> sem, ut porta justo ipsum commodo dui. ';

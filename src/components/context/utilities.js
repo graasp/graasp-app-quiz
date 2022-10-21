@@ -35,6 +35,9 @@ export const computeCorrectness = (data, correctData) => {
         correctData.text.toLowerCase().trim()
       );
     }
+    case QUESTION_TYPES.FILL_BLANKS: {
+      return data?.text === correctData.text;
+    }
     default:
       return false;
   }
@@ -73,6 +76,18 @@ export const validateQuestionData = (data) => {
       }
       if (data?.choices?.some(({ value }) => !value)) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE;
+      }
+
+      break;
+    case QUESTION_TYPES.FILL_BLANKS:
+      if (!data?.text?.length) {
+        throw FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT;
+      }
+      if (
+        (data.text.match(/</g) || []).length !==
+        (data.text.match(/>/g) || []).length
+      ) {
+        throw FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS;
       }
 
       break;

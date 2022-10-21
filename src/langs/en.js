@@ -39,5 +39,8 @@ export default {
     [FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE]:
       'An answer cannot be empty',
     [FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY]: 'Answer cannot be empty',
+    [FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT]: 'The text cannot be empty',
+    [FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS]:
+      'The text has unmatching "<" and ">"',
   },
 };

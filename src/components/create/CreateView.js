@@ -17,6 +17,7 @@ import { isDifferent, validateQuestionData } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
 import QuestionTopBar from '../navigation/QuestionTopBar';
 import Explanation from './Explanation';
+import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
 import QuestionTitle from './QuestionTitle';
 import QuestionTypeSelect from './QuestionTypeSelect';
@@ -125,6 +126,14 @@ const CreateView = () => {
                         ...d,
                       });
                     }}
+                  />
+                );
+              }
+              case QUESTION_TYPES.FILL_BLANKS: {
+                return (
+                  <FillInTheBlanks
+                    text={newData?.text}
+                    onChangeData={(text) => setNewData({ ...newData, text })}
                   />
                 );
               }
