@@ -1,7 +1,6 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
-import { Button, ListItem, Typography, styled } from '@mui/material';
+import { ListItem, Typography, styled } from '@mui/material';
 
 import { FILL_BLANKS_TYPE } from '../../../config/constants';
 import {

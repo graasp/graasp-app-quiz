@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import { TextField, Typography } from '@mui/material';
 
-import { FILL_BLANKS_DEFAULT_TEXT } from '../../config/constants';
+import { FILL_BLANKS_PLACEHOLDER_TEXT } from '../../config/constants';
 import { FILL_BLANKS_TEXT_FIELD_CY } from '../../config/selectors';
 
-const FillInTheBlanks = ({ onChangeData }) => {
+const FillInTheBlanks = ({ onChangeData, text }) => {
   const { t } = useTranslation();
 
   const onChange = (e) => {
@@ -27,7 +27,8 @@ const FillInTheBlanks = ({ onChangeData }) => {
         rows={4}
         multiline
         onChange={onChange}
-        placeholder={FILL_BLANKS_DEFAULT_TEXT}
+        value={text}
+        placeholder={FILL_BLANKS_PLACEHOLDER_TEXT}
       />
     </>
   );

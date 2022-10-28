@@ -93,5 +93,5 @@ export const FILL_BLANKS_TYPE = {
   BLANK: 'blank',
 };
 
-export const FILL_BLANKS_DEFAULT_TEXT =
+export const FILL_BLANKS_PLACEHOLDER_TEXT =
   'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. Phasellus aliquam, arcu vel <hendrerit> hendrerit, dui nulla <vulputate> sem, ut porta justo ipsum commodo dui. ';

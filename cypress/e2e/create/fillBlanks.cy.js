@@ -2,7 +2,6 @@ import {
   APP_SETTING_NAMES,
   DEFAULT_QUESTION,
   FAILURE_MESSAGES,
-  FILL_BLANKS_DEFAULT_TEXT,
   PERMISSION_LEVELS,
   QUESTION_TYPES,
 } from '../../../src/config/constants';
@@ -15,9 +14,6 @@ import {
   CREATE_VIEW_SAVE_BUTTON_CY,
   FILL_BLANKS_TEXT_FIELD_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
-  SLIDER_CY,
-  SLIDER_MAX_FIELD_CY,
-  SLIDER_MIN_FIELD_CY,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
@@ -33,7 +29,8 @@ const newFillBlanksData = {
 
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
-    name === APP_SETTING_NAMES.QUESTION && data.type === QUESTION_TYPES.SLIDER
+    name === APP_SETTING_NAMES.QUESTION &&
+    data.type === QUESTION_TYPES.FILL_BLANKS
 );
 
 const fillBlanksQuestion = (
@@ -114,7 +111,7 @@ describe('Fill in the Blanks', () => {
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
     });
 
-    it.only('Show saved question', () => {
+    it('Show saved question', () => {
       cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`)
         .should('be.visible')
         .should('have.value', data.question);
@@ -126,14 +123,14 @@ describe('Fill in the Blanks', () => {
         .should('be.visible')
         .should('contain', data.question);
 
-      cy.get(`${dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)} input`).should(
+      cy.get(`${dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)} textarea`).should(
         'have.value',
         data.text
       );
       cy.checkExplanationField(data.explanation);
     });
 
-    it.only('Update question', () => {
+    it('Update question', () => {
       fillBlanksQuestion(newFillBlanksData, data);
 
       // click new question and come back
@@ -145,9 +142,9 @@ describe('Fill in the Blanks', () => {
         .should('be.visible')
         .should('contain', newFillBlanksData.question);
 
-      cy.get(`${dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)} input`).should(
+      cy.get(`${dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)} textarea`).should(
         'have.value',
-        data.text
+        newFillBlanksData.text
       );
       cy.checkExplanationField(newFillBlanksData.explanation);
     });
