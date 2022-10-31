@@ -31,6 +31,7 @@ const PlayFillInTheBlanks = ({
   useEffect(() => {
     const { words, answers } = splitSentence(values.text ?? '', response.text);
     setState({ ...state, words, answers });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values, response]);
 
   const saveResponse = (newWords) => {
