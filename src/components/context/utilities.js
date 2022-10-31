@@ -54,10 +54,8 @@ export const getAppDataByQuestionId = (appData, qId) => {
 };
 
 export const areTagsMatching = (text) => {
-  console.log('text: ', text);
   let acc = 0;
   for (let i = 0; i < text.length; i++) {
-    console.log('text[i]: ', text[i]);
     if (text[i] === '<') {
       acc += 1;
     } else if (text[i] === '>') {
@@ -69,7 +67,7 @@ export const areTagsMatching = (text) => {
     }
   }
 
-  return true;
+  return acc === 0;
 };
 
 export const validateQuestionData = (data) => {
