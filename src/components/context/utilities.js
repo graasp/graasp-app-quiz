@@ -53,6 +53,25 @@ export const getAppDataByQuestionId = (appData, qId) => {
   );
 };
 
+export const areTagsMatching = (text) => {
+  console.log('text: ', text);
+  let acc = 0;
+  for (let i = 0; i < text.length; i++) {
+    console.log('text[i]: ', text[i]);
+    if (text[i] === '<') {
+      acc += 1;
+    } else if (text[i] === '>') {
+      acc -= 1;
+    }
+
+    if (acc < 0 || acc > 1) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 export const validateQuestionData = (data) => {
   if (!data?.question) {
     throw FAILURE_MESSAGES.EMPTY_QUESTION;
@@ -83,10 +102,8 @@ export const validateQuestionData = (data) => {
       if (!data?.text?.length) {
         throw FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT;
       }
-      if (
-        (data.text.match(/</g) || []).length !==
-        (data.text.match(/>/g) || []).length
-      ) {
+      // matching tags
+      if (!areTagsMatching(data.text)) {
         throw FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS;
       }
 

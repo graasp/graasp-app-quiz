@@ -27,10 +27,8 @@ const { answers, words } = splitSentence(text);
 
 // verify all answers styles
 const checkCorrection = ({ answers: responseAnswers }) => {
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(1500);
   answers.forEach((answer, idx) => {
-    cy.get(dataCyWrapper(FILL_BLANKS_CORRECTION_CY)).should(
+    cy.get(dataCyWrapper(FILL_BLANKS_CORRECTION_CY), { timeout: 5500 }).should(
       'contain',
       answer.text
     );
@@ -101,8 +99,7 @@ describe('Fill In The Blanks', () => {
           );
         } else {
           cy.get(dataCyWrapper(buildBlankedTextWordCy(w.id))).should(
-            'contain',
-            ''
+            'be.empty'
           );
         }
       });

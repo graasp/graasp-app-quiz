@@ -25,13 +25,11 @@ const Answers = ({ answers }) => {
       p={1}
       justifyContent="center"
       mb={3}
-      sx={{
-        borderRadius: '10px',
-        border: '1px grey dotted',
-        flexWrap: 'wrap',
-        minHeight: '50px',
-        width: '100%',
-      }}
+      borderRadius={2}
+      border="1px grey dotted"
+      flexWrap="wrap"
+      minHeight={50}
+      width={'100%'}
       onDragLeave={_handleDragLeave}
       onDragOver={_handleDragOver}
     >
