@@ -101,8 +101,9 @@ describe('Create View', () => {
       );
 
       // delete all
-      cy.get(dataCyWrapper(CREATE_VIEW_DELETE_BUTTON_CY)).click();
-      cy.get(dataCyWrapper(CREATE_VIEW_DELETE_BUTTON_CY)).click();
+      for (let i = 0; i < APP_SETTINGS.length - 2; i += 1) {
+        cy.get(dataCyWrapper(CREATE_VIEW_DELETE_BUTTON_CY)).click();
+      }
 
       // fallback to new question screen if no more data
       cy.get(dataCyWrapper(CREATE_VIEW_DELETE_BUTTON_CY)).should('be.disabled');

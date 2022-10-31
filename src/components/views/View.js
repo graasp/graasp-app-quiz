@@ -27,7 +27,6 @@ const View = () => {
           case PERMISSION_LEVELS.ADMIN:
           case PERMISSION_LEVELS.WRITE:
             return <CreateView />;
-
           case PERMISSION_LEVELS.READ:
           default:
             return <PlayView />;

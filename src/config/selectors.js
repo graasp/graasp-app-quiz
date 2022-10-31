@@ -32,3 +32,9 @@ export const PLAY_VIEW_SLIDER_CY = 'playViewSlider';
 export const PLAY_VIEW_TEXT_INPUT_CY = 'playViewTextInput';
 export const EXPLANATION_CY = 'explanation';
 export const EXPLANATION_PLAY_CY = 'explanationPlay';
+export const buildFillBlanksAnswerId = (id) => `fillBlanksAnswer-${id}`;
+export const buildBlankedTextWordCy = (id) => `fillBlankedTextWord-${id}`;
+export const FILL_BLANKS_CORRECTION_CY = 'fillBlanksCorrection';
+export const buildFillBlanksCorrectionAnswerCy = (id, correctness) =>
+  `fillBlanksCorrectionAnswer-${id}-${correctness}`;
+export const FILL_BLANKS_TEXT_FIELD_CY = 'fillBlanksTextField';

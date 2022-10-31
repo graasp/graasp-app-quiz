@@ -35,6 +35,9 @@ export const computeCorrectness = (data, correctData) => {
         correctData.text.toLowerCase().trim()
       );
     }
+    case QUESTION_TYPES.FILL_BLANKS: {
+      return data?.text === correctData.text;
+    }
     default:
       return false;
   }
@@ -48,6 +51,23 @@ export const getAppDataByQuestionId = (appData, qId) => {
       },
     }
   );
+};
+
+export const areTagsMatching = (text) => {
+  let acc = 0;
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === '<') {
+      acc += 1;
+    } else if (text[i] === '>') {
+      acc -= 1;
+    }
+
+    if (acc < 0 || acc > 1) {
+      return false;
+    }
+  }
+
+  return acc === 0;
 };
 
 export const validateQuestionData = (data) => {
@@ -73,6 +93,16 @@ export const validateQuestionData = (data) => {
       }
       if (data?.choices?.some(({ value }) => !value)) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE;
+      }
+
+      break;
+    case QUESTION_TYPES.FILL_BLANKS:
+      if (!data?.text?.length) {
+        throw FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT;
+      }
+      // matching tags
+      if (!areTagsMatching(data.text)) {
+        throw FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS;
       }
 
       break;

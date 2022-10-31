@@ -21,6 +21,7 @@ import { QuizContext } from '../context/QuizContext';
 import { getAppDataByQuestionId } from '../context/utilities';
 import QuestionTopBar from '../navigation/QuestionTopBar';
 import PlayMultipleChoices from '../play/PlayMultipleChoices';
+import PlayFillInTheBlanks from './PlayFillInTheBlanks';
 import PlaySlider from './PlaySlider';
 import PlayTextInput from './PlayTextInput';
 
@@ -118,6 +119,24 @@ const PlayView = () => {
             case QUESTION_TYPES.TEXT_INPUT: {
               return (
                 <PlayTextInput
+                  values={currentQuestion.data}
+                  response={newResponse.data}
+                  setResponse={(text) => {
+                    setNewResponse({
+                      ...newResponse,
+                      data: {
+                        ...newResponse.data,
+                        text,
+                      },
+                    });
+                  }}
+                  showCorrection={showCorrection}
+                />
+              );
+            }
+            case QUESTION_TYPES.FILL_BLANKS: {
+              return (
+                <PlayFillInTheBlanks
                   values={currentQuestion.data}
                   response={newResponse.data}
                   setResponse={(text) => {

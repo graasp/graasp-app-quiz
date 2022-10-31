@@ -52,10 +52,22 @@ export const SLIDER_APP_SETTING = {
   },
 };
 
+export const FILL_BLANKS_SETTING = {
+  id: 'fill-blanks-id',
+  name: APP_SETTING_NAMES.QUESTION,
+  data: {
+    type: QUESTION_TYPES.FILL_BLANKS,
+    question: 'My fill in the blanks question',
+    text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
+    explanation: 'my explanation for fill in the blanks',
+  },
+};
+
 export const APP_SETTINGS = [
   MULTIPLE_CHOICES_APP_SETTING,
   TEXT_INPUT_APP_SETTING,
   SLIDER_APP_SETTING,
+  FILL_BLANKS_SETTING,
   {
     id: 'order-list-id',
     name: APP_SETTING_NAMES.QUESTION_LIST,
@@ -64,6 +76,7 @@ export const APP_SETTINGS = [
         MULTIPLE_CHOICES_APP_SETTING.id,
         TEXT_INPUT_APP_SETTING.id,
         SLIDER_APP_SETTING.id,
+        FILL_BLANKS_SETTING.id,
       ],
     },
   },
