@@ -13332,6 +13332,7 @@ __metadata:
     react-i18next: 11.17.0
     react-scripts: 5.0.1
     react-toastify: 9.0.3
+    standard-version: 9.5.0
     web-vitals: ^2.1.4
   languageName: unknown
   linkType: soft
