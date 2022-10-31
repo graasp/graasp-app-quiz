@@ -37,7 +37,11 @@
     "build:dev": "env-cmd -f ./.env.dev yarn build",
     "build:prod": "env-cmd -f ./.env.prod yarn build",
     "cypress:open": "env-cmd -f ./.env.local cypress open",
-    "cypress:run": "env-cmd -f ./.env.test cypress run --headless --browser chrome --spec \"cypress/**/*.cy.js\""
+    "cypress:run": "env-cmd -f ./.env.test cypress run --headless --browser chrome --spec \"cypress/**/*.cy.js\"",
+    "release:first": "standard-version -a --first-release",
+    "release:minor": "standard-version -a --release-as minor",
+    "release:major": "standard-version -a --release-as major",
+    "release:patch": "standard-version -a --release-as patch"
   },
   "browserslist": {
     "production": [
