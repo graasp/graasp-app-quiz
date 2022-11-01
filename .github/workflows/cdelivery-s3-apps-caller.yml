@@ -25,6 +25,6 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGE }}
       aws-region: ${{ secrets.APPS_AWS_REGION }}
       aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_APPS_STAGE }}
-      graasp-domain: ${{ secrets.PROD_GRAASP_DOMAIN }}
+      graasp-domain: ${{ secrets.STAGE_GRAASP_DOMAIN }}
       cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_STAGE }}
       sentry-dsn: ${{ secrets.SENTRY_DSN }}
