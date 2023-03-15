@@ -10,7 +10,7 @@ const buildDatabase = (appContext) => ({
       updatedAt: '2022-07-22T12:36:51.741Z',
       data: {
         questionId: 'id4',
-        choices: ['London'],
+        choices: ['Paris'],
       },
       id: '2',
     },

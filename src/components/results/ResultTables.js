@@ -1,85 +1,54 @@
+import {useCallback, useContext, useEffect, useState} from 'react';
+
 import {
   CircularProgress,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
-} from "@mui/material";
-import {hooks} from "../../config/queryClient";
-import {useContext} from "react";
-import {QuizContext} from "../context/QuizContext";
-import {getAppDataByQuestionId, getDataWithId} from "../context/utilities";
+} from '@mui/material';
 
+import { hooks } from '../../config/queryClient';
+import { QuizContext } from '../context/QuizContext';
+import {
+  getAllAppDataByQuestionId,
+  getDataWithId,
+} from '../context/utilities';
+import TableByQuestion from './TableByQuestion';
+
+/**
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const ResultTables = () => {
 
-  const {data: responses, isLoading} = hooks.useAppData();
-  const {order, questions} = useContext(QuizContext);
-
-
-  if (isLoading) {
-    return <CircularProgress/>;
-  }
-
+  const { data: responses, isLoading } = hooks.useAppData();
+  const { order, questions } = useContext(QuizContext);
 
   /**
    * Helper function to get the name of all users that have answered to at least one question.
    *
    * @returns Immutable set of user's memberId
    */
-  const getAllUser = () => {
-    return responses.map(r => r.memberId).toSet();
+  const getAllUsers = useCallback(() => {
+    return responses.map((r) => r.memberId).toSet();
+  }, [responses]);
+
+  const [users, setUsers] = useState(getAllUsers());
+
+  useEffect(() => {
+    setUsers(getAllUsers());
+  }, [responses, getAllUsers]);
+
+  if (isLoading) {
+    return <CircularProgress />;
   }
 
-  /**
-   * Helper function to extract the data of one user for a specific question.
-   *
-   * @param {string} qId The id of the question
-   * @param {string} userMemberId The name of the user
-   * @returns {string} Response for given user and data.
-   */
-  const getQuestionData = (qId, userMemberId) => {
-    const {text, value, choices} = getAppDataByQuestionId(responses.filter(res => res.memberId === userMemberId), qId).data;
-    return text ?? (value ?? choices?.join(", "))
-  }
+  return order.map((qId) => (
+    <TableByQuestion
+      key={qId}
+      userList={users}
+      question={{ id: qId, data: getDataWithId(questions, qId).data }}
+      responses={getAllAppDataByQuestionId(responses, qId)}
+    />
+  ));
+};
 
-  return (
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                Question / User
-              </TableCell>
-              {
-                order.map(qId =>
-                    <TableCell key={qId} align="left">
-                      {getDataWithId(questions, qId)?.data?.question}
-                    </TableCell>)
-              }
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {
-              getAllUser().map(user => (
-                  <TableRow key={user} sx={{'&:last-child td, &:last-child th': {border: 0}}}>
-                    <TableCell component="th" scope="row">
-                      {user}
-                    </TableCell>
-                    {order.map(qId => (
-                        <TableCell align="left">
-                          {getQuestionData(qId, user)}
-                        </TableCell>
-                    ))}
-                  </TableRow>
-              ))
-            }
-          </TableBody>
-        </Table>
-      </TableContainer>
-  )
-}
-
-export default ResultTables
+export default ResultTables;

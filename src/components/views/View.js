@@ -10,8 +10,8 @@ import { CONTEXTS } from '../../config/contexts';
 import i18n from '../../config/i18n';
 import { QuizProvider } from '../context/QuizContext';
 import CreateView from '../create/CreateView';
+import AdminView from '../navigation/AdminView';
 import PlayView from '../play/PlayView';
-import QuizConceptionView from "../navigation/QuizConceptionView";
 
 const View = () => {
   const context = useContext(Context);
@@ -34,7 +34,7 @@ const View = () => {
         }
       }
       default:
-          return <QuizConceptionView />; // TODO To change between player and Teacher View
+        return <AdminView />; // TODO To change between player and Teacher View
     }
   };
 
