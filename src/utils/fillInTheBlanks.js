@@ -67,9 +67,13 @@ export const splitSentence = (text = '', response = '') => {
 };
 
 export const responseToText = (response) => {
-  return response.reduce((acc, word) => {
-    const text =
-      word.type === FILL_BLANKS_TYPE.BLANK ? `<${word.displayed}>` : word.text;
-    return acc + ' ' + text;
-  }, '');
+  return response
+    .reduce((acc, word) => {
+      const text =
+        word.type === FILL_BLANKS_TYPE.BLANK
+          ? `<${word.displayed}>`
+          : word.text;
+      return acc + ' ' + text;
+    }, '')
+    .trim();
 };
