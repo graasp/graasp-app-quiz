@@ -1,15 +1,10 @@
-import {useCallback, useContext, useEffect, useState} from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
-import {
-  CircularProgress,
-} from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 import { hooks } from '../../config/queryClient';
 import { QuizContext } from '../context/QuizContext';
-import {
-  getAllAppDataByQuestionId,
-  getDataWithId,
-} from '../context/utilities';
+import { getAllAppDataByQuestionId, getDataWithId } from '../context/utilities';
 import TableByQuestion from './TableByQuestion';
 
 /**
@@ -18,7 +13,6 @@ import TableByQuestion from './TableByQuestion';
  * @constructor
  */
 const ResultTables = () => {
-
   const { data: responses, isLoading } = hooks.useAppData();
   const { order, questions } = useContext(QuizContext);
 
