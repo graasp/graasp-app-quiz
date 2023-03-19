@@ -47,5 +47,8 @@ export default {
     User: 'User',
     Date: 'Date',
     Correct: 'Correct',
+    'Not yet answered': 'Not yet answered',
+    'sorted descending': 'sorted descending',
+    'sorted ascending': 'sorted ascending',
   },
 };

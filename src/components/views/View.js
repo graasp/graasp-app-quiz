@@ -9,7 +9,6 @@ import { PERMISSION_LEVELS } from '../../config/constants';
 import { CONTEXTS } from '../../config/contexts';
 import i18n from '../../config/i18n';
 import { QuizProvider } from '../context/QuizContext';
-import CreateView from '../create/CreateView';
 import AdminView from '../navigation/AdminView';
 import PlayView from '../play/PlayView';
 
@@ -27,14 +26,14 @@ const View = () => {
         switch (context.get('permission')) {
           case PERMISSION_LEVELS.ADMIN:
           case PERMISSION_LEVELS.WRITE:
-            return <CreateView />;
+            return <AdminView />;
           case PERMISSION_LEVELS.READ:
           default:
             return <PlayView />;
         }
       }
       default:
-        return <AdminView />; // TODO To change between player and Teacher View
+        return <PlayView />;
     }
   };
 

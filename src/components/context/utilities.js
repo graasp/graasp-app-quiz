@@ -54,11 +54,7 @@ export const getAppDataByQuestionId = (appData, qId) => {
 };
 
 export const getAllAppDataByQuestionId = (appData, qId) => {
-  return (
-    appData?.filter(({ data }) => data?.questionId === qId) ?? [
-      { data: { questionId: qId } },
-    ]
-  );
+  return appData?.filter(({ data }) => data?.questionId === qId) ?? [];
 };
 
 export const areTagsMatching = (text) => {

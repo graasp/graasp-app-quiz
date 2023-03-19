@@ -43,5 +43,8 @@ export default {
     User: 'Utilisateur',
     Date: 'Date',
     Correct: 'Correcte',
+    'Not yet answered': 'Pas encore répondu',
+    'sorted descending': 'trié par ordre décroissant',
+    'sorted ascending': 'trié par ordre croissant',
   },
 };
