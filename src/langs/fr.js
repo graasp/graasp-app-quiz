@@ -38,5 +38,10 @@ export default {
     [FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE]:
       'Une réponse ne peut pas être vide',
     [FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY]: 'La réponse ne peut pas être vide',
+    'Create Quiz': 'Créer un quiz',
+    Results: 'Résultats',
+    User: 'Utilisateur',
+    Date: 'Date',
+    Correct: 'Correcte',
   },
 };

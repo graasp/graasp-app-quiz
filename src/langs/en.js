@@ -42,5 +42,10 @@ export default {
     [FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT]: 'The text cannot be empty',
     [FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS]:
       'The text has unmatching "<" and ">"',
+    'Create Quiz': 'Create Quiz',
+    Results: 'Results',
+    User: 'User',
+    Date: 'Date',
+    Correct: 'Correct',
   },
 };

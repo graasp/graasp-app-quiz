@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CancelOutlined, CheckCircleOutlined } from '@mui/icons-material';
 import {
@@ -20,8 +21,6 @@ import { QUESTION_TYPES } from '../../config/constants';
 import { computeCorrectness } from '../context/utilities';
 
 const TableByQuestion = ({ question, userList, responses }) => {
-  // TODO Add translation plugin
-
   /**
    * Object that represent an enum with the possible value for ordering property
    *
@@ -32,6 +31,7 @@ const TableByQuestion = ({ question, userList, responses }) => {
     DESC: 'desc',
   });
 
+  const { t } = useTranslation();
   const [order, setOrder] = useState(Order.ASC);
 
   /**
@@ -116,7 +116,7 @@ const TableByQuestion = ({ question, userList, responses }) => {
    * Helper function to invert the current order when clicking on sorted column header
    */
   const handleRequestSort = () => {
-    const isAsc = order === 'asc';
+    const isAsc = order === Order.ASC;
     setOrder(isAsc ? Order.DESC : Order.ASC);
   };
 
@@ -130,13 +130,13 @@ const TableByQuestion = ({ question, userList, responses }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align={"left"}>
+                <TableCell align={'left'}>
                   <TableSortLabel
                     active={true}
                     direction={order ?? 'asc'}
                     onClick={handleRequestSort}
                   >
-                    {'User'}
+                    {t('User')}
                     {
                       <Box component="span" sx={visuallyHidden}>
                         {order === Order.DESC
@@ -146,9 +146,9 @@ const TableByQuestion = ({ question, userList, responses }) => {
                     }
                   </TableSortLabel>
                 </TableCell>
-                <TableCell align={"left"}>Answer</TableCell>
-                <TableCell align={"left"}>Date</TableCell>
-                <TableCell align={"left"}>Correct</TableCell>
+                <TableCell align={'left'}>{t('Answer')}</TableCell>
+                <TableCell align={'left'}>{t('Date')}</TableCell>
+                <TableCell align={'left'}>{t('Correct')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
