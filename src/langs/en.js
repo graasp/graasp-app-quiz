@@ -50,5 +50,7 @@ export default {
     'Not yet answered': 'Not yet answered',
     'sorted descending': 'sorted descending',
     'sorted ascending': 'sorted ascending',
+    "There isn't any questions to display":
+      "There isn't any questions to display",
   },
 };

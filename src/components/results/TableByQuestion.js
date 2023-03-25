@@ -18,6 +18,15 @@ import Box from '@mui/material/Box';
 import { visuallyHidden } from '@mui/utils';
 
 import { QUESTION_TYPES } from '../../config/constants';
+import {
+  TABLE_BY_QUESTION_CONTAINER_CY,
+  buildTableByQuestionAnswerHeader,
+  buildTableByQuestionCorrectHeader,
+  buildTableByQuestionCy,
+  buildTableByQuestionDateHeader,
+  buildTableByQuestionTableBodyCy,
+  buildTableByQuestionUserHeader,
+} from '../../config/selectors';
 import { Order, getComparator } from '../../utils/tableUtils';
 import { computeCorrectness } from '../context/utilities';
 
@@ -87,9 +96,13 @@ const TableByQuestion = ({ question, userList, responses }) => {
   };
 
   return (
-    <Box sx={{ mb: 8 }}>
+    <Box sx={{ mb: 8 }} data-cy={TABLE_BY_QUESTION_CONTAINER_CY}>
       <Stack direction="column" spacing={4}>
-        <Typography variant="h5" component="h5">
+        <Typography
+          variant="h5"
+          component="h5"
+          data-cy={buildTableByQuestionCy(question.data.question)}
+        >
           {question.data.question}
         </Typography>
         <TableContainer component={Paper}>
@@ -101,6 +114,9 @@ const TableByQuestion = ({ question, userList, responses }) => {
                     active={true}
                     direction={order}
                     onClick={handleRequestSort}
+                    data-cy={buildTableByQuestionUserHeader(
+                      question.data.question
+                    )}
                   >
                     {t('User')}
                     {
@@ -112,13 +128,36 @@ const TableByQuestion = ({ question, userList, responses }) => {
                     }
                   </TableSortLabel>
                 </TableCell>
-                <TableCell align="left">{t('Answer')}</TableCell>
-                <TableCell align="left">{t('Date')}</TableCell>
-                <TableCell align="left">{t('Correct')}</TableCell>
+                <TableCell
+                  align="left"
+                  data-cy={buildTableByQuestionAnswerHeader(
+                    question.data.question
+                  )}
+                >
+                  {t('Answer')}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  data-cy={buildTableByQuestionDateHeader(
+                    question.data.question
+                  )}
+                >
+                  {t('Date')}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  data-cy={buildTableByQuestionCorrectHeader(
+                    question.data.question
+                  )}
+                >
+                  {t('Correct')}
+                </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {userList.sort(getComparator(order)).map((userId) => (
+            <TableBody
+              data-cy={buildTableByQuestionTableBodyCy(question.data.question)}
+            >
+              {userList?.sort(getComparator(order)).map((userId) => (
                 <TableRow
                   key={userId}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

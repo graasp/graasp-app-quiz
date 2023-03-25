@@ -38,3 +38,19 @@ export const FILL_BLANKS_CORRECTION_CY = 'fillBlanksCorrection';
 export const buildFillBlanksCorrectionAnswerCy = (id, correctness) =>
   `fillBlanksCorrectionAnswer-${id}-${correctness}`;
 export const FILL_BLANKS_TEXT_FIELD_CY = 'fillBlanksTextField';
+export const CREATE_VIEW_CONTAINER_CY = 'createViewContainer';
+export const TABLE_BY_QUESTION_CONTAINER_CY = 'tableByQuestionContainer';
+export const NAVIGATION_TAB_CONTAINER_CY = 'navigationTabContainer';
+export const NAVIGATION_CREATE_QUIZ_BUTTON_CY = 'navigationCreateQuizButton';
+export const NAVIGATION_RESULT_BUTTON_CY = 'navigationResultButton';
+export const buildTableByQuestionCy = (qId) => `tableByQuestion-${qId}`;
+export const buildTableByQuestionTableBodyCy = (qId) =>
+  `tableByQuestionTableBody-${qId}`;
+export const buildTableByQuestionUserHeader = (qId) =>
+  `tableByQuestionUserHeader-${qId}`;
+export const buildTableByQuestionAnswerHeader = (qId) =>
+  `tableByQuestionAnswerHeader-${qId}`;
+export const buildTableByQuestionDateHeader = (qId) =>
+  `tableByQuestionDateHeader-${qId}`;
+export const buildTableByQuestionCorrectHeader = (qId) =>
+  `tableByQuestionCorrectHeader-${qId}`;

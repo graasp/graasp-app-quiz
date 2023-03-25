@@ -81,3 +81,70 @@ export const APP_SETTINGS = [
     },
   },
 ];
+
+export const CAPITAL_FRANCE_SETTING = {
+  id: 'id4',
+  data: {
+    question: 'What is the capital of France?',
+    type: QUESTION_TYPES.MULTIPLE_CHOICES,
+    choices: [
+      { value: 'London', isCorrect: false },
+      { value: 'Paris', isCorrect: true },
+      { value: 'New York', isCorrect: false },
+      { value: 'Tokyo', isCorrect: false },
+    ],
+    explanation: 'Paris is the capital of France.',
+  },
+  name: APP_SETTING_NAMES.QUESTION,
+};
+
+export const HAPPINESS_LEVEL_SETTING = {
+  id: 'id5',
+  data: {
+    question: 'How happy are you?',
+    type: QUESTION_TYPES.SLIDER,
+    min: 10,
+    max: 90,
+    value: 20,
+    explanation: 'Go to sleep.',
+  },
+  name: APP_SETTING_NAMES.QUESTION,
+};
+
+export const BABY_CAT_SETTING = {
+  id: 'id6',
+  data: {
+    question: 'What is a baby cat called?',
+    type: QUESTION_TYPES.TEXT_INPUT,
+    text: 'kitten',
+  },
+  name: APP_SETTING_NAMES.QUESTION,
+};
+
+export const FILL_BLANKS_SETTING2 = {
+  id: 'id7',
+  data: {
+    question: 'Fill In The Blanks',
+
+    type: QUESTION_TYPES.FILL_BLANKS,
+    text: 'Lorem <ips um> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
+  },
+  name: APP_SETTING_NAMES.QUESTION,
+};
+
+/**
+ * App settings used to test that question along with the responses are displayed properly in the Result Table By Question
+ */
+export const APP_SETTINGS2 = [
+  CAPITAL_FRANCE_SETTING,
+  HAPPINESS_LEVEL_SETTING,
+  BABY_CAT_SETTING,
+  FILL_BLANKS_SETTING2,
+  {
+    id: 'question-list',
+    data: {
+      list: ['id7', 'id5', 'id6', 'id4'],
+    },
+    name: APP_SETTING_NAMES.QUESTION_LIST,
+  },
+];

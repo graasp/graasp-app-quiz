@@ -4,9 +4,9 @@ import {
   FAILURE_MESSAGES,
   PERMISSION_LEVELS,
   QUESTION_TYPES,
-} from '../../../src/config/constants';
-import { CONTEXTS } from '../../../src/config/contexts';
-import i18n from '../../../src/config/i18n';
+} from '../../../../src/config/constants';
+import { CONTEXTS } from '../../../../src/config/contexts';
+import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
@@ -18,8 +18,8 @@ import {
   SLIDER_MIN_FIELD_CY,
   buildQuestionStepCy,
   dataCyWrapper,
-} from '../../../src/config/selectors';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+} from '../../../../src/config/selectors';
+import { APP_SETTINGS } from '../../../fixtures/appSettings';
 
 const t = i18n.t;
 
