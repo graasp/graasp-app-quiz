@@ -54,3 +54,8 @@ export const buildTableByQuestionDateHeader = (qId) =>
   `tableByQuestionDateHeader-${qId}`;
 export const buildTableByQuestionCorrectHeader = (qId) =>
   `tableByQuestionCorrectHeader-${qId}`;
+export const TABLE_BY_QUESTION_USER_ID_HEADER = 'tableByQuestionUerIdHeader';
+export const TABLE_BY_QUESTION_ANSWER_DATA = 'tableByQuestionAnswerData';
+export const TABLE_BY_QUESTION_DATE_DATA = 'tableByQuestionDateData';
+export const TABLE_BY_QUESTION_CORRECT_ICON = 'tableByQuestionCorrectIcon';
+export const TABLE_BY_QUESTION_ENTRY = 'tableByQuestionEntry';
