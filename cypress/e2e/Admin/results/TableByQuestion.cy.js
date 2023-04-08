@@ -1,15 +1,13 @@
+import { getSettingsByName } from '../../../../src/components/context/utilities';
+import { APP_SETTING_NAMES } from '../../../../src/config/constants';
 import {
-  APP_SETTING_NAMES,
-  PERMISSION_LEVELS,
-} from '../../../../src/config/constants';
-import { CONTEXTS } from '../../../../src/config/contexts';
-import {
-  NAVIGATION_RESULT_BUTTON_CY,
+  AUTO_SCROLLABLE_MENU_LINK_LIST,
   TABLE_BY_QUESTION_ANSWER_DATA_CY,
   TABLE_BY_QUESTION_CORRECT_ICON_CY,
   TABLE_BY_QUESTION_DATE_DATA_CY,
   TABLE_BY_QUESTION_ENTRY_CY,
   TABLE_BY_QUESTION_USER_ID_HEADER_CY,
+  buildAutoScrollableMenuLinkCy,
   buildTableByQuestionAnswerHeaderCy,
   buildTableByQuestionCorrectHeaderCy,
   buildTableByQuestionCy,
@@ -18,25 +16,14 @@ import {
   buildTableByQuestionUserHeaderCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_DATA } from '../../../fixtures/appData';
+import theme from '../../../../src/layout/theme';
+import { APP_DATA, APP_DATA2 } from '../../../fixtures/appData';
 import { APP_SETTINGS2 } from '../../../fixtures/appSettings';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
 
 describe('Table by Question', () => {
   it('Table by Question no app data', () => {
-    cy.setUpApi({
-      database: {
-        appSettings: APP_SETTINGS2,
-      },
-      appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
-      },
-    });
-    cy.visit('/');
-
-    // navigate to the table by question
-    cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2);
 
     APP_SETTINGS2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
       (s, idx) => {
@@ -61,20 +48,7 @@ describe('Table by Question', () => {
    * Test the table by question view for a few question and some user answers
    */
   it('Table by Question correctly display data', () => {
-    cy.setUpApi({
-      database: {
-        appSettings: APP_SETTINGS2,
-        appData: APP_DATA,
-      },
-      appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
-      },
-    });
-    cy.visit('/');
-
-    // navigate to the table by question
-    cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2, APP_DATA);
 
     // Test that each table are correctly displayed
     APP_SETTINGS2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
@@ -101,7 +75,117 @@ describe('Table by Question', () => {
       }
     );
   });
+
+  /**
+   * Test that the link in the left menu are ordered in the same way as the questions
+   */
+  it('Menu on left correctly display question title, in the correct order', () => {
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2, APP_DATA);
+
+    // Retrieved the question ordered as in the APP_SETTINGS2
+    const orderedResponseText = getSettingsByName(
+      APP_SETTINGS2,
+      APP_SETTING_NAMES.QUESTION_LIST
+    )[0].data.list.map((elem) => {
+      return APP_SETTINGS2.find((el) => el.id === elem).data.question;
+    });
+
+    cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST))
+      .children('a')
+      .each((elem, idx) => {
+        cy.wrap(elem).find('p').should('have.text', orderedResponseText[idx]);
+      });
+  });
+
+  /**
+   * Test that when clicking on a link, the table become visible
+   */
+  it('Click on menu goes to question', () => {
+    // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2, APP_DATA2);
+
+    const orderedResponseText = getSettingsByName(
+      APP_SETTINGS2,
+      APP_SETTING_NAMES.QUESTION_LIST
+    )[0].data.list.map((elem) => {
+      return APP_SETTINGS2.find((el) => el.id === elem).data.question;
+    });
+
+    //cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(orderedResponseText[3]))).click()
+
+    orderedResponseText.forEach((elem, i) => {
+      // click on the link
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(elem))).click();
+
+      // check that the table is visible ( allow 1s to fetch it, as it may take some times to scroll there)
+      cy.get(dataCyWrapper(buildTableByQuestionCy(elem))).should('be.visible');
+
+      // check that other element are not visible
+      orderedResponseText.forEach((el, idx) => {
+        if (idx !== i) {
+          cy.get(dataCyWrapper(buildTableByQuestionCy(el))).should(
+            'not.be.visible'
+          );
+        }
+      });
+    });
+  });
+
+  /**
+   * Test that when we scroll, the correct link becomes selected
+   */
+  it('Scroll to table correctly display selected link', () => {
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2, APP_DATA2);
+
+    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
+
+    const orderedResponseText = getSettingsByName(
+      APP_SETTINGS2,
+      APP_SETTING_NAMES.QUESTION_LIST
+    )[0].data.list.map((elem) => {
+      return APP_SETTINGS2.find((el) => el.id === elem).data.question;
+    });
+
+    orderedResponseText.forEach((elem, i) => {
+      // Scroll element into view
+      cy.get(dataCyWrapper(buildTableByQuestionCy(elem))).scrollIntoView();
+
+      // check that the correct link appear as selected
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(elem))).should(
+        'have.css',
+        'border-color',
+        rgbBorderColor
+      );
+
+      // check that other border are transparent
+      orderedResponseText.forEach((el, idx) => {
+        if (idx !== i) {
+          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(el))).should(
+            'have.css',
+            'border-color',
+            'rgba(0, 0, 0, 0)'
+          );
+        }
+      });
+    });
+  });
 });
+
+/**
+ * Helper function to convert a color from hex to rgb
+ * Needed because the color in css property is in rgb, but the primary color is in hex format
+ *
+ * @param hexColor the color in hexadecimal format
+ * @returns {`rgb(${number}, ${number}, ${number})`} The color as rgb definition
+ */
+const hexToRGB = (hexColor) => {
+  const bigint = parseInt(hexColor.slice(1), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+
+  return `rgb(${r}, ${g}, ${b})`;
+};
 
 /**
  * Helper function to test that the header of the table is correct

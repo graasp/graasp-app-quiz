@@ -1,7 +1,29 @@
 import { useEffect, useState } from 'react';
 
-import { Link, Stack, styled, useTheme } from '@mui/material';
+import { Link, Stack, useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
+
+import {
+  AUTO_SCROLLABLE_MENU_LINK_LIST,
+  buildAutoScrollableMenuLinkCy,
+} from '../../config/selectors';
+
+/**
+ * Base style for the links
+ */
+const baseLinkStyle = {
+  color: 'black',
+  maxWidth: '150px',
+  padding: '5px',
+  textDecoration: 'none',
+  borderWidth: '2px',
+  borderRightStyle: 'solid',
+  borderColor: 'transparent',
+  '&:hover': {
+    color: '#878383',
+    borderColor: '#878383',
+  },
+};
 
 /**
  * A component that serve as a menu, that is used to easily navigate between different element of a page,
@@ -13,19 +35,6 @@ import Typography from '@mui/material/Typography';
  * @param {{label: string, link: string}[]} links The list of the elements we want to add to this menu
  */
 const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
-  /**
-   * Restyled Link component to use for question navigation
-   */
-  const QuestionLink = styled(Link)({
-    color: 'black',
-    maxWidth: '150px',
-    padding: '5px',
-    textDecoration: 'none',
-    borderWidth: '2px',
-    borderRightStyle: 'solid',
-    borderColor: 'transparent',
-  });
-
   const theme = useTheme();
   const [highlightedLink, setHighlightedLink] = useState('');
   const [questionVisibility, setQuestionVisibility] = useState({});
@@ -115,18 +124,13 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
   const linkSxProp = (link) => {
     return highlightedLink === link
       ? {
+          ...baseLinkStyle,
           borderColor: theme.palette.primary.main,
           '&:hover': {
             color: theme.palette.primary.main,
           },
         }
-      : {
-          borderColor: 'transparent',
-          '&:hover': {
-            color: '#878383',
-            borderColor: '#878383',
-          },
-        };
+      : baseLinkStyle;
   };
 
   /**
@@ -148,17 +152,18 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
   };
 
   return (
-    <Stack>
+    <Stack data-cy={AUTO_SCROLLABLE_MENU_LINK_LIST}>
       {links.map(({ label, link }) => {
         return (
-          <QuestionLink
+          <Link
             key={label}
             href={`#${link}`}
             sx={() => linkSxProp(link)}
             onClick={() => handleLinkClicked(link)}
+            data-cy={buildAutoScrollableMenuLinkCy(label)}
           >
             <Typography>{label}</Typography>
-          </QuestionLink>
+          </Link>
         );
       })}
     </Stack>
