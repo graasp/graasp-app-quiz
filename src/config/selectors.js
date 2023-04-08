@@ -46,16 +46,16 @@ export const NAVIGATION_RESULT_BUTTON_CY = 'navigationResultButton';
 export const buildTableByQuestionCy = (qId) => `tableByQuestion-${qId}`;
 export const buildTableByQuestionTableBodyCy = (qId) =>
   `tableByQuestionTableBody-${qId}`;
-export const buildTableByQuestionUserHeader = (qId) =>
+export const buildTableByQuestionUserHeaderCy = (qId) =>
   `tableByQuestionUserHeader-${qId}`;
-export const buildTableByQuestionAnswerHeader = (qId) =>
+export const buildTableByQuestionAnswerHeaderCy = (qId) =>
   `tableByQuestionAnswerHeader-${qId}`;
-export const buildTableByQuestionDateHeader = (qId) =>
+export const buildTableByQuestionDateHeaderCy = (qId) =>
   `tableByQuestionDateHeader-${qId}`;
-export const buildTableByQuestionCorrectHeader = (qId) =>
+export const buildTableByQuestionCorrectHeaderCy = (qId) =>
   `tableByQuestionCorrectHeader-${qId}`;
-export const TABLE_BY_QUESTION_USER_ID_HEADER = 'tableByQuestionUerIdHeader';
-export const TABLE_BY_QUESTION_ANSWER_DATA = 'tableByQuestionAnswerData';
-export const TABLE_BY_QUESTION_DATE_DATA = 'tableByQuestionDateData';
-export const TABLE_BY_QUESTION_CORRECT_ICON = 'tableByQuestionCorrectIcon';
-export const TABLE_BY_QUESTION_ENTRY = 'tableByQuestionEntry';
+export const TABLE_BY_QUESTION_USER_ID_HEADER_CY = 'tableByQuestionUerIdHeader';
+export const TABLE_BY_QUESTION_ANSWER_DATA_CY = 'tableByQuestionAnswerData';
+export const TABLE_BY_QUESTION_DATE_DATA_CY = 'tableByQuestionDateData';
+export const TABLE_BY_QUESTION_CORRECT_ICON_CY = 'tableByQuestionCorrectIcon';
+export const TABLE_BY_QUESTION_ENTRY_CY = 'tableByQuestionEntry';

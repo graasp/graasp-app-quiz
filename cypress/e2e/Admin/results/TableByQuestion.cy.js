@@ -5,17 +5,17 @@ import {
 import { CONTEXTS } from '../../../../src/config/contexts';
 import {
   NAVIGATION_RESULT_BUTTON_CY,
-  TABLE_BY_QUESTION_ANSWER_DATA,
-  TABLE_BY_QUESTION_CORRECT_ICON,
-  TABLE_BY_QUESTION_DATE_DATA,
-  TABLE_BY_QUESTION_ENTRY,
-  TABLE_BY_QUESTION_USER_ID_HEADER,
-  buildTableByQuestionAnswerHeader,
-  buildTableByQuestionCorrectHeader,
+  TABLE_BY_QUESTION_ANSWER_DATA_CY,
+  TABLE_BY_QUESTION_CORRECT_ICON_CY,
+  TABLE_BY_QUESTION_DATE_DATA_CY,
+  TABLE_BY_QUESTION_ENTRY_CY,
+  TABLE_BY_QUESTION_USER_ID_HEADER_CY,
+  buildTableByQuestionAnswerHeaderCy,
+  buildTableByQuestionCorrectHeaderCy,
   buildTableByQuestionCy,
-  buildTableByQuestionDateHeader,
+  buildTableByQuestionDateHeaderCy,
   buildTableByQuestionTableBodyCy,
-  buildTableByQuestionUserHeader,
+  buildTableByQuestionUserHeaderCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import { APP_DATA } from '../../../fixtures/appData';
@@ -91,7 +91,7 @@ describe('Table by Question', () => {
 
         // sort descending
         cy.get(
-          dataCyWrapper(buildTableByQuestionUserHeader(s.data.question))
+          dataCyWrapper(buildTableByQuestionUserHeaderCy(s.data.question))
         ).click();
 
         // test header
@@ -110,19 +110,19 @@ describe('Table by Question', () => {
  * @param {string} ascending Suffix to add to User whether it is sorted ascending or descending
  */
 const testTableHeader = (qTitle, ascending) => {
-  cy.get(dataCyWrapper(buildTableByQuestionUserHeader(qTitle))).should(
+  cy.get(dataCyWrapper(buildTableByQuestionUserHeaderCy(qTitle))).should(
     'have.text',
     `User${ascending}`
   );
-  cy.get(dataCyWrapper(buildTableByQuestionAnswerHeader(qTitle))).should(
+  cy.get(dataCyWrapper(buildTableByQuestionAnswerHeaderCy(qTitle))).should(
     'have.text',
     'Answer'
   );
-  cy.get(dataCyWrapper(buildTableByQuestionDateHeader(qTitle))).should(
+  cy.get(dataCyWrapper(buildTableByQuestionDateHeaderCy(qTitle))).should(
     'have.text',
     'Date'
   );
-  cy.get(dataCyWrapper(buildTableByQuestionCorrectHeader(qTitle))).should(
+  cy.get(dataCyWrapper(buildTableByQuestionCorrectHeaderCy(qTitle))).should(
     'have.text',
     'Correct'
   );
@@ -145,18 +145,18 @@ const testTableContent = (qTitle, ascending) => {
    */
   const index = ascending ? (n) => n : (n) => 2 - n;
   cy.get(dataCyWrapper(buildTableByQuestionTableBodyCy(qTitle)))
-    .children(dataCyWrapper(TABLE_BY_QUESTION_ENTRY))
+    .children(dataCyWrapper(TABLE_BY_QUESTION_ENTRY_CY))
     .each((entry, idx) => {
       // Test the header (i.e. the userId)
       cy.wrap(entry)
-        .get(dataCyWrapper(TABLE_BY_QUESTION_USER_ID_HEADER), {
+        .get(dataCyWrapper(TABLE_BY_QUESTION_USER_ID_HEADER_CY), {
           withinSubject: entry,
         })
         .should('have.text', RESPONSES[qTitle][index(idx)].userId);
 
       // Test the answer to the question
       cy.wrap(entry)
-        .get(dataCyWrapper(TABLE_BY_QUESTION_ANSWER_DATA), {
+        .get(dataCyWrapper(TABLE_BY_QUESTION_ANSWER_DATA_CY), {
           withinSubject: entry,
         })
         .should('have.text', RESPONSES[qTitle][index(idx)].fields.answer);
@@ -165,7 +165,7 @@ const testTableContent = (qTitle, ascending) => {
       const date = RESPONSES[qTitle][index(idx)].fields.date;
       if (date !== undefined) {
         cy.wrap(entry)
-          .get(dataCyWrapper(TABLE_BY_QUESTION_DATE_DATA), {
+          .get(dataCyWrapper(TABLE_BY_QUESTION_DATE_DATA_CY), {
             withinSubject: entry,
           })
           .should('have.text', date);
@@ -175,7 +175,7 @@ const testTableContent = (qTitle, ascending) => {
       const icon = RESPONSES[qTitle][index(idx)].fields.icon;
       if (icon !== undefined) {
         cy.wrap(entry)
-          .get(dataCyWrapper(TABLE_BY_QUESTION_CORRECT_ICON), {
+          .get(dataCyWrapper(TABLE_BY_QUESTION_CORRECT_ICON_CY), {
             withinSubject: entry,
           })
           .find('svg')
