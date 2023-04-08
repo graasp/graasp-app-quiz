@@ -19,7 +19,12 @@ import { visuallyHidden } from '@mui/utils';
 
 import { QUESTION_TYPES } from '../../config/constants';
 import {
+  TABLE_BY_QUESTION_ANSWER_DATA,
   TABLE_BY_QUESTION_CONTAINER_CY,
+  TABLE_BY_QUESTION_CORRECT_ICON,
+  TABLE_BY_QUESTION_DATE_DATA,
+  TABLE_BY_QUESTION_ENTRY,
+  TABLE_BY_QUESTION_USER_ID_HEADER,
   buildTableByQuestionAnswerHeader,
   buildTableByQuestionCorrectHeader,
   buildTableByQuestionCy,
@@ -161,19 +166,35 @@ const TableByQuestion = ({ question, userList, responses }) => {
                 <TableRow
                   key={userId}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  data-cy={TABLE_BY_QUESTION_ENTRY}
                 >
                   {getResponseForUserId(userId) ? (
                     <>
-                      <TableCell component="th" scope="row" align="left">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        align="left"
+                        data-cy={TABLE_BY_QUESTION_USER_ID_HEADER}
+                      >
                         {userId}
                       </TableCell>
-                      <TableCell align="left" sx={{ maxWidth: 350 }}>
+                      <TableCell
+                        align="left"
+                        sx={{ maxWidth: 350 }}
+                        data-cy={TABLE_BY_QUESTION_ANSWER_DATA}
+                      >
                         {getResponseDataForUserId(userId)}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell
+                        align="left"
+                        data-cy={TABLE_BY_QUESTION_DATE_DATA}
+                      >
                         {getResponseDateForUserId(userId)}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell
+                        align="left"
+                        data-cy={TABLE_BY_QUESTION_CORRECT_ICON}
+                      >
                         {computeCorrectness(
                           getResponseForUserId(userId)?.data,
                           question.data
@@ -186,10 +207,19 @@ const TableByQuestion = ({ question, userList, responses }) => {
                     </>
                   ) : (
                     <>
-                      <TableCell component="th" scope="row" align="left">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        align="left"
+                        data-cy={TABLE_BY_QUESTION_USER_ID_HEADER}
+                      >
                         {userId}
                       </TableCell>
-                      <TableCell colSpan={3} align="center">
+                      <TableCell
+                        colSpan={3}
+                        align="center"
+                        data-cy={TABLE_BY_QUESTION_ANSWER_DATA}
+                      >
                         {t('Not yet answered')}
                       </TableCell>
                     </>

@@ -5,6 +5,11 @@ import {
 import { CONTEXTS } from '../../../../src/config/contexts';
 import {
   NAVIGATION_RESULT_BUTTON_CY,
+  TABLE_BY_QUESTION_ANSWER_DATA,
+  TABLE_BY_QUESTION_CORRECT_ICON,
+  TABLE_BY_QUESTION_DATE_DATA,
+  TABLE_BY_QUESTION_ENTRY,
+  TABLE_BY_QUESTION_USER_ID_HEADER,
   buildTableByQuestionAnswerHeader,
   buildTableByQuestionCorrectHeader,
   buildTableByQuestionCy,
@@ -15,8 +20,43 @@ import {
 } from '../../../../src/config/selectors';
 import { APP_DATA } from '../../../fixtures/appData';
 import { APP_SETTINGS2 } from '../../../fixtures/appSettings';
+import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
 
 describe('Table by Question', () => {
+  it('Table by Question no app data', () => {
+    cy.setUpApi({
+      database: {
+        appSettings: APP_SETTINGS2,
+      },
+      appContext: {
+        permission: PERMISSION_LEVELS.ADMIN,
+        context: CONTEXTS.BUILDER,
+      },
+    });
+    cy.visit('/');
+
+    // navigate to the table by question
+    cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
+
+    APP_SETTINGS2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
+      (s, idx) => {
+        // check that the title is present
+        cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
+          'have.text',
+          APP_SETTINGS2[idx].data.question
+        );
+
+        // check that the table header is present
+        testTableHeader(s.data.question, 'sorted ascending');
+
+        // check that the body is empty
+        cy.get(
+          dataCyWrapper(buildTableByQuestionTableBodyCy(s.data.question))
+        ).should('be.empty');
+      }
+    );
+  });
+
   /**
    * Test the table by question view for a few question and some user answers
    */
@@ -95,109 +135,51 @@ const testTableHeader = (qTitle, ascending) => {
  * @param {boolean} ascending Whether the current sorting order is ascending or descending
  */
 const testTableContent = (qTitle, ascending) => {
-  const n = ascending ? 0 : 2;
+  /**
+   * Helper function to return the index of the user for which to check the response from,
+   *
+   * The function is different depending on whether the data is sorted ascending or descending,
+   * this is to enforce ordering of entry sorted by user id.
+   *
+   * @param n the current index when iterating through each child
+   */
+  const index = ascending ? (n) => n : (n) => 2 - n;
   cy.get(dataCyWrapper(buildTableByQuestionTableBodyCy(qTitle)))
-    .children('tr')
-    .each((tr, idxTr) => {
-      // test for the header of the row
-      cy.wrap(tr)
-        .children('th')
-        .first()
-        .should('have.text', RESPONSES[qTitle][Math.abs(n - idxTr)].userId);
+    .children(dataCyWrapper(TABLE_BY_QUESTION_ENTRY))
+    .each((entry, idx) => {
+      // Test the header (i.e. the userId)
+      cy.wrap(entry)
+        .get(dataCyWrapper(TABLE_BY_QUESTION_USER_ID_HEADER), {
+          withinSubject: entry,
+        })
+        .should('have.text', RESPONSES[qTitle][index(idx)].userId);
 
-      // test for the content of the row
-      cy.wrap(tr)
-        .children('td')
-        .each((td, idxTd) => {
-          if (idxTd === 2) {
-            cy.wrap(td)
-              .children('svg')
-              .first()
-              .should(
-                'have.attr',
-                'data-testid',
-                RESPONSES[qTitle][Math.abs(n - idxTr)].fields[idxTd]
-              );
-          } else {
-            cy.wrap(td).should(
-              'have.text',
-              RESPONSES[qTitle][Math.abs(n - idxTr)].fields[idxTd]
-            );
-          }
-        });
+      // Test the answer to the question
+      cy.wrap(entry)
+        .get(dataCyWrapper(TABLE_BY_QUESTION_ANSWER_DATA), {
+          withinSubject: entry,
+        })
+        .should('have.text', RESPONSES[qTitle][index(idx)].fields.answer);
+
+      // If the question has been answer test the date
+      const date = RESPONSES[qTitle][index(idx)].fields.date;
+      if (date !== undefined) {
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_QUESTION_DATE_DATA), {
+            withinSubject: entry,
+          })
+          .should('have.text', date);
+      }
+
+      // If the question has been answered test the icon
+      const icon = RESPONSES[qTitle][index(idx)].fields.icon;
+      if (icon !== undefined) {
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_QUESTION_CORRECT_ICON), {
+            withinSubject: entry,
+          })
+          .find('svg')
+          .should('have.attr', 'data-testid', icon);
+      }
     });
-};
-
-/**
- * Array containing the expected data for each table in the table by question page
- */
-const RESPONSES = {
-  // Data first question
-  'Fill In The Blanks': [
-    {
-      userId: 'mock-member-id-1',
-      fields: [
-        'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
-        'Fri Jul 22 2022',
-        'CancelOutlinedIcon',
-      ],
-    },
-    {
-      userId: 'mock-member-id-2',
-      fields: ['Not yet answered'],
-    },
-    {
-      userId: 'mock-member-id-3',
-      fields: [
-        'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ip sum> sem.',
-        'Fri Jul 22 2022',
-        'CancelOutlinedIcon',
-      ],
-    },
-  ],
-  // Data second question
-  'How happy are you?': [
-    {
-      userId: 'mock-member-id-1',
-      fields: ['Not yet answered'],
-    },
-    {
-      userId: 'mock-member-id-2',
-      fields: ['60', 'Fri Jul 22 2022', 'CancelOutlinedIcon'],
-    },
-    {
-      userId: 'mock-member-id-3',
-      fields: ['Not yet answered'],
-    },
-  ],
-  // Data third question
-  'What is a baby cat called?': [
-    {
-      userId: 'mock-member-id-1',
-      fields: ['90', 'Fri Jul 22 2022', 'CancelOutlinedIcon'],
-    },
-    {
-      userId: 'mock-member-id-2',
-      fields: ['Not yet answered'],
-    },
-    {
-      userId: 'mock-member-id-3',
-      fields: ['Not yet answered'],
-    },
-  ],
-  // Data fourth question
-  'What is the capital of France?': [
-    {
-      userId: 'mock-member-id-1',
-      fields: ['Paris', 'Fri Jul 22 2022', 'CheckCircleOutlinedIcon'],
-    },
-    {
-      userId: 'mock-member-id-2',
-      fields: ['Tokyo, London', 'Fri Jul 22 2022', 'CancelOutlinedIcon'],
-    },
-    {
-      userId: 'mock-member-id-3',
-      fields: ['Not yet answered'],
-    },
-  ],
 };
