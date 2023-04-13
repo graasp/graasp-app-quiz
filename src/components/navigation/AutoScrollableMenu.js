@@ -1,29 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { Link, Stack, useTheme } from '@mui/material';
+import { Link, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 
+import { AUTO_SCROLLABLE_HOVER_COLOR } from '../../config/constants';
 import {
   AUTO_SCROLLABLE_MENU_LINK_LIST,
   buildAutoScrollableMenuLinkCy,
 } from '../../config/selectors';
 
 /**
- * Base style for the links
+ * Restyled link
  */
-const baseLinkStyle = {
-  color: 'black',
-  maxWidth: '150px',
-  padding: '5px',
-  textDecoration: 'none',
-  borderWidth: '2px',
-  borderRightStyle: 'solid',
-  borderColor: 'transparent',
-  '&:hover': {
-    color: '#878383',
-    borderColor: '#878383',
-  },
-};
+const AutoScrollableLink = styled(Link)(({ theme, isHighlighted }) => {
+  const condStyle = isHighlighted
+    ? {
+        borderColor: theme.palette.primary.main,
+        '&:hover': {
+          color: theme.palette.primary.main,
+        },
+      }
+    : {
+        borderColor: 'transparent',
+        '&:hover': {
+          color: AUTO_SCROLLABLE_HOVER_COLOR,
+          borderColor: AUTO_SCROLLABLE_HOVER_COLOR,
+        },
+      };
+
+  return {
+    color: theme.palette.text.primary,
+    maxWidth: '150px',
+    padding: theme.spacing(1),
+    textDecoration: 'none',
+    borderWidth: '2px',
+    borderRightStyle: 'solid',
+    ...condStyle,
+  };
+});
 
 /**
  * A component that serve as a menu, that is used to easily navigate between different element of a page,
@@ -35,10 +50,22 @@ const baseLinkStyle = {
  * @param {{label: string, link: string}[]} links The list of the elements we want to add to this menu
  */
 const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
-  const theme = useTheme();
+  /**
+   * Store the link that is currently highlighted
+   */
   const [highlightedLink, setHighlightedLink] = useState('');
+  /**
+   * Store an object that contains every link, and whether they are currently visible or not.
+   * This object will be used to display which link is currently highlighted, whenever this object change
+   * select the first visible link and set it as highlighted
+   */
   const [questionVisibility, setQuestionVisibility] = useState({});
-  const [clickedItem, setClickedItem] = useState({});
+  /**
+   * Store the value of the last clicked value.
+   * Store it in a useRef to avoid registering and unregistering a new callback on the scroll event
+   * every time we click on a link
+   */
+  const clickedLink = useRef(null);
 
   /**
    * register call back to listen for intersection with the received elements
@@ -82,15 +109,15 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
     // store ref, to be able to remove listener when component is destroyed
     const ref = containerRef.current;
     const endScrollCallback = () => {
-      setHighlightedLink(clickedItem.link);
-      setClickedItem({}); // set back the clicked item to null once set
+      setHighlightedLink(clickedLink.current);
+      clickedLink.current = null; // set back the clicked item to null once set
     };
 
-    // If an item as been clicked, 'link' property won't be undefined, and we will set a timeout
+    // If an item as been clicked, the link won't be null, and we will set a timeout
     // to set the clicked link as clicked when scroll end (i.e. we reached the bottom)
     // create a new timeout each 100ms as long as we keep scrolling
     const callback = () => {
-      if (clickedItem.link !== undefined) {
+      if (clickedLink.current !== null) {
         clearTimeout(window?.scrollEndTimer);
         window.scrollEndTimer = setTimeout(endScrollCallback, 100);
       }
@@ -101,7 +128,7 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
     return () => {
       ref.removeEventListener('scroll', callback);
     };
-  }, [containerRef, clickedItem]);
+  }, [containerRef]);
 
   /**
    * update the highlighted link whenever the question visibility changes
@@ -116,24 +143,6 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
   }, [questionVisibility]);
 
   /**
-   * Helper function to set the correct style to the link given link property
-   *
-   * @param {string} link the link associated with this question
-   * @returns The additional css style to apply to thins link
-   */
-  const linkSxProp = (link) => {
-    return highlightedLink === link
-      ? {
-          ...baseLinkStyle,
-          borderColor: theme.palette.primary.main,
-          '&:hover': {
-            color: theme.palette.primary.main,
-          },
-        }
-      : baseLinkStyle;
-  };
-
-  /**
    * Helper function to handle the click on a link
    *
    * We already start a timeout upon clicking, to handle scenario where no scroll is required to
@@ -142,10 +151,10 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
    * @param {string} link The label of the question we clicked on
    */
   const handleLinkClicked = (link) => {
-    setClickedItem({ link });
+    clickedLink.current = link;
     const clickCallback = () => {
       setHighlightedLink(link);
-      setClickedItem({}); // set back the clicked item to null once set
+      clickedLink.current = null; // set back the clicked item to null once set
     };
 
     window.scrollEndTimer = setTimeout(clickCallback, 100);
@@ -155,15 +164,15 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
     <Stack data-cy={AUTO_SCROLLABLE_MENU_LINK_LIST}>
       {links.map(({ label, link }) => {
         return (
-          <Link
+          <AutoScrollableLink
+            isHighlighted={highlightedLink === link}
             key={label}
             href={`#${link}`}
-            sx={() => linkSxProp(link)}
             onClick={() => handleLinkClicked(link)}
             data-cy={buildAutoScrollableMenuLinkCy(label)}
           >
             <Typography>{label}</Typography>
-          </Link>
+          </AutoScrollableLink>
         );
       })}
     </Stack>

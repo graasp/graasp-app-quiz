@@ -30,6 +30,12 @@ const ResultTables = ({ headerElem }) => {
   const { data: responses, isLoading } = hooks.useAppData();
   const { order, questions } = useContext(QuizContext);
   const questionContainerRef = useRef(null);
+
+  /**
+   * Store a reference to every TableByQuestion element
+   *
+   * useRef is used to prevent to component to re-render upon every questionRefs changes
+   */
   const questionRefs = useRef({});
 
   /**
