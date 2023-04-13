@@ -8,6 +8,7 @@ import { Alert, Button, Grid, Typography } from '@mui/material';
 import { QUESTION_TYPES } from '../../config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
+  CREATE_VIEW_CONTAINER_CY,
   CREATE_VIEW_DELETE_BUTTON_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
@@ -67,6 +68,7 @@ const CreateView = () => {
         direction="row"
         alignItems="center"
         justifyContent="center"
+        data-cy={CREATE_VIEW_CONTAINER_CY}
       >
         <Grid item>
           <QuestionTopBar

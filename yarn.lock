@@ -1528,6 +1528,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.21.0":
+  version: 7.21.0
+  resolution: "@babel/runtime@npm:7.21.0"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: 7b33e25bfa9e0e1b9e8828bb61b2d32bdd46b41b07ba7cb43319ad08efc6fda8eb89445193e67d6541814627df0ca59122c0ea795e412b99c5183a0540d338ab
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.12.13, @babel/template@npm:^7.18.6, @babel/template@npm:^7.3.3":
   version: 7.18.6
   resolution: "@babel/template@npm:7.18.6"
@@ -2605,6 +2614,21 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 861231bdfbd3e352b3efa200415c2723e14eee60d7f63d7e5755b84255ca8a9be022ecd2585c5bb1b7b029b4f145f675d5952a46914d03355a03e53881cf949b
+  languageName: node
+  linkType: hard
+
+"@mui/utils@npm:5.11.13":
+  version: 5.11.13
+  resolution: "@mui/utils@npm:5.11.13"
+  dependencies:
+    "@babel/runtime": ^7.21.0
+    "@types/prop-types": ^15.7.5
+    "@types/react-is": ^16.7.1 || ^17.0.0
+    prop-types: ^15.8.1
+    react-is: ^18.2.0
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0
+  checksum: 0f403f2635fd5cd39c013b9d4defa2cf1ecc023e35b8c9866d6123792480dcafe47207e43420c10b0d030e64df31e78adfdb8248e2476da27f07d80ed0b44927
   languageName: node
   linkType: hard
 
@@ -13310,6 +13334,7 @@ __metadata:
     "@graasp/apps-query-client": "github:graasp/graasp-apps-query-client.git"
     "@mui/icons-material": 5.6.2
     "@mui/material": ^5.5.3
+    "@mui/utils": 5.11.13
     "@sentry/react": 7.8.1
     "@sentry/tracing": 7.8.1
     "@testing-library/jest-dom": ^5.16.3
@@ -13729,6 +13754,13 @@ __metadata:
   version: 1.4.2
   resolution: "regenerate@npm:1.4.2"
   checksum: 3317a09b2f802da8db09aa276e469b57a6c0dd818347e05b8862959c6193408242f150db5de83c12c3fa99091ad95fb42a6db2c3329bfaa12a0ea4cbbeb30cb0
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.13.11":
+  version: 0.13.11
+  resolution: "regenerator-runtime@npm:0.13.11"
+  checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
   languageName: node
   linkType: hard
 

@@ -1,8 +1,8 @@
 import {
   DEFAULT_QUESTION_TYPE,
   PERMISSION_LEVELS,
-} from '../../../src/config/constants';
-import { CONTEXTS } from '../../../src/config/contexts';
+} from '../../../../src/config/constants';
+import { CONTEXTS } from '../../../../src/config/contexts';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -13,8 +13,8 @@ import {
   QUESTION_BAR_PREV_CY,
   buildQuestionStepCy,
   dataCyWrapper,
-} from '../../../src/config/selectors';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+} from '../../../../src/config/selectors';
+import { APP_SETTINGS } from '../../../fixtures/appSettings';
 
 describe('Create View', () => {
   it('Empty data', () => {

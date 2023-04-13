@@ -53,6 +53,10 @@ export const getAppDataByQuestionId = (appData, qId) => {
   );
 };
 
+export const getAllAppDataByQuestionId = (appData, qId) => {
+  return appData?.filter(({ data }) => data?.questionId === qId) ?? [];
+};
+
 export const areTagsMatching = (text) => {
   let acc = 0;
   for (let i = 0; i < text.length; i++) {

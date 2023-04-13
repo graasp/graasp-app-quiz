@@ -38,5 +38,15 @@ export default {
     [FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE]:
       'Une réponse ne peut pas être vide',
     [FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY]: 'La réponse ne peut pas être vide',
+    'Create Quiz': 'Créer un quiz',
+    Results: 'Résultats',
+    User: 'Utilisateur',
+    Date: 'Date',
+    Correct: 'Correcte',
+    'Not yet answered': 'Pas encore répondu',
+    'sorted descending': 'trié par ordre décroissant',
+    'sorted ascending': 'trié par ordre croissant',
+    "There isn't any question to display":
+      "Il n'y a aucune questions à afficher",
   },
 };

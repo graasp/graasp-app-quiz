@@ -1,53 +1,50 @@
 import {
   APP_SETTING_NAMES,
-  DEFAULT_QUESTION,
-  FAILURE_MESSAGES,
   PERMISSION_LEVELS,
   QUESTION_TYPES,
-} from '../../../src/config/constants';
-import { CONTEXTS } from '../../../src/config/contexts';
-import i18n from '../../../src/config/i18n';
+} from '../../../../src/config/constants';
+import { CONTEXTS } from '../../../../src/config/contexts';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
-  FILL_BLANKS_TEXT_FIELD_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
+  TEXT_INPUT_FIELD_CY,
   buildQuestionStepCy,
   dataCyWrapper,
-} from '../../../src/config/selectors';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+} from '../../../../src/config/selectors';
+import { APP_SETTINGS } from '../../../fixtures/appSettings';
 
-const t = i18n.t;
-
-const newFillBlanksData = {
+const newTextInputData = {
   question: 'new question text',
-  text: 'My text with <blanks> and more <blanks>',
-  explanation: 'new explanation',
+  text: 'new text',
+  explanation: 'my explanation',
 };
 
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
-    data.type === QUESTION_TYPES.FILL_BLANKS
+    data.type === QUESTION_TYPES.TEXT_INPUT
 );
 
-const fillBlanksQuestion = (
+const fillTextInputQuestion = (
   { text, question, explanation },
-  originalAppSettingData = DEFAULT_QUESTION.data,
   { shouldSave = true } = {}
 ) => {
-  // fill question
+  // fill question if not empty
   cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
   if (question.length) {
     cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).type(question);
   }
 
-  if (text?.length) {
-    cy.get(dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)).clear().type(text);
+  // fill answer if not empty
+  cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).clear();
+  if (text.length) {
+    cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).type(text);
   }
 
+  // fill explanation
   cy.fillExplanation(explanation);
 
   // save
@@ -56,8 +53,8 @@ const fillBlanksQuestion = (
   }
 };
 
-describe('Fill in the Blanks', () => {
-  it('Start with empty data and save question', () => {
+describe('Text Input', () => {
+  it('Start with empty data and save empty response', () => {
     cy.setUpApi({
       database: {
         appSettings: [],
@@ -69,29 +66,33 @@ describe('Fill in the Blanks', () => {
     });
     cy.visit('/');
 
-    cy.switchQuestionType(QUESTION_TYPES.FILL_BLANKS);
+    cy.switchQuestionType(QUESTION_TYPES.TEXT_INPUT);
 
-    // empty text
-    const new1 = { ...newFillBlanksData, text: '' };
-    fillBlanksQuestion(new1, DEFAULT_QUESTION.data);
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT)
-    );
-
-    // faulty text
-    const new2 = {
-      ...newFillBlanksData,
-      text: 'my <faulty< text with <blanks>',
+    // empty answer
+    const new1 = {
+      ...newTextInputData,
+      text: '',
     };
-    fillBlanksQuestion(new2, new1, { shouldSave: false });
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS)
-    );
+    fillTextInputQuestion(new1);
 
-    fillBlanksQuestion(newFillBlanksData, new2);
+    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
+  });
 
+  it('Start with empty data and save question with non-empty response', () => {
+    cy.setUpApi({
+      database: {
+        appSettings: [],
+      },
+      appContext: {
+        permission: PERMISSION_LEVELS.ADMIN,
+        context: CONTEXTS.BUILDER,
+      },
+    });
+    cy.visit('/');
+
+    cy.switchQuestionType(QUESTION_TYPES.TEXT_INPUT);
+
+    fillTextInputQuestion(newTextInputData);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
   });
 
@@ -117,21 +118,22 @@ describe('Fill in the Blanks', () => {
         .should('have.value', data.question);
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        QUESTION_TYPES.FILL_BLANKS
+        QUESTION_TYPES.TEXT_INPUT
       );
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')
         .should('contain', data.question);
 
-      cy.get(`${dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)} textarea`).should(
+      cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).should(
         'have.value',
         data.text
       );
+
       cy.checkExplanationField(data.explanation);
     });
 
     it('Update question', () => {
-      fillBlanksQuestion(newFillBlanksData, data);
+      fillTextInputQuestion(newTextInputData);
 
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
@@ -140,13 +142,14 @@ describe('Fill in the Blanks', () => {
       // question bar should be updated
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')
-        .should('contain', newFillBlanksData.question);
+        .should('contain', newTextInputData.question);
 
-      cy.get(`${dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)} textarea`).should(
+      cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).should(
         'have.value',
-        newFillBlanksData.text
+        newTextInputData.text
       );
-      cy.checkExplanationField(newFillBlanksData.explanation);
+
+      cy.checkExplanationField(newTextInputData.explanation);
     });
   });
 });
