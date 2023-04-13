@@ -46,7 +46,7 @@ export default {
     'Not yet answered': 'Pas encore répondu',
     'sorted descending': 'trié par ordre décroissant',
     'sorted ascending': 'trié par ordre croissant',
-    "There isn't any questions to display":
-      "Il n'y à aucune questions à afficher",
+    "There isn't any question to display":
+      "Il n'y a aucune questions à afficher",
   },
 };

@@ -18,19 +18,19 @@ import {
 } from '../../../../src/config/selectors';
 import theme from '../../../../src/layout/theme';
 import { APP_DATA, APP_DATA2 } from '../../../fixtures/appData';
-import { APP_SETTINGS2 } from '../../../fixtures/appSettings';
+import { APP_SETTINGS_2 } from '../../../fixtures/appSettings';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
 
 describe('Table by Question', () => {
   it('Table by Question no app data', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2);
 
-    APP_SETTINGS2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
+    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
       (s, idx) => {
         // check that the title is present
         cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
           'have.text',
-          APP_SETTINGS2[idx].data.question
+          APP_SETTINGS_2[idx].data.question
         );
 
         // check that the table header is present
@@ -48,14 +48,14 @@ describe('Table by Question', () => {
    * Test the table by question view for a few question and some user answers
    */
   it('Table by Question correctly display data', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2, APP_DATA);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA);
 
     // Test that each table are correctly displayed
-    APP_SETTINGS2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
+    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
       (s, idx) => {
         cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
           'have.text',
-          APP_SETTINGS2[idx].data.question
+          APP_SETTINGS_2[idx].data.question
         );
 
         // test header
@@ -80,14 +80,14 @@ describe('Table by Question', () => {
    * Test that the link in the left menu are ordered in the same way as the questions
    */
   it('Menu on left correctly display question title, in the correct order', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2, APP_DATA);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA);
 
     // Retrieved the question ordered as in the APP_SETTINGS2
     const orderedResponseText = getSettingsByName(
-      APP_SETTINGS2,
+      APP_SETTINGS_2,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      return APP_SETTINGS2.find((el) => el.id === elem).data.question;
+      return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
     });
 
     cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST))
@@ -102,13 +102,13 @@ describe('Table by Question', () => {
    */
   it('Click on menu goes to question', () => {
     // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2, APP_DATA2);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA2);
 
     const orderedResponseText = getSettingsByName(
-      APP_SETTINGS2,
+      APP_SETTINGS_2,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      return APP_SETTINGS2.find((el) => el.id === elem).data.question;
+      return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
     });
 
     //cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(orderedResponseText[3]))).click()
@@ -135,15 +135,15 @@ describe('Table by Question', () => {
    * Test that when we scroll, the correct link becomes selected
    */
   it('Scroll to table correctly display selected link', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS2, APP_DATA2);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA2);
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
     const orderedResponseText = getSettingsByName(
-      APP_SETTINGS2,
+      APP_SETTINGS_2,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      return APP_SETTINGS2.find((el) => el.id === elem).data.question;
+      return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
     });
 
     orderedResponseText.forEach((elem, i) => {

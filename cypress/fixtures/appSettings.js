@@ -121,7 +121,7 @@ export const BABY_CAT_SETTING = {
   name: APP_SETTING_NAMES.QUESTION,
 };
 
-export const FILL_BLANKS_SETTING2 = {
+export const FILL_BLANKS_SETTING_2 = {
   id: 'id7',
   data: {
     question: 'Fill In The Blanks',
@@ -135,11 +135,11 @@ export const FILL_BLANKS_SETTING2 = {
 /**
  * App settings used to test that question along with the responses are displayed properly in the Result Table By Question
  */
-export const APP_SETTINGS2 = [
+export const APP_SETTINGS_2 = [
   CAPITAL_FRANCE_SETTING,
   HAPPINESS_LEVEL_SETTING,
   BABY_CAT_SETTING,
-  FILL_BLANKS_SETTING2,
+  FILL_BLANKS_SETTING_2,
   {
     id: 'question-list',
     data: {

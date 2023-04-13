@@ -166,7 +166,7 @@ const ResultTables = ({ headerElem }) => {
     </Stack>
   ) : (
     <Typography align="center" data-cy={TABLE_BY_QUESTION_CONTAINER_CY}>
-      {t("There isn't any questions to display")}
+      {t("There isn't any question to display")}
     </Typography>
   );
 };
