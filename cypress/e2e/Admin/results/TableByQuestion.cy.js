@@ -19,14 +19,14 @@ import {
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import { APP_DATA } from '../../../fixtures/appData';
-import { APP_SETTINGS2 } from '../../../fixtures/appSettings';
+import { APP_SETTINGS_2 } from '../../../fixtures/appSettings';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
 
 describe('Table by Question', () => {
   it('Table by Question no app data', () => {
     cy.setUpApi({
       database: {
-        appSettings: APP_SETTINGS2,
+        appSettings: APP_SETTINGS_2,
       },
       appContext: {
         permission: PERMISSION_LEVELS.ADMIN,
@@ -38,12 +38,12 @@ describe('Table by Question', () => {
     // navigate to the table by question
     cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
 
-    APP_SETTINGS2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
+    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
       (s, idx) => {
         // check that the title is present
         cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
           'have.text',
-          APP_SETTINGS2[idx].data.question
+          APP_SETTINGS_2[idx].data.question
         );
 
         // check that the table header is present
@@ -63,7 +63,7 @@ describe('Table by Question', () => {
   it('Table by Question correctly display data', () => {
     cy.setUpApi({
       database: {
-        appSettings: APP_SETTINGS2,
+        appSettings: APP_SETTINGS_2,
         appData: APP_DATA,
       },
       appContext: {
@@ -77,11 +77,11 @@ describe('Table by Question', () => {
     cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
 
     // Test that each table are correctly displayed
-    APP_SETTINGS2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
+    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
       (s, idx) => {
         cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
           'have.text',
-          APP_SETTINGS2[idx].data.question
+          APP_SETTINGS_2[idx].data.question
         );
 
         // test header

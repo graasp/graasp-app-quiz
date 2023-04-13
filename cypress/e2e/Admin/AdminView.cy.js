@@ -33,7 +33,7 @@ describe('Admin View', () => {
     testAdminViewBaseLayout();
     cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should(
       'have.text',
-      "There isn't any questions to display"
+      "There isn't any question to display"
     );
   });
 
