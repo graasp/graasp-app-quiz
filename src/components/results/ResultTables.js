@@ -1,11 +1,4 @@
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CircularProgress, Stack } from '@mui/material';
@@ -14,6 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import { hooks } from '../../config/queryClient';
 import { TABLE_BY_QUESTION_CONTAINER_CY } from '../../config/selectors';
+import { useMaxAvailableHeight } from '../../hooks/UseMaxAvailableHeight';
 import { QuizContext } from '../context/QuizContext';
 import { getAllAppDataByQuestionId } from '../context/utilities';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
@@ -30,6 +24,7 @@ const ResultTables = ({ headerElem }) => {
   const { data: responses, isLoading } = hooks.useAppData();
   const { order, questions } = useContext(QuizContext);
   const questionContainerRef = useRef(null);
+  const maxHeight = useMaxAvailableHeight(headerElem);
 
   /**
    * Store a reference to every TableByQuestion element
@@ -59,52 +54,6 @@ const ResultTables = ({ headerElem }) => {
   const [questionData, setQuestionData] = useState(extractQuestionData());
 
   /**
-   * Helper function to calculate the full height of an element, take margin into account
-   */
-  const getElemFullHeight = useCallback((elem) => {
-    const elemStyle = getComputedStyle(elem);
-    return (
-      elem.offsetHeight +
-      parseInt(elemStyle.marginTop) +
-      parseInt(elemStyle.marginBottom)
-    );
-  }, []);
-
-  /**
-   * Stores the height of the header, dynamically updated if it is resized
-   */
-  const headerHeight = useSyncExternalStore(
-    (callback) => {
-      headerElem?.current.addEventListener('resize', callback);
-      return () => headerElem?.current.removeEventListener('resize', callback);
-    },
-    () => {
-      return getElemFullHeight(headerElem?.current ?? 0);
-    }
-  );
-
-  /**
-   * Stores the height of the viewport, dynamically updated if it is resized
-   */
-  const windowHeight = useSyncExternalStore(
-    (callback) => {
-      window.addEventListener('resize', callback);
-      return () => window.removeEventListener('resize', callback);
-    },
-    () => {
-      return window.innerHeight;
-    }
-  );
-
-  /**
-   * Helper function that returns the max height that the displayed component can have
-   * to not overflow out of the window.
-   */
-  const calcMaxHeight = useCallback(() => {
-    return windowHeight - headerHeight - 16; // 16 is just empirically determined to prevent the page scroll bar to display
-  }, [windowHeight, headerHeight]);
-
-  /**
    * Helper function to get the name of all users that have answered to at least one question.
    *
    * @returns Immutable set of user's memberId
@@ -129,7 +78,7 @@ const ResultTables = ({ headerElem }) => {
 
   return order.length > 0 ? (
     <Stack direction="row" spacing={5}>
-      <Box sx={{ maxHeight: calcMaxHeight(), overflow: 'auto' }}>
+      <Box sx={{ maxHeight: maxHeight, overflow: 'auto' }}>
         <AutoScrollableMenu
           links={order.map((qId) => {
             const data = questionData.get(qId).first();
@@ -143,7 +92,7 @@ const ResultTables = ({ headerElem }) => {
         sx={{
           overflow: 'auto',
           width: '100%',
-          height: calcMaxHeight(),
+          height: maxHeight,
           pr: 1,
           scrollBehavior: 'smooth',
         }}
