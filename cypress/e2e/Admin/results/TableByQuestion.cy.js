@@ -111,8 +111,6 @@ describe('Table by Question', () => {
       return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
     });
 
-    //cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(orderedResponseText[3]))).click()
-
     orderedResponseText.forEach((elem, i) => {
       // click on the link
       cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(elem))).click();

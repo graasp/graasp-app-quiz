@@ -7,7 +7,7 @@ import {
   AUTO_SCROLLABLE_MENU_LINK_LIST,
   buildAutoScrollableMenuLinkCy,
 } from '../../config/selectors';
-import { useDynamicHighlightedLink } from '../../hooks/UseDynamicHighilghtedLink';
+import { useDynamicHighlightedLink } from '../../hooks/useDynamicHighilghtedLink';
 
 /**
  * Restyled link

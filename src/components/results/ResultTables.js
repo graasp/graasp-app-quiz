@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import { hooks } from '../../config/queryClient';
 import { TABLE_BY_QUESTION_CONTAINER_CY } from '../../config/selectors';
-import { useMaxAvailableHeight } from '../../hooks/UseMaxAvailableHeight';
+import { useMaxAvailableHeight } from '../../hooks/useMaxAvailableHeight';
 import { QuizContext } from '../context/QuizContext';
 import { getAllAppDataByQuestionId } from '../context/utilities';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';

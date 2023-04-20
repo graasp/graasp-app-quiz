@@ -3,9 +3,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Custom hook to extract the logic behind the highlighted link in the AutoScrollableMenu
  *
- * This hook allow to determine which link should be highlighted based on two inputs.
+ * This hook allow to determine which link should be highlighted based on two inputs, that are computed from within
+ * the hook based on the two hook argument and the `clickOnLink` function.
  *
- *  - The first input is the menu link on which we clicked when we click on one.
+ *  - The first input is the menu link on which we clicked when we click on one link. The clicked link
+ *    will be set by calling the return method `clickOnLink`.
  *  - The second input is the highest object from the `elemRefs` list visible inside the `containerRef` element.
  *    Those element will be observed for changes upon scroll, and `highlightedLink` will be automatically updated.
  *
@@ -115,7 +117,7 @@ export const useDynamicHighlightedLink = (containerRef, elemRefs) => {
    * update the highlighted link whenever the question visibility changes
    */
   useEffect(() => {
-    if (questionVisibility !== undefined) {
+    if (questionVisibility) {
       const e = Object.entries(questionVisibility).find(([, value]) => value);
       if (e !== undefined) {
         setHighlightedLink(e[0]);
