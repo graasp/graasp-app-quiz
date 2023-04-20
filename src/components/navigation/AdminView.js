@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Tab, Tabs } from '@mui/material';
@@ -16,13 +16,18 @@ const AdminView = () => {
   const { t } = useTranslation();
   const [tab, setTab] = useState(0);
 
+  const headerElem = useRef(null);
+
   const TabPanel = ({ children, tab, index }) => {
-    return tab === index && <Box sx={{ pt: 4 }}>{children}</Box>;
+    return tab === index && <Box>{children}</Box>;
   };
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box
+        sx={{ borderBottom: 1, borderColor: 'divider', mb: 4 }}
+        ref={headerElem}
+      >
         <Tabs
           value={tab}
           onChange={(_, v) => setTab(v)}
@@ -39,7 +44,7 @@ const AdminView = () => {
         <CreateView />
       </TabPanel>
       <TabPanel tab={tab} index={1}>
-        <ResultTables />
+        <ResultTables headerElem={headerElem} />
       </TabPanel>
     </Box>
   );
