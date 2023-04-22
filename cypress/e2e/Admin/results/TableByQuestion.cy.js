@@ -1,7 +1,7 @@
 import { getSettingsByName } from '../../../../src/components/context/utilities';
 import { APP_SETTING_NAMES } from '../../../../src/config/constants';
 import {
-  AUTO_SCROLLABLE_MENU_LINK_LIST,
+  AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
   TABLE_BY_QUESTION_ANSWER_DATA_CY,
   TABLE_BY_QUESTION_CORRECT_ICON_CY,
   TABLE_BY_QUESTION_DATE_DATA_CY,
@@ -90,7 +90,7 @@ describe('Table by Question', () => {
       return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
     });
 
-    cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST))
+    cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
       .children('a')
       .each((elem, idx) => {
         cy.wrap(elem).find('p').should('have.text', orderedResponseText[idx]);

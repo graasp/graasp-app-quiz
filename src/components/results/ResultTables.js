@@ -7,10 +7,14 @@ import Typography from '@mui/material/Typography';
 
 import { hooks } from '../../config/queryClient';
 import { TABLE_BY_QUESTION_CONTAINER_CY } from '../../config/selectors';
-import { useMaxAvailableHeight } from '../../hooks/useMaxAvailableHeight';
+import {
+  useMaxAvailableHeightInParent,
+  useMaxAvailableHeightInWindow,
+} from '../../hooks/useMaxAvailableHeight';
 import { QuizContext } from '../context/QuizContext';
 import { getAllAppDataByQuestionId } from '../context/utilities';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
+import ResultTablesMenu from '../navigation/ResultTablesMenu';
 import TableByQuestion from './TableByQuestion';
 
 /**
@@ -24,7 +28,14 @@ const ResultTables = ({ headerElem }) => {
   const { data: responses, isLoading } = hooks.useAppData();
   const { order, questions } = useContext(QuizContext);
   const questionContainerRef = useRef(null);
-  const maxHeight = useMaxAvailableHeight(headerElem);
+  const [tab, setTab] = useState(0);
+  const leftMenuElem = useRef(null);
+  const tableMenuElem = useRef(null);
+  const maxResultViewHeight = useMaxAvailableHeightInWindow(headerElem.current);
+  const maxHeightScrollableMenu = useMaxAvailableHeightInParent(
+    leftMenuElem.current,
+    tableMenuElem.current
+  );
 
   /**
    * Store a reference to every TableByQuestion element
@@ -78,21 +89,28 @@ const ResultTables = ({ headerElem }) => {
 
   return order.length > 0 ? (
     <Stack direction="row" spacing={5}>
-      <Box sx={{ maxHeight: maxHeight, overflow: 'auto' }}>
-        <AutoScrollableMenu
-          links={order.map((qId) => {
-            const data = questionData.get(qId).first();
-            return { label: data.question, link: data.innerLink };
-          })}
-          elemRefs={questionRefs}
-          containerRef={questionContainerRef}
+      <Box sx={{ maxHeight: maxResultViewHeight }} ref={leftMenuElem}>
+        <ResultTablesMenu
+          tab={tab}
+          setTab={setTab}
+          tableMenuElem={tableMenuElem}
         />
+        <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
+          <AutoScrollableMenu
+            links={order.map((qId) => {
+              const data = questionData.get(qId).first();
+              return { label: data.question, link: data.innerLink };
+            })}
+            elemRefs={questionRefs}
+            containerRef={questionContainerRef}
+          />
+        </Box>
       </Box>
       <Box
         sx={{
           overflow: 'auto',
           width: '100%',
-          height: maxHeight,
+          height: maxResultViewHeight,
           pr: 1,
           scrollBehavior: 'smooth',
         }}

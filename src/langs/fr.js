@@ -48,5 +48,7 @@ export default {
     'sorted ascending': 'trié par ordre croissant',
     "There isn't any question to display":
       "Il n'y a aucune questions à afficher",
+    'Results by question': 'Résultats par question',
+    'Results by user': 'Résultatsj par utilisateur',
   },
 };

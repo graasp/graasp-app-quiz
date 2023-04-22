@@ -11,16 +11,13 @@ import {
 } from '../../config/selectors';
 import CreateView from '../create/CreateView';
 import ResultTables from '../results/ResultTables';
+import TabPanel from './TabPanel';
 
 const AdminView = () => {
   const { t } = useTranslation();
   const [tab, setTab] = useState(0);
 
   const headerElem = useRef(null);
-
-  const TabPanel = ({ children, tab, index }) => {
-    return tab === index && <Box>{children}</Box>;
-  };
 
   return (
     <Box sx={{ width: '100%' }}>

@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 
 import { AUTO_SCROLLABLE_HOVER_COLOR } from '../../config/constants';
 import {
-  AUTO_SCROLLABLE_MENU_LINK_LIST,
+  AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
   buildAutoScrollableMenuLinkCy,
 } from '../../config/selectors';
 import { useDynamicHighlightedLink } from '../../hooks/useDynamicHighilghtedLink';
@@ -12,7 +12,9 @@ import { useDynamicHighlightedLink } from '../../hooks/useDynamicHighilghtedLink
 /**
  * Restyled link
  */
-const AutoScrollableLink = styled(Link)(({ theme, isHighlighted }) => {
+const AutoScrollableLink = styled(Link, {
+  shouldForwardProp: (prop) => prop !== 'isHighlighted',
+})(({ theme, isHighlighted }) => {
   const condStyle = isHighlighted
     ? {
         borderColor: theme.palette.primary.main,
@@ -67,7 +69,7 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
   };
 
   return (
-    <Stack data-cy={AUTO_SCROLLABLE_MENU_LINK_LIST}>
+    <Stack data-cy={AUTO_SCROLLABLE_MENU_LINK_LIST_CY}>
       {links.map(({ label, link }) => {
         return (
           <AutoScrollableLink

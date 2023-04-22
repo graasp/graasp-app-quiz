@@ -61,4 +61,9 @@ export const TABLE_BY_QUESTION_CORRECT_ICON_CY = 'tableByQuestionCorrectIcon';
 export const TABLE_BY_QUESTION_ENTRY_CY = 'tableByQuestionEntry';
 export const buildAutoScrollableMenuLinkCy = (label) =>
   `autoScrollableMenuLink-${label}`;
-export const AUTO_SCROLLABLE_MENU_LINK_LIST = 'autoScrollableMenuLinkList';
+export const AUTO_SCROLLABLE_MENU_LINK_LIST_CY = 'autoScrollableMenuLinkList';
+export const RESULT_TABLES_TAB_CONTAINERS_CY = 'resultTablesTabContainers';
+export const RESULT_TABLES_RESULT_BY_QUESTION_BUTTON_CY =
+  'resultTablesResultByQuestionButton';
+export const RESULT_TABLES_RESULT_BY_USER_BUTTON_CY =
+  'resultTablesResultByUserButton';
