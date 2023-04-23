@@ -18,6 +18,9 @@ import ResultTablesMenu from '../navigation/ResultTablesMenu';
 import TabPanel from '../navigation/TabPanel';
 import TableByQuestion from './TableByQuestion';
 
+const TABLE_BY_QUESTION_PANEL_IDX = 0;
+const TABLE_BY_USER_PANEL_IDX = 1;
+
 /**
  * Component that represents the result tables
  *
@@ -29,6 +32,7 @@ const ResultTables = ({ headerElem }) => {
   const { data: responses, isLoading } = hooks.useAppData();
   const { order, questions } = useContext(QuizContext);
   const questionContainerRef = useRef(null);
+  const userContainerRef = useRef(null);
   const [tab, setTab] = useState(0);
   const tableMenuElem = useRef(null);
   const maxResultViewHeight = useMaxAvailableHeightInWindow(headerElem.current);
@@ -43,6 +47,7 @@ const ResultTables = ({ headerElem }) => {
    * useRef is used to prevent to component to re-render upon every questionRefs changes
    */
   const questionRefs = useRef({});
+  const userRefs = useRef({});
 
   /**
    * Helper function to extract the data from the questions
@@ -97,17 +102,28 @@ const ResultTables = ({ headerElem }) => {
             tableMenuElem={tableMenuElem}
           />
           <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
-            <AutoScrollableMenu
-              links={order.map((qId) => {
-                const data = questionData.get(qId).first();
-                return { label: data.question, link: data.innerLink };
-              })}
-              elemRefs={questionRefs}
-              containerRef={questionContainerRef}
-            />
+            <TabPanel tab={tab} index={TABLE_BY_QUESTION_PANEL_IDX}>
+              <AutoScrollableMenu
+                links={order.map((qId) => {
+                  const data = questionData.get(qId).first();
+                  return { label: data.question, link: data.innerLink };
+                })}
+                elemRefs={questionRefs}
+                containerRef={questionContainerRef}
+              />
+            </TabPanel>
+            <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
+              <AutoScrollableMenu
+                links={users.map((uId) => {
+                  return { label: uId, link: uId.replaceAll(' ', '-') };
+                })}
+                elemRefs={userRefs}
+                containerRef={userContainerRef}
+              />
+            </TabPanel>
           </Box>
         </Box>
-        <TabPanel tab={tab} index={0}>
+        <TabPanel tab={tab} index={TABLE_BY_QUESTION_PANEL_IDX}>
           <Box
             sx={{
               overflow: 'auto',
@@ -133,10 +149,27 @@ const ResultTables = ({ headerElem }) => {
             ))}
           </Box>
         </TabPanel>
-        <TabPanel tab={tab} index={1}>
-          <Typography sx={{ width: '100%' }}>
-            Place where the TableByUser will be displayed
-          </Typography>
+        <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
+          <Box
+            sx={{
+              overflow: 'auto',
+              width: '100%',
+              height: maxResultViewHeight,
+              pr: 1,
+              scrollBehavior: 'smooth',
+            }}
+            ref={userContainerRef}
+          >
+            {users.map((uId) => (
+              <Box
+                key={uId}
+                id={uId.replaceAll(' ', '-')}
+                ref={(elm) => (userRefs.current[uId] = elm)}
+              >
+                <Typography>I am {uId}</Typography>
+              </Box>
+            ))}
+          </Box>
         </TabPanel>
       </Stack>
     ) : (
