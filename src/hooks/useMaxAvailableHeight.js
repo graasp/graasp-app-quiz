@@ -43,36 +43,17 @@ export const useMaxAvailableHeightInWindow = (
  * It will dynamically calculate the height of both the above element and the element below, and
  * subtract their height from the height of the parent.
  *
- * @param {HTMLElement} parent The parent element in which we want to place the component
+ * @param {number} parentHeight The height of the parent in which we want to place the component
  * @param {HTMLElement} elemAbove The element above the element, null by default (i.e. no element above)
  * @param {HTMLElement} elemBelow The element below the element, null by default (i.e. no element below)
  * @return {number} the maximum available height for the current element to display without overflow
  */
-export const useMaxAvailableHeightInParent = (
-  parent,
+export const useMaxAvailableHeightWithParentHeight = (
+  parentHeight,
   elemAbove = null,
   elemBelow = null
 ) => {
   const maxHeight = useTotalDynamicHeight(elemAbove, elemBelow);
-
-  /**
-   * Memorise the parent callback function, to avoid subscribing and unsubscribing everytime the
-   * hook is called
-   */
-  const parentCallback = useCallback(
-    (callback) => {
-      parent?.addEventListener('resize', callback);
-      return () => parent?.removeEventListener('resize', callback);
-    },
-    [parent]
-  );
-
-  /**
-   * Stores the height of the parent, dynamically updated if it is resized
-   */
-  const parentHeight = useSyncExternalStore(parentCallback, () => {
-    return getElemFullHeight(parent);
-  });
 
   return parentHeight - maxHeight;
 };

@@ -3,6 +3,7 @@ import { APP_SETTING_NAMES } from '../../../../src/config/constants';
 import {
   AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
   TABLE_BY_QUESTION_ANSWER_DATA_CY,
+  TABLE_BY_QUESTION_CONTAINER_CY,
   TABLE_BY_QUESTION_CORRECT_ICON_CY,
   TABLE_BY_QUESTION_DATE_DATA_CY,
   TABLE_BY_QUESTION_ENTRY_CY,
@@ -25,22 +26,10 @@ describe('Table by Question', () => {
   it('Table by Question no app data', () => {
     cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2);
 
-    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
-      (s, idx) => {
-        // check that the title is present
-        cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
-          'have.text',
-          APP_SETTINGS_2[idx].data.question
-        );
-
-        // check that the table header is present
-        testTableHeader(s.data.question, 'sorted ascending');
-
-        // check that the body is empty
-        cy.get(
-          dataCyWrapper(buildTableByQuestionTableBodyCy(s.data.question))
-        ).should('be.empty');
-      }
+    // if empty app data, then should display that no user have answered the quiz yet
+    cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should(
+      'have.text',
+      'No users answered the quiz yet'
     );
   });
 

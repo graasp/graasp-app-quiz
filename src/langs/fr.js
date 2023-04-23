@@ -49,6 +49,8 @@ export default {
     "There isn't any question to display":
       "Il n'y a aucune questions à afficher",
     'Results by question': 'Résultats par question',
-    'Results by user': 'Résultatsj par utilisateur',
+    'Results by user': 'Résultats par utilisateur',
+    'No users answered the quiz yet':
+      "Aucun utilisateurs n'a répondu au quiz pour l'instant",
   },
 };

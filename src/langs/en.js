@@ -54,5 +54,6 @@ export default {
       "There isn't any question to display",
     'Results by question': 'Results by question',
     'Results by user': 'Results by user',
+    'No users answered the quiz yet': 'No users answered the quiz yet',
   },
 };
