@@ -33,9 +33,7 @@ const View = () => {
         }
       }
       default:
-        // TODO revert before PR
-        //return <PlayView />;
-        return <AdminView />;
+        return <PlayView />;
     }
   };
 
