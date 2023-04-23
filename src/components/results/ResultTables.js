@@ -12,11 +12,15 @@ import {
   useMaxAvailableHeightWithParentHeight,
 } from '../../hooks/useMaxAvailableHeight';
 import { QuizContext } from '../context/QuizContext';
-import { getAllAppDataByQuestionId } from '../context/utilities';
+import {
+  getAllAppDataByQuestionId,
+  getAllAppDataByUserId,
+} from '../context/utilities';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
 import ResultTablesMenu from '../navigation/ResultTablesMenu';
 import TabPanel from '../navigation/TabPanel';
 import TableByQuestion from './TableByQuestion';
+import TableByUser from './TableByUser';
 
 const TABLE_BY_QUESTION_PANEL_IDX = 0;
 const TABLE_BY_USER_PANEL_IDX = 1;
@@ -166,7 +170,11 @@ const ResultTables = ({ headerElem }) => {
                 id={uId.replaceAll(' ', '-')}
                 ref={(elm) => (userRefs.current[uId] = elm)}
               >
-                <Typography>I am {uId}</Typography>
+                <TableByUser
+                  user={uId}
+                  questions={questions}
+                  responses={getAllAppDataByUserId(responses, uId)}
+                />
               </Box>
             ))}
           </Box>
