@@ -35,7 +35,12 @@ import {
 import { Order, getComparator } from '../../utils/tableUtils';
 import { computeCorrectness } from '../context/utilities';
 
-const TableByQuestion = ({ question, userList, responses }) => {
+const TableByQuestion = ({
+  question,
+  userList,
+  responses,
+  handleUserClicked,
+}) => {
   const { t } = useTranslation();
   const [order, setOrder] = useState(Order.ASC);
   const [responsesByUser, setResponsesByUser] = useState(
@@ -174,6 +179,8 @@ const TableByQuestion = ({ question, userList, responses }) => {
                         component="th"
                         scope="row"
                         align="left"
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => handleUserClicked(userId)}
                         data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
                       >
                         {userId}
@@ -211,6 +218,8 @@ const TableByQuestion = ({ question, userList, responses }) => {
                         component="th"
                         scope="row"
                         align="left"
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => handleUserClicked(userId)}
                         data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
                       >
                         {userId}

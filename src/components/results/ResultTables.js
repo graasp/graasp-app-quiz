@@ -44,6 +44,10 @@ const ResultTables = ({ headerElem }) => {
     maxResultViewHeight,
     tableMenuElem.current
   );
+  // Use a ref here, so that we can reset it from the child component (AutoScrollableMenu), without triggering a
+  //re-render. We have to reset it in the child component, so that it only scroll to this value only once
+  const initiallyClickedQuestion = useRef(null);
+  const initiallyClickedUser = useRef(null);
 
   /**
    * Store a reference to every TableByQuestion element
@@ -72,6 +76,31 @@ const ResultTables = ({ headerElem }) => {
   }, [questions]);
 
   const [questionData, setQuestionData] = useState(extractQuestionData());
+
+  /**
+   * Callback that is called when a question is clicked on in the
+   * tableByUser component, so that we are redirected to the corresponding
+   * question in the tableByQuestion
+   */
+  const handleQuestionClicked = useCallback(
+    (qId) => {
+      initiallyClickedQuestion.current = questionData
+        .get(qId)
+        .first().innerLink;
+      setTab(TABLE_BY_QUESTION_PANEL_IDX);
+    },
+    [questionData]
+  );
+
+  /**
+   * Callback that is called when a user is clicked on in the
+   * tableByQuestion component, so that we are redirected to the corresponding
+   * user in the tableByUser
+   */
+  const handleUserClicked = useCallback((qName) => {
+    initiallyClickedUser.current = qName.replaceAll(' ', '-');
+    setTab(TABLE_BY_USER_PANEL_IDX);
+  }, []);
 
   /**
    * Helper function to get the name of all users that have answered to at least one question.
@@ -114,6 +143,7 @@ const ResultTables = ({ headerElem }) => {
                 })}
                 elemRefs={questionRefs}
                 containerRef={questionContainerRef}
+                initialClickedId={initiallyClickedQuestion}
               />
             </TabPanel>
             <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
@@ -123,6 +153,7 @@ const ResultTables = ({ headerElem }) => {
                 })}
                 elemRefs={userRefs}
                 containerRef={userContainerRef}
+                initiallyClickedId={initiallyClickedUser}
               />
             </TabPanel>
           </Box>
@@ -148,6 +179,7 @@ const ResultTables = ({ headerElem }) => {
                   userList={users}
                   question={{ id: qId, data: questionData?.get(qId).first() }}
                   responses={getAllAppDataByQuestionId(responses, qId)}
+                  handleUserClicked={handleUserClicked}
                 />
               </Box>
             ))}
@@ -174,6 +206,7 @@ const ResultTables = ({ headerElem }) => {
                   user={uId}
                   questions={questions}
                   responses={getAllAppDataByUserId(responses, uId)}
+                  handleQuestionClicked={handleQuestionClicked}
                 />
               </Box>
             ))}

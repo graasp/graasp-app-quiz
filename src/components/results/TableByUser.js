@@ -43,8 +43,9 @@ import {
  * @param {string} user The user id
  * @param questions The list of questions in the quiz
  * @param responses The list of responses that the current user gave
+ * @param handleQuestionClicked A callback function that is called when a question is clicked
  */
-const TableByUser = ({ user, questions, responses }) => {
+const TableByUser = ({ user, questions, responses, handleQuestionClicked }) => {
   const { t } = useTranslation();
   const [order, setOrder] = useState(Order.ASC);
 
@@ -209,6 +210,12 @@ const TableByUser = ({ user, questions, responses }) => {
                     component="th"
                     scope="row"
                     align="left"
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      handleQuestionClicked(
+                        questionByName.get(qName).first().id
+                      )
+                    }
                     data-cy={TABLE_BY_USER_QUESTION_NAME_HEADER_CY}
                   >
                     {qName}

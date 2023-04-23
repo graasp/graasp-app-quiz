@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Link, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -49,8 +51,16 @@ const AutoScrollableLink = styled(Link, {
  * @param {MutableRefObject<{}>} elemRefs A list of element stored as an object, those element will be observed
  * for intersection with the parent element
  * @param {{label: string, link: string}[]} links The list of the elements we want to add to this menu
+ * @param {MutableRefObject<null>} initiallyClickedId The id of the link to click on when, wrapped in a `MutableRefObject`
+ * so that we can reset its value directly after having click on it (without triggering a re-render),
+ * so that it doesn't always go there upon re-render
  */
-const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
+const AutoScrollableMenu = ({
+  containerRef,
+  elemRefs,
+  links,
+  initiallyClickedId,
+}) => {
   const [highlightedLink, clickOnLink] = useDynamicHighlightedLink(
     containerRef,
     elemRefs
@@ -67,6 +77,18 @@ const AutoScrollableMenu = ({ containerRef, elemRefs, links }) => {
   const handleLinkClicked = (link) => {
     clickOnLink(link);
   };
+
+  // If there is an initial value, click on it to directly go to it
+  useEffect(() => {
+    if (initiallyClickedId?.current) {
+      document.getElementById(initiallyClickedId.current).scrollIntoView(true);
+      clickOnLink(initiallyClickedId.current);
+
+      // once set, reset the initialClicked to null
+      // as it is a ref, it won't re-render the component
+      initiallyClickedId.current = null;
+    }
+  }, [initiallyClickedId, clickOnLink]);
 
   return (
     <Stack data-cy={AUTO_SCROLLABLE_MENU_LINK_LIST_CY}>
