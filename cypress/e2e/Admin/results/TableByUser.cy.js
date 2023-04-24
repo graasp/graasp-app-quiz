@@ -1,9 +1,11 @@
 import {
+  AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
   TABLE_BY_USER_ANSWER_DATA_CY,
   TABLE_BY_USER_CORRECT_ICON_CY,
   TABLE_BY_USER_DATE_DATA_CY,
   TABLE_BY_USER_ENTRY_CY,
   TABLE_BY_USER_QUESTION_NAME_HEADER_CY,
+  buildAutoScrollableMenuLinkCy,
   buildTableByUserAnswerHeaderCy,
   buildTableByUserCorrectHeaderCy,
   buildTableByUserCy,
@@ -12,9 +14,11 @@ import {
   buildTableByUserTableBodyCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_DATA } from '../../../fixtures/appData';
-import { APP_SETTINGS_2 } from '../../../fixtures/appSettings';
+import theme from '../../../../src/layout/theme';
+import { APP_DATA, APP_DATA_3 } from '../../../fixtures/appData';
+import { APP_SETTINGS_2, APP_SETTINGS_3 } from '../../../fixtures/appSettings';
 import { USER_RESPONSES } from '../../../fixtures/tableByUserResponses';
+import { hexToRGB } from '../../../utils/Color';
 
 describe('Table by User', () => {
   /**
@@ -39,6 +43,85 @@ describe('Table by User', () => {
       testTableHeader(uId, 'sorted descending');
       // test content
       testTableContent(uId, false);
+    });
+  });
+
+  /**
+   * Test that the link in the left menu are ordered in the same way as the users
+   */
+  it('Menu on left correctly display question title, in the correct order', () => {
+    cy.setupResultTablesByUserForCheck(APP_SETTINGS_2, APP_DATA);
+
+    // retrieved the users
+    const orderedUser = [...getUserFromAppData(APP_DATA)];
+
+    cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
+      .children('a')
+      .each((elem, idx) => {
+        cy.wrap(elem).find('p').should('have.text', orderedUser[idx]);
+      });
+  });
+
+  /**
+   * Test that when clicking on a link, the table become visible
+   */
+  it('Click on menu goes to question', () => {
+    // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
+    cy.setupResultTablesByUserForCheck(APP_SETTINGS_3, APP_DATA_3);
+
+    const orderedUser = getUserFromAppData(APP_DATA_3);
+
+    orderedUser.forEach((elem, i) => {
+      // click on the link
+      cy.get(
+        dataCyWrapper(buildAutoScrollableMenuLinkCy(elem.replaceAll(' ', '-')))
+      ).click();
+
+      // check that the table is visible ( allow 1s to fetch it, as it may take some times to scroll there)
+      cy.get(dataCyWrapper(buildTableByUserCy(elem))).should('be.visible');
+
+      // check that other element are not visible
+      orderedUser.forEach((el, idx) => {
+        if (idx !== i) {
+          cy.get(dataCyWrapper(buildTableByUserCy(el))).should(
+            'not.be.visible'
+          );
+        }
+      });
+    });
+  });
+
+  /**
+   * Test that when we scroll, the correct link becomes selected
+   */
+  it('Scroll to table correctly display selected link', () => {
+    cy.setupResultTablesByUserForCheck(APP_SETTINGS_3, APP_DATA_3);
+
+    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
+
+    const orderedUser = getUserFromAppData(APP_DATA_3);
+
+    orderedUser.forEach((elem, i) => {
+      // Scroll element into view
+      cy.get(dataCyWrapper(buildTableByUserCy(elem))).scrollIntoView();
+
+      // check that the correct link appear as selected
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(elem))).should(
+        'have.css',
+        'border-color',
+        rgbBorderColor
+      );
+
+      // check that other border are transparent
+      orderedUser.forEach((el, idx) => {
+        if (idx !== i) {
+          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(el))).should(
+            'have.css',
+            'border-color',
+            'rgba(0, 0, 0, 0)'
+          );
+        }
+      });
     });
   });
 });

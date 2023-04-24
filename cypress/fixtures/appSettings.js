@@ -132,6 +132,42 @@ export const FILL_BLANKS_SETTING_2 = {
   name: APP_SETTING_NAMES.QUESTION,
 };
 
+export const FILL_BLANKS_SETTINGS_3 = {
+  id: 'id9',
+  data: {
+    question: 'Find equation',
+    type: QUESTION_TYPES.FILL_BLANKS,
+    text: '<1> + <1> = <2>',
+  },
+  name: APP_SETTING_NAMES.QUESTION,
+};
+
+export const NAME_EARTH_SATELLITE = {
+  id: 'id10',
+  data: {
+    question: "What is the name of earth's natural satellite",
+    type: QUESTION_TYPES.MULTIPLE_CHOICES,
+    choices: [
+      { value: 'Moon', isCorrect: true },
+      { value: 'Jupiter', isCorrect: false },
+      { value: 'Mars', isCorrect: false },
+    ],
+  },
+  name: APP_SETTING_NAMES.QUESTION,
+};
+
+export const ATOMIC_NUMBER_HE = {
+  id: 'id11',
+  data: {
+    question: 'What is the atomic number of Helium',
+    type: QUESTION_TYPES.SLIDER,
+    min: 1,
+    max: 21,
+    value: 2,
+  },
+  name: APP_SETTING_NAMES.QUESTION,
+};
+
 /**
  * App settings used to test that question along with the responses are displayed properly in the Result Table By Question
  */
@@ -144,6 +180,24 @@ export const APP_SETTINGS_2 = [
     id: 'question-list',
     data: {
       list: ['id7', 'id5', 'id6', 'id4'],
+    },
+    name: APP_SETTING_NAMES.QUESTION_LIST,
+  },
+];
+
+export const APP_SETTINGS_3 = [
+  CAPITAL_FRANCE_SETTING,
+  HAPPINESS_LEVEL_SETTING,
+  BABY_CAT_SETTING,
+  FILL_BLANKS_SETTING_2,
+  FILL_BLANKS_SETTINGS_3,
+  NAME_EARTH_SATELLITE,
+  ATOMIC_NUMBER_HE,
+
+  {
+    id: 'question-list',
+    data: {
+      list: ['id7', 'id5', 'id6', 'id4', 'id9', 'id10', 'id11'],
     },
     name: APP_SETTING_NAMES.QUESTION_LIST,
   },

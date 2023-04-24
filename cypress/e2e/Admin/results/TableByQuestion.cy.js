@@ -18,9 +18,10 @@ import {
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import theme from '../../../../src/layout/theme';
-import { APP_DATA, APP_DATA2 } from '../../../fixtures/appData';
+import { APP_DATA, APP_DATA_2 } from '../../../fixtures/appData';
 import { APP_SETTINGS_2 } from '../../../fixtures/appSettings';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
+import { hexToRGB } from '../../../utils/Color';
 
 describe('Table by Question', () => {
   it('Table by Question no app data', () => {
@@ -91,7 +92,7 @@ describe('Table by Question', () => {
    */
   it('Click on menu goes to question', () => {
     // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA2);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA_2);
 
     const orderedResponseText = getSettingsByName(
       APP_SETTINGS_2,
@@ -122,7 +123,7 @@ describe('Table by Question', () => {
    * Test that when we scroll, the correct link becomes selected
    */
   it('Scroll to table correctly display selected link', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA2);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA_2);
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
@@ -157,22 +158,6 @@ describe('Table by Question', () => {
     });
   });
 });
-
-/**
- * Helper function to convert a color from hex to rgb
- * Needed because the color in css property is in rgb, but the primary color is in hex format
- *
- * @param hexColor the color in hexadecimal format
- * @returns {`rgb(${number}, ${number}, ${number})`} The color as rgb definition
- */
-const hexToRGB = (hexColor) => {
-  const bigint = parseInt(hexColor.slice(1), 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-
-  return `rgb(${r}, ${g}, ${b})`;
-};
 
 /**
  * Helper function to test that the header of the table is correct

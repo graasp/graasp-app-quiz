@@ -84,7 +84,6 @@ const ResultTables = ({ headerElem }) => {
    */
   const handleQuestionClicked = useCallback(
     (qId) => {
-      console.log(`clicked on ${qId}`)
       initiallyClickedQuestion.current = questionData
         .get(qId)
         .first().innerLink;
