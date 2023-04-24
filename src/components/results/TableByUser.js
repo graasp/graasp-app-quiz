@@ -143,7 +143,7 @@ const TableByUser = ({ user, questions, responses, handleQuestionClicked }) => {
    * @returns {string} return the date of answer's last modification
    */
   const getResponseDateForQuestionName = (qName) => {
-    const updatedAt = getResponseDataForQuestionName(qName)?.updatedAt;
+    const updatedAt = getResponseForQuestionName(qName)?.updatedAt;
 
     return updatedAt ? new Date(updatedAt).toDateString() : '';
   };
