@@ -1,5 +1,6 @@
 import { buildDatabase } from '@graasp/apps-query-client';
 
+import app from '../../src/components/App';
 import { PERMISSION_LEVELS } from '../../src/config/constants';
 import { CONTEXTS } from '../../src/config/contexts';
 import {
@@ -7,6 +8,7 @@ import {
   EXPLANATION_CY,
   EXPLANATION_PLAY_CY,
   NAVIGATION_RESULT_BUTTON_CY,
+  RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
   buildQuestionStepCy,
   buildQuestionTypeOption,
   dataCyWrapper,
@@ -89,5 +91,21 @@ Cypress.Commands.add(
 
     // navigate to the table by question
     cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
+  }
+);
+
+/**
+ * Command to set up the test, to test the table by user view
+ *
+ * @param app_settings The app settings to use to initialize the test
+ * @param app_data The app data to use to initialize the test
+ */
+Cypress.Commands.add(
+  'setupResultTablesByUserForCheck',
+  (app_settings, app_data) => {
+    cy.setupResultTablesByQuestionForCheck(app_settings, app_data);
+
+    // navigate to the table by user
+    cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_USER_BUTTON_CY)).click();
   }
 );
