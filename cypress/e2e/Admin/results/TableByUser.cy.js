@@ -1,5 +1,8 @@
+import { getSettingsByName } from '../../../../src/components/context/utilities';
+import { APP_SETTING_NAMES } from '../../../../src/config/constants';
 import {
   AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
+  RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
   TABLE_BY_USER_ANSWER_DATA_CY,
   TABLE_BY_USER_CORRECT_ICON_CY,
   TABLE_BY_USER_DATE_DATA_CY,
@@ -123,6 +126,53 @@ describe('Table by User', () => {
         }
       });
     });
+  });
+
+  it('click on question redirect us to corresponding table by question', () => {
+    cy.setupResultTablesByUserForCheck(APP_SETTINGS_3, APP_DATA_3);
+
+    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
+
+    const fstUser = [...getUserFromAppData(APP_DATA_3)][0];
+
+    // question id for first user
+    const fstUserQIds = APP_DATA_3.filter(
+      (appData) => appData.memberId === fstUser
+    ).map((appData) => appData.data.questionId);
+
+    const questionsNames = getSettingsByName(
+      APP_SETTINGS_3,
+      APP_SETTING_NAMES.QUESTION
+    )
+      .filter((setting) => fstUserQIds.includes(setting.id))
+      .map((setting) => setting.data.question)
+      .sort();
+
+    for (let i = 0; i < questionsNames.length; i++) {
+      // navigate to the table by user
+      cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_USER_BUTTON_CY)).click();
+
+      cy.get(dataCyWrapper(buildTableByUserTableBodyCy(fstUser)))
+        .children(dataCyWrapper(TABLE_BY_USER_ENTRY_CY))
+        .eq(i)
+        .then((elem) => {
+          // click on the user header
+          cy.wrap(elem)
+            .get(dataCyWrapper(TABLE_BY_USER_QUESTION_NAME_HEADER_CY), {
+              withinSubject: elem,
+            })
+            .click();
+
+          cy.get(
+            dataCyWrapper(buildAutoScrollableMenuLinkCy(questionsNames[i]))
+          ).should('have.css', 'border-color', rgbBorderColor);
+
+          //TODO
+          // assert that the correct table is visible
+          // This test doesn't work for now, cypress seems to prevent the document.scrollIntoView behaviour
+          //cy.get(dataCyWrapper(buildTableByQuestionCy(questions[i]))).should('be.visible');
+        });
+    }
   });
 });
 

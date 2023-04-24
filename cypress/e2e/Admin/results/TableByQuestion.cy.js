@@ -2,6 +2,7 @@ import { getSettingsByName } from '../../../../src/components/context/utilities'
 import { APP_SETTING_NAMES } from '../../../../src/config/constants';
 import {
   AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
+  RESULT_TABLES_RESULT_BY_QUESTION_BUTTON_CY,
   TABLE_BY_QUESTION_ANSWER_DATA_CY,
   TABLE_BY_QUESTION_CONTAINER_CY,
   TABLE_BY_QUESTION_CORRECT_ICON_CY,
@@ -156,6 +157,52 @@ describe('Table by Question', () => {
         }
       });
     });
+  });
+
+  it('click on user redirect us to corresponding table by user', () => {
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA_2);
+
+    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
+
+    const fstQuestionId = getSettingsByName(
+      APP_SETTINGS_2,
+      APP_SETTING_NAMES.QUESTION_LIST
+    )[0].data.list[0];
+    const fstQuestion = getSettingsByName(
+      APP_SETTINGS_2,
+      APP_SETTING_NAMES.QUESTION
+    ).find((setting) => setting.id === fstQuestionId).data.question;
+
+    const users = new Set(APP_DATA_2.map((data) => data.memberId));
+    let i = 0;
+    for (const user of users) {
+      // navigate to the table by user
+      cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_QUESTION_BUTTON_CY)).click();
+
+      cy.get(dataCyWrapper(buildTableByQuestionTableBodyCy(fstQuestion)))
+        .children(dataCyWrapper(TABLE_BY_QUESTION_ENTRY_CY))
+        .eq(i)
+        .then((elem) => {
+          // click on the user header
+          cy.wrap(elem)
+            .get(dataCyWrapper(TABLE_BY_QUESTION_USER_ID_HEADER_CY), {
+              withinSubject: elem,
+            })
+            .click();
+
+          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(user))).should(
+            'have.css',
+            'border-color',
+            rgbBorderColor
+          );
+
+          //TODO
+          // assert that the correct table is visible
+          // This test doesn't work for now, cypress seems to prevent the document.scrollIntoView behaviour
+          //cy.get(dataCyWrapper(buildTableByUserCy(user))).should('be.visible');
+        });
+      i++;
+    }
   });
 });
 
