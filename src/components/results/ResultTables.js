@@ -84,6 +84,7 @@ const ResultTables = ({ headerElem }) => {
    */
   const handleQuestionClicked = useCallback(
     (qId) => {
+      console.log(`clicked on ${qId}`)
       initiallyClickedQuestion.current = questionData
         .get(qId)
         .first().innerLink;
@@ -143,7 +144,7 @@ const ResultTables = ({ headerElem }) => {
                 })}
                 elemRefs={questionRefs}
                 containerRef={questionContainerRef}
-                initialClickedId={initiallyClickedQuestion}
+                initiallyClickedId={initiallyClickedQuestion}
               />
             </TabPanel>
             <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
