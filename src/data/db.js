@@ -169,7 +169,19 @@ const buildDatabase = (appContext) => ({
   members: [
     {
       id: appContext.memberId,
-      name: 'mock-member',
+      name: 'George',
+    },
+    {
+      id: 'mock-member-id-1',
+      name: 'James',
+    },
+    {
+      id: 'mock-member-id-2',
+      name: 'Sarah',
+    },
+    {
+      id: 'mock-member-id-3',
+      name: 'Emily',
     },
   ],
 });

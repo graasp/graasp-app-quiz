@@ -40,7 +40,7 @@ import {
 /**
  * Component that represents a table for a given users along with his responses to the quiz
  *
- * @param {string} user The user id
+ * @param {string} user The user name
  * @param questions The list of questions in the quiz
  * @param responses The list of responses that the current user gave
  * @param handleQuestionClicked A callback function that is called when a question is clicked

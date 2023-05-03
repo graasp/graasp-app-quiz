@@ -11,6 +11,11 @@ import {
   useMaxAvailableHeightInWindow,
   useMaxAvailableHeightWithParentHeight,
 } from '../../hooks/useMaxAvailableHeight';
+import {
+  Order,
+  comparatorArrayBySecondElem,
+  getComparator,
+} from '../../utils/tableUtils';
 import { QuizContext } from '../context/QuizContext';
 import {
   getAllAppDataByQuestionId,
@@ -34,6 +39,7 @@ const TABLE_BY_USER_PANEL_IDX = 1;
 const ResultTables = ({ headerElem }) => {
   const { t } = useTranslation();
   const { data: responses, isLoading } = hooks.useAppData();
+  const { data, isContextLoading } = hooks.useAppContext();
   const { order, questions } = useContext(QuizContext);
   const questionContainerRef = useRef(null);
   const userContainerRef = useRef(null);
@@ -113,6 +119,30 @@ const ResultTables = ({ headerElem }) => {
 
   const [users, setUsers] = useState(getAllUsers());
 
+  /**
+   * Helper function to construct a list that will contain a tuple of member id along with its name
+   *
+   * Will only contains member that have answered at least one question
+   * Will directly sort the list ascending to navigate more easily in students
+   *
+   * @returns A list of tuple from user name to its id
+   */
+  const getUserIdToName = useCallback(() => {
+    const listIdNames = data?.members?.reduce((acc, cur) => {
+      return users.contains(cur.id) ? [...acc, [cur.id, cur.name]] : acc;
+    }, []);
+    // directly sort the list descending
+    return listIdNames?.sort(
+      getComparator(Order.ASC, comparatorArrayBySecondElem)
+    );
+  }, [data, users]);
+
+  const [membersIdName, setMembersIdName] = useState(getUserIdToName());
+
+  useEffect(() => {
+    setMembersIdName(getUserIdToName());
+  }, [data, getUserIdToName]);
+
   useEffect(() => {
     setUsers(getAllUsers());
   }, [responses, getAllUsers]);
@@ -121,7 +151,7 @@ const ResultTables = ({ headerElem }) => {
     setQuestionData(extractQuestionData());
   }, [questions, extractQuestionData]);
 
-  if (isLoading) {
+  if (isLoading || isContextLoading) {
     return <CircularProgress />;
   }
 
@@ -148,8 +178,8 @@ const ResultTables = ({ headerElem }) => {
             </TabPanel>
             <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
               <AutoScrollableMenu
-                links={users.map((uId) => {
-                  return { label: uId, link: uId.replaceAll(' ', '-') };
+                links={membersIdName?.map(([uId, uName]) => {
+                  return { label: uName, link: uId.replaceAll(' ', '-') };
                 })}
                 elemRefs={userRefs}
                 containerRef={userContainerRef}
@@ -176,7 +206,7 @@ const ResultTables = ({ headerElem }) => {
                 ref={(elm) => (questionRefs.current[qId] = elm)}
               >
                 <TableByQuestion
-                  userList={users}
+                  userList={membersIdName}
                   question={{ id: qId, data: questionData?.get(qId).first() }}
                   responses={getAllAppDataByQuestionId(responses, qId)}
                   handleUserClicked={handleUserClicked}
@@ -196,14 +226,14 @@ const ResultTables = ({ headerElem }) => {
             }}
             ref={userContainerRef}
           >
-            {users.map((uId) => (
+            {membersIdName?.map(([uId, uName]) => (
               <Box
                 key={uId}
                 id={uId.replaceAll(' ', '-')}
                 ref={(elm) => (userRefs.current[uId] = elm)}
               >
                 <TableByUser
-                  user={uId}
+                  user={uName}
                   questions={questions}
                   responses={getAllAppDataByUserId(responses, uId)}
                   handleQuestionClicked={handleQuestionClicked}
