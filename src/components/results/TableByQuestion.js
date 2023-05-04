@@ -189,7 +189,7 @@ const TableByQuestion = ({
                           onClick={() => handleUserClicked(userId)}
                           data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
                         >
-                          {/*userId*/ userName}
+                          {userName}
                         </TableCell>
                         <TableCell
                           align="left"

@@ -1,4 +1,6 @@
-export const MOCK_USER1_APP_DATA = [
+// I tried to fill all the member IDs by using the reference to "MEMBERS_RESULT_TABLES['mock-member-id-xxx'].id
+// But for some reason, MEMBERS_RESULT_TABLES is undefined by the time the MOCK_USER are created
+export const LIAM_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-1',
@@ -37,7 +39,11 @@ export const MOCK_USER1_APP_DATA = [
   },
 ];
 
-export const MOCK_USER1_APP_DATA_2 = [
+/**
+ * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
+ * and make things easier to test the scroll behaviour
+ */
+export const LIAM_MORE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-1',
@@ -76,7 +82,7 @@ export const MOCK_USER1_APP_DATA_2 = [
   },
 ];
 
-export const MOCK_USER2_APP_DATA = [
+export const HARPER_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-2',
@@ -103,7 +109,11 @@ export const MOCK_USER2_APP_DATA = [
   },
 ];
 
-export const MOCK_USER2_APP_DATA_2 = [
+/**
+ * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
+ * and make things easier to test the scroll behaviour
+ */
+export const HARPER_MORE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-2',
@@ -142,7 +152,7 @@ export const MOCK_USER2_APP_DATA_2 = [
   },
 ];
 
-export const MOCK_USER3_APP_DATA = [
+export const MASON_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-3',
@@ -157,7 +167,11 @@ export const MOCK_USER3_APP_DATA = [
   },
 ];
 
-export const MOCK_USER3_APP_DATA_2 = [
+/**
+ * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
+ * and make things easier to test the scroll behaviour
+ */
+export const MASON_MORE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-3',
@@ -196,7 +210,7 @@ export const MOCK_USER3_APP_DATA_2 = [
   },
 ];
 
-export const MOCK_USER4_APP_DATA = [
+export const ISABELLA_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-4',
@@ -234,7 +248,12 @@ export const MOCK_USER4_APP_DATA = [
     id: '19',
   },
 ];
-export const MOCK_USER4_APP_DATA_2 = [
+
+/**
+ * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
+ * and make things easier to test the scroll behaviour
+ */
+export const ISABELLA_MORE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-4',
@@ -273,7 +292,7 @@ export const MOCK_USER4_APP_DATA_2 = [
   },
 ];
 
-export const MOCK_USER5_APP_DATA = [
+export const ETHAN_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-5',
@@ -312,7 +331,11 @@ export const MOCK_USER5_APP_DATA = [
   },
 ];
 
-export const MOCK_USER5_APP_DATA_2 = [
+/**
+ * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
+ * and make things easier to test the scroll behaviour
+ */
+export const ETHAN_MORE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-5',
@@ -351,7 +374,7 @@ export const MOCK_USER5_APP_DATA_2 = [
   },
 ];
 
-export const MOCK_USER6_APP_DATA = [
+export const MIA_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-6',
@@ -390,7 +413,11 @@ export const MOCK_USER6_APP_DATA = [
   },
 ];
 
-export const MOCK_USER6_APP_DATA_2 = [
+/**
+ * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
+ * and make things easier to test the scroll behaviour
+ */
+export const MIA_MORE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-6',
@@ -429,7 +456,7 @@ export const MOCK_USER6_APP_DATA_2 = [
   },
 ];
 
-export const MOCK_USER7_APP_DATA = [
+export const ALEXANDER_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-7',
@@ -468,7 +495,11 @@ export const MOCK_USER7_APP_DATA = [
   },
 ];
 
-export const MOCK_USER7_APP_DATA_2 = [
+/**
+ * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
+ * and make things easier to test the scroll behaviour
+ */
+export const ALEXANDER_MORE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-7',
@@ -507,7 +538,7 @@ export const MOCK_USER7_APP_DATA_2 = [
   },
 ];
 
-export const MOCK_USER8_APP_DATA = [
+export const CHLOE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-8',
@@ -546,7 +577,11 @@ export const MOCK_USER8_APP_DATA = [
   },
 ];
 
-export const MOCK_USER8_APP_DATA_2 = [
+/**
+ * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
+ * and make things easier to test the scroll behaviour
+ */
+export const CHLOE_MORE_RESPONSES = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-8',
@@ -585,38 +620,48 @@ export const MOCK_USER8_APP_DATA_2 = [
   },
 ];
 
+/**
+ * Basic app data(i.e. user responses) used to test that display is good in table by user and by questions
+ */
 export const APP_DATA = [
-  ...MOCK_USER1_APP_DATA,
-  ...MOCK_USER2_APP_DATA,
-  ...MOCK_USER3_APP_DATA,
+  ...LIAM_RESPONSES,
+  ...HARPER_RESPONSES,
+  ...MASON_RESPONSES,
 ];
 
+/**
+ * App data with more user to make te table bigger, and make it easier to test the scroll behaviour in
+ * table by question
+ */
 export const APP_DATA_2 = [
-  ...MOCK_USER1_APP_DATA,
-  ...MOCK_USER2_APP_DATA,
-  ...MOCK_USER3_APP_DATA,
-  ...MOCK_USER4_APP_DATA,
-  ...MOCK_USER5_APP_DATA,
-  ...MOCK_USER6_APP_DATA,
-  ...MOCK_USER7_APP_DATA,
-  ...MOCK_USER8_APP_DATA,
+  ...LIAM_RESPONSES,
+  ...HARPER_RESPONSES,
+  ...MASON_RESPONSES,
+  ...ISABELLA_RESPONSES,
+  ...ETHAN_RESPONSES,
+  ...MIA_RESPONSES,
+  ...ALEXANDER_RESPONSES,
+  ...CHLOE_RESPONSES,
 ];
 
+/**
+ * App data with more users and responses, to make it easier to test the scroll behaviour in table by user
+ */
 export const APP_DATA_3 = [
-  ...MOCK_USER1_APP_DATA,
-  ...MOCK_USER1_APP_DATA_2,
-  ...MOCK_USER2_APP_DATA,
-  ...MOCK_USER2_APP_DATA_2,
-  ...MOCK_USER3_APP_DATA,
-  ...MOCK_USER3_APP_DATA_2,
-  ...MOCK_USER4_APP_DATA,
-  ...MOCK_USER4_APP_DATA_2,
-  ...MOCK_USER5_APP_DATA,
-  ...MOCK_USER5_APP_DATA_2,
-  ...MOCK_USER6_APP_DATA,
-  ...MOCK_USER6_APP_DATA_2,
-  ...MOCK_USER7_APP_DATA,
-  ...MOCK_USER7_APP_DATA_2,
-  ...MOCK_USER8_APP_DATA,
-  ...MOCK_USER8_APP_DATA_2,
+  ...LIAM_RESPONSES,
+  ...LIAM_MORE_RESPONSES,
+  ...HARPER_RESPONSES,
+  ...HARPER_MORE_RESPONSES,
+  ...MASON_RESPONSES,
+  ...MASON_MORE_RESPONSES,
+  ...ISABELLA_RESPONSES,
+  ...ISABELLA_MORE_RESPONSES,
+  ...ETHAN_RESPONSES,
+  ...ETHAN_MORE_RESPONSES,
+  ...MIA_RESPONSES,
+  ...MIA_MORE_RESPONSES,
+  ...ALEXANDER_RESPONSES,
+  ...ALEXANDER_MORE_RESPONSES,
+  ...CHLOE_RESPONSES,
+  ...CHLOE_MORE_RESPONSES,
 ];

@@ -167,7 +167,7 @@ const ResultTables = ({ headerElem }) => {
           <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
             <TabPanel tab={tab} index={TABLE_BY_QUESTION_PANEL_IDX}>
               <AutoScrollableMenu
-                links={order.map((qId) => {
+                links={order?.map((qId) => {
                   const data = questionData.get(qId).first();
                   return { label: data.question, link: data.innerLink };
                 })}
@@ -199,7 +199,7 @@ const ResultTables = ({ headerElem }) => {
             }}
             ref={questionContainerRef}
           >
-            {order.map((qId) => (
+            {order?.map((qId) => (
               <Box
                 key={qId}
                 id={questionData?.get(qId).first().innerLink}

@@ -92,7 +92,7 @@ const AutoScrollableMenu = ({
 
   return (
     <Stack data-cy={AUTO_SCROLLABLE_MENU_LINK_LIST_CY}>
-      {links.map(({ label, link }) => {
+      {links?.map(({ label, link }) => {
         return (
           <AutoScrollableLink
             isHighlighted={highlightedLink === link}

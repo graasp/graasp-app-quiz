@@ -33,7 +33,7 @@ const View = () => {
         }
       }
       default:
-        return <PlayView />;
+        return <AdminView />;
     }
   };
 

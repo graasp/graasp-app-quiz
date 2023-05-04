@@ -1,6 +1,5 @@
 import { buildDatabase } from '@graasp/apps-query-client';
 
-import app from '../../src/components/App';
 import { PERMISSION_LEVELS } from '../../src/config/constants';
 import { CONTEXTS } from '../../src/config/contexts';
 import {
@@ -15,16 +14,19 @@ import {
 } from '../../src/config/selectors';
 import { MEMBERS } from '../fixtures/members';
 
-Cypress.Commands.add('setUpApi', ({ database = {}, appContext } = {}) => {
-  // mock api and database
-  Cypress.on('window:before:load', (win) => {
-    win.database = buildDatabase({
-      members: Object.values(MEMBERS),
-      ...database,
+Cypress.Commands.add(
+  'setUpApi',
+  ({ database = {}, appContext, members = MEMBERS } = {}) => {
+    // mock api and database
+    Cypress.on('window:before:load', (win) => {
+      win.database = buildDatabase({
+        members: Object.values(members),
+        ...database,
+      });
+      win.appContext = appContext;
     });
-    win.appContext = appContext;
-  });
-});
+  }
+);
 
 Cypress.Commands.add('switchQuestionType', (type) => {
   // mock api and database
@@ -76,7 +78,7 @@ Cypress.Commands.add('fillExplanation', (explanation) => {
  */
 Cypress.Commands.add(
   'setupResultTablesByQuestionForCheck',
-  (app_settings, app_data) => {
+  (app_settings, app_data, members) => {
     cy.setUpApi({
       database: {
         appSettings: app_settings,
@@ -86,11 +88,16 @@ Cypress.Commands.add(
         permission: PERMISSION_LEVELS.ADMIN,
         context: CONTEXTS.BUILDER,
       },
+      members,
     });
     cy.visit('/');
 
     // navigate to the table by question
     cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
+
+    // TODO Cypress doesn't wait long enough, and the members are not fully retrieved, but it freeze the
+    //  render like that, and thus the AutoScrollablePanel is not fully initialized
+    cy.wait(2000);
   }
 );
 
@@ -102,9 +109,12 @@ Cypress.Commands.add(
  */
 Cypress.Commands.add(
   'setupResultTablesByUserForCheck',
-  (app_settings, app_data) => {
-    cy.setupResultTablesByQuestionForCheck(app_settings, app_data);
+  (app_settings, app_data, members) => {
+    cy.setupResultTablesByQuestionForCheck(app_settings, app_data, members);
 
+    // TODO Cypress doesn't wait long enough, and the members are not fully retrieved, but it freeze the
+    //  render like that, and thus the AutoScrollablePanel is not fully initialized
+    cy.wait(2000);
     // navigate to the table by user
     cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_USER_BUTTON_CY)).click();
   }

@@ -21,6 +21,7 @@ import {
 import theme from '../../../../src/layout/theme';
 import { APP_DATA, APP_DATA_2 } from '../../../fixtures/appData';
 import { APP_SETTINGS_2 } from '../../../fixtures/appSettings';
+import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
 import { hexToRGB } from '../../../utils/Color';
 
@@ -39,7 +40,11 @@ describe('Table by Question', () => {
    * Test the table by question view for a few question and some user answers
    */
   it('Table by Question correctly display data', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA,
+      MEMBERS_RESULT_TABLES
+    );
 
     // Test that each table are correctly displayed
     APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
@@ -71,7 +76,11 @@ describe('Table by Question', () => {
    * Test that the link in the left menu are ordered in the same way as the questions
    */
   it('Menu on left correctly display question title, in the correct order', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA,
+      MEMBERS_RESULT_TABLES
+    );
 
     // Retrieved the question ordered as in the APP_SETTINGS2
     const orderedResponseText = getSettingsByName(
@@ -93,7 +102,11 @@ describe('Table by Question', () => {
    */
   it('Click on menu goes to question', () => {
     // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA_2);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA_2,
+      MEMBERS_RESULT_TABLES
+    );
 
     const orderedResponseText = getSettingsByName(
       APP_SETTINGS_2,
@@ -124,7 +137,11 @@ describe('Table by Question', () => {
    * Test that when we scroll, the correct link becomes selected
    */
   it('Scroll to table correctly display selected link', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA_2);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA_2,
+      MEMBERS_RESULT_TABLES
+    );
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
@@ -160,7 +177,11 @@ describe('Table by Question', () => {
   });
 
   it('click on user redirect us to corresponding table by user', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA_2);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA_2,
+      MEMBERS_RESULT_TABLES
+    );
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
@@ -173,9 +194,10 @@ describe('Table by Question', () => {
       APP_SETTING_NAMES.QUESTION
     ).find((setting) => setting.id === fstQuestionId).data.question;
 
-    const users = new Set(APP_DATA_2.map((data) => data.memberId));
-    let i = 0;
-    for (const user of users) {
+    const users = [...new Set(APP_DATA_2.map((data) => data.memberId))]
+      .map((id) => MEMBERS_RESULT_TABLES[id].name)
+      .sort();
+    for (const [i, user] of users.entries()) {
       // navigate to the table by user
       cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_QUESTION_BUTTON_CY)).click();
 
@@ -190,18 +212,18 @@ describe('Table by Question', () => {
             })
             .click();
 
+          // SHOULD FIND NAME NOT MEMBER-ID
           cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(user))).should(
             'have.css',
             'border-color',
             rgbBorderColor
           );
 
-          //TODO
           // assert that the correct table is visible
           // This test doesn't work for now, cypress seems to prevent the document.scrollIntoView behaviour
+          // comment it for now
           //cy.get(dataCyWrapper(buildTableByUserCy(user))).should('be.visible');
         });
-      i++;
     }
   });
 });

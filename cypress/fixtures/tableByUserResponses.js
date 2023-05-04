@@ -1,57 +1,65 @@
+import { IconTestText } from '../utils/IconTestText';
+import { HARPER_RESPONSES, LIAM_RESPONSES, MASON_RESPONSES } from './appData';
+import {
+  BABY_CAT_SETTING,
+  CAPITAL_FRANCE_SETTING,
+  FILL_BLANKS_SETTING_2,
+  HAPPINESS_LEVEL_SETTING,
+} from './appSettings';
+import { MEMBERS_RESULT_TABLES } from './members';
+
 export const USER_RESPONSES = {
-  'mock-member-id-1': [
+  [MEMBERS_RESULT_TABLES['mock-member-id-1'].id]: [
     {
-      qName: 'Fill In The Blanks',
+      qName: FILL_BLANKS_SETTING_2.data.question,
       fields: {
-        answer:
-          'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
-        date: 'Fri Jul 22 2022',
-        icon: 'CancelOutlinedIcon',
+        answer: LIAM_RESPONSES[2].data.text,
+        date: new Date(LIAM_RESPONSES[2].updatedAt).toDateString(),
+        icon: IconTestText.WRONG,
       },
     },
     {
-      qName: 'What is a baby cat called?',
+      qName: BABY_CAT_SETTING.data.question,
       fields: {
-        answer: '90',
-        date: 'Fri Jul 22 2022',
-        icon: 'CancelOutlinedIcon',
+        answer: LIAM_RESPONSES[1].data.text,
+        date: new Date(LIAM_RESPONSES[1].updatedAt).toDateString(),
+        icon: IconTestText.WRONG,
       },
     },
     {
-      qName: 'What is the capital of France?',
+      qName: CAPITAL_FRANCE_SETTING.data.question,
       fields: {
-        answer: 'Paris',
-        date: 'Fri Jul 22 2022',
-        icon: 'CheckCircleOutlinedIcon',
-      },
-    },
-  ],
-  'mock-member-id-2': [
-    {
-      qName: 'How happy are you?',
-      fields: {
-        answer: '60',
-        date: 'Fri Jul 22 2022',
-        icon: 'CancelOutlinedIcon',
-      },
-    },
-    {
-      qName: 'What is the capital of France?',
-      fields: {
-        answer: 'Tokyo, London',
-        date: 'Fri Jul 22 2022',
-        icon: 'CancelOutlinedIcon',
+        answer: LIAM_RESPONSES[0].data.choices[0],
+        date: new Date(LIAM_RESPONSES[0].updatedAt).toDateString(),
+        icon: IconTestText.CORRECT,
       },
     },
   ],
-  'mock-member-id-3': [
+  [MEMBERS_RESULT_TABLES['mock-member-id-2'].id]: [
     {
-      qName: 'Fill In The Blanks',
+      qName: HAPPINESS_LEVEL_SETTING.data.question,
       fields: {
-        answer:
-          'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ip sum> sem.',
-        date: 'Fri Jul 22 2022',
-        icon: 'CancelOutlinedIcon',
+        answer: HARPER_RESPONSES[0].data.value,
+        date: new Date(HARPER_RESPONSES[0].updatedAt).toDateString(),
+        icon: IconTestText.WRONG,
+      },
+    },
+    {
+      qName: CAPITAL_FRANCE_SETTING.data.question,
+      fields: {
+        answer: HARPER_RESPONSES[1].data.choices.join(', '),
+        date: new Date(HARPER_RESPONSES[1].updatedAt).toDateString(),
+        icon: IconTestText.WRONG,
+      },
+    },
+  ],
+  [MEMBERS_RESULT_TABLES['mock-member-id-3'].id]: [
+    {
+      qName: FILL_BLANKS_SETTING_2.data.question,
+      fields: {
+        answer: MASON_RESPONSES[0].data.text,
+        date: new Date(MASON_RESPONSES[0].updatedAt).toDateString(),
+        icon: IconTestText.WRONG,
       },
     },
   ],

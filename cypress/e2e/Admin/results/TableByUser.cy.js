@@ -18,8 +18,14 @@ import {
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import theme from '../../../../src/layout/theme';
+import {
+  Order,
+  comparatorArrayBySecondElem,
+  getComparator,
+} from '../../../../src/utils/tableUtils';
 import { APP_DATA, APP_DATA_3 } from '../../../fixtures/appData';
 import { APP_SETTINGS_2, APP_SETTINGS_3 } from '../../../fixtures/appSettings';
+import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { USER_RESPONSES } from '../../../fixtures/tableByUserResponses';
 import { hexToRGB } from '../../../utils/Color';
 
@@ -28,24 +34,31 @@ describe('Table by User', () => {
    * Test the table by user view for a few question and some user answers
    */
   it('Table by Question correctly display data', () => {
-    cy.setupResultTablesByUserForCheck(APP_SETTINGS_2, APP_DATA);
+    cy.setupResultTablesByUserForCheck(
+      APP_SETTINGS_2,
+      APP_DATA,
+      MEMBERS_RESULT_TABLES
+    );
 
     // Test that each table are correctly displayed
-    getUserFromAppData(APP_DATA).forEach((uId) => {
-      cy.get(dataCyWrapper(buildTableByUserCy(uId))).should('have.text', uId);
+    getUserNamesFromAppData(APP_DATA).forEach(([uId, uName]) => {
+      cy.get(dataCyWrapper(buildTableByUserCy(uName))).should(
+        'have.text',
+        uName
+      );
 
       // test header
-      testTableHeader(uId, 'sorted ascending');
+      testTableHeader(uName, 'sorted ascending');
       // test content
-      testTableContent(uId, true);
+      testTableContent(uName, uId, true);
 
       // sort descending
-      cy.get(dataCyWrapper(buildTableByUserQuestionHeaderCy(uId))).click();
+      cy.get(dataCyWrapper(buildTableByUserQuestionHeaderCy(uName))).click();
 
       // test header
-      testTableHeader(uId, 'sorted descending');
+      testTableHeader(uName, 'sorted descending');
       // test content
-      testTableContent(uId, false);
+      testTableContent(uName, uId, false);
     });
   });
 
@@ -53,15 +66,19 @@ describe('Table by User', () => {
    * Test that the link in the left menu are ordered in the same way as the users
    */
   it('Menu on left correctly display question title, in the correct order', () => {
-    cy.setupResultTablesByUserForCheck(APP_SETTINGS_2, APP_DATA);
+    cy.setupResultTablesByUserForCheck(
+      APP_SETTINGS_2,
+      APP_DATA,
+      MEMBERS_RESULT_TABLES
+    );
 
     // retrieved the users
-    const orderedUser = [...getUserFromAppData(APP_DATA)];
+    const orderedUser = getUserNamesFromAppData(APP_DATA);
 
     cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
       .children('a')
       .each((elem, idx) => {
-        cy.wrap(elem).find('p').should('have.text', orderedUser[idx]);
+        cy.wrap(elem).find('p').should('have.text', orderedUser[idx][1]);
       });
   });
 
@@ -70,23 +87,25 @@ describe('Table by User', () => {
    */
   it('Click on menu goes to question', () => {
     // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
-    cy.setupResultTablesByUserForCheck(APP_SETTINGS_3, APP_DATA_3);
+    cy.setupResultTablesByUserForCheck(
+      APP_SETTINGS_3,
+      APP_DATA_3,
+      MEMBERS_RESULT_TABLES
+    );
 
-    const orderedUser = getUserFromAppData(APP_DATA_3);
+    const orderedUser = getUserNamesFromAppData(APP_DATA_3);
 
-    orderedUser.forEach((elem, i) => {
+    orderedUser.forEach(([uId, uName], i) => {
       // click on the link
-      cy.get(
-        dataCyWrapper(buildAutoScrollableMenuLinkCy(elem.replaceAll(' ', '-')))
-      ).click();
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(uName))).click();
 
       // check that the table is visible ( allow 1s to fetch it, as it may take some times to scroll there)
-      cy.get(dataCyWrapper(buildTableByUserCy(elem))).should('be.visible');
+      cy.get(dataCyWrapper(buildTableByUserCy(uName))).should('be.visible');
 
       // check that other element are not visible
-      orderedUser.forEach((el, idx) => {
+      orderedUser.forEach(([_, uName], idx) => {
         if (idx !== i) {
-          cy.get(dataCyWrapper(buildTableByUserCy(el))).should(
+          cy.get(dataCyWrapper(buildTableByUserCy(uName))).should(
             'not.be.visible'
           );
         }
@@ -98,46 +117,52 @@ describe('Table by User', () => {
    * Test that when we scroll, the correct link becomes selected
    */
   it('Scroll to table correctly display selected link', () => {
-    cy.setupResultTablesByUserForCheck(APP_SETTINGS_3, APP_DATA_3);
+    cy.setupResultTablesByUserForCheck(
+      APP_SETTINGS_3,
+      APP_DATA_3,
+      MEMBERS_RESULT_TABLES
+    );
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
-    const orderedUser = getUserFromAppData(APP_DATA_3);
+    const orderedUser = getUserNamesFromAppData(APP_DATA_3);
 
-    orderedUser.forEach((elem, i) => {
+    orderedUser.forEach(([_, uName], i) => {
       // Scroll element into view
-      cy.get(dataCyWrapper(buildTableByUserCy(elem))).scrollIntoView();
+      cy.get(dataCyWrapper(buildTableByUserCy(uName))).scrollIntoView();
 
       // check that the correct link appear as selected
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(elem))).should(
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(uName))).should(
         'have.css',
         'border-color',
         rgbBorderColor
       );
 
       // check that other border are transparent
-      orderedUser.forEach((el, idx) => {
+      orderedUser.forEach(([_, uNameInner], idx) => {
         if (idx !== i) {
-          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(el))).should(
-            'have.css',
-            'border-color',
-            'rgba(0, 0, 0, 0)'
-          );
+          cy.get(
+            dataCyWrapper(buildAutoScrollableMenuLinkCy(uNameInner))
+          ).should('have.css', 'border-color', 'rgba(0, 0, 0, 0)');
         }
       });
     });
   });
 
   it('click on question redirect us to corresponding table by question', () => {
-    cy.setupResultTablesByUserForCheck(APP_SETTINGS_3, APP_DATA_3);
+    cy.setupResultTablesByUserForCheck(
+      APP_SETTINGS_3,
+      APP_DATA_3,
+      MEMBERS_RESULT_TABLES
+    );
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
-    const fstUser = [...getUserFromAppData(APP_DATA_3)][0];
+    const [fstUserId, fstUserName] = getUserNamesFromAppData(APP_DATA_3)[0];
 
     // question id for first user
     const fstUserQIds = APP_DATA_3.filter(
-      (appData) => appData.memberId === fstUser
+      (appData) => appData.memberId === fstUserId
     ).map((appData) => appData.data.questionId);
 
     const questionsNames = getSettingsByName(
@@ -152,7 +177,7 @@ describe('Table by User', () => {
       // navigate to the table by user
       cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_USER_BUTTON_CY)).click();
 
-      cy.get(dataCyWrapper(buildTableByUserTableBodyCy(fstUser)))
+      cy.get(dataCyWrapper(buildTableByUserTableBodyCy(fstUserName)))
         .children(dataCyWrapper(TABLE_BY_USER_ENTRY_CY))
         .eq(i)
         .then((elem) => {
@@ -167,9 +192,9 @@ describe('Table by User', () => {
             dataCyWrapper(buildAutoScrollableMenuLinkCy(questionsNames[i]))
           ).should('have.css', 'border-color', rgbBorderColor);
 
-          //TODO
           // assert that the correct table is visible
           // This test doesn't work for now, cypress seems to prevent the document.scrollIntoView behaviour
+          // comment for now
           //cy.get(dataCyWrapper(buildTableByQuestionCy(questions[i]))).should('be.visible');
         });
     }
@@ -203,18 +228,23 @@ const testTableHeader = (uId, ascending) => {
 
 /**
  * Extract all user from app data
+ *
+ * @return list of tuple containing the user id along with its name, sorted by name
  */
-const getUserFromAppData = (appData) => {
-  return new Set(appData.map((data) => data.memberId));
+const getUserNamesFromAppData = (appData) => {
+  return [...new Set(appData.map((data) => data.memberId))]
+    .map((uId) => [uId, MEMBERS_RESULT_TABLES[uId].name])
+    .sort(getComparator(Order.ASC, comparatorArrayBySecondElem));
 };
 
 /**
  * Helper function to test that the content of the table is correct
  *
+ * @param {string} uName The name of the user for which we currently are displayint the data
  * @param {string} uId The user id for which we currently are displaying the data
  * @param {boolean} ascending Whether the current sorting order is ascending or descending
  */
-const testTableContent = (uId, ascending) => {
+const testTableContent = (uName, uId, ascending) => {
   /**
    * Helper function to return the index of the user for which to check the response from,
    *
@@ -226,7 +256,7 @@ const testTableContent = (uId, ascending) => {
    */
   const index = ascending ? (n, _) => n : (n, length) => length - 1 - n;
 
-  cy.get(dataCyWrapper(buildTableByUserTableBodyCy(uId)))
+  cy.get(dataCyWrapper(buildTableByUserTableBodyCy(uName)))
     .children(dataCyWrapper(TABLE_BY_USER_ENTRY_CY))
     .each((entry, idx) => {
       // Test the header (i.e. the userId)
