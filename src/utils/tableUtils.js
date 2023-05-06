@@ -29,11 +29,19 @@ export const comparator = (e1, e2) => {
   return 0;
 };
 
-export const comparatorArrayBySecondElem = (e1, e2) => {
-  if (e2[1] < e1[1]) {
+/**
+ * Helper function to compare two element, the element to compare are object that contains an
+ * element with element key `name`
+ *
+ * @param e1 The first object
+ * @param e2 The second object
+ * @return {number} Whether the first one or the second one is the biggest
+ */
+export const comparatorArrayByElemName = (e1, e2) => {
+  if (e2.name < e1.name) {
     return -1;
   }
-  if (e2[1] > e1[1]) {
+  if (e2.name > e1.name) {
     return 1;
   }
   return 0;

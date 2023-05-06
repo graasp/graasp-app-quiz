@@ -20,7 +20,7 @@ import {
 import theme from '../../../../src/layout/theme';
 import {
   Order,
-  comparatorArrayBySecondElem,
+  comparatorArrayByElemName,
   getComparator,
 } from '../../../../src/utils/tableUtils';
 import { APP_DATA, APP_DATA_3 } from '../../../fixtures/appData';
@@ -41,24 +41,22 @@ describe('Table by User', () => {
     );
 
     // Test that each table are correctly displayed
-    getUserNamesFromAppData(APP_DATA).forEach(([uId, uName]) => {
-      cy.get(dataCyWrapper(buildTableByUserCy(uName))).should(
-        'have.text',
-        uName
-      );
+    getUserNamesFromAppData(APP_DATA).forEach(({ id, name }) => {
+      console.log('name is: ', name);
+      cy.get(dataCyWrapper(buildTableByUserCy(name))).should('have.text', name);
 
       // test header
-      testTableHeader(uName, 'sorted ascending');
+      testTableHeader(name, 'sorted ascending');
       // test content
-      testTableContent(uName, uId, true);
+      testTableContent(name, id, true);
 
       // sort descending
-      cy.get(dataCyWrapper(buildTableByUserQuestionHeaderCy(uName))).click();
+      cy.get(dataCyWrapper(buildTableByUserQuestionHeaderCy(name))).click();
 
       // test header
-      testTableHeader(uName, 'sorted descending');
+      testTableHeader(name, 'sorted descending');
       // test content
-      testTableContent(uName, uId, false);
+      testTableContent(name, id, false);
     });
   });
 
@@ -78,7 +76,7 @@ describe('Table by User', () => {
     cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
       .children('a')
       .each((elem, idx) => {
-        cy.wrap(elem).find('p').should('have.text', orderedUser[idx][1]);
+        cy.wrap(elem).find('p').should('have.text', orderedUser[idx].name);
       });
   });
 
@@ -95,17 +93,17 @@ describe('Table by User', () => {
 
     const orderedUser = getUserNamesFromAppData(APP_DATA_3);
 
-    orderedUser.forEach(([uId, uName], i) => {
+    orderedUser.forEach(({ id, name }, i) => {
       // click on the link
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(uName))).click();
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(name))).click();
 
       // check that the table is visible ( allow 1s to fetch it, as it may take some times to scroll there)
-      cy.get(dataCyWrapper(buildTableByUserCy(uName))).should('be.visible');
+      cy.get(dataCyWrapper(buildTableByUserCy(name))).should('be.visible');
 
       // check that other element are not visible
-      orderedUser.forEach(([_, uName], idx) => {
+      orderedUser.forEach(({ name }, idx) => {
         if (idx !== i) {
-          cy.get(dataCyWrapper(buildTableByUserCy(uName))).should(
+          cy.get(dataCyWrapper(buildTableByUserCy(name))).should(
             'not.be.visible'
           );
         }
@@ -127,23 +125,25 @@ describe('Table by User', () => {
 
     const orderedUser = getUserNamesFromAppData(APP_DATA_3);
 
-    orderedUser.forEach(([_, uName], i) => {
+    orderedUser.forEach(({ name }, i) => {
       // Scroll element into view
-      cy.get(dataCyWrapper(buildTableByUserCy(uName))).scrollIntoView();
+      cy.get(dataCyWrapper(buildTableByUserCy(name))).scrollIntoView();
 
       // check that the correct link appear as selected
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(uName))).should(
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(name))).should(
         'have.css',
         'border-color',
         rgbBorderColor
       );
 
       // check that other border are transparent
-      orderedUser.forEach(([_, uNameInner], idx) => {
+      orderedUser.forEach(({ name }, idx) => {
         if (idx !== i) {
-          cy.get(
-            dataCyWrapper(buildAutoScrollableMenuLinkCy(uNameInner))
-          ).should('have.css', 'border-color', 'rgba(0, 0, 0, 0)');
+          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(name))).should(
+            'have.css',
+            'border-color',
+            'rgba(0, 0, 0, 0)'
+          );
         }
       });
     });
@@ -158,7 +158,8 @@ describe('Table by User', () => {
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
-    const [fstUserId, fstUserName] = getUserNamesFromAppData(APP_DATA_3)[0];
+    const { id: fstUserId, name: fstUserName } =
+      getUserNamesFromAppData(APP_DATA_3)[0];
 
     // question id for first user
     const fstUserQIds = APP_DATA_3.filter(
@@ -233,8 +234,13 @@ const testTableHeader = (uId, ascending) => {
  */
 const getUserNamesFromAppData = (appData) => {
   return [...new Set(appData.map((data) => data.memberId))]
-    .map((uId) => [uId, MEMBERS_RESULT_TABLES[uId].name])
-    .sort(getComparator(Order.ASC, comparatorArrayBySecondElem));
+    .map(
+      (uId) =>
+        Object.values(MEMBERS_RESULT_TABLES).filter(
+          ({ id: mId }) => mId === uId
+        )[0]
+    )
+    .sort(getComparator(Order.ASC, comparatorArrayByElemName));
 };
 
 /**

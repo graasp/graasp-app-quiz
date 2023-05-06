@@ -15,13 +15,13 @@ export const RESPONSES = {
   // Data first question
   [FILL_BLANKS_SETTING_2.data.question]: [
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-2'].name,
+      userId: MEMBERS_RESULT_TABLES.HARPER.name,
       fields: {
         answer: 'Not yet answered',
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-1'].name,
+      userId: MEMBERS_RESULT_TABLES.LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[2].data.text,
         date: new Date(LIAM_RESPONSES[2].updatedAt).toDateString(),
@@ -29,7 +29,7 @@ export const RESPONSES = {
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-3'].name,
+      userId: MEMBERS_RESULT_TABLES.MASON.name,
       fields: {
         answer: MASON_RESPONSES[0].data.text,
         date: new Date(MASON_RESPONSES[0].updatedAt).toDateString(),
@@ -40,7 +40,7 @@ export const RESPONSES = {
   // Data second question
   [HAPPINESS_LEVEL_SETTING.data.question]: [
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-2'].name,
+      userId: MEMBERS_RESULT_TABLES.HARPER.name,
       fields: {
         answer: HARPER_RESPONSES[0].data.value,
         date: new Date(HARPER_RESPONSES[0].updatedAt).toDateString(),
@@ -48,13 +48,13 @@ export const RESPONSES = {
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-1'].name,
+      userId: MEMBERS_RESULT_TABLES.LIAM.name,
       fields: {
         answer: 'Not yet answered',
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-3'].name,
+      userId: MEMBERS_RESULT_TABLES.MASON.name,
       fields: {
         answer: 'Not yet answered',
       },
@@ -63,13 +63,13 @@ export const RESPONSES = {
   // Data third question
   [BABY_CAT_SETTING.data.question]: [
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-2'].name,
+      userId: MEMBERS_RESULT_TABLES.HARPER.name,
       fields: {
         answer: 'Not yet answered',
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-1'].name,
+      userId: MEMBERS_RESULT_TABLES.LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[1].data.text,
         date: new Date(LIAM_RESPONSES[1].updatedAt).toDateString(),
@@ -77,7 +77,7 @@ export const RESPONSES = {
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-3'].name,
+      userId: MEMBERS_RESULT_TABLES.MASON.name,
       fields: {
         answer: 'Not yet answered',
       },
@@ -86,7 +86,7 @@ export const RESPONSES = {
   // Data fourth question
   [CAPITAL_FRANCE_SETTING.data.question]: [
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-2'].name,
+      userId: MEMBERS_RESULT_TABLES.HARPER.name,
       fields: {
         answer: HARPER_RESPONSES[1].data.choices.join(', '),
         date: new Date(HARPER_RESPONSES[1].updatedAt).toDateString(),
@@ -94,7 +94,7 @@ export const RESPONSES = {
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-1'].name,
+      userId: MEMBERS_RESULT_TABLES.LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[0].data.choices[0],
         date: new Date(LIAM_RESPONSES[0].updatedAt).toDateString(),
@@ -102,7 +102,7 @@ export const RESPONSES = {
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES['mock-member-id-3'].name,
+      userId: MEMBERS_RESULT_TABLES.MASON.name,
       fields: {
         answer: 'Not yet answered',
       },

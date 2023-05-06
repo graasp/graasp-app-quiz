@@ -34,14 +34,14 @@ import {
 } from '../../config/selectors';
 import {
   Order,
-  comparatorArrayBySecondElem,
+  comparatorArrayByElemName,
   getComparator,
 } from '../../utils/tableUtils';
 import { computeCorrectness } from '../context/utilities';
 
 const TableByQuestion = ({
   question,
-  userList,
+  memberList,
   responses,
   handleUserClicked,
 }) => {
@@ -171,45 +171,45 @@ const TableByQuestion = ({
             <TableBody
               data-cy={buildTableByQuestionTableBodyCy(question.data.question)}
             >
-              {userList
-                ?.sort(getComparator(order, comparatorArrayBySecondElem))
-                .map(([userId, userName]) => (
+              {memberList
+                ?.sort(getComparator(order, comparatorArrayByElemName))
+                .map(({ id, name }) => (
                   <TableRow
-                    key={userId}
+                    key={id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     data-cy={TABLE_BY_QUESTION_ENTRY_CY}
                   >
-                    {getResponseForUserId(userId) ? (
+                    {getResponseForUserId(id) ? (
                       <>
                         <TableCell
                           component="th"
                           scope="row"
                           align="left"
                           sx={{ cursor: 'pointer' }}
-                          onClick={() => handleUserClicked(userId)}
+                          onClick={() => handleUserClicked(id)}
                           data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
                         >
-                          {userName}
+                          {name}
                         </TableCell>
                         <TableCell
                           align="left"
                           sx={{ maxWidth: 350 }}
                           data-cy={TABLE_BY_QUESTION_ANSWER_DATA_CY}
                         >
-                          {getResponseDataForUserId(userId)}
+                          {getResponseDataForUserId(id)}
                         </TableCell>
                         <TableCell
                           align="left"
                           data-cy={TABLE_BY_QUESTION_DATE_DATA_CY}
                         >
-                          {getResponseDateForUserId(userId)}
+                          {getResponseDateForUserId(id)}
                         </TableCell>
                         <TableCell
                           align="left"
                           data-cy={TABLE_BY_QUESTION_CORRECT_ICON_CY}
                         >
                           {computeCorrectness(
-                            getResponseForUserId(userId)?.data,
+                            getResponseForUserId(id)?.data,
                             question.data
                           ) ? (
                             <CheckCircleOutlined color="success" />
@@ -225,10 +225,10 @@ const TableByQuestion = ({
                           scope="row"
                           align="left"
                           sx={{ cursor: 'pointer' }}
-                          onClick={() => handleUserClicked(userId)}
+                          onClick={() => handleUserClicked(id)}
                           data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
                         >
-                          {userName}
+                          {name}
                         </TableCell>
                         <TableCell
                           colSpan={3}

@@ -195,7 +195,12 @@ describe('Table by Question', () => {
     ).find((setting) => setting.id === fstQuestionId).data.question;
 
     const users = [...new Set(APP_DATA_2.map((data) => data.memberId))]
-      .map((id) => MEMBERS_RESULT_TABLES[id].name)
+      .map(
+        (id) =>
+          Object.values(MEMBERS_RESULT_TABLES).filter(
+            ({ id: mId }) => mId === id
+          )[0].name
+      )
       .sort();
     for (const [i, user] of users.entries()) {
       // navigate to the table by user

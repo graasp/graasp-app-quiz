@@ -9,7 +9,7 @@ import {
 import { MEMBERS_RESULT_TABLES } from './members';
 
 export const USER_RESPONSES = {
-  [MEMBERS_RESULT_TABLES['mock-member-id-1'].id]: [
+  [MEMBERS_RESULT_TABLES.LIAM.id]: [
     {
       qName: FILL_BLANKS_SETTING_2.data.question,
       fields: {
@@ -35,7 +35,7 @@ export const USER_RESPONSES = {
       },
     },
   ],
-  [MEMBERS_RESULT_TABLES['mock-member-id-2'].id]: [
+  [MEMBERS_RESULT_TABLES.HARPER.id]: [
     {
       qName: HAPPINESS_LEVEL_SETTING.data.question,
       fields: {
@@ -53,7 +53,7 @@ export const USER_RESPONSES = {
       },
     },
   ],
-  [MEMBERS_RESULT_TABLES['mock-member-id-3'].id]: [
+  [MEMBERS_RESULT_TABLES.MASON.id]: [
     {
       qName: FILL_BLANKS_SETTING_2.data.question,
       fields: {

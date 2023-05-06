@@ -13,7 +13,7 @@ import {
 } from '../../hooks/useMaxAvailableHeight';
 import {
   Order,
-  comparatorArrayBySecondElem,
+  comparatorArrayByElemName,
   getComparator,
 } from '../../utils/tableUtils';
 import { QuizContext } from '../context/QuizContext';
@@ -39,7 +39,7 @@ const TABLE_BY_USER_PANEL_IDX = 1;
 const ResultTables = ({ headerElem }) => {
   const { t } = useTranslation();
   const { data: responses, isLoading } = hooks.useAppData();
-  const { data, isContextLoading } = hooks.useAppContext();
+  const { data, isLoading: isContextLoading } = hooks.useAppContext();
   const { order, questions } = useContext(QuizContext);
   const questionContainerRef = useRef(null);
   const userContainerRef = useRef(null);
@@ -120,28 +120,28 @@ const ResultTables = ({ headerElem }) => {
   const [users, setUsers] = useState(getAllUsers());
 
   /**
-   * Helper function to construct a list that will contain a tuple of member id along with its name
+   * Helper function to construct a list that will contain all the members that have responded to at least
+   * one question in the quiz
    *
-   * Will only contains member that have answered at least one question
    * Will directly sort the list ascending to navigate more easily in students
    *
    * @returns A list of tuple from user name to its id
    */
-  const getUserIdToName = useCallback(() => {
+  const getMembers = useCallback(() => {
     const listIdNames = data?.members?.reduce((acc, cur) => {
-      return users.contains(cur.id) ? [...acc, [cur.id, cur.name]] : acc;
+      return users.contains(cur.id) ? [...acc, cur] : acc;
     }, []);
     // directly sort the list descending
     return listIdNames?.sort(
-      getComparator(Order.ASC, comparatorArrayBySecondElem)
+      getComparator(Order.ASC, comparatorArrayByElemName)
     );
   }, [data, users]);
 
-  const [membersIdName, setMembersIdName] = useState(getUserIdToName());
+  const [members, setMembers] = useState(getMembers());
 
   useEffect(() => {
-    setMembersIdName(getUserIdToName());
-  }, [data, getUserIdToName]);
+    setMembers(getMembers());
+  }, [data, getMembers]);
 
   useEffect(() => {
     setUsers(getAllUsers());
@@ -178,8 +178,8 @@ const ResultTables = ({ headerElem }) => {
             </TabPanel>
             <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
               <AutoScrollableMenu
-                links={membersIdName?.map(([uId, uName]) => {
-                  return { label: uName, link: uId.replaceAll(' ', '-') };
+                links={members?.map(({ id, name }) => {
+                  return { label: name, link: id.replaceAll(' ', '-') };
                 })}
                 elemRefs={userRefs}
                 containerRef={userContainerRef}
@@ -206,7 +206,7 @@ const ResultTables = ({ headerElem }) => {
                 ref={(elm) => (questionRefs.current[qId] = elm)}
               >
                 <TableByQuestion
-                  userList={membersIdName}
+                  memberList={members}
                   question={{ id: qId, data: questionData?.get(qId).first() }}
                   responses={getAllAppDataByQuestionId(responses, qId)}
                   handleUserClicked={handleUserClicked}
@@ -226,16 +226,16 @@ const ResultTables = ({ headerElem }) => {
             }}
             ref={userContainerRef}
           >
-            {membersIdName?.map(([uId, uName]) => (
+            {members?.map(({ id, name }) => (
               <Box
-                key={uId}
-                id={uId.replaceAll(' ', '-')}
-                ref={(elm) => (userRefs.current[uId] = elm)}
+                key={id}
+                id={id.replaceAll(' ', '-')}
+                ref={(elm) => (userRefs.current[id] = elm)}
               >
                 <TableByUser
-                  user={uName}
+                  user={name}
                   questions={questions}
-                  responses={getAllAppDataByUserId(responses, uId)}
+                  responses={getAllAppDataByUserId(responses, id)}
                   handleQuestionClicked={handleQuestionClicked}
                 />
               </Box>

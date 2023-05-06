@@ -1,4 +1,4 @@
-// I tried to fill all the member IDs by using the reference to "MEMBERS_RESULT_TABLES['mock-member-id-xxx'].id
+// I tried to fill all the member IDs by using the reference to "MEMBERS_RESULT_TABLES.MEMBER.id
 // But for some reason, MEMBERS_RESULT_TABLES is undefined by the time the MOCK_USER are created
 export const LIAM_RESPONSES = [
   {
