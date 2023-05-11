@@ -56,3 +56,12 @@ export const comparatorArrayByElemName = (e1, e2) => {
  */
 export const getComparator = (order, comp = comparator) =>
   order === Order.DESC ? (a, b) => comp(a, b) : (a, b) => -comp(a, b);
+
+/**
+ * Helper function to substitute spaces by hyphens in strings to be able to use them as inner links
+ *
+ * @param {String} linkName The string that we want to format as an inner link
+ */
+export const formatInnerLink = (linkName) => {
+  return linkName.replaceAll(' ', '-')
+}

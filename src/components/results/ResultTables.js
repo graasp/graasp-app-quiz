@@ -14,7 +14,7 @@ import {
 import {
   Order,
   comparatorArrayByElemName,
-  getComparator,
+  getComparator, formatInnerLink,
 } from '../../utils/tableUtils';
 import { QuizContext } from '../context/QuizContext';
 import {
@@ -75,7 +75,7 @@ const ResultTables = ({ headerElem }) => {
         return e.map((el) => {
           return {
             ...el.data,
-            innerLink: el.data.question.replaceAll(' ', '-'),
+            innerLink: formatInnerLink(el.data.question),
           };
         });
       });
@@ -104,7 +104,7 @@ const ResultTables = ({ headerElem }) => {
    * user in the tableByUser
    */
   const handleUserClicked = useCallback((qName) => {
-    initiallyClickedUser.current = qName.replaceAll(' ', '-');
+    initiallyClickedUser.current = formatInnerLink(qName);
     setTab(TABLE_BY_USER_PANEL_IDX);
   }, []);
 
@@ -179,7 +179,7 @@ const ResultTables = ({ headerElem }) => {
             <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
               <AutoScrollableMenu
                 links={members?.map(({ id, name }) => {
-                  return { label: name, link: id.replaceAll(' ', '-') };
+                  return { label: name, link: formatInnerLink(id) };
                 })}
                 elemRefs={userRefs}
                 containerRef={userContainerRef}
@@ -229,7 +229,7 @@ const ResultTables = ({ headerElem }) => {
             {members?.map(({ id, name }) => (
               <Box
                 key={id}
-                id={id.replaceAll(' ', '-')}
+                id={formatInnerLink(id)}
                 ref={(elm) => (userRefs.current[id] = elm)}
               >
                 <TableByUser
