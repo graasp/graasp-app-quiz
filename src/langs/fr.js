@@ -48,5 +48,6 @@ export default {
     'sorted ascending': 'trié par ordre croissant',
     "There isn't any question to display":
       "Il n'y a aucune questions à afficher",
+    Analytics: 'Analytique',
   },
 };

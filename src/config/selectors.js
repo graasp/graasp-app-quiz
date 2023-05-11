@@ -62,3 +62,4 @@ export const TABLE_BY_QUESTION_ENTRY_CY = 'tableByQuestionEntry';
 export const buildAutoScrollableMenuLinkCy = (label) =>
   `autoScrollableMenuLink-${label}`;
 export const AUTO_SCROLLABLE_MENU_LINK_LIST = 'autoScrollableMenuLinkList';
+export const NAVIGATION_ANALYTICS_BUTTON_CY = 'navigationAnalyticsButton';
