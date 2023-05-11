@@ -32,10 +32,19 @@ import {
   buildTableByQuestionTableBodyCy,
   buildTableByQuestionUserHeaderCy,
 } from '../../config/selectors';
-import { Order, getComparator } from '../../utils/tableUtils';
+import {
+  Order,
+  comparatorArrayByElemName,
+  getComparator,
+} from '../../utils/tableUtils';
 import { computeCorrectness } from '../context/utilities';
 
-const TableByQuestion = ({ question, userList, responses }) => {
+const TableByQuestion = ({
+  question,
+  memberList,
+  responses,
+  handleUserClicked,
+}) => {
   const { t } = useTranslation();
   const [order, setOrder] = useState(Order.ASC);
   const [responsesByUser, setResponsesByUser] = useState(
@@ -162,70 +171,76 @@ const TableByQuestion = ({ question, userList, responses }) => {
             <TableBody
               data-cy={buildTableByQuestionTableBodyCy(question.data.question)}
             >
-              {userList?.sort(getComparator(order)).map((userId) => (
-                <TableRow
-                  key={userId}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  data-cy={TABLE_BY_QUESTION_ENTRY_CY}
-                >
-                  {getResponseForUserId(userId) ? (
-                    <>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        align="left"
-                        data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
-                      >
-                        {userId}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        sx={{ maxWidth: 350 }}
-                        data-cy={TABLE_BY_QUESTION_ANSWER_DATA_CY}
-                      >
-                        {getResponseDataForUserId(userId)}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        data-cy={TABLE_BY_QUESTION_DATE_DATA_CY}
-                      >
-                        {getResponseDateForUserId(userId)}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        data-cy={TABLE_BY_QUESTION_CORRECT_ICON_CY}
-                      >
-                        {computeCorrectness(
-                          getResponseForUserId(userId)?.data,
-                          question.data
-                        ) ? (
-                          <CheckCircleOutlined color="success" />
-                        ) : (
-                          <CancelOutlined color="error" />
-                        )}
-                      </TableCell>
-                    </>
-                  ) : (
-                    <>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        align="left"
-                        data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
-                      >
-                        {userId}
-                      </TableCell>
-                      <TableCell
-                        colSpan={3}
-                        align="center"
-                        data-cy={TABLE_BY_QUESTION_ANSWER_DATA_CY}
-                      >
-                        {t('Not yet answered')}
-                      </TableCell>
-                    </>
-                  )}
-                </TableRow>
-              ))}
+              {memberList
+                ?.sort(getComparator(order, comparatorArrayByElemName))
+                .map(({ id, name }) => (
+                  <TableRow
+                    key={id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    data-cy={TABLE_BY_QUESTION_ENTRY_CY}
+                  >
+                    {getResponseForUserId(id) ? (
+                      <>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          align="left"
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() => handleUserClicked(id)}
+                          data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
+                        >
+                          {name}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ maxWidth: 350 }}
+                          data-cy={TABLE_BY_QUESTION_ANSWER_DATA_CY}
+                        >
+                          {getResponseDataForUserId(id)}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          data-cy={TABLE_BY_QUESTION_DATE_DATA_CY}
+                        >
+                          {getResponseDateForUserId(id)}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          data-cy={TABLE_BY_QUESTION_CORRECT_ICON_CY}
+                        >
+                          {computeCorrectness(
+                            getResponseForUserId(id)?.data,
+                            question.data
+                          ) ? (
+                            <CheckCircleOutlined color="success" />
+                          ) : (
+                            <CancelOutlined color="error" />
+                          )}
+                        </TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          align="left"
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() => handleUserClicked(id)}
+                          data-cy={TABLE_BY_QUESTION_USER_ID_HEADER_CY}
+                        >
+                          {name}
+                        </TableCell>
+                        <TableCell
+                          colSpan={3}
+                          align="center"
+                          data-cy={TABLE_BY_QUESTION_ANSWER_DATA_CY}
+                        >
+                          {t('Not yet answered')}
+                        </TableCell>
+                      </>
+                    )}
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

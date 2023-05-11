@@ -19,7 +19,7 @@ export const Order = Object.freeze({
  * @param {string} e2 The second username
  * @returns {number} Whether the first one or the second one is the biggest
  */
-const comparator = (e1, e2) => {
+export const comparator = (e1, e2) => {
   if (e2 < e1) {
     return -1;
   }
@@ -30,12 +30,38 @@ const comparator = (e1, e2) => {
 };
 
 /**
+ * Helper function to compare two element, the element to compare are object that contains an
+ * element with element key `name`
+ *
+ * @param e1 The first object
+ * @param e2 The second object
+ * @return {number} Whether the first one or the second one is the biggest
+ */
+export const comparatorArrayByElemName = (e1, e2) => {
+  if (e2.name < e1.name) {
+    return -1;
+  }
+  if (e2.name > e1.name) {
+    return 1;
+  }
+  return 0;
+};
+
+/**
  * Helper function to get the correct comparator depending on whether we are sorting ascending or descending
  *
  * @param {string} order The order for which we want to get the comparator
+ * @param comp The comparator to use to compare
  * @returns {{(string, string): number}} The comparator corresponding to the required order
  */
-export const getComparator = (order) =>
-  order === Order.DESC
-    ? (a, b) => comparator(a, b)
-    : (a, b) => -comparator(a, b);
+export const getComparator = (order, comp = comparator) =>
+  order === Order.DESC ? (a, b) => comp(a, b) : (a, b) => -comp(a, b);
+
+/**
+ * Helper function to substitute spaces by hyphens in strings to be able to use them as inner links
+ *
+ * @param {String} linkName The string that we want to format as an inner link
+ */
+export const formatInnerLink = (linkName) => {
+  return linkName.replaceAll(' ', '-')
+}

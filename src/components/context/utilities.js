@@ -53,8 +53,18 @@ export const getAppDataByQuestionId = (appData, qId) => {
   );
 };
 
+export const getQuestionNameFromId = (appSettings, qId) => {
+  return (
+    appSettings?.find((setting) => setting.id === qId)?.data?.question ?? ''
+  );
+};
+
 export const getAllAppDataByQuestionId = (appData, qId) => {
   return appData?.filter(({ data }) => data?.questionId === qId) ?? [];
+};
+
+export const getAllAppDataByUserId = (appData, uId) => {
+  return appData?.filter((entry) => entry.memberId === uId) ?? [];
 };
 
 export const areTagsMatching = (text) => {

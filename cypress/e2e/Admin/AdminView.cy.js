@@ -13,6 +13,7 @@ import {
   buildTableByQuestionCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
+import { APP_DATA } from '../../fixtures/appData';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
 
 describe('Admin View', () => {
@@ -44,6 +45,7 @@ describe('Admin View', () => {
     cy.setUpApi({
       database: {
         appSettings: APP_SETTINGS,
+        appData: APP_DATA,
       },
       appContext: {
         permission: PERMISSION_LEVELS.ADMIN,
