@@ -52,6 +52,9 @@ export default {
     'sorted ascending': 'sorted ascending',
     "There isn't any question to display":
       "There isn't any question to display",
+    'Results by question': 'Results by question',
+    'Results by user': 'Results by user',
+    'No users answered the quiz yet': 'No users answered the quiz yet',
     Analytics: 'Analytics',
   },
 };

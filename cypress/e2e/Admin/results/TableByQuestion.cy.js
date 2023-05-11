@@ -1,8 +1,10 @@
 import { getSettingsByName } from '../../../../src/components/context/utilities';
 import { APP_SETTING_NAMES } from '../../../../src/config/constants';
 import {
-  AUTO_SCROLLABLE_MENU_LINK_LIST,
+  AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
+  RESULT_TABLES_RESULT_BY_QUESTION_BUTTON_CY,
   TABLE_BY_QUESTION_ANSWER_DATA_CY,
+  TABLE_BY_QUESTION_CONTAINER_CY,
   TABLE_BY_QUESTION_CORRECT_ICON_CY,
   TABLE_BY_QUESTION_DATE_DATA_CY,
   TABLE_BY_QUESTION_ENTRY_CY,
@@ -17,30 +19,20 @@ import {
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import theme from '../../../../src/layout/theme';
-import { APP_DATA, APP_DATA2 } from '../../../fixtures/appData';
+import { APP_DATA, APP_DATA_2 } from '../../../fixtures/appData';
 import { APP_SETTINGS_2 } from '../../../fixtures/appSettings';
+import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
+import { hexToRGB } from '../../../utils/Color';
 
 describe('Table by Question', () => {
   it('Table by Question no app data', () => {
     cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2);
 
-    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
-      (s, idx) => {
-        // check that the title is present
-        cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
-          'have.text',
-          APP_SETTINGS_2[idx].data.question
-        );
-
-        // check that the table header is present
-        testTableHeader(s.data.question, 'sorted ascending');
-
-        // check that the body is empty
-        cy.get(
-          dataCyWrapper(buildTableByQuestionTableBodyCy(s.data.question))
-        ).should('be.empty');
-      }
+    // if empty app data, then should display that no user have answered the quiz yet
+    cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should(
+      'have.text',
+      'No users answered the quiz yet'
     );
   });
 
@@ -48,7 +40,11 @@ describe('Table by Question', () => {
    * Test the table by question view for a few question and some user answers
    */
   it('Table by Question correctly display data', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA,
+      MEMBERS_RESULT_TABLES
+    );
 
     // Test that each table are correctly displayed
     APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
@@ -80,7 +76,11 @@ describe('Table by Question', () => {
    * Test that the link in the left menu are ordered in the same way as the questions
    */
   it('Menu on left correctly display question title, in the correct order', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA,
+      MEMBERS_RESULT_TABLES
+    );
 
     // Retrieved the question ordered as in the APP_SETTINGS2
     const orderedResponseText = getSettingsByName(
@@ -90,7 +90,7 @@ describe('Table by Question', () => {
       return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
     });
 
-    cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST))
+    cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
       .children('a')
       .each((elem, idx) => {
         cy.wrap(elem).find('p').should('have.text', orderedResponseText[idx]);
@@ -102,7 +102,11 @@ describe('Table by Question', () => {
    */
   it('Click on menu goes to question', () => {
     // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA2);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA_2,
+      MEMBERS_RESULT_TABLES
+    );
 
     const orderedResponseText = getSettingsByName(
       APP_SETTINGS_2,
@@ -133,7 +137,11 @@ describe('Table by Question', () => {
    * Test that when we scroll, the correct link becomes selected
    */
   it('Scroll to table correctly display selected link', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2, APP_DATA2);
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA_2,
+      MEMBERS_RESULT_TABLES
+    );
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
@@ -167,23 +175,63 @@ describe('Table by Question', () => {
       });
     });
   });
+
+  it('click on user redirect us to corresponding table by user', () => {
+    cy.setupResultTablesByQuestionForCheck(
+      APP_SETTINGS_2,
+      APP_DATA_2,
+      MEMBERS_RESULT_TABLES
+    );
+
+    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
+
+    const fstQuestionId = getSettingsByName(
+      APP_SETTINGS_2,
+      APP_SETTING_NAMES.QUESTION_LIST
+    )[0].data.list[0];
+    const fstQuestion = getSettingsByName(
+      APP_SETTINGS_2,
+      APP_SETTING_NAMES.QUESTION
+    ).find((setting) => setting.id === fstQuestionId).data.question;
+
+    const users = [...new Set(APP_DATA_2.map((data) => data.memberId))]
+      .map(
+        (id) =>
+          Object.values(MEMBERS_RESULT_TABLES).filter(
+            ({ id: mId }) => mId === id
+          )[0].name
+      )
+      .sort();
+    for (const [i, user] of users.entries()) {
+      // navigate to the table by user
+      cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_QUESTION_BUTTON_CY)).click();
+
+      cy.get(dataCyWrapper(buildTableByQuestionTableBodyCy(fstQuestion)))
+        .children(dataCyWrapper(TABLE_BY_QUESTION_ENTRY_CY))
+        .eq(i)
+        .then((elem) => {
+          // click on the user header
+          cy.wrap(elem)
+            .get(dataCyWrapper(TABLE_BY_QUESTION_USER_ID_HEADER_CY), {
+              withinSubject: elem,
+            })
+            .click();
+
+          // SHOULD FIND NAME NOT MEMBER-ID
+          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(user))).should(
+            'have.css',
+            'border-color',
+            rgbBorderColor
+          );
+
+          // assert that the correct table is visible
+          // This test doesn't work for now, cypress seems to prevent the document.scrollIntoView behaviour
+          // comment it for now
+          //cy.get(dataCyWrapper(buildTableByUserCy(user))).should('be.visible');
+        });
+    }
+  });
 });
-
-/**
- * Helper function to convert a color from hex to rgb
- * Needed because the color in css property is in rgb, but the primary color is in hex format
- *
- * @param hexColor the color in hexadecimal format
- * @returns {`rgb(${number}, ${number}, ${number})`} The color as rgb definition
- */
-const hexToRGB = (hexColor) => {
-  const bigint = parseInt(hexColor.slice(1), 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-
-  return `rgb(${r}, ${g}, ${b})`;
-};
 
 /**
  * Helper function to test that the header of the table is correct

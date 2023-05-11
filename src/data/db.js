@@ -64,6 +64,30 @@ const buildDatabase = (appContext) => ({
     },
     {
       itemId: 'mock-item-id',
+      memberId: 'mock-member-id-2',
+      creator: 'mock-member-id-2',
+      createdAt: '2022-07-22T12:35:50.195Z',
+      updatedAt: '2022-07-22T12:36:51.741Z',
+      data: {
+        questionId: 'id6',
+        text: 'kitten',
+      },
+      id: '7',
+    },
+    {
+      itemId: 'mock-item-id',
+      memberId: 'mock-member-id-2',
+      creator: 'mock-member-id-2',
+      createdAt: '2022-07-22T12:35:50.195Z',
+      updatedAt: '2022-07-22T12:36:51.741Z',
+      data: {
+        questionId: 'id7',
+        text: 'Lorem <ips um> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
+      },
+      id: '8',
+    },
+    {
+      itemId: 'mock-item-id',
       memberId: 'mock-member-id-3',
       creator: 'mock-member-id-3',
       createdAt: '2022-07-22T12:35:50.195Z',
@@ -72,7 +96,19 @@ const buildDatabase = (appContext) => ({
         questionId: 'id7',
         text: 'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ip sum> sem.',
       },
-      id: '7',
+      id: '9',
+    },
+    {
+      itemId: 'mock-item-id',
+      memberId: 'mock-member-id-3',
+      creator: 'mock-member-id-3',
+      createdAt: '2022-07-22T12:35:50.195Z',
+      updatedAt: '2022-07-22T12:36:51.741Z',
+      data: {
+        questionId: 'id6',
+        text: 'bird',
+      },
+      id: '10',
     },
   ],
   appSettings: [
@@ -133,7 +169,19 @@ const buildDatabase = (appContext) => ({
   members: [
     {
       id: appContext.memberId,
-      name: 'mock-member',
+      name: 'George',
+    },
+    {
+      id: 'mock-member-id-1',
+      name: 'James',
+    },
+    {
+      id: 'mock-member-id-2',
+      name: 'Sarah',
+    },
+    {
+      id: 'mock-member-id-3',
+      name: 'Emily',
     },
   ],
 });
