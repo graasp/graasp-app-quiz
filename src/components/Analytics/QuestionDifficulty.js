@@ -1,80 +1,74 @@
 import Plotly from 'plotly.js-basic-dist-min';
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import createPlotlyComponent from 'react-plotly.js/factory';
 
 import { CircularProgress, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 
+import { CHART_SECONDARY_COLOR } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
-import { useElementWidth } from '../../hooks/useElementWidth';
-import { QuizContext } from '../context/QuizContext';
-import { computeCorrectness, getDataWithId } from '../context/utilities';
 import {
   defaultLayout,
   defaultSettings,
   hoverData,
-} from './plotUtils/plotUtils';
+} from '../../utils/plotUtils';
+import { QuizContext } from '../context/QuizContext';
+import { computeCorrectness, getDataWithId } from '../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
 
-const QuestionDifficulty = () => {
+const QuestionDifficulty = ({ maxWidth }) => {
+  const { t } = useTranslation();
   const { data: responses, isLoading } = hooks.useAppData();
   const { questions } = useContext(QuizContext);
   const theme = useTheme();
-  const plotContainerElem = useRef(null);
-
-  const plotContainerElemWidth = useElementWidth(plotContainerElem.current);
-
-  // TODO Trick to force react to re-render, is there a Better way to do ??
-  const [, updateState] = useState(plotContainerElemWidth);
-  useEffect(() => {
-    updateState(plotContainerElemWidth);
-  }, [plotContainerElemWidth]);
-
-  /**
-   * Helper function to split a string at every other space
-   * Used, as plotly js is not able to automatically wrap long string
-   */
-  //const splitSecondSpace = useCallback((string) => {
-  //  return string.replace(/([^ ]* [^ ]*)( )/g, '$1<br>')
-  //}, [])
 
   /**
    * Function to calculate the data to be displayed in the chart
    *
    * Returns an object that contains the data, and some additional information used to be displayed on the chart
    */
-  const correctResponseChartData = Array.from(
+  const chartData = Array.from(
     responses.groupBy((r) => r.data.questionId)
   ).reduce(
     (acc, [id, list], idx) => {
       const question = getDataWithId(questions, id).data;
-      const nbCorrectResponses = list.reduce(
-        (acc, next) =>
-          computeCorrectness(next.data, question) ? acc + 1 : acc,
-        0
+      const nbCorrectAndIncorrect = list.reduce(
+        ([correct, incorrect], next) =>
+          computeCorrectness(next.data, question)
+            ? [correct + 1, incorrect]
+            : [correct, incorrect + 1],
+        [0, 0]
       );
 
       return {
-        data: {
-          x: [
-            ...acc.data.x,
-            /*splitSecondSpace(`${question.question}-${id}`)*/ `Q${idx + 1}`,
-          ],
-          y: [...acc.data.y, nbCorrectResponses],
+        dataCorrect: {
+          x: [...acc.dataCorrect.x, `Q${idx + 1}`],
+          y: [...acc.dataCorrect.y, nbCorrectAndIncorrect[0]],
+        },
+        dataIncorrect: {
+          x: [...acc.dataIncorrect.x, `Q${idx + 1}`],
+          y: [...acc.dataIncorrect.y, nbCorrectAndIncorrect[1]],
         },
         percentageCorrect: [
           ...acc.percentageCorrect,
-          nbCorrectResponses / list.size,
+          nbCorrectAndIncorrect[0] / list.size,
+        ],
+        percentageIncorrect: [
+          ...acc.percentageIncorrect,
+          nbCorrectAndIncorrect[1] / list.size,
         ],
         maxValue: Math.max(acc.maxValue, list.size),
         hoverText: [...acc.hoverText, question.question],
       };
     },
     {
-      data: { x: [], y: [] },
+      dataCorrect: { x: [], y: [] },
+      dataIncorrect: { x: [], y: [] },
       percentageCorrect: [],
+      percentageIncorrect: [],
       maxValue: 0,
       hoverText: [],
     }
@@ -85,30 +79,55 @@ const QuestionDifficulty = () => {
   }
 
   return (
-    <Box sx={{ mt: 3 }} ref={plotContainerElem}>
+    <Box sx={{ mt: 3, width: '100%' }}>
       <Plot
         data={[
           {
-            name: 'Correct responses',
+            name: t('Correct responses'),
             type: 'bar',
-            ...correctResponseChartData.data,
+            ...chartData.dataCorrect,
             marker: {
               color: theme.palette.primary.main,
             },
             ...hoverData(
-              correctResponseChartData.hoverText,
-              correctResponseChartData.percentageCorrect,
-              '%{hovertext}<br><br> - Number of correct responses: %{y} <br> - Percentage correct responses: %{meta:.1%} <extra></extra>',
-              theme
+              chartData.hoverText,
+              chartData.percentageCorrect,
+              `%{hovertext}<br><br> - ${t(
+                'Number of correct responses'
+              )}: %{y} <br> - ${t(
+                'Percentage correct responses'
+              )}: %{meta:.1%} <extra></extra>`,
+              theme.palette.primary.main
             ),
+            texttemplate: '%{y}',
+          },
+          {
+            name: t('Incorrect responses'),
+            type: 'bar',
+            ...chartData.dataIncorrect,
+            marker: {
+              color: CHART_SECONDARY_COLOR,
+            },
+            ...hoverData(
+              chartData.hoverText,
+              chartData.percentageIncorrect,
+              `%{hovertext}<br><br> - ${t(
+                'Number of incorrect responses'
+              )}: %{y} <br> - ${t(
+                'Percentage incorrect responses'
+              )}: %{meta:.1%} <extra></extra>`,
+              CHART_SECONDARY_COLOR
+            ),
+            texttemplate: '%{y}',
           },
         ]}
         layout={{
           ...defaultLayout(
-            'Number of correct responses per question',
-            plotContainerElemWidth,
-            correctResponseChartData.maxValue
+            t('Number of correct/incorrect responses per question'),
+            maxWidth,
+            chartData.maxValue
           ),
+          barmode: 'stack',
         }}
         config={{ ...defaultSettings('Nb_correct_responses') }}
         useResizeHandler

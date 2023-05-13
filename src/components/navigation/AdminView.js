@@ -5,10 +5,12 @@ import { Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import {
+  NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_CREATE_QUIZ_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
   NAVIGATION_TAB_CONTAINER_CY,
 } from '../../config/selectors';
+import AnalyticsMenu from '../Analytics/AnalyticsMenu';
 import CreateView from '../create/CreateView';
 import ResultTables from '../results/ResultTables';
 import TabPanel from './TabPanel';
@@ -35,6 +37,10 @@ const AdminView = () => {
             data-cy={NAVIGATION_CREATE_QUIZ_BUTTON_CY}
           />
           <Tab label={t('Results')} data-cy={NAVIGATION_RESULT_BUTTON_CY} />
+          <Tab
+            label={t('Analytics')}
+            data-cy={NAVIGATION_ANALYTICS_BUTTON_CY}
+          />
         </Tabs>
       </Box>
       <TabPanel tab={tab} index={0}>
@@ -42,6 +48,9 @@ const AdminView = () => {
       </TabPanel>
       <TabPanel tab={tab} index={1}>
         <ResultTables headerElem={headerElem} />
+      </TabPanel>
+      <TabPanel tab={tab} index={2}>
+        <AnalyticsMenu />
       </TabPanel>
     </Box>
   );

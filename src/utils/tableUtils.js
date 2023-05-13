@@ -63,5 +63,5 @@ export const getComparator = (order, comp = comparator) =>
  * @param {String} linkName The string that we want to format as an inner link
  */
 export const formatInnerLink = (linkName) => {
-  return linkName.replaceAll(' ', '-')
-}
+  return linkName.replaceAll(' ', '-');
+};

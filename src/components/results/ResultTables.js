@@ -14,7 +14,8 @@ import {
 import {
   Order,
   comparatorArrayByElemName,
-  getComparator, formatInnerLink,
+  formatInnerLink,
+  getComparator,
 } from '../../utils/tableUtils';
 import { QuizContext } from '../context/QuizContext';
 import {
