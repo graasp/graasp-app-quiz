@@ -1,6 +1,6 @@
 import Plotly from 'plotly.js-basic-dist-min';
 
-import { useContext } from 'react';
+import {useContext, useMemo} from 'react';
 import { useTranslation } from 'react-i18next';
 import createPlotlyComponent from 'react-plotly.js/factory';
 
@@ -30,49 +30,51 @@ const QuestionDifficulty = ({ maxWidth }) => {
    *
    * Returns an object that contains the data, and some additional information used to be displayed on the chart
    */
-  const chartData = Array.from(
-    responses.groupBy((r) => r.data.questionId)
-  ).reduce(
-    (acc, [id, list], idx) => {
-      const question = getDataWithId(questions, id).data;
-      const nbCorrectAndIncorrect = list.reduce(
-        ([correct, incorrect], next) =>
-          computeCorrectness(next.data, question)
-            ? [correct + 1, incorrect]
-            : [correct, incorrect + 1],
-        [0, 0]
-      );
+  const chartData = useMemo(() => {
+    return Array.from(
+        responses.groupBy((r) => r.data.questionId)
+    ).reduce(
+        (acc, [id, list], idx) => {
+          const question = getDataWithId(questions, id).data;
+          const nbCorrectAndIncorrect = list.reduce(
+              ([correct, incorrect], next) =>
+                  computeCorrectness(next.data, question)
+                      ? [correct + 1, incorrect]
+                      : [correct, incorrect + 1],
+              [0, 0]
+          );
 
-      return {
-        dataCorrect: {
-          x: [...acc.dataCorrect.x, `Q${idx + 1}`],
-          y: [...acc.dataCorrect.y, nbCorrectAndIncorrect[0]],
+          return {
+            dataCorrect: {
+              x: [...acc.dataCorrect.x, `Q${idx + 1}`],
+              y: [...acc.dataCorrect.y, nbCorrectAndIncorrect[0]],
+            },
+            dataIncorrect: {
+              x: [...acc.dataIncorrect.x, `Q${idx + 1}`],
+              y: [...acc.dataIncorrect.y, nbCorrectAndIncorrect[1]],
+            },
+            percentageCorrect: [
+              ...acc.percentageCorrect,
+              nbCorrectAndIncorrect[0] / list.size,
+            ],
+            percentageIncorrect: [
+              ...acc.percentageIncorrect,
+              nbCorrectAndIncorrect[1] / list.size,
+            ],
+            maxValue: Math.max(acc.maxValue, list.size),
+            hoverText: [...acc.hoverText, question.question],
+          };
         },
-        dataIncorrect: {
-          x: [...acc.dataIncorrect.x, `Q${idx + 1}`],
-          y: [...acc.dataIncorrect.y, nbCorrectAndIncorrect[1]],
-        },
-        percentageCorrect: [
-          ...acc.percentageCorrect,
-          nbCorrectAndIncorrect[0] / list.size,
-        ],
-        percentageIncorrect: [
-          ...acc.percentageIncorrect,
-          nbCorrectAndIncorrect[1] / list.size,
-        ],
-        maxValue: Math.max(acc.maxValue, list.size),
-        hoverText: [...acc.hoverText, question.question],
-      };
-    },
-    {
-      dataCorrect: { x: [], y: [] },
-      dataIncorrect: { x: [], y: [] },
-      percentageCorrect: [],
-      percentageIncorrect: [],
-      maxValue: 0,
-      hoverText: [],
-    }
-  );
+        {
+          dataCorrect: { x: [], y: [] },
+          dataIncorrect: { x: [], y: [] },
+          percentageCorrect: [],
+          percentageIncorrect: [],
+          maxValue: 0,
+          hoverText: [],
+        }
+    );
+  }, [questions, responses])
 
   if (isLoading) {
     return <CircularProgress />;
