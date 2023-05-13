@@ -66,5 +66,6 @@ export default {
     'Percentage correct responses': 'Percentage correct responses',
     'Number of incorrect responses': 'Number of incorrect responses',
     'Percentage incorrect responses': 'Percentage incorrect responses',
+    'Number of correct responses per user': 'Number of correct responses per user'
   },
 };

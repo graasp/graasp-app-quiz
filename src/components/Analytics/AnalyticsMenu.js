@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { useElementWidth } from '../../hooks/useElementWidth';
 import TabPanel from '../navigation/TabPanel';
 import QuestionDifficulty from './QuestionDifficulty';
+import CorrectResponsePerUser from "./CorrectResponsePerUser";
 
 const AnalyticsMenu = () => {
   const { t } = useTranslation();
@@ -46,7 +47,7 @@ const AnalyticsMenu = () => {
           <QuestionDifficulty maxWidth={stackElemWidth - sideMenuElemWidth} />
         </TabPanel>
         <TabPanel tab={tab} index={1}>
-          Placeholder future chart
+          <CorrectResponsePerUser maxWidth={stackElemWidth - sideMenuElemWidth}/>
         </TabPanel>
       </Stack>
     </Box>

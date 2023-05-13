@@ -40,16 +40,20 @@ export const defaultSettings = (fileName) => {
  *
  * @param title The title of the chart
  * @param width The width of the chart
- * @param maxValue The max value in the graph, used to display correct range
+ * @param maxValueX The max X value in the graph, used to display correct range (can be null)
+ * @param maxValueY The max Y value in the graph, used to display correct range (can be null)
  */
-export const defaultLayout = (title, width, maxValue) => {
+export const defaultLayout = (title, width, maxValueX, maxValueY) => {
   return {
     autosize: true,
     title: {
       text: title,
     },
     yaxis: {
-      range: [0, maxValue],
+      range: maxValueX? [0, maxValueX] : [],
+    },
+    xaxis: {
+      range: maxValueY? [0, maxValueY] : []
     },
     modebar: {
       orientation: 'h',
@@ -63,5 +67,8 @@ export const defaultLayout = (title, width, maxValue) => {
     },
     showlegend: true,
     width,
+    margin: {
+      pad: 5
+    }
   };
 };
