@@ -31,7 +31,6 @@ export const defaultSettings = (fileName) => {
     toImageButtonOptions: {
       filename: fileName,
     },
-    responsive: true,
   };
 };
 
@@ -50,10 +49,10 @@ export const defaultLayout = (title, width, maxValueX, maxValueY) => {
       text: title,
     },
     yaxis: {
-      range: maxValueX? [0, maxValueX] : [],
+      range: maxValueX ? [0, maxValueX] : [],
     },
     xaxis: {
-      range: maxValueY? [0, maxValueY] : []
+      range: maxValueY ? [0, maxValueY] : [],
     },
     modebar: {
       orientation: 'h',
@@ -68,7 +67,7 @@ export const defaultLayout = (title, width, maxValueX, maxValueY) => {
     showlegend: true,
     width,
     margin: {
-      pad: 5
-    }
+      pad: 5,
+    },
   };
 };

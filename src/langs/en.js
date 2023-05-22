@@ -56,8 +56,9 @@ export default {
     'Results by user': 'Results by user',
     'No users answered the quiz yet': 'No users answered the quiz yet',
     Analytics: 'Analytics',
-    'Question correctness': 'Question correctness',
-    'Question completion rate': 'Question completion rate',
+    'Quiz performance': 'Quiz performance',
+    'Users performance': 'Users performance',
+    'Quiz completion rate': 'Quiz completion rate',
     'Correct responses': 'Correct responses',
     'Incorrect responses': 'Incorrect responses',
     'Number of correct/incorrect responses per question':
@@ -66,6 +67,7 @@ export default {
     'Percentage correct responses': 'Percentage correct responses',
     'Number of incorrect responses': 'Number of incorrect responses',
     'Percentage incorrect responses': 'Percentage incorrect responses',
-    'Number of correct responses per user': 'Number of correct responses per user'
+    'Number of correct responses per user':
+      'Number of correct responses per user',
   },
 };

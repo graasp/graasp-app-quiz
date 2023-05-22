@@ -50,7 +50,7 @@ const AdminView = () => {
         <ResultTables headerElem={headerElem} />
       </TabPanel>
       <TabPanel tab={tab} index={2}>
-        <AnalyticsMenu />
+        <AnalyticsMenu headerElem={headerElem} />
       </TabPanel>
     </Box>
   );
