@@ -50,7 +50,11 @@ const AnalyticsMenu = ({ headerElem }) => {
       <Stack direction="row" ref={stackElemRef}>
         <Box
           ref={sideMenuElemRef}
-          sx={{ minWidth: '8em', maxHeight: maxResultViewHeight, overflow: 'auto' }}
+          sx={{
+            minWidth: '8em',
+            maxHeight: maxResultViewHeight,
+            overflow: 'auto',
+          }}
         >
           <AutoScrollableMenu
             links={menuLabels}

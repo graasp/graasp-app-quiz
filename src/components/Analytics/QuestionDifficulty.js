@@ -22,19 +22,23 @@ const Plot = createPlotlyComponent(Plotly);
 const QuestionDifficulty = ({ maxWidth }) => {
   const { t } = useTranslation();
   const { data: responses, isLoading } = hooks.useAppData();
-  const { questions } = useContext(QuizContext);
+  const { questions, order } = useContext(QuizContext);
   const theme = useTheme();
 
   /**
    * Function to calculate the data to be displayed in the chart
    *
    * Returns an object that contains the data, and some additional information used to be displayed on the chart
+   *
+   * the order of the question are the same as defined when creating the quizz
    */
   const chartData = useMemo(() => {
-    return Array.from(responses.groupBy((r) => r.data.questionId)).reduce(
-      (acc, [id, list], idx) => {
-        const question = getDataWithId(questions, id).data;
-        const nbCorrectAndIncorrect = list.reduce(
+    const responsesByQId = responses.groupBy((r) => r.data.questionId);
+    return order?.reduce(
+      (acc, qId, idx) => {
+        const question = getDataWithId(questions, qId).data;
+        const responses = responsesByQId.get(qId);
+        const nbCorrectAndIncorrect = responses.reduce(
           ([correct, incorrect], next) =>
             computeCorrectness(next.data, question)
               ? [correct + 1, incorrect]
@@ -53,13 +57,13 @@ const QuestionDifficulty = ({ maxWidth }) => {
           },
           percentageCorrect: [
             ...acc.percentageCorrect,
-            nbCorrectAndIncorrect[0] / list.size,
+            nbCorrectAndIncorrect[0] / responses.size,
           ],
           percentageIncorrect: [
             ...acc.percentageIncorrect,
-            nbCorrectAndIncorrect[1] / list.size,
+            nbCorrectAndIncorrect[1] / responses.size,
           ],
-          maxValue: Math.max(acc.maxValue, list.size),
+          maxValue: Math.max(acc.maxValue, responses.size),
           hoverText: [...acc.hoverText, question.question],
         };
       },
@@ -72,7 +76,7 @@ const QuestionDifficulty = ({ maxWidth }) => {
         hoverText: [],
       }
     );
-  }, [questions, responses]);
+  }, [questions, responses, order]);
 
   if (isLoading) {
     return <CircularProgress />;

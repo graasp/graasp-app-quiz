@@ -46,7 +46,7 @@ const CorrectResponsePerUser = ({ maxWidth }) => {
   }, [groupQuestionById]);
 
   const chartData = Array.from(responses?.groupBy((r) => r.memberId)).reduce(
-    (acc, [id, list], idx) => {
+    (acc, [id, list]) => {
       const nbCorrect = list.reduce(
         (acc, next) =>
           computeCorrectness(
@@ -111,7 +111,9 @@ const CorrectResponsePerUser = ({ maxWidth }) => {
             undefined,
             chartData.maxValue
           ),
-          barmode: 'stack',
+          yaxis: {
+            automargin: true,
+          },
         }}
         config={{ ...defaultSettings('Nb_correct_responses') }}
       ></Plot>
