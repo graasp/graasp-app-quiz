@@ -27,7 +27,7 @@ export const hoverData = (hoverText, meta, template, borderColor) => {
 export const defaultSettings = (fileName) => {
   return {
     displaylogo: false,
-    scrollZoom: true,
+    scrollZoom: false, // It doesn't bring much now, so disable it, but let it here if we need it again
     toImageButtonOptions: {
       filename: fileName,
     },
@@ -39,20 +39,28 @@ export const defaultSettings = (fileName) => {
  *
  * @param title The title of the chart
  * @param width The width of the chart
+ * @param percentage Set the y-axis in percentage if true
  * @param maxValueX The max X value in the graph, used to display correct range (can be null)
  * @param maxValueY The max Y value in the graph, used to display correct range (can be null)
  */
-export const defaultLayout = (title, width, maxValueX, maxValueY) => {
+export const defaultLayout = (
+  title,
+  width,
+  percentage,
+  maxValueX,
+  maxValueY
+) => {
   return {
     autosize: true,
     title: {
       text: title,
     },
     yaxis: {
-      range: maxValueX ? [0, maxValueX] : [],
+      range: maxValueY ? [0, maxValueY] : [],
+      tickformat: percentage ? ',.0%' : null,
     },
     xaxis: {
-      range: maxValueY ? [0, maxValueY] : [],
+      range: maxValueX ? [0, maxValueX] : [],
     },
     modebar: {
       orientation: 'h',

@@ -9,6 +9,7 @@ import { useMaxAvailableHeightInWindow } from '../../hooks/useMaxAvailableHeight
 import { formatInnerLink } from '../../utils/tableUtils';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
 import CorrectResponsePerUser from './CorrectResponsePerUser';
+import CorrectResponsesPercentage from './CorrectResponsesPercentage';
 import QuestionDifficulty from './QuestionDifficulty';
 
 const SLIDER_WIDTH = 16;
@@ -37,7 +38,8 @@ const AnalyticsMenu = ({ headerElem }) => {
 
   const menuLabels = [
     t('Quiz performance'),
-    t('Users performance') /*t('Quiz completion rate')*/,
+    t('Users performance'),
+    t('Quiz correct response percentage'),
   ].map((val) => {
     return {
       label: val,
@@ -84,6 +86,14 @@ const AnalyticsMenu = ({ headerElem }) => {
             id={menuLabels[1].link}
           >
             <CorrectResponsePerUser
+              maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
+            />
+          </Box>
+          <Box
+            ref={(elm) => (chartRefs.current[menuLabels[2].label] = elm)}
+            id={menuLabels[2].link}
+          >
+            <CorrectResponsesPercentage
               maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
             />
           </Box>

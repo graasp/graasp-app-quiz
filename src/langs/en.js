@@ -58,7 +58,7 @@ export default {
     Analytics: 'Analytics',
     'Quiz performance': 'Quiz performance',
     'Users performance': 'Users performance',
-    'Quiz completion rate': 'Quiz completion rate',
+    'Quiz correct response percentage': 'Quiz correct response percentage',
     'Correct responses': 'Correct responses',
     'Incorrect responses': 'Incorrect responses',
     'Number of correct/incorrect responses per question':

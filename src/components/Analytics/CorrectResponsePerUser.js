@@ -108,7 +108,7 @@ const CorrectResponsePerUser = ({ maxWidth }) => {
           ...defaultLayout(
             t('Number of correct responses per user'),
             maxWidth,
-            undefined,
+            false,
             chartData.maxValue
           ),
           yaxis: {

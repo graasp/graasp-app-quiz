@@ -129,6 +129,8 @@ const QuestionDifficulty = ({ maxWidth }) => {
           ...defaultLayout(
             t('Number of correct/incorrect responses per question'),
             maxWidth,
+            false,
+            undefined,
             chartData.maxValue
           ),
           barmode: 'stack',
