@@ -29,7 +29,7 @@ const AnswersDistributionBarChart = ({ maxWidth, chartData, question }) => {
               color: theme.palette.primary.main,
             },
             ...hoverData(
-              chartData.hoverText,
+              chartData?.hoverText,
               chartData.percentage,
               `%{hovertext}<br><br> - ${t(
                 'Number of time selected'
@@ -43,7 +43,7 @@ const AnswersDistributionBarChart = ({ maxWidth, chartData, question }) => {
         ]}
         layout={{
           ...defaultLayout(
-            `${t('Answers distribution')} - <br> ${question.data.question}`,
+            `${t('Answers distribution')} -<br>${question.data.question}`,
             maxWidth,
             false,
             undefined,

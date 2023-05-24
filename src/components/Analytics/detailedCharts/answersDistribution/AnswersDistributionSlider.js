@@ -89,15 +89,11 @@ const AnswersDistributionSlider = ({
               theme.palette.primary.main
             ),
             fill: 'tozeroy',
-            texttemplate: '%{text}',
-            textfont: {
-              color: 'red',
-            },
           },
         ]}
         layout={{
           ...defaultLayout(
-            `${t('Answers distribution')} - <br> ${question.data.question}`,
+            `${t('Answers distribution')} -<br> ${question.data.question}`,
             maxWidth,
             false,
             undefined,

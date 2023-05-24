@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { QUESTION_TYPES } from '../../../config/constants';
 import { hooks } from '../../../config/queryClient';
 import { getAllAppDataByQuestionId } from '../../context/utilities';
+import AnswersDistributionFillInTheBlanks from './answersDistribution/AnswersDistributionFillInTheBlanks';
 import AnswersDistributionMultipleChoices from './answersDistribution/AnswersDistributionMultipleChoices';
 import AnswersDistributionSlider from './answersDistribution/AnswersDistributionSlider';
 import AnswersDistributionTextInput from './answersDistribution/AnswersDistributionTextInput';
@@ -49,6 +50,14 @@ const QuestionDetailedCharts = ({
       case QUESTION_TYPES.TEXT_INPUT:
         return (
           <AnswersDistributionTextInput
+            maxWidth={maxWidth}
+            question={question}
+            appDataForQuestion={appDataForQuestion}
+          />
+        );
+      case QUESTION_TYPES.FILL_BLANKS:
+        return (
+          <AnswersDistributionFillInTheBlanks
             maxWidth={maxWidth}
             question={question}
             appDataForQuestion={appDataForQuestion}
