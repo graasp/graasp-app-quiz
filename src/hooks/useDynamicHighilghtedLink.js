@@ -14,12 +14,19 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  * @param {MutableRefObject<null>} containerRef The element to use as parent for the observer pattern
  * @param {MutableRefObject<{}>} elemRefs A list of element stored as an object, those element will be observed
  * for intersection with the parent element
+ * @param triggerVal Value to pass, to manually re-trigger the hook, as Ref do not change, if its value changed
+ * from outside, the useEffect won't be triggered automatically, in some cases, we might want to change it and
+ * trigger again the observable, pass a different triggerVal to achieve this behavior.
  * @return {[string, (link: String) => void]} An array containing two elements
  *
  *  - elem 1 (highlightedLink): This is the link that is currently highlighted
  *  - elem 2 (clickOnLink): This is a function to click on a link (i.e. the link we want to be highlighted next).
  */
-export const useDynamicHighlightedLink = (containerRef, elemRefs) => {
+export const useDynamicHighlightedLink = (
+  containerRef,
+  elemRefs,
+  triggerVal
+) => {
   /**
    * Store the link that is currently highlighted
    */
@@ -62,15 +69,18 @@ export const useDynamicHighlightedLink = (containerRef, elemRefs) => {
       intersectionCallback,
       observerOption
     );
-    Object.entries(elemRefs.current).forEach(([, value]) =>
-      observer.observe(value)
-    );
+    Object.entries(elemRefs.current).forEach(([, value]) => {
+      if (value) {
+        observer.observe(value);
+      }
+    });
 
     // disconnect all observed value upon destruction of component
     return () => {
+      setQuestionVisibility({}); // reset visibility so its ready again for new elements
       observer.disconnect();
     };
-  }, [elemRefs, containerRef]);
+  }, [elemRefs, containerRef, triggerVal]);
 
   /**
    * Subscribe to scroll event to be able to determine when we stop scrolling to set the correct clicked item
@@ -111,7 +121,7 @@ export const useDynamicHighlightedLink = (containerRef, elemRefs) => {
       ref.removeEventListener('scroll', scrollCallback);
       ref.removeEventListener('wheel', wheelCallback);
     };
-  }, [containerRef]);
+  }, [containerRef, triggerVal]);
 
   /**
    * update the highlighted link whenever the question visibility changes

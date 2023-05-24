@@ -79,3 +79,12 @@ export const defaultLayout = (
     },
   };
 };
+
+/**
+ * Function to truncate text that are longer than a certain length
+ *
+ * @param text The text to truncate if too long
+ * @param length The max length allowed before truncating the text
+ */
+export const truncateText = (text, length) =>
+  text.length > length ? `${text.slice(0, length)}...` : text;

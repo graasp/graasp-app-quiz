@@ -67,5 +67,12 @@ export default {
     'Percentage incorrect responses': 'Pourcentage de réponses incorrectes',
     'Number of correct responses per user':
       'Nombre de réponses correctes par utilisateur',
+    General: 'Général',
+    'Question answer frequency': 'Fréquence des réponses à la question',
+    'Answers distribution': 'Distribution des réponses',
+    'Number of answers': 'Nombre de réponses',
+    'Number of time selected': 'Nombre de fois sélectionné',
+    'Percentage number of time selected':
+      'Pourcentage du nombre de fois sélectionné',
   },
 };

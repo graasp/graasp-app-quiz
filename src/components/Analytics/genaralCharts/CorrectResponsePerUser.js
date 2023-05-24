@@ -8,14 +8,14 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import { CircularProgress, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 
-import { hooks } from '../../config/queryClient';
+import { hooks } from '../../../config/queryClient';
 import {
   defaultLayout,
   defaultSettings,
   hoverData,
-} from '../../utils/plotUtils';
-import { QuizContext } from '../context/QuizContext';
-import { computeCorrectness } from '../context/utilities';
+} from '../../../utils/plotUtils';
+import { QuizContext } from '../../context/QuizContext';
+import { computeCorrectness } from '../../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
 

@@ -7,15 +7,15 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import { CircularProgress, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 
-import { CHART_SECONDARY_COLOR } from '../../config/constants';
-import { hooks } from '../../config/queryClient';
+import { CHART_SECONDARY_COLOR } from '../../../config/constants';
+import { hooks } from '../../../config/queryClient';
 import {
   defaultLayout,
   defaultSettings,
   hoverData,
-} from '../../utils/plotUtils';
-import { QuizContext } from '../context/QuizContext';
-import { computeCorrectness, getDataWithId } from '../context/utilities';
+} from '../../../utils/plotUtils';
+import { QuizContext } from '../../context/QuizContext';
+import { computeCorrectness, getDataWithId } from '../../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
 

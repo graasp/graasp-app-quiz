@@ -1,29 +1,81 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Stack } from '@mui/material';
+import { Stack, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import { useElementWidth } from '../../hooks/useElementWidth';
-import { useMaxAvailableHeightInWindow } from '../../hooks/useMaxAvailableHeight';
+import {
+  useMaxAvailableHeightInWindow,
+  useMaxAvailableHeightWithParentHeight,
+} from '../../hooks/useMaxAvailableHeight';
 import { formatInnerLink } from '../../utils/tableUtils';
+import { QuizContext } from '../context/QuizContext';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
-import CorrectResponsePerUser from './CorrectResponsePerUser';
-import CorrectResponsesPercentage from './CorrectResponsesPercentage';
-import QuestionDifficulty from './QuestionDifficulty';
+import TabPanel from '../navigation/TabPanel';
+import QuestionDetailedCharts from './detailedCharts/QuestionDetailedCharts';
+import GeneralCharts from './genaralCharts/GeneralCharts';
 
 const SLIDER_WIDTH = 16;
 
 const AnalyticsMenu = ({ headerElem }) => {
   const { t } = useTranslation();
 
+  const generalMenuLabels = useMemo(() => {
+    return [
+      t('Quiz performance'),
+      t('Users performance'),
+      t('Quiz correct response percentage'),
+    ].map((val) => {
+      return {
+        label: val,
+        link: formatInnerLink(val),
+      };
+    });
+  }, [t]);
+
+  const questionDetailedMenuLabels = useMemo(() => {
+    return [t('Question answer frequency')].map((val) => {
+      return {
+        label: val,
+        link: formatInnerLink(val),
+      };
+    });
+  }, [t]);
+
+  const [autoScrollableMenuLinks, setAutoScrollableMenuLinks] =
+    useState(generalMenuLabels);
+  const { questions, order } = useContext(QuizContext);
   const chartRefs = useRef({});
   const chartContainerRef = useRef(null);
   const stackElemRef = useRef(null);
   const sideMenuElemRef = useRef(null);
   const [stackElem, setStackElem] = useState(null);
   const [sideMenuElem, setSideMenuElem] = useState(null);
+  const chartTabs = useRef(null);
   const maxResultViewHeight = useMaxAvailableHeightInWindow(headerElem.current);
+  const maxHeightScrollableMenu = useMaxAvailableHeightWithParentHeight(
+    maxResultViewHeight,
+    chartTabs.current
+  );
+  const [tab, setTab] = useState(0);
+
+  const getQuestionById = useCallback(() => {
+    return questions.groupBy((q) => q.id);
+  }, [questions]);
+
+  const [questionById, setQuestionById] = useState(getQuestionById());
+
+  useEffect(() => {
+    setQuestionById(getQuestionById());
+  }, [getQuestionById]);
 
   // Here to force react to trigger a re-render when stackElemRef.current has been modified
   useEffect(() => {
@@ -36,16 +88,14 @@ const AnalyticsMenu = ({ headerElem }) => {
   const stackElemWidth = useElementWidth(stackElem);
   const sideMenuElemWidth = useElementWidth(sideMenuElem);
 
-  const menuLabels = [
-    t('Quiz performance'),
-    t('Users performance'),
-    t('Quiz correct response percentage'),
-  ].map((val) => {
-    return {
-      label: val,
-      link: formatInnerLink(val),
-    };
-  });
+  const handleTabChanged = (_, v) => {
+    if (v === 0) {
+      setAutoScrollableMenuLinks(generalMenuLabels);
+    } else {
+      setAutoScrollableMenuLinks(questionDetailedMenuLabels);
+    }
+    setTab(v);
+  };
 
   return (
     <Box>
@@ -54,15 +104,40 @@ const AnalyticsMenu = ({ headerElem }) => {
           ref={sideMenuElemRef}
           sx={{
             minWidth: '8em',
+            maxWidth: '12em',
             maxHeight: maxResultViewHeight,
-            overflow: 'auto',
           }}
         >
-          <AutoScrollableMenu
-            links={menuLabels}
-            elemRefs={chartRefs}
-            containerRef={chartContainerRef}
-          />
+          <Box
+            sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              mb: 4,
+              maxHeight: maxResultViewHeight / 2,
+              overflow: 'auto',
+            }}
+            ref={chartTabs}
+          >
+            <Tabs
+              value={tab}
+              onChange={handleTabChanged}
+              orientation="vertical"
+            >
+              <Tab label={t('General')} />
+              {order?.map((qId) => {
+                const question = questionById.get(qId)?.first()?.data?.question;
+                return <Tab label={question} key={question} />;
+              })}
+            </Tabs>
+          </Box>
+          <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
+            <AutoScrollableMenu
+              links={autoScrollableMenuLinks}
+              elemRefs={chartRefs}
+              containerRef={chartContainerRef}
+              triggerVal={tab}
+            />
+          </Box>
         </Box>
         <Box
           sx={{
@@ -73,30 +148,25 @@ const AnalyticsMenu = ({ headerElem }) => {
           }}
           ref={chartContainerRef}
         >
-          <Box
-            ref={(elm) => (chartRefs.current[menuLabels[0].label] = elm)}
-            id={menuLabels[0].link}
-          >
-            <QuestionDifficulty
+          <TabPanel tab={tab} index={0}>
+            <GeneralCharts
               maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
+              generalMenuLabels={generalMenuLabels}
+              chartRefs={chartRefs}
             />
-          </Box>
-          <Box
-            ref={(elm) => (chartRefs.current[menuLabels[1].label] = elm)}
-            id={menuLabels[1].link}
-          >
-            <CorrectResponsePerUser
-              maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
-            />
-          </Box>
-          <Box
-            ref={(elm) => (chartRefs.current[menuLabels[2].label] = elm)}
-            id={menuLabels[2].link}
-          >
-            <CorrectResponsesPercentage
-              maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
-            />
-          </Box>
+          </TabPanel>
+          {order?.map((qId, idx) => {
+            return (
+              <TabPanel tab={tab} index={idx + 1} key={qId}>
+                <QuestionDetailedCharts
+                  maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
+                  questionDetailedMenuLabels={questionDetailedMenuLabels}
+                  chartRefs={chartRefs}
+                  question={questionById.get(qId)?.first()}
+                />
+              </TabPanel>
+            );
+          })}
         </Box>
       </Stack>
     </Box>
