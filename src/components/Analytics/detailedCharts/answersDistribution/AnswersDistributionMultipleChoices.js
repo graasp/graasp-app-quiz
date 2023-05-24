@@ -51,7 +51,7 @@ const AnswersDistributionMultipleChoices = ({
     (acc, [choices, list], idx) => {
       return {
         data: {
-          x: [...acc.data.x, `A${idx + 1} <br> ${truncateText(choices, 10)}`], //
+          x: [...acc.data.x, `A${idx + 1}<br>${truncateText(choices, 10)}`],
           y: [...acc.data.y, list.size],
         },
         percentage: [...acc.percentage, list.size / appDataForQuestion.size],

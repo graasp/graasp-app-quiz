@@ -7,6 +7,7 @@ import { QUESTION_TYPES } from '../../../config/constants';
 import { hooks } from '../../../config/queryClient';
 import { getAllAppDataByQuestionId } from '../../context/utilities';
 import AnswersDistributionMultipleChoices from './answersDistribution/AnswersDistributionMultipleChoices';
+import AnswersDistributionSlider from './answersDistribution/AnswersDistributionSlider';
 
 const QuestionDetailedCharts = ({
   maxWidth,
@@ -31,6 +32,14 @@ const QuestionDetailedCharts = ({
       case QUESTION_TYPES.MULTIPLE_CHOICES:
         return (
           <AnswersDistributionMultipleChoices
+            maxWidth={maxWidth}
+            question={question}
+            appDataForQuestion={appDataForQuestion}
+          />
+        );
+      case QUESTION_TYPES.SLIDER:
+        return (
+          <AnswersDistributionSlider
             maxWidth={maxWidth}
             question={question}
             appDataForQuestion={appDataForQuestion}
