@@ -97,6 +97,13 @@ const AnalyticsMenu = ({ headerElem }) => {
     setTab(v);
   };
 
+  const handleQuestionRedirection = (qId) => {
+    const index = order.indexOf(qId);
+    if (index !== -1) {
+      setTab(order.indexOf(qId) + 1);
+    }
+  };
+
   return (
     <Box>
       <Stack direction="row" ref={stackElemRef}>
@@ -153,6 +160,7 @@ const AnalyticsMenu = ({ headerElem }) => {
               maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
               generalMenuLabels={generalMenuLabels}
               chartRefs={chartRefs}
+              goToDetailedQuestion={handleQuestionRedirection}
             />
           </TabPanel>
           {order?.map((qId, idx) => {

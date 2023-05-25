@@ -18,7 +18,7 @@ import { computeCorrectness, getDataWithId } from '../../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
 
-const CorrectResponsesPercentage = ({ maxWidth }) => {
+const CorrectResponsesPercentage = ({ maxWidth, goToDetailedQuestion }) => {
   const { t } = useTranslation();
   const { data: responses, isLoading } = hooks.useAppData();
   const { questions, order } = useContext(QuizContext);
@@ -36,11 +36,11 @@ const CorrectResponsesPercentage = ({ maxWidth }) => {
   const chartData = useMemo(() => {
     return order.reduce(
       (acc, qId, idx) => {
-        const question = getDataWithId(questions, qId).data;
+        const question = getDataWithId(questions, qId);
         const responses = responsesByQId.get(qId);
         const nbCorrect = responses.reduce(
           (acc, next) =>
-            computeCorrectness(next.data, question) ? acc + 1 : acc,
+            computeCorrectness(next.data, question.data) ? acc + 1 : acc,
           0
         );
 
@@ -49,12 +49,14 @@ const CorrectResponsesPercentage = ({ maxWidth }) => {
             x: [...acc.data.x, `Q${idx + 1}`],
             y: [...acc.data.y, nbCorrect / responses.size],
           },
-          hoverText: [...acc.hoverText, question.question],
+          hoverText: [...acc.hoverText, question.data.question],
+          qIds: [...acc.qIds, question.id],
         };
       },
       {
         data: { x: [], y: [] },
         hoverText: [],
+        qIds: [],
       }
     );
   }, [questions, responsesByQId, order]);
@@ -76,10 +78,10 @@ const CorrectResponsesPercentage = ({ maxWidth }) => {
             },
             ...hoverData(
               chartData.hoverText,
-              null,
+              chartData.qIds,
               `%{hovertext}<br><br> - ${t(
                 'Percentage correct responses'
-              )}: %{y} <extra></extra>`,
+              )}: %{y:.1%} <extra></extra>`,
               theme.palette.primary.main
             ),
             fill: 'tozeroy',
@@ -98,6 +100,7 @@ const CorrectResponsesPercentage = ({ maxWidth }) => {
           },
         }}
         config={{ ...defaultSettings('Quiz_correct_response_percentage') }}
+        onClick={({ points }) => goToDetailedQuestion(points[0].meta)}
       />
     </Box>
   );

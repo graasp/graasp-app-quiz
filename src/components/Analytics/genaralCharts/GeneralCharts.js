@@ -4,14 +4,22 @@ import CorrectResponsePerUser from './CorrectResponsePerUser';
 import CorrectResponsesPercentage from './CorrectResponsesPercentage';
 import QuestionDifficulty from './QuestionDifficulty';
 
-const GeneralCharts = ({ maxWidth, generalMenuLabels, chartRefs }) => {
+const GeneralCharts = ({
+  maxWidth,
+  generalMenuLabels,
+  chartRefs,
+  goToDetailedQuestion,
+}) => {
   return (
     <>
       <Box
         ref={(elm) => (chartRefs.current[generalMenuLabels[0].label] = elm)}
         id={generalMenuLabels[0].link}
       >
-        <QuestionDifficulty maxWidth={maxWidth} />
+        <QuestionDifficulty
+          maxWidth={maxWidth}
+          goToDetailedQuestion={goToDetailedQuestion}
+        />
       </Box>
       <Box
         ref={(elm) => (chartRefs.current[generalMenuLabels[1].label] = elm)}
@@ -23,7 +31,10 @@ const GeneralCharts = ({ maxWidth, generalMenuLabels, chartRefs }) => {
         ref={(elm) => (chartRefs.current[generalMenuLabels[2].label] = elm)}
         id={generalMenuLabels[2].link}
       >
-        <CorrectResponsesPercentage maxWidth={maxWidth} />
+        <CorrectResponsesPercentage
+          maxWidth={maxWidth}
+          goToDetailedQuestion={goToDetailedQuestion}
+        />
       </Box>
     </>
   );
