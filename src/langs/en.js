@@ -75,5 +75,6 @@ export default {
     'Number of answers': 'Number of answers',
     'Number of time selected': 'Number of time selected',
     'Percentage number of time selected': 'Percentage number of time selected',
+    'Error, question type unknown': 'Error, question type unknown',
   },
 };

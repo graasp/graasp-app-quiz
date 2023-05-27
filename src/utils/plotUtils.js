@@ -43,13 +43,13 @@ export const defaultSettings = (fileName) => {
  * @param maxValueX The max X value in the graph, used to display correct range (can be null)
  * @param maxValueY The max Y value in the graph, used to display correct range (can be null)
  */
-export const defaultLayout = (
+export const defaultLayout = ({
   title,
   width,
   percentage,
   maxValueX,
-  maxValueY
-) => {
+  maxValueY,
+}) => {
   return {
     autosize: true,
     title: {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CircularProgress, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -17,6 +18,7 @@ const QuestionDetailedCharts = ({
   chartRefs,
   question,
 }) => {
+  const { t } = useTranslation();
   const { data: responses, isLoading } = hooks.useAppData();
 
   const [appDataForQuestion, setAppDataForQuestion] = useState(
@@ -64,7 +66,7 @@ const QuestionDetailedCharts = ({
           />
         );
       default:
-        return <Typography> Error, question type unknown </Typography>;
+        return <Typography> {t('Error, question type unknown')} </Typography>;
     }
   };
 
@@ -73,16 +75,14 @@ const QuestionDetailedCharts = ({
   }
 
   return (
-    <>
-      <Box
-        ref={(elm) =>
-          (chartRefs.current[questionDetailedMenuLabels[0].label] = elm)
-        }
-        id={questionDetailedMenuLabels[0].link}
-      >
-        {renderAnswerDistributionChart()}
-      </Box>
-    </>
+    <Box
+      ref={(elm) =>
+        (chartRefs.current[questionDetailedMenuLabels[0].label] = elm)
+      }
+      id={questionDetailedMenuLabels[0].link}
+    >
+      {renderAnswerDistributionChart()}
+    </Box>
   );
 };
 

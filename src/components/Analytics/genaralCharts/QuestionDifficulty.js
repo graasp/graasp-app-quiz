@@ -126,13 +126,12 @@ const QuestionDifficulty = ({ maxWidth, goToDetailedQuestion }) => {
           },
         ]}
         layout={{
-          ...defaultLayout(
-            t('Number of correct/incorrect responses per question'),
-            maxWidth,
-            false,
-            undefined,
-            chartData.maxValue
-          ),
+          ...defaultLayout({
+            title: t('Number of correct/incorrect responses per question'),
+            width: maxWidth,
+            percentage: false,
+            maxValueY: chartData.maxValue,
+          }),
           barmode: 'stack',
         }}
         config={{ ...defaultSettings('Nb_correct_responses') }}

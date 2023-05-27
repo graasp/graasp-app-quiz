@@ -42,13 +42,14 @@ const AnswersDistributionBarChart = ({ maxWidth, chartData, question }) => {
           },
         ]}
         layout={{
-          ...defaultLayout(
-            `${t('Answers distribution')} -<br>${question.data.question}`,
-            maxWidth,
-            false,
-            undefined,
-            chartData.maxValue
-          ),
+          ...defaultLayout({
+            title: `${t('Answers distribution')} -<br>${
+              question.data.question
+            }`,
+            width: maxWidth,
+            percentage: false,
+            maxValueY: chartData.maxValue,
+          }),
           showlegend: false,
         }}
         config={{

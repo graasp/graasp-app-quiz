@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { truncateText } from '../../../../utils/plotUtils';
 import AnswersDistributionBarChart from './AnswersDistributionBarChart';
@@ -8,47 +8,55 @@ const AnswersDistributionMultipleChoices = ({
   question,
   appDataForQuestion,
 }) => {
-  const getResponsesByChoices = useCallback(() => {
-    return appDataForQuestion
-      .map((r) => {
-        return {
-          ...r,
-          data: {
-            ...r.data,
-            choices: r.data.choices.join(', '),
-          },
-        };
-      })
-      .groupBy((r) => r.data.choices);
-  }, [appDataForQuestion]);
-
-  const [responsesByChoices, setResponsesByChoices] = useState(
-    getResponsesByChoices()
+  const questions = useMemo(
+    () =>
+      question.data.choices.reduce((acc, c) => {
+        acc[c.value] = 0;
+        return acc;
+      }, {}),
+    [question]
   );
 
-  useEffect(
-    () => setResponsesByChoices(getResponsesByChoices()),
-    [getResponsesByChoices]
+  const responsesCount = useMemo(
+    () =>
+      appDataForQuestion.reduce(
+        (questionsCountAcc, appData) =>
+          appData.data.choices.reduce((acc, choice) => {
+            acc[choice]++;
+            return acc;
+          }, questionsCountAcc),
+        questions
+      ),
+    [appDataForQuestion, questions]
   );
 
-  const chartData = Array.from(responsesByChoices).reduce(
-    (acc, [choices, list], idx) => {
-      return {
-        data: {
-          x: [...acc.data.x, `A${idx + 1}<br>${truncateText(choices, 10)}`],
-          y: [...acc.data.y, list.size],
+  const totalCount = useMemo(
+    () => Object.values(responsesCount).reduce((acc, count) => acc + count, 0),
+    [responsesCount]
+  );
+
+  const chartData = useMemo(
+    () =>
+      Object.entries(responsesCount).reduce(
+        (acc, [choice, count], idx) => {
+          return {
+            data: {
+              x: [...acc.data.x, `A${idx + 1}<br>${truncateText(choice, 10)}`],
+              y: [...acc.data.y, count],
+            },
+            percentage: [...acc.percentage, count / totalCount],
+            maxValue: Math.max(acc.maxValue, count),
+            hoverText: [...acc.hoverText, choice],
+          };
         },
-        percentage: [...acc.percentage, list.size / appDataForQuestion.size],
-        maxValue: Math.max(acc.maxValue, list.size),
-        hoverText: [...acc.hoverText, choices],
-      };
-    },
-    {
-      data: { x: [], y: [] },
-      percentage: [],
-      maxValue: 0,
-      hoverText: [],
-    }
+        {
+          data: { x: [], y: [] },
+          percentage: [],
+          maxValue: 0,
+          hoverText: [],
+        }
+      ),
+    [responsesCount, totalCount]
   );
 
   return (

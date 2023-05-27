@@ -105,12 +105,12 @@ const CorrectResponsePerUser = ({ maxWidth }) => {
           },
         ]}
         layout={{
-          ...defaultLayout(
-            t('Number of correct responses per user'),
-            maxWidth,
-            false,
-            chartData.maxValue
-          ),
+          ...defaultLayout({
+            title: t('Number of correct responses per user'),
+            width: maxWidth,
+            percentage: false,
+            maxValueX: chartData.maxValue,
+          }),
           yaxis: {
             automargin: true,
           },

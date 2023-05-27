@@ -88,13 +88,12 @@ const CorrectResponsesPercentage = ({ maxWidth, goToDetailedQuestion }) => {
           },
         ]}
         layout={{
-          ...defaultLayout(
-            t('Quiz correct response percentage'),
-            maxWidth,
-            true,
-            undefined,
-            1.1
-          ),
+          ...defaultLayout({
+            title: t('Quiz correct response percentage'),
+            width: maxWidth,
+            percentage: true,
+            maxValueY: 1.1,
+          }),
           xaxis: {
             range: [-0.2, order.length - 0.8],
           },
