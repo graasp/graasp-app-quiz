@@ -19,6 +19,13 @@ import { computeCorrectness, getDataWithId } from '../../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
 
+/**
+ * Component that renders the question difficulty chart
+ *
+ * @param maxWidth The maximum width of the chart
+ * @param goToDetailedQuestion The callback to call to be redirected to the detailed chart corresponding to
+ * the question that has been clicked on
+ */
 const QuestionDifficulty = ({ maxWidth, goToDetailedQuestion }) => {
   const { t } = useTranslation();
   const { data: responses, isLoading } = hooks.useAppData();
@@ -30,7 +37,7 @@ const QuestionDifficulty = ({ maxWidth, goToDetailedQuestion }) => {
    *
    * Returns an object that contains the data, and some additional information used to be displayed on the chart
    *
-   * the order of the question are the same as defined when creating the quizz
+   * the order of the question are the same as defined when creating the quiz
    */
   const chartData = useMemo(() => {
     const responsesByQId = responses.groupBy((r) => r.data.questionId);
@@ -134,7 +141,7 @@ const QuestionDifficulty = ({ maxWidth, goToDetailedQuestion }) => {
           }),
           barmode: 'stack',
         }}
-        config={{ ...defaultSettings('Nb_correct_responses') }}
+        config={defaultSettings('Nb_correct_responses')}
         onClick={({ points }) => goToDetailedQuestion(points[0].meta[1])}
       />
     </Box>

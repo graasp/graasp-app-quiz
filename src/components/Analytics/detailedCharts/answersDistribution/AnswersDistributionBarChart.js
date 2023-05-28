@@ -13,7 +13,15 @@ import {
 } from '../../../../utils/plotUtils';
 
 const Plot = createPlotlyComponent(Plotly);
-const AnswersDistributionBarChart = ({ maxWidth, chartData, question }) => {
+
+/**
+ * Component to display the answersDistribution into a bar chart given the received data
+ *
+ * @param maxWidth The max width of the question
+ * @param chartData The data to display into the chart
+ * @param questionName The name of the question, to add as title of the chart
+ */
+const AnswersDistributionBarChart = ({ maxWidth, chartData, questionName }) => {
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -43,18 +51,14 @@ const AnswersDistributionBarChart = ({ maxWidth, chartData, question }) => {
         ]}
         layout={{
           ...defaultLayout({
-            title: `${t('Answers distribution')} -<br>${
-              question.data.question
-            }`,
+            title: `${t('Answers distribution')} -<br>${questionName}`,
             width: maxWidth,
             percentage: false,
             maxValueY: chartData.maxValue,
           }),
           showlegend: false,
         }}
-        config={{
-          ...defaultSettings(`${question.data.question}_Answer distribution`),
-        }}
+        config={defaultSettings(`${questionName}_Answer distribution`)}
       />
     </Box>
   );

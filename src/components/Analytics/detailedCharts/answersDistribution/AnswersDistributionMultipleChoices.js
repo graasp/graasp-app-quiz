@@ -3,6 +3,13 @@ import { useMemo } from 'react';
 import { truncateText } from '../../../../utils/plotUtils';
 import AnswersDistributionBarChart from './AnswersDistributionBarChart';
 
+/**
+ * Component used to display the answers distribution for the multiple choices question type
+ *
+ * @param maxWidth The max width of the chart
+ * @param question The question for which to display detailed information into the chart
+ * @param appDataForQuestion The app data for the question (i.e. users answers)
+ */
 const AnswersDistributionMultipleChoices = ({
   maxWidth,
   question,
@@ -62,7 +69,7 @@ const AnswersDistributionMultipleChoices = ({
   return (
     <AnswersDistributionBarChart
       maxWidth={maxWidth}
-      question={question}
+      questionName={question.data.question}
       chartData={chartData}
     />
   );

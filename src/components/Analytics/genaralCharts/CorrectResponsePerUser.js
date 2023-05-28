@@ -1,7 +1,7 @@
 import { List } from 'immutable';
 import Plotly from 'plotly.js-basic-dist-min';
 
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPlotlyComponent from 'react-plotly.js/factory';
 
@@ -19,6 +19,11 @@ import { computeCorrectness } from '../../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
 
+/**
+ * Component that renders the correct response per user chart
+ *
+ * @param maxWidth the maximum width of the chart
+ */
 const CorrectResponsePerUser = ({ maxWidth }) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -26,53 +31,46 @@ const CorrectResponsePerUser = ({ maxWidth }) => {
   const { data: responses, isLoading } = hooks.useAppData();
   const { questions } = useContext(QuizContext);
 
-  const groupMemberById = useCallback(() => {
+  const membersById = useMemo(() => {
     return List(data?.members)?.groupBy((m) => m.id);
   }, [data]);
 
-  const groupQuestionById = useCallback(() => {
+  const questionsById = useMemo(() => {
     return questions?.groupBy((q) => q.id);
   }, [questions]);
 
-  const [membersById, setMemberById] = useState(groupMemberById());
-  const [questionsById, setQuestionsById] = useState(groupQuestionById());
+  const chartData = useMemo(() => {
+    return Array.from(
+      responses?.groupBy((response) => response.memberId)
+    ).reduce(
+      (acc, [id, list]) => {
+        const nbCorrect = list.reduce(
+          (acc, next) =>
+            computeCorrectness(
+              next.data,
+              questionsById?.get(next.data.questionId)?.first()?.data
+            )
+              ? acc + 1
+              : acc,
+          0
+        );
 
-  useEffect(() => {
-    setMemberById(groupMemberById());
-  }, [groupMemberById]);
-
-  useEffect(() => {
-    setQuestionsById(groupQuestionById());
-  }, [groupQuestionById]);
-
-  const chartData = Array.from(responses?.groupBy((r) => r.memberId)).reduce(
-    (acc, [id, list]) => {
-      const nbCorrect = list.reduce(
-        (acc, next) =>
-          computeCorrectness(
-            next.data,
-            questionsById?.get(next.data.questionId)?.first()?.data
-          )
-            ? acc + 1
-            : acc,
-        0
-      );
-
-      return {
-        dataCorrect: {
-          x: [...acc.dataCorrect.x, nbCorrect],
-          y: [...acc.dataCorrect.y, membersById.get(id)?.first().name],
-        },
-        percentageCorrect: [...acc.percentageCorrect, nbCorrect / list.size],
-        maxValue: Math.max(acc.maxValue, list.size),
-      };
-    },
-    {
-      dataCorrect: { x: [], y: [] },
-      percentageCorrect: [],
-      maxValue: 0,
-    }
-  );
+        return {
+          dataCorrect: {
+            x: [...acc.dataCorrect.x, nbCorrect],
+            y: [...acc.dataCorrect.y, membersById.get(id)?.first().name],
+          },
+          percentageCorrect: [...acc.percentageCorrect, nbCorrect / list.size],
+          maxValue: Math.max(acc.maxValue, list.size),
+        };
+      },
+      {
+        dataCorrect: { x: [], y: [] },
+        percentageCorrect: [],
+        maxValue: 0,
+      }
+    );
+  }, [membersById, questionsById, responses]);
 
   if (isLoading || isContextLoading) {
     return <CircularProgress />;
@@ -115,7 +113,7 @@ const CorrectResponsePerUser = ({ maxWidth }) => {
             automargin: true,
           },
         }}
-        config={{ ...defaultSettings('Nb_correct_responses') }}
+        config={defaultSettings('Nb_correct_responses')}
       ></Plot>
     </Box>
   );

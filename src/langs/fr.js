@@ -75,5 +75,7 @@ export default {
     'Percentage number of time selected':
       'Pourcentage du nombre de fois sélectionné',
     'Error, question type unknown': 'Erreur, type de question inconnu',
+    'Error, chart type unknown': 'Erreur, type de graphique inconnu',
+    blank: 'vide',
   },
 };

@@ -76,5 +76,7 @@ export default {
     'Number of time selected': 'Number of time selected',
     'Percentage number of time selected': 'Percentage number of time selected',
     'Error, question type unknown': 'Error, question type unknown',
+    'Error, chart type unknown': 'Error, chart type unknown',
+    blank: 'blank',
   },
 };

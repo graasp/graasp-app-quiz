@@ -1,62 +1,79 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { splitSentence } from '../../../../utils/fillInTheBlanks';
 import { truncateText } from '../../../../utils/plotUtils';
 import AnswersDistributionBarChart from './AnswersDistributionBarChart';
 
+/**
+ * Component used to display the answers distribution for the fill in the blank question type
+ *
+ * @param maxWidth The max width of the chart
+ * @param question The question for which to display detailed information into the chart
+ * @param appDataForQuestion The app data for the question (i.e. users answers)
+ * @param chartIndex The index of the chart, the index represents which blank in the question the current chart is displaying
+ */
 const AnswersDistributionFillInTheBlanks = ({
   maxWidth,
   question,
   appDataForQuestion,
+  chartIndex,
 }) => {
-  const getResponsesByFilledWords = useCallback(() => {
+  const { t } = useTranslation();
+  const responsesByFilledWords = useMemo(() => {
     return appDataForQuestion
-      .map((r) => {
-        const { answers } = splitSentence(r.data.text, question.data.text);
+      .map((appData) => {
+        const { answers } = splitSentence(
+          appData.data.text,
+          question.data.text
+        );
         return {
-          ...r,
+          ...appData,
           data: {
-            ...r.data,
-            filledWords: answers.map((a) => a.text).join(', '),
+            ...appData.data,
+            filledWord: answers[chartIndex].text,
           },
         };
       })
-      .groupBy((r) => r.data.filledWords);
-  }, [appDataForQuestion, question]);
+      .groupBy((r) => r.data.filledWord);
+  }, [appDataForQuestion, question, chartIndex]);
 
-  const [responsesByFilledWords, setResponsesByFilledWords] = useState(
-    getResponsesByFilledWords()
-  );
-
-  useEffect(
-    () => setResponsesByFilledWords(getResponsesByFilledWords()),
-    [getResponsesByFilledWords]
-  );
-
-  const chartData = Array.from(responsesByFilledWords).reduce(
-    (acc, [filledWords, list], idx) => {
-      return {
-        data: {
-          x: [...acc.data.x, `A${idx + 1}<br>${truncateText(filledWords, 10)}`],
-          y: [...acc.data.y, list.size],
+  const chartData = useMemo(
+    () =>
+      Array.from(responsesByFilledWords).reduce(
+        (acc, [filledWord, list], idx) => {
+          return {
+            data: {
+              x: [
+                ...acc.data.x,
+                `A${idx + 1}<br>${truncateText(filledWord, 10)}`,
+              ],
+              y: [...acc.data.y, list.size],
+            },
+            percentage: [
+              ...acc.percentage,
+              list.size / appDataForQuestion.size,
+            ],
+            maxValue: Math.max(acc.maxValue, list.size),
+            hoverText: [...acc.hoverText, filledWord],
+          };
         },
-        percentage: [...acc.percentage, list.size / appDataForQuestion.size],
-        maxValue: Math.max(acc.maxValue, list.size),
-        hoverText: [...acc.hoverText, list.first().data.text],
-      };
-    },
-    {
-      data: { x: [], y: [] },
-      percentage: [],
-      maxValue: 0,
-      hoverText: [],
-    }
+        {
+          data: { x: [], y: [] },
+          percentage: [],
+          maxValue: 0,
+          hoverText: [],
+        }
+      ),
+    [responsesByFilledWords, appDataForQuestion]
   );
 
   return (
     <AnswersDistributionBarChart
       maxWidth={maxWidth}
-      question={question}
+      questionName={`${question.data.question} - ${t('blank')} ${
+        chartIndex + 1
+      }`}
       chartData={chartData}
     />
   );

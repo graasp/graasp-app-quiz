@@ -11,47 +11,39 @@ import { useTranslation } from 'react-i18next';
 import { Stack, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 
+import { QUESTION_TYPES } from '../../config/constants';
 import { useElementWidth } from '../../hooks/useElementWidth';
 import {
   useMaxAvailableHeightInWindow,
   useMaxAvailableHeightWithParentHeight,
 } from '../../hooks/useMaxAvailableHeight';
-import { formatInnerLink } from '../../utils/tableUtils';
 import { QuizContext } from '../context/QuizContext';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
 import TabPanel from '../navigation/TabPanel';
+import {
+  fillInTheBlankCharts,
+  generalCharts,
+  multipleChoicesCharts,
+  sliderCharts,
+  textInputCharts,
+} from './AnalyticsCharts';
 import QuestionDetailedCharts from './detailedCharts/QuestionDetailedCharts';
 import GeneralCharts from './genaralCharts/GeneralCharts';
 
 const SLIDER_WIDTH = 16;
 
+/**
+ * Component that represents the Analytics menu. Handle which charts have to be drawn.
+ *
+ * @param headerElem The header element if any, used to calculate the remaining height that this object can take
+ * in the window
+ */
 const AnalyticsMenu = ({ headerElem }) => {
   const { t } = useTranslation();
 
-  const generalMenuLabels = useMemo(() => {
-    return [
-      t('Quiz performance'),
-      t('Users performance'),
-      t('Quiz correct response percentage'),
-    ].map((val) => {
-      return {
-        label: val,
-        link: formatInnerLink(val),
-      };
-    });
-  }, [t]);
-
-  const questionDetailedMenuLabels = useMemo(() => {
-    return [t('Question answer frequency')].map((val) => {
-      return {
-        label: val,
-        link: formatInnerLink(val),
-      };
-    });
-  }, [t]);
-
-  const [autoScrollableMenuLinks, setAutoScrollableMenuLinks] =
-    useState(generalMenuLabels);
+  // The charts to display, must contain 'link' and 'label' properties so that they can easily be passed
+  // to AutoScrollableMenu component
+  const [charts, setCharts] = useState(generalCharts(t));
   const { questions, order } = useContext(QuizContext);
   const chartRefs = useRef({});
   const chartContainerRef = useRef(null);
@@ -67,15 +59,10 @@ const AnalyticsMenu = ({ headerElem }) => {
   );
   const [tab, setTab] = useState(0);
 
-  const getQuestionById = useCallback(() => {
-    return questions.groupBy((q) => q.id);
-  }, [questions]);
-
-  const [questionById, setQuestionById] = useState(getQuestionById());
-
-  useEffect(() => {
-    setQuestionById(getQuestionById());
-  }, [getQuestionById]);
+  const questionById = useMemo(
+    () => questions.groupBy((q) => q.id),
+    [questions]
+  );
 
   // Here to force react to trigger a re-render when stackElemRef.current has been modified
   useEffect(() => {
@@ -88,21 +75,64 @@ const AnalyticsMenu = ({ headerElem }) => {
   const stackElemWidth = useElementWidth(stackElem);
   const sideMenuElemWidth = useElementWidth(sideMenuElem);
 
-  const handleTabChanged = (_, v) => {
-    if (v === 0) {
-      setAutoScrollableMenuLinks(generalMenuLabels);
-    } else {
-      setAutoScrollableMenuLinks(questionDetailedMenuLabels);
-    }
-    setTab(v);
-  };
+  /**
+   * List of question ordered, so that we can easily get the question represented by the index of a tab
+   * useful to know the type of the question, to correctly get the charts to display for a question type
+   */
+  const detailedChartTabQuestion = useMemo(
+    () => order.map((qId) => questionById.get(qId)?.first()),
+    [order, questionById]
+  );
 
-  const handleQuestionRedirection = (qId) => {
-    const index = order.indexOf(qId);
-    if (index !== -1) {
-      setTab(order.indexOf(qId) + 1);
-    }
-  };
+  /**
+   * Callback to get the charts given the type of the question that has been selected
+   */
+  const getChartsForType = useCallback(
+    (question) => {
+      // eslint-disable-next-line default-case
+      switch (question?.data?.type) {
+        case QUESTION_TYPES.FILL_BLANKS:
+          return fillInTheBlankCharts(t, question);
+        case QUESTION_TYPES.SLIDER:
+          return sliderCharts(t);
+        case QUESTION_TYPES.TEXT_INPUT:
+          return textInputCharts(t);
+        case QUESTION_TYPES.MULTIPLE_CHOICES:
+          return multipleChoicesCharts(t);
+      }
+    },
+    [t]
+  );
+
+  /**
+   * Callback to handle the tab change, will change the active tab, and correctly set the charts to display
+   */
+  const handleTabChanged = useCallback(
+    (_, v) => {
+      if (v === 0) {
+        setCharts(generalCharts(t));
+      } else {
+        setCharts(getChartsForType(detailedChartTabQuestion[v - 1]));
+      }
+      setTab(v);
+    },
+    [getChartsForType, detailedChartTabQuestion, t]
+  );
+
+  /**
+   * When clicking on a chart question in the general section, gets redirected to the corresponding question
+   * detailed charts
+   */
+  const handleQuestionRedirection = useCallback(
+    (qId) => {
+      const index = order.indexOf(qId);
+      if (index !== -1) {
+        setCharts(getChartsForType(detailedChartTabQuestion[index]));
+        setTab(index + 1);
+      }
+    },
+    [order, detailedChartTabQuestion, getChartsForType]
+  );
 
   return (
     <Box>
@@ -139,7 +169,7 @@ const AnalyticsMenu = ({ headerElem }) => {
           </Box>
           <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
             <AutoScrollableMenu
-              links={autoScrollableMenuLinks}
+              links={charts}
               elemRefs={chartRefs}
               containerRef={chartContainerRef}
               triggerVal={tab}
@@ -158,20 +188,21 @@ const AnalyticsMenu = ({ headerElem }) => {
           <TabPanel tab={tab} index={0}>
             <GeneralCharts
               maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
-              generalMenuLabels={generalMenuLabels}
+              generalCharts={generalCharts(t)}
               chartRefs={chartRefs}
               goToDetailedQuestion={handleQuestionRedirection}
             />
           </TabPanel>
           {order?.map((qId, idx) => {
+            const question = questionById.get(qId)?.first();
             return (
-              // The +1 is here to account for the General tab, that is at inedx 0
+              // The +1 is here to account for the General tab, that is at index 0
               <TabPanel tab={tab} index={idx + 1} key={qId}>
                 <QuestionDetailedCharts
                   maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
-                  questionDetailedMenuLabels={questionDetailedMenuLabels}
+                  detailedCharts={charts}
                   chartRefs={chartRefs}
-                  question={questionById.get(qId)?.first()}
+                  question={question}
                 />
               </TabPanel>
             );

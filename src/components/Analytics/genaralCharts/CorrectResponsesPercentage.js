@@ -98,7 +98,7 @@ const CorrectResponsesPercentage = ({ maxWidth, goToDetailedQuestion }) => {
             range: [-0.2, order.length - 0.8],
           },
         }}
-        config={{ ...defaultSettings('Quiz_correct_response_percentage') }}
+        config={defaultSettings('Quiz_correct_response_percentage')}
         onClick={({ points }) => goToDetailedQuestion(points[0].meta)}
       />
     </Box>
