@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CircularProgress, Stack, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 import { QUESTION_TYPES } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
@@ -126,89 +127,100 @@ const AnalyticsMenu = ({ headerElem }) => {
     return <CircularProgress />;
   }
 
-  return (
-    <Box>
-      <Stack direction="row" ref={(elem) => setStackElem(elem)}>
-        <Box
-          ref={(elem) => setSideMenuElem(elem)}
-          sx={{
-            minWidth: '8em',
-            maxWidth: '12em',
-            maxHeight: maxResultViewHeight,
-          }}
-        >
+  return order.length > 0 ? (
+    responses.size > 0 ? (
+      <Box>
+        <Stack direction="row" ref={(elem) => setStackElem(elem)}>
+          <Box
+            ref={(elem) => setSideMenuElem(elem)}
+            sx={{
+              minWidth: '8em',
+              maxWidth: '12em',
+              maxHeight: maxResultViewHeight,
+            }}
+          >
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: 'divider',
+                mb: 4,
+                maxHeight: maxResultViewHeight / 2,
+                overflow: 'auto',
+              }}
+              ref={chartTabs}
+            >
+              <Tabs
+                value={tab}
+                onChange={handleTabChanged}
+                orientation="vertical"
+              >
+                <Tab label={t('General')} />
+                {order?.map((qId) => {
+                  const question = questionById.get(qId)?.first()
+                    ?.data?.question;
+                  return <Tab label={question} key={question} />;
+                })}
+              </Tabs>
+            </Box>
+            <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
+              <AutoScrollableMenu
+                links={charts}
+                elemRefs={chartRefs}
+                containerRef={chartContainerRef}
+                triggerVal={tab}
+              />
+            </Box>
+          </Box>
           <Box
             sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              mb: 4,
-              maxHeight: maxResultViewHeight / 2,
               overflow: 'auto',
+              width: '100%',
+              height: maxResultViewHeight,
+              scrollBehavior: 'smooth',
             }}
-            ref={chartTabs}
+            ref={chartContainerRef}
           >
-            <Tabs
-              value={tab}
-              onChange={handleTabChanged}
-              orientation="vertical"
-            >
-              <Tab label={t('General')} />
-              {order?.map((qId) => {
-                const question = questionById.get(qId)?.first()?.data?.question;
-                return <Tab label={question} key={question} />;
-              })}
-            </Tabs>
+            <TabPanel tab={tab} index={0}>
+              <GeneralCharts
+                maxWidth={stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH}
+                generalCharts={generalCharts(t)}
+                chartRefs={chartRefs}
+                goToDetailedQuestion={handleQuestionRedirection}
+                questions={questions}
+                order={order}
+                responses={responses}
+                members={data?.members}
+              />
+            </TabPanel>
+            {order?.map((qId, idx) => {
+              const question = questionById.get(qId)?.first();
+              return (
+                // The +1 is here to account for the General tab, that is at index 0
+                <TabPanel tab={tab} index={idx + 1} key={qId}>
+                  <QuestionDetailedCharts
+                    maxWidth={
+                      stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH
+                    }
+                    detailedCharts={charts}
+                    chartRefs={chartRefs}
+                    question={question}
+                    responses={responses}
+                  />
+                </TabPanel>
+              );
+            })}
           </Box>
-          <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
-            <AutoScrollableMenu
-              links={charts}
-              elemRefs={chartRefs}
-              containerRef={chartContainerRef}
-              triggerVal={tab}
-            />
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            overflow: 'auto',
-            width: '100%',
-            height: maxResultViewHeight,
-            scrollBehavior: 'smooth',
-          }}
-          ref={chartContainerRef}
-        >
-          <TabPanel tab={tab} index={0}>
-            <GeneralCharts
-              maxWidth={stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH}
-              generalCharts={generalCharts(t)}
-              chartRefs={chartRefs}
-              goToDetailedQuestion={handleQuestionRedirection}
-              questions={questions}
-              order={order}
-              responses={responses}
-              members={data?.members}
-            />
-          </TabPanel>
-          {order?.map((qId, idx) => {
-            const question = questionById.get(qId)?.first();
-            return (
-              // The +1 is here to account for the General tab, that is at index 0
-              <TabPanel tab={tab} index={idx + 1} key={qId}>
-                <QuestionDetailedCharts
-                  maxWidth={
-                    stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH
-                  }
-                  detailedCharts={charts}
-                  chartRefs={chartRefs}
-                  question={question}
-                  responses={responses}
-                />
-              </TabPanel>
-            );
-          })}
-        </Box>
-      </Stack>
-    </Box>
+        </Stack>
+      </Box>
+    ) : (
+      <Typography align="center">
+        {t('No users answered the quiz yet')}
+      </Typography>
+    )
+  ) : (
+    <Typography align="center">
+      {t("There isn't any question to display")}
+    </Typography>
   );
 };
 
