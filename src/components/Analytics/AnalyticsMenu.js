@@ -1,17 +1,11 @@
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Stack, Tab, Tabs } from '@mui/material';
+import { CircularProgress, Stack, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import { QUESTION_TYPES } from '../../config/constants';
+import { hooks } from '../../config/queryClient';
 import { useElementWidth } from '../../hooks/useElementWidth';
 import {
   useMaxAvailableHeightInWindow,
@@ -30,7 +24,7 @@ import {
 import QuestionDetailedCharts from './detailedCharts/QuestionDetailedCharts';
 import GeneralCharts from './genaralCharts/GeneralCharts';
 
-const SLIDER_WIDTH = 16;
+const SLIDE_BAR_WIDTH = 16;
 
 /**
  * Component that represents the Analytics menu. Handle which charts have to be drawn.
@@ -41,14 +35,16 @@ const SLIDER_WIDTH = 16;
 const AnalyticsMenu = ({ headerElem }) => {
   const { t } = useTranslation();
 
+  // Fetch all the data here, as it is used by multiple children, avoid to fetch it in all children
+  const { questions, order } = useContext(QuizContext);
+  const { data, isLoading: isContextLoading } = hooks.useAppContext();
+  const { data: responses, isLoading } = hooks.useAppData();
+
   // The charts to display, must contain 'link' and 'label' properties so that they can easily be passed
   // to AutoScrollableMenu component
   const [charts, setCharts] = useState(generalCharts(t));
-  const { questions, order } = useContext(QuizContext);
   const chartRefs = useRef({});
   const chartContainerRef = useRef(null);
-  const stackElemRef = useRef(null);
-  const sideMenuElemRef = useRef(null);
   const [stackElem, setStackElem] = useState(null);
   const [sideMenuElem, setSideMenuElem] = useState(null);
   const chartTabs = useRef(null);
@@ -63,14 +59,6 @@ const AnalyticsMenu = ({ headerElem }) => {
     () => questions.groupBy((q) => q.id),
     [questions]
   );
-
-  // Here to force react to trigger a re-render when stackElemRef.current has been modified
-  useEffect(() => {
-    setStackElem(stackElemRef.current);
-  }, []);
-  useEffect(() => {
-    setSideMenuElem(sideMenuElemRef.current);
-  }, []);
 
   const stackElemWidth = useElementWidth(stackElem);
   const sideMenuElemWidth = useElementWidth(sideMenuElem);
@@ -134,11 +122,15 @@ const AnalyticsMenu = ({ headerElem }) => {
     [order, detailedChartTabQuestion, getChartsForType]
   );
 
+  if (isLoading || isContextLoading) {
+    return <CircularProgress />;
+  }
+
   return (
     <Box>
-      <Stack direction="row" ref={stackElemRef}>
+      <Stack direction="row" ref={(elem) => setStackElem(elem)}>
         <Box
-          ref={sideMenuElemRef}
+          ref={(elem) => setSideMenuElem(elem)}
           sx={{
             minWidth: '8em',
             maxWidth: '12em',
@@ -187,10 +179,14 @@ const AnalyticsMenu = ({ headerElem }) => {
         >
           <TabPanel tab={tab} index={0}>
             <GeneralCharts
-              maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
+              maxWidth={stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH}
               generalCharts={generalCharts(t)}
               chartRefs={chartRefs}
               goToDetailedQuestion={handleQuestionRedirection}
+              questions={questions}
+              order={order}
+              responses={responses}
+              members={data?.members}
             />
           </TabPanel>
           {order?.map((qId, idx) => {
@@ -199,10 +195,13 @@ const AnalyticsMenu = ({ headerElem }) => {
               // The +1 is here to account for the General tab, that is at index 0
               <TabPanel tab={tab} index={idx + 1} key={qId}>
                 <QuestionDetailedCharts
-                  maxWidth={stackElemWidth - sideMenuElemWidth - SLIDER_WIDTH}
+                  maxWidth={
+                    stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH
+                  }
                   detailedCharts={charts}
                   chartRefs={chartRefs}
                   question={question}
+                  responses={responses}
                 />
               </TabPanel>
             );

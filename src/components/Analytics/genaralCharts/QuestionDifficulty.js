@@ -1,20 +1,18 @@
 import Plotly from 'plotly.js-basic-dist-min';
 
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPlotlyComponent from 'react-plotly.js/factory';
 
-import { CircularProgress, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import { CHART_SECONDARY_COLOR } from '../../../config/constants';
-import { hooks } from '../../../config/queryClient';
 import {
   defaultLayout,
   defaultSettings,
   hoverData,
 } from '../../../utils/plotUtils';
-import { QuizContext } from '../../context/QuizContext';
 import { computeCorrectness, getDataWithId } from '../../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
@@ -25,11 +23,18 @@ const Plot = createPlotlyComponent(Plotly);
  * @param maxWidth The maximum width of the chart
  * @param goToDetailedQuestion The callback to call to be redirected to the detailed chart corresponding to
  * the question that has been clicked on
+ * @param responses The responses
+ * @param order
+ * @param questions
  */
-const QuestionDifficulty = ({ maxWidth, goToDetailedQuestion }) => {
+const QuestionDifficulty = ({
+  maxWidth,
+  goToDetailedQuestion,
+  responses,
+  order,
+  questions,
+}) => {
   const { t } = useTranslation();
-  const { data: responses, isLoading } = hooks.useAppData();
-  const { questions, order } = useContext(QuizContext);
   const theme = useTheme();
 
   /**
@@ -84,10 +89,6 @@ const QuestionDifficulty = ({ maxWidth, goToDetailedQuestion }) => {
       }
     );
   }, [questions, responses, order]);
-
-  if (isLoading) {
-    return <CircularProgress />;
-  }
 
   return (
     <Box sx={{ width: '100%' }}>

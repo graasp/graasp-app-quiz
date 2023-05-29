@@ -20,12 +20,20 @@ import QuestionDifficulty from './QuestionDifficulty';
  * @param chartRefs The object into which to add the ref of the element containing each chart
  * @param goToDetailedQuestion The callback function to call in order to redirect the user to the corresponding
  * detailed chart when clicking on a particular question
+ * @param questions The quiz questions
+ * @param order The order in which the questions appear in the quiz
+ * @param responses The responses provided by the user to the quiz
+ * @param members The members that responded to the quiz
  */
 const GeneralCharts = ({
   maxWidth,
   generalCharts,
   chartRefs,
   goToDetailedQuestion,
+  questions,
+  order,
+  responses,
+  members,
 }) => {
   const { t } = useTranslation();
 
@@ -40,22 +48,35 @@ const GeneralCharts = ({
             <QuestionDifficulty
               maxWidth={maxWidth}
               goToDetailedQuestion={goToDetailedQuestion}
+              responses={responses}
+              order={order}
+              questions={questions}
             />
           );
         case GeneralChartType.USER_PERFORMANCE:
-          return <CorrectResponsePerUser maxWidth={maxWidth} />;
+          return (
+            <CorrectResponsePerUser
+              maxWidth={maxWidth}
+              responses={responses}
+              questions={questions}
+              members={members}
+            />
+          );
         case GeneralChartType.QUIZ_CORRECT_PERCENTAGE:
           return (
             <CorrectResponsesPercentage
               maxWidth={maxWidth}
               goToDetailedQuestion={goToDetailedQuestion}
+              responses={responses}
+              order={order}
+              questions={questions}
             />
           );
         default:
           return <Typography> {t('Error, chart type unknown')} </Typography>;
       }
     },
-    [maxWidth, goToDetailedQuestion, t]
+    [maxWidth, goToDetailedQuestion, t, members, order, responses, questions]
   );
 
   return generalCharts.map((menuLabel) => {

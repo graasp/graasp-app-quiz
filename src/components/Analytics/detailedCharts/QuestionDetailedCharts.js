@@ -1,11 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CircularProgress, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import { QUESTION_TYPES } from '../../../config/constants';
-import { hooks } from '../../../config/queryClient';
 import { getAllAppDataByQuestionId } from '../../context/utilities';
 import { DetailedChartType } from '../AnalyticsCharts';
 import AnswersDistributionFillInTheBlanks from './answersDistribution/AnswersDistributionFillInTheBlanks';
@@ -20,15 +19,16 @@ import AnswersDistributionTextInput from './answersDistribution/AnswersDistribut
  * @param detailedCharts The detailed charts to be displayed
  * @param chartRefs The object into which to add the ref of the element containing each chart
  * @param question The question for which to display detailed information
+ * @param responses The responses provided by the user to the quiz
  */
 const QuestionDetailedCharts = ({
   maxWidth,
   detailedCharts,
   chartRefs,
   question,
+  responses,
 }) => {
   const { t } = useTranslation();
-  const { data: responses, isLoading } = hooks.useAppData();
 
   const appDataForQuestion = useMemo(
     () => getAllAppDataByQuestionId(responses, question.id),
@@ -96,10 +96,6 @@ const QuestionDetailedCharts = ({
     },
     [renderAnswerDistributionChart, t]
   );
-
-  if (isLoading) {
-    return <CircularProgress />;
-  }
 
   return detailedCharts.map((menuLabel) => {
     return (
