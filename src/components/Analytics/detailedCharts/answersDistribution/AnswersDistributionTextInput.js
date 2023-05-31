@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
 
+import { useTheme } from '@mui/material';
+
 import { truncateText } from '../../../../utils/plotUtils';
+import { computeCorrectness } from '../../../context/utilities';
 import AnswersDistributionBarChart from './AnswersDistributionBarChart';
 
 /**
@@ -15,6 +18,7 @@ const AnswersDistributionTextInput = ({
   question,
   appDataForQuestion,
 }) => {
+  const theme = useTheme();
   const responsesByText = useMemo(
     () => appDataForQuestion.groupBy((r) => r.data.text),
     [appDataForQuestion]
@@ -35,6 +39,12 @@ const AnswersDistributionTextInput = ({
             ],
             maxValue: Math.max(acc.maxValue, list.size),
             hoverText: [...acc.hoverText, text],
+            barColors: [
+              ...acc.barColors,
+              computeCorrectness(list.get(0).data, question.data)
+                ? theme.palette.success.main
+                : theme.palette.primary.main,
+            ],
           };
         },
         {
@@ -42,9 +52,10 @@ const AnswersDistributionTextInput = ({
           percentage: [],
           maxValue: 0,
           hoverText: [],
+          barColors: [],
         }
       ),
-    [responsesByText, appDataForQuestion]
+    [responsesByText, appDataForQuestion, question, theme]
   );
 
   return (

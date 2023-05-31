@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import { useTheme } from '@mui/material';
+
 import { truncateText } from '../../../../utils/plotUtils';
 import AnswersDistributionBarChart from './AnswersDistributionBarChart';
 
@@ -15,6 +17,15 @@ const AnswersDistributionMultipleChoices = ({
   question,
   appDataForQuestion,
 }) => {
+  const theme = useTheme();
+  const correctChoices = useMemo(
+    () =>
+      question.data.choices
+        .filter(({ isCorrect }) => isCorrect)
+        .map(({ value }) => value),
+    [question]
+  );
+
   const questions = useMemo(
     () =>
       question.data.choices.reduce((acc, c) => {
@@ -54,6 +65,12 @@ const AnswersDistributionMultipleChoices = ({
             percentage: [...acc.percentage, count / totalCount],
             maxValue: Math.max(acc.maxValue, count),
             hoverText: [...acc.hoverText, choice],
+            barColors: [
+              ...acc.barColors,
+              correctChoices.includes(choice)
+                ? theme.palette.success.main
+                : theme.palette.primary.main,
+            ],
           };
         },
         {
@@ -61,9 +78,10 @@ const AnswersDistributionMultipleChoices = ({
           percentage: [],
           maxValue: 0,
           hoverText: [],
+          barColors: [],
         }
       ),
-    [responsesCount, totalCount]
+    [responsesCount, totalCount, correctChoices, theme]
   );
 
   return (

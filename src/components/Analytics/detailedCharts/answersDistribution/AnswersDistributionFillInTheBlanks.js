@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useTheme } from '@mui/material';
+
 import { splitSentence } from '../../../../utils/fillInTheBlanks';
 import { truncateText } from '../../../../utils/plotUtils';
 import AnswersDistributionBarChart from './AnswersDistributionBarChart';
@@ -19,6 +21,7 @@ const AnswersDistributionFillInTheBlanks = ({
   appDataForQuestion,
   chartIndex,
 }) => {
+  const theme = useTheme();
   const { t } = useTranslation();
   const responsesByFilledWords = useMemo(() => {
     return appDataForQuestion
@@ -31,17 +34,18 @@ const AnswersDistributionFillInTheBlanks = ({
           ...appData,
           data: {
             ...appData.data,
-            filledWord: answers[chartIndex].text,
+            filledWord: answers[chartIndex],
           },
         };
       })
-      .groupBy((r) => r.data.filledWord);
+      .groupBy((r) => r.data.filledWord.text);
   }, [appDataForQuestion, question, chartIndex]);
 
   const chartData = useMemo(
     () =>
       Array.from(responsesByFilledWords).reduce(
         (acc, [filledWord, list], idx) => {
+          const placedWords = list.get(0).data.filledWord.placed;
           return {
             data: {
               x: [
@@ -56,6 +60,12 @@ const AnswersDistributionFillInTheBlanks = ({
             ],
             maxValue: Math.max(acc.maxValue, list.size),
             hoverText: [...acc.hoverText, filledWord],
+            barColors: [
+              ...acc.barColors,
+              placedWords.displayed === placedWords.text
+                ? theme.palette.success.main
+                : theme.palette.primary.main,
+            ],
           };
         },
         {
@@ -63,9 +73,10 @@ const AnswersDistributionFillInTheBlanks = ({
           percentage: [],
           maxValue: 0,
           hoverText: [],
+          barColors: [],
         }
       ),
-    [responsesByFilledWords, appDataForQuestion]
+    [responsesByFilledWords, appDataForQuestion, theme]
   );
 
   return (

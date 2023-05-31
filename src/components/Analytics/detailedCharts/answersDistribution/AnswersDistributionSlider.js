@@ -1,5 +1,8 @@
 import { useMemo } from 'react';
 
+import { useTheme } from '@mui/material';
+
+import { computeCorrectness } from '../../../context/utilities';
 import AnswersDistributionBarChart from './AnswersDistributionBarChart';
 
 /**
@@ -14,6 +17,7 @@ const AnswersDistributionSlider = ({
   question,
   appDataForQuestion,
 }) => {
+  const theme = useTheme();
   const responsesByValue = useMemo(() => {
     return appDataForQuestion.groupBy((r) => r.data.value);
   }, [appDataForQuestion]);
@@ -43,6 +47,12 @@ const AnswersDistributionSlider = ({
               ],
               maxValue: Math.max(acc.maxValue, list.size),
               hoverText: [...acc.hoverText, value],
+              barColors: [
+                ...acc.barColors,
+                computeCorrectness(list.get(0).data, question.data)
+                  ? theme.palette.success.main
+                  : theme.palette.primary.main,
+              ],
             };
           },
           {
@@ -50,9 +60,10 @@ const AnswersDistributionSlider = ({
             percentage: [],
             maxValue: 0,
             hoverText: [],
+            barColors: [],
           }
         ),
-    [responsesByValue, appDataForQuestion]
+    [responsesByValue, appDataForQuestion, theme, question]
   );
 
   return (
