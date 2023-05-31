@@ -79,14 +79,14 @@ const GeneralCharts = ({
     [maxWidth, goToDetailedQuestion, t, members, order, responses, questions]
   );
 
-  return generalCharts.map((menuLabel) => {
+  return generalCharts.map((chart) => {
     return (
       <Box
-        ref={(elm) => (chartRefs.current[menuLabel.label] = elm)}
-        key={menuLabel.label}
-        id={menuLabel.link}
+        ref={(elm) => (chartRefs.current[chart.label] = elm)}
+        key={chart.label}
+        id={chart.link}
       >
-        {renderChartType(menuLabel.chartType)}
+        {renderChartType(chart.chartType)}
       </Box>
     );
   });

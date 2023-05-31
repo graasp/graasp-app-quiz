@@ -5,6 +5,7 @@ import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import { QUESTION_TYPES } from '../../../config/constants';
+import { buildAnalyticsDetailedChartCy } from '../../../config/selectors';
 import { getAllAppDataByQuestionId } from '../../context/utilities';
 import { DetailedChartType } from '../AnalyticsCharts';
 import AnswersDistributionFillInTheBlanks from './answersDistribution/AnswersDistributionFillInTheBlanks';
@@ -97,14 +98,15 @@ const QuestionDetailedCharts = ({
     [renderAnswerDistributionChart, t]
   );
 
-  return detailedCharts.map((menuLabel) => {
+  return detailedCharts.map((chart) => {
     return (
       <Box
-        ref={(elm) => (chartRefs.current[menuLabel.label] = elm)}
-        key={menuLabel.label}
-        id={menuLabel.link}
+        ref={(elm) => (chartRefs.current[chart.label] = elm)}
+        key={chart.label}
+        id={chart.link}
+        data-cy={buildAnalyticsDetailedChartCy(chart.label)}
       >
-        {renderChartType(menuLabel.chartType, menuLabel.chartIndex)}
+        {renderChartType(chart.chartType, chart.chartIndex)}
       </Box>
     );
   });

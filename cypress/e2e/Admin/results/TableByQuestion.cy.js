@@ -23,6 +23,7 @@ import { APP_DATA, APP_DATA_2 } from '../../../fixtures/appData';
 import { APP_SETTINGS_2 } from '../../../fixtures/appSettings';
 import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
+import { verifySelectedMenu } from '../../../utils/AutoScrollableMenuSelected';
 import { hexToRGB } from '../../../utils/Color';
 
 describe('Table by Question', () => {
@@ -143,36 +144,21 @@ describe('Table by Question', () => {
       MEMBERS_RESULT_TABLES
     );
 
-    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
-
     const orderedResponseText = getSettingsByName(
       APP_SETTINGS_2,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
+      return {
+        label: APP_SETTINGS_2.find((el) => el.id === elem).data.question,
+      };
     });
 
-    orderedResponseText.forEach((elem, i) => {
+    orderedResponseText.forEach(({ label: elem }, i) => {
       // Scroll element into view
       cy.get(dataCyWrapper(buildTableByQuestionCy(elem))).scrollIntoView();
 
       // check that the correct link appear as selected
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(elem))).should(
-        'have.css',
-        'border-color',
-        rgbBorderColor
-      );
-
-      // check that other border are transparent
-      orderedResponseText.forEach((el, idx) => {
-        if (idx !== i) {
-          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(el))).should(
-            'have.css',
-            'border-color',
-            'rgba(0, 0, 0, 0)'
-          );
-        }
-      });
+      verifySelectedMenu(i, orderedResponseText);
     });
   });
 

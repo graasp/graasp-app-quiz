@@ -62,7 +62,7 @@ const AnswersDistributionFillInTheBlanks = ({
             hoverText: [...acc.hoverText, filledWord],
             barColors: [
               ...acc.barColors,
-              placedWords.displayed === placedWords.text
+              placedWords && placedWords?.displayed === placedWords?.text
                 ? theme.palette.success.main
                 : theme.palette.primary.main,
             ],

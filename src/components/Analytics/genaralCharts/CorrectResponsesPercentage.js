@@ -7,13 +7,13 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 
+import { ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE_CY } from '../../../config/selectors';
 import {
   defaultLayout,
   defaultSettings,
   hoverData,
 } from '../../../utils/plotUtils';
 import { computeCorrectness, getDataWithId } from '../../context/utilities';
-import {ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE} from "../../../config/selectors";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -71,7 +71,10 @@ const CorrectResponsesPercentage = ({
   }, [questions, responsesByQId, order]);
 
   return (
-    <Box sx={{ width: '100%' }} data-cy={ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE}>
+    <Box
+      sx={{ width: '100%' }}
+      data-cy={ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE_CY}
+    >
       <Plot
         data={[
           {

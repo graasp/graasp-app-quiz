@@ -6,11 +6,12 @@ import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   EXPLANATION_CY,
   EXPLANATION_PLAY_CY,
+  NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
   RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
   buildQuestionStepCy,
   buildQuestionTypeOption,
-  dataCyWrapper, NAVIGATION_ANALYTICS_BUTTON_CY,
+  dataCyWrapper,
 } from '../../src/config/selectors';
 import { MEMBERS } from '../fixtures/members';
 
@@ -102,25 +103,26 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-    'setupAnalyticsForCheck',
-    (app_settings, app_data, members) => {
-      cy.setUpApi({
-        database: {
-          appSettings: app_settings,
-          appData: app_data,
-        },
-        appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
-          context: CONTEXTS.BUILDER
-        },
-        members
-      })
+  'setupAnalyticsForCheck',
+  (app_settings, app_data, members) => {
+    cy.setUpApi({
+      database: {
+        appSettings: app_settings,
+        appData: app_data,
+      },
+      appContext: {
+        permission: PERMISSION_LEVELS.ADMIN,
+        context: CONTEXTS.BUILDER,
+      },
+      members,
+    });
 
-      cy.visit('/')
+    cy.visit('/');
 
-      // navigate to Analytics
-      cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click()
-    })
+    // navigate to Analytics
+    cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
+  }
+);
 
 /**
  * Command to set up the test, to test the table by user view

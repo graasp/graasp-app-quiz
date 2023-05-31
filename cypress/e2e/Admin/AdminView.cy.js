@@ -5,16 +5,18 @@ import {
 import { CONTEXTS } from '../../../src/config/contexts';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
+  ANALYTICS_CONTAINER_CY,
   CREATE_VIEW_CONTAINER_CY,
+  NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_CREATE_QUIZ_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
   NAVIGATION_TAB_CONTAINER_CY,
   TABLE_BY_QUESTION_CONTAINER_CY,
   buildTableByQuestionCy,
-  dataCyWrapper, NAVIGATION_ANALYTICS_BUTTON_CY, ANALYTICS_CONTAINER_CY,
+  dataCyWrapper,
 } from '../../../src/config/selectors';
-import {APP_DATA_2} from '../../fixtures/appData';
-import {APP_SETTINGS_2} from '../../fixtures/appSettings';
+import { APP_DATA_2 } from '../../fixtures/appData';
+import { APP_SETTINGS_2 } from '../../fixtures/appSettings';
 
 describe('Admin View', () => {
   /**
@@ -41,9 +43,9 @@ describe('Admin View', () => {
 
     cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
     cy.get(dataCyWrapper(ANALYTICS_CONTAINER_CY)).should(
-        'have.text',
-        "There isn't any question to display"
-    )
+      'have.text',
+      "There isn't any question to display"
+    );
   });
 
   /**
@@ -91,6 +93,6 @@ export const testAdminViewBaseLayout = () => {
   cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should('be.visible');
 
   // after clicking on analytics, the component should be visible
-  cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click()
-  cy.get(dataCyWrapper(ANALYTICS_CONTAINER_CY)).should('be.visible')
+  cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
+  cy.get(dataCyWrapper(ANALYTICS_CONTAINER_CY)).should('be.visible');
 };

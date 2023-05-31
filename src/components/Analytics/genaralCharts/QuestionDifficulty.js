@@ -8,13 +8,13 @@ import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import { CHART_SECONDARY_COLOR } from '../../../config/constants';
+import { ANALYTICS_GENERAL_QUIZ_PERFORMANCE_CY } from '../../../config/selectors';
 import {
   defaultLayout,
   defaultSettings,
   hoverData,
 } from '../../../utils/plotUtils';
 import { computeCorrectness, getDataWithId } from '../../context/utilities';
-import {ANALYTICS_GENERAL_QUIZ_PERFORMANCE} from "../../../config/selectors";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -92,7 +92,7 @@ const QuestionDifficulty = ({
   }, [questions, responses, order]);
 
   return (
-    <Box sx={{ width: '100%' }} data-cy={ANALYTICS_GENERAL_QUIZ_PERFORMANCE}>
+    <Box sx={{ width: '100%' }} data-cy={ANALYTICS_GENERAL_QUIZ_PERFORMANCE_CY}>
       <Plot
         data={[
           {

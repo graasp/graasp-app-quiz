@@ -7,6 +7,11 @@ import Typography from '@mui/material/Typography';
 
 import { QUESTION_TYPES } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
+import {
+  ANALYTICS_CONTAINER_CY,
+  ANALYTICS_GENERAL_TAB_MENU_CY,
+  buildAnalyticsDetailedQuestionTabMenuCy,
+} from '../../config/selectors';
 import { useElementWidth } from '../../hooks/useElementWidth';
 import {
   useMaxAvailableHeightInWindow,
@@ -24,11 +29,6 @@ import {
 } from './AnalyticsCharts';
 import QuestionDetailedCharts from './detailedCharts/QuestionDetailedCharts';
 import GeneralCharts from './genaralCharts/GeneralCharts';
-import {
-  ANALYTICS_CONTAINER_CY,
-  ANALYTICS_GENERAL_TAB_MENU_CY,
-  buildAnalyticsDetailedQuestionTabMenuCy
-} from "../../config/selectors";
 
 const SLIDE_BAR_WIDTH = 16;
 
@@ -159,11 +159,22 @@ const AnalyticsMenu = ({ headerElem }) => {
                 onChange={handleTabChanged}
                 orientation="vertical"
               >
-                <Tab label={t('General')} data-cy={ANALYTICS_GENERAL_TAB_MENU_CY}/>
+                <Tab
+                  label={t('General')}
+                  data-cy={ANALYTICS_GENERAL_TAB_MENU_CY}
+                />
                 {order?.map((qId) => {
                   const question = questionById.get(qId)?.first()
                     ?.data?.question;
-                  return <Tab label={question} key={question} data-cy={buildAnalyticsDetailedQuestionTabMenuCy(question)}/>;
+                  return (
+                    <Tab
+                      label={question}
+                      key={question}
+                      data-cy={buildAnalyticsDetailedQuestionTabMenuCy(
+                        question
+                      )}
+                    />
+                  );
                 })}
               </Tabs>
             </Box>

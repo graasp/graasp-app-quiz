@@ -27,6 +27,7 @@ import { APP_DATA, APP_DATA_3 } from '../../../fixtures/appData';
 import { APP_SETTINGS_2, APP_SETTINGS_3 } from '../../../fixtures/appSettings';
 import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { USER_RESPONSES } from '../../../fixtures/tableByUserResponses';
+import { verifySelectedMenu } from '../../../utils/AutoScrollableMenuSelected';
 import { hexToRGB } from '../../../utils/Color';
 
 describe('Table by User', () => {
@@ -121,31 +122,16 @@ describe('Table by User', () => {
       MEMBERS_RESULT_TABLES
     );
 
-    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
+    const orderedUser = getUserNamesFromAppData(APP_DATA_3).map(({ name }) => ({
+      label: name,
+    }));
 
-    const orderedUser = getUserNamesFromAppData(APP_DATA_3);
-
-    orderedUser.forEach(({ name }, i) => {
+    orderedUser.forEach(({ label: name }, i) => {
       // Scroll element into view
       cy.get(dataCyWrapper(buildTableByUserCy(name))).scrollIntoView();
 
       // check that the correct link appear as selected
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(name))).should(
-        'have.css',
-        'border-color',
-        rgbBorderColor
-      );
-
-      // check that other border are transparent
-      orderedUser.forEach(({ name }, idx) => {
-        if (idx !== i) {
-          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(name))).should(
-            'have.css',
-            'border-color',
-            'rgba(0, 0, 0, 0)'
-          );
-        }
-      });
+      verifySelectedMenu(i, orderedUser);
     });
   });
 

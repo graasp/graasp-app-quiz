@@ -127,7 +127,7 @@ export const FILL_BLANKS_SETTING_2 = {
     question: 'Fill In The Blanks',
 
     type: QUESTION_TYPES.FILL_BLANKS,
-    text: 'Lorem <ips um> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
+    text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
   },
   name: APP_SETTING_NAMES.QUESTION,
 };
