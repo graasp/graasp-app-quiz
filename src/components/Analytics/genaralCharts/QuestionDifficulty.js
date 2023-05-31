@@ -14,6 +14,7 @@ import {
   hoverData,
 } from '../../../utils/plotUtils';
 import { computeCorrectness, getDataWithId } from '../../context/utilities';
+import {ANALYTICS_GENERAL_QUIZ_PERFORMANCE} from "../../../config/selectors";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -23,9 +24,9 @@ const Plot = createPlotlyComponent(Plotly);
  * @param maxWidth The maximum width of the chart
  * @param goToDetailedQuestion The callback to call to be redirected to the detailed chart corresponding to
  * the question that has been clicked on
- * @param responses The responses
- * @param order
- * @param questions
+ * @param responses The responses provided by the user to the quiz
+ * @param order The order in which the questions appear in the quiz
+ * @param questions The question for which to display detailed information
  */
 const QuestionDifficulty = ({
   maxWidth,
@@ -91,7 +92,7 @@ const QuestionDifficulty = ({
   }, [questions, responses, order]);
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%' }} data-cy={ANALYTICS_GENERAL_QUIZ_PERFORMANCE}>
       <Plot
         data={[
           {
@@ -127,7 +128,7 @@ const QuestionDifficulty = ({
                 'Number of incorrect responses'
               )}: %{y} <br> - ${t(
                 'Percentage incorrect responses'
-              )}: %{meta:.1%} <extra></extra>`,
+              )}: %{meta[0]:.1%} <extra></extra>`,
               CHART_SECONDARY_COLOR
             ),
             texttemplate: '%{y}',

@@ -11,10 +11,10 @@ import {
   NAVIGATION_TAB_CONTAINER_CY,
   TABLE_BY_QUESTION_CONTAINER_CY,
   buildTableByQuestionCy,
-  dataCyWrapper,
+  dataCyWrapper, NAVIGATION_ANALYTICS_BUTTON_CY, ANALYTICS_CONTAINER_CY,
 } from '../../../src/config/selectors';
-import { APP_DATA } from '../../fixtures/appData';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+import {APP_DATA_2} from '../../fixtures/appData';
+import {APP_SETTINGS_2} from '../../fixtures/appSettings';
 
 describe('Admin View', () => {
   /**
@@ -32,10 +32,18 @@ describe('Admin View', () => {
     });
     cy.visit('/');
     testAdminViewBaseLayout();
+
+    cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
     cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should(
       'have.text',
       "There isn't any question to display"
     );
+
+    cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
+    cy.get(dataCyWrapper(ANALYTICS_CONTAINER_CY)).should(
+        'have.text',
+        "There isn't any question to display"
+    )
   });
 
   /**
@@ -44,8 +52,8 @@ describe('Admin View', () => {
   it('Question data', () => {
     cy.setUpApi({
       database: {
-        appSettings: APP_SETTINGS,
-        appData: APP_DATA,
+        appSettings: APP_SETTINGS_2,
+        appData: APP_DATA_2,
       },
       appContext: {
         permission: PERMISSION_LEVELS.ADMIN,
@@ -55,11 +63,12 @@ describe('Admin View', () => {
     cy.visit('/');
     testAdminViewBaseLayout();
 
-    APP_SETTINGS.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
+    cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
+    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
       (s, idx) =>
         cy
           .get(dataCyWrapper(buildTableByQuestionCy(s.data.question)))
-          .should('have.text', APP_SETTINGS[idx].data.question)
+          .should('have.text', APP_SETTINGS_2[idx].data.question)
     );
   });
 });
@@ -74,9 +83,14 @@ export const testAdminViewBaseLayout = () => {
   cy.get(dataCyWrapper(NAVIGATION_TAB_CONTAINER_CY)).should('be.visible');
   cy.get(dataCyWrapper(NAVIGATION_CREATE_QUIZ_BUTTON_CY)).should('be.visible');
   cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).should('be.visible');
+  cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).should('be.visible');
   cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
 
   // after we click on result, the table component should be visible and the table
   cy.get(dataCyWrapper(CREATE_VIEW_CONTAINER_CY)).should('not.exist');
   cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should('be.visible');
+
+  // after clicking on analytics, the component should be visible
+  cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click()
+  cy.get(dataCyWrapper(ANALYTICS_CONTAINER_CY)).should('be.visible')
 };

@@ -87,3 +87,15 @@ export const TABLE_BY_USER_DATE_DATA_CY = 'tableByUserDateData';
 export const TABLE_BY_USER_CORRECT_ICON_CY = 'tableByUserCorrectIcon';
 export const AUTO_SCROLLABLE_MENU_LINK_LIST = 'autoScrollableMenuLinkList';
 export const NAVIGATION_ANALYTICS_BUTTON_CY = 'navigationAnalyticsButton';
+
+export const ANALYTICS_CONTAINER_CY = 'analyticsContainer';
+
+export const ANALYTICS_GENERAL_TAB_MENU_CY = 'analyticsGeneralTabMenu';
+
+export const buildAnalyticsDetailedQuestionTabMenuCy = (qTitle) => `analyticsDetailedQuestionTabMenu-${qTitle}`
+
+export const ANALYTICS_GENERAL_QUIZ_PERFORMANCE = 'analyticsGeneralQuizPerformance'
+
+export const ANALYTICS_GENERAL_CORRECT_RESPONSE_PER_USER = 'analyticsGeneralCorrectResponsePerUser'
+
+export const ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE = 'analyticsGeneralCorrectResponsePercentage'

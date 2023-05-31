@@ -13,6 +13,7 @@ import {
   hoverData,
 } from '../../../utils/plotUtils';
 import { computeCorrectness, getDataWithId } from '../../context/utilities';
+import {ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE} from "../../../config/selectors";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -70,7 +71,7 @@ const CorrectResponsesPercentage = ({
   }, [questions, responsesByQId, order]);
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%' }} data-cy={ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE}>
       <Plot
         data={[
           {

@@ -14,6 +14,10 @@ import {
   hoverData,
 } from '../../../utils/plotUtils';
 import { computeCorrectness } from '../../context/utilities';
+import {
+  ANALYTICS_GENERAL_CORRECT_RESPONSE_PER_USER,
+  ANALYTICS_GENERAL_QUIZ_PERFORMANCE
+} from "../../../config/selectors";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -80,7 +84,7 @@ const CorrectResponsePerUser = ({
   );
 
   return (
-    <Box sx={{ mt: 3, width: '100%' }}>
+    <Box sx={{ mt: 3, width: '100%' }} data-cy={ANALYTICS_GENERAL_CORRECT_RESPONSE_PER_USER}>
       <Plot
         data={[
           {

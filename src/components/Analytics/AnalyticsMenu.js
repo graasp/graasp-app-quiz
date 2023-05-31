@@ -24,6 +24,11 @@ import {
 } from './AnalyticsCharts';
 import QuestionDetailedCharts from './detailedCharts/QuestionDetailedCharts';
 import GeneralCharts from './genaralCharts/GeneralCharts';
+import {
+  ANALYTICS_CONTAINER_CY,
+  ANALYTICS_GENERAL_TAB_MENU_CY,
+  buildAnalyticsDetailedQuestionTabMenuCy
+} from "../../config/selectors";
 
 const SLIDE_BAR_WIDTH = 16;
 
@@ -128,8 +133,8 @@ const AnalyticsMenu = ({ headerElem }) => {
   }
 
   return order.length > 0 ? (
-    responses.size > 0 ? (
-      <Box>
+    responses?.size > 0 ? (
+      <Box data-cy={ANALYTICS_CONTAINER_CY}>
         <Stack direction="row" ref={(elem) => setStackElem(elem)}>
           <Box
             ref={(elem) => setSideMenuElem(elem)}
@@ -154,11 +159,11 @@ const AnalyticsMenu = ({ headerElem }) => {
                 onChange={handleTabChanged}
                 orientation="vertical"
               >
-                <Tab label={t('General')} />
+                <Tab label={t('General')} data-cy={ANALYTICS_GENERAL_TAB_MENU_CY}/>
                 {order?.map((qId) => {
                   const question = questionById.get(qId)?.first()
                     ?.data?.question;
-                  return <Tab label={question} key={question} />;
+                  return <Tab label={question} key={question} data-cy={buildAnalyticsDetailedQuestionTabMenuCy(question)}/>;
                 })}
               </Tabs>
             </Box>
@@ -213,12 +218,12 @@ const AnalyticsMenu = ({ headerElem }) => {
         </Stack>
       </Box>
     ) : (
-      <Typography align="center">
+      <Typography align="center" data-cy={ANALYTICS_CONTAINER_CY}>
         {t('No users answered the quiz yet')}
       </Typography>
     )
   ) : (
-    <Typography align="center">
+    <Typography align="center" data-cy={ANALYTICS_CONTAINER_CY}>
       {t("There isn't any question to display")}
     </Typography>
   );
