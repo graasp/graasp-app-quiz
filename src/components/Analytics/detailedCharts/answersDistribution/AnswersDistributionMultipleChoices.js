@@ -26,6 +26,9 @@ const AnswersDistributionMultipleChoices = ({
     [question]
   );
 
+  /**
+   * Initialize the object to use in the responses count, so that every possible answer are initially set to 0
+   */
   const questions = useMemo(
     () =>
       question.data.choices.reduce((acc, c) => {

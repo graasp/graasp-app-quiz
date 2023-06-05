@@ -36,16 +36,16 @@ const AnswersDistributionBarChart = ({ maxWidth, chartData, questionName }) => {
             marker: {
               color: chartData.barColors ?? theme.palette.primary.main,
             },
-            ...hoverData(
-              chartData?.hoverText,
-              chartData.percentage,
-              `%{hovertext}<br><br> - ${t(
+            ...hoverData({
+              hoverText: chartData?.hoverText,
+              meta: chartData.percentage,
+              hoverTemplate: `%{hovertext}<br><br> - ${t(
                 'Number of time selected'
               )}: %{y} <br> - ${t(
                 'Percentage number of time selected'
               )}: %{meta:.1%} <extra></extra>`,
-              chartData.barColors ?? theme.palette.primary.main
-            ),
+              borderColor: chartData.barColors ?? theme.palette.primary.main,
+            }),
             texttemplate: '%{y}',
           },
         ]}

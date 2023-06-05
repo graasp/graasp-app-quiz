@@ -102,16 +102,16 @@ const QuestionDifficulty = ({
             marker: {
               color: theme.palette.primary.main,
             },
-            ...hoverData(
-              chartData.hoverText,
-              chartData.percentageCorrect,
-              `%{hovertext}<br><br> - ${t(
+            ...hoverData({
+              hoverText: chartData.hoverText,
+              meta: chartData.percentageCorrect,
+              hoverTemplate: `%{hovertext}<br><br> - ${t(
                 'Number of correct responses'
               )}: %{y} <br> - ${t(
                 'Percentage correct responses'
               )}: %{meta[0]:.1%} <extra></extra>`,
-              theme.palette.primary.main
-            ),
+              borderColor: theme.palette.primary.main,
+            }),
             texttemplate: '%{y}',
           },
           {
@@ -121,16 +121,16 @@ const QuestionDifficulty = ({
             marker: {
               color: CHART_SECONDARY_COLOR,
             },
-            ...hoverData(
-              chartData.hoverText,
-              chartData.percentageIncorrect,
-              `%{hovertext}<br><br> - ${t(
+            ...hoverData({
+              hoverText: chartData.hoverText,
+              meta: chartData.percentageIncorrect,
+              hoverTemplate: `%{hovertext}<br><br> - ${t(
                 'Number of incorrect responses'
               )}: %{y} <br> - ${t(
                 'Percentage incorrect responses'
               )}: %{meta[0]:.1%} <extra></extra>`,
-              CHART_SECONDARY_COLOR
-            ),
+              borderColor: CHART_SECONDARY_COLOR,
+            }),
             texttemplate: '%{y}',
           },
         ]}

@@ -19,16 +19,19 @@ import {
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import theme from '../../../../src/layout/theme';
-import { APP_DATA, APP_DATA_2 } from '../../../fixtures/appData';
-import { APP_SETTINGS_2 } from '../../../fixtures/appSettings';
+import {
+  APP_DATA_FEW_QUESTIONS_FEW_USERS,
+  APP_DATA_FEW_QUESTIONS_LOT_USERS,
+} from '../../../fixtures/appData';
+import { APP_SETTINGS_FEW_QUESTIONS } from '../../../fixtures/appSettings';
 import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
-import { verifySelectedMenu } from '../../../utils/AutoScrollableMenuSelected';
-import { hexToRGB } from '../../../utils/Color';
+import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
+import { hexToRGB } from '../../../utils/color';
 
 describe('Table by Question', () => {
   it('Table by Question no app data', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_2);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_FEW_QUESTIONS);
 
     // if empty app data, then should display that no user have answered the quiz yet
     cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should(
@@ -42,35 +45,35 @@ describe('Table by Question', () => {
    */
   it('Table by Question correctly display data', () => {
     cy.setupResultTablesByQuestionForCheck(
-      APP_SETTINGS_2,
-      APP_DATA,
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_DATA_FEW_QUESTIONS_FEW_USERS,
       MEMBERS_RESULT_TABLES
     );
 
     // Test that each table are correctly displayed
-    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
-      (s, idx) => {
-        cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
-          'have.text',
-          APP_SETTINGS_2[idx].data.question
-        );
+    APP_SETTINGS_FEW_QUESTIONS.filter(
+      (s) => s.name === APP_SETTING_NAMES.QUESTION
+    ).forEach((s, idx) => {
+      cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.question))).should(
+        'have.text',
+        APP_SETTINGS_FEW_QUESTIONS[idx].data.question
+      );
 
-        // test header
-        testTableHeader(s.data.question, 'sorted ascending');
-        // test content
-        testTableContent(s.data.question, true);
+      // test header
+      testTableHeader(s.data.question, 'sorted ascending');
+      // test content
+      testTableContent(s.data.question, true);
 
-        // sort descending
-        cy.get(
-          dataCyWrapper(buildTableByQuestionUserHeaderCy(s.data.question))
-        ).click();
+      // sort descending
+      cy.get(
+        dataCyWrapper(buildTableByQuestionUserHeaderCy(s.data.question))
+      ).click();
 
-        // test header
-        testTableHeader(s.data.question, 'sorted descending');
-        // test content
-        testTableContent(s.data.question, false);
-      }
-    );
+      // test header
+      testTableHeader(s.data.question, 'sorted descending');
+      // test content
+      testTableContent(s.data.question, false);
+    });
   });
 
   /**
@@ -78,17 +81,18 @@ describe('Table by Question', () => {
    */
   it('Menu on left correctly display question title, in the correct order', () => {
     cy.setupResultTablesByQuestionForCheck(
-      APP_SETTINGS_2,
-      APP_DATA,
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_DATA_FEW_QUESTIONS_FEW_USERS,
       MEMBERS_RESULT_TABLES
     );
 
     // Retrieved the question ordered as in the APP_SETTINGS2
     const orderedResponseText = getSettingsByName(
-      APP_SETTINGS_2,
+      APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
+      return APP_SETTINGS_FEW_QUESTIONS.find((el) => el.id === elem).data
+        .question;
     });
 
     cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
@@ -104,16 +108,17 @@ describe('Table by Question', () => {
   it('Click on menu goes to question', () => {
     // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
     cy.setupResultTablesByQuestionForCheck(
-      APP_SETTINGS_2,
-      APP_DATA_2,
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_DATA_FEW_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 
     const orderedResponseText = getSettingsByName(
-      APP_SETTINGS_2,
+      APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      return APP_SETTINGS_2.find((el) => el.id === elem).data.question;
+      return APP_SETTINGS_FEW_QUESTIONS.find((el) => el.id === elem).data
+        .question;
     });
 
     orderedResponseText.forEach((elem, i) => {
@@ -139,17 +144,18 @@ describe('Table by Question', () => {
    */
   it('Scroll to table correctly display selected link', () => {
     cy.setupResultTablesByQuestionForCheck(
-      APP_SETTINGS_2,
-      APP_DATA_2,
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_DATA_FEW_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 
     const orderedResponseText = getSettingsByName(
-      APP_SETTINGS_2,
+      APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
       return {
-        label: APP_SETTINGS_2.find((el) => el.id === elem).data.question,
+        label: APP_SETTINGS_FEW_QUESTIONS.find((el) => el.id === elem).data
+          .question,
       };
     });
 
@@ -164,23 +170,25 @@ describe('Table by Question', () => {
 
   it('click on user redirect us to corresponding table by user', () => {
     cy.setupResultTablesByQuestionForCheck(
-      APP_SETTINGS_2,
-      APP_DATA_2,
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_DATA_FEW_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
     const fstQuestionId = getSettingsByName(
-      APP_SETTINGS_2,
+      APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list[0];
     const fstQuestion = getSettingsByName(
-      APP_SETTINGS_2,
+      APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION
     ).find((setting) => setting.id === fstQuestionId).data.question;
 
-    const users = [...new Set(APP_DATA_2.map((data) => data.memberId))]
+    const users = [
+      ...new Set(APP_DATA_FEW_QUESTIONS_LOT_USERS.map((data) => data.memberId)),
+    ]
       .map(
         (id) =>
           Object.values(MEMBERS_RESULT_TABLES).filter(

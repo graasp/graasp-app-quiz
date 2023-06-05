@@ -83,7 +83,6 @@ const AnalyticsMenu = ({ headerElem }) => {
    */
   const getChartsForType = useCallback(
     (question) => {
-      // eslint-disable-next-line default-case
       switch (question?.data?.type) {
         case QUESTION_TYPES.FILL_BLANKS:
           return fillInTheBlankCharts(t, question);
@@ -93,6 +92,10 @@ const AnalyticsMenu = ({ headerElem }) => {
           return textInputCharts(t);
         case QUESTION_TYPES.MULTIPLE_CHOICES:
           return multipleChoicesCharts(t);
+        default:
+          console.error(
+            `The provided question type (${question?.data?.type}) is unknown`
+          );
       }
     },
     [t]

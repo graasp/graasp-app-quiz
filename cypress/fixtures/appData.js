@@ -623,7 +623,7 @@ export const CHLOE_MORE_RESPONSES = [
 /**
  * Basic app data(i.e. user responses) used to test that display is good in table by user and by questions
  */
-export const APP_DATA = [
+export const APP_DATA_FEW_QUESTIONS_FEW_USERS = [
   ...LIAM_RESPONSES,
   ...HARPER_RESPONSES,
   ...MASON_RESPONSES,
@@ -633,7 +633,7 @@ export const APP_DATA = [
  * App data with more user to make te table bigger, and make it easier to test the scroll behaviour in
  * table by question
  */
-export const APP_DATA_2 = [
+export const APP_DATA_FEW_QUESTIONS_LOT_USERS = [
   ...LIAM_RESPONSES,
   ...HARPER_RESPONSES,
   ...MASON_RESPONSES,
@@ -647,7 +647,7 @@ export const APP_DATA_2 = [
 /**
  * App data with more users and responses, to make it easier to test the scroll behaviour in table by user
  */
-export const APP_DATA_3 = [
+export const APP_DATA_LOT_QUESTIONS_LOT_USERS = [
   ...LIAM_RESPONSES,
   ...LIAM_MORE_RESPONSES,
   ...HARPER_RESPONSES,

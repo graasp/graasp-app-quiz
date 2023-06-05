@@ -59,7 +59,7 @@ const AnswersDistributionFillInTheBlanks = ({
               list.size / appDataForQuestion.size,
             ],
             maxValue: Math.max(acc.maxValue, list.size),
-            hoverText: [...acc.hoverText, filledWord],
+            hoverText: [...acc.hoverText, question.data.text],
             barColors: [
               ...acc.barColors,
               placedWords && placedWords?.displayed === placedWords?.text
@@ -76,7 +76,7 @@ const AnswersDistributionFillInTheBlanks = ({
           barColors: [],
         }
       ),
-    [responsesByFilledWords, appDataForQuestion, theme]
+    [responsesByFilledWords, appDataForQuestion, theme, question]
   );
 
   return (

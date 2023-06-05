@@ -171,7 +171,7 @@ export const ATOMIC_NUMBER_HE = {
 /**
  * App settings used to test that question along with the responses are displayed properly in the Result Table By Question
  */
-export const APP_SETTINGS_2 = [
+export const APP_SETTINGS_FEW_QUESTIONS = [
   CAPITAL_FRANCE_SETTING,
   HAPPINESS_LEVEL_SETTING,
   BABY_CAT_SETTING,
@@ -185,7 +185,7 @@ export const APP_SETTINGS_2 = [
   },
 ];
 
-export const APP_SETTINGS_3 = [
+export const APP_SETTINGS_LOT_QUESTIONS = [
   CAPITAL_FRANCE_SETTING,
   HAPPINESS_LEVEL_SETTING,
   BABY_CAT_SETTING,

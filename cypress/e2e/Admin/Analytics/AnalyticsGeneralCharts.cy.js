@@ -10,10 +10,13 @@ import {
   buildAutoScrollableMenuLinkCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_DATA_3 } from '../../../fixtures/appData';
-import { APP_SETTINGS_2, APP_SETTINGS_3 } from '../../../fixtures/appSettings';
+import { APP_DATA_LOT_QUESTIONS_LOT_USERS } from '../../../fixtures/appData';
+import {
+  APP_SETTINGS_FEW_QUESTIONS,
+  APP_SETTINGS_LOT_QUESTIONS,
+} from '../../../fixtures/appSettings';
 import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
-import { verifySelectedMenu } from '../../../utils/AutoScrollableMenuSelected';
+import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
 
 const generalCharts = [
   {
@@ -35,7 +38,7 @@ const generalCharts = [
 
 describe('Analytics General', () => {
   it('General Analytics no app data', () => {
-    cy.setupAnalyticsForCheck(APP_SETTINGS_2);
+    cy.setupAnalyticsForCheck(APP_SETTINGS_FEW_QUESTIONS);
 
     // if empty app data, then should display that no user have answered the quiz yet
     cy.get(dataCyWrapper(ANALYTICS_CONTAINER_CY)).should(
@@ -49,8 +52,8 @@ describe('Analytics General', () => {
    */
   it('Analytics tab with data, layout correctly displayed', () => {
     cy.setupAnalyticsForCheck(
-      APP_SETTINGS_3,
-      APP_DATA_3,
+      APP_SETTINGS_LOT_QUESTIONS,
+      APP_DATA_LOT_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 
@@ -65,17 +68,16 @@ describe('Analytics General', () => {
       .should('have.attr', 'aria-selected', 'true');
 
     // All the question of the quiz should have their own tab, to navigate to detailed questions
-    getSettingsByName(APP_SETTINGS_3, APP_SETTING_NAMES.QUESTION).forEach(
-      (q) => {
-        cy.get(
-          dataCyWrapper(
-            buildAnalyticsDetailedQuestionTabMenuCy(q.data.question)
-          )
-        )
-          .scrollIntoView()
-          .should('have.text', q.data.question);
-      }
-    );
+    getSettingsByName(
+      APP_SETTINGS_LOT_QUESTIONS,
+      APP_SETTING_NAMES.QUESTION
+    ).forEach((q) => {
+      cy.get(
+        dataCyWrapper(buildAnalyticsDetailedQuestionTabMenuCy(q.data.question))
+      )
+        .scrollIntoView()
+        .should('have.text', q.data.question);
+    });
 
     // The charts should correctly have en entry in the menu
     generalCharts.forEach(({ label }) => {
@@ -91,8 +93,8 @@ describe('Analytics General', () => {
 
   it('Analytics, click chart in menu goes to correct charts', () => {
     cy.setupAnalyticsForCheck(
-      APP_SETTINGS_3,
-      APP_DATA_3,
+      APP_SETTINGS_LOT_QUESTIONS,
+      APP_DATA_LOT_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 
@@ -116,8 +118,8 @@ describe('Analytics General', () => {
 
   it('Scroll to chart, select correct menu entry', () => {
     cy.setupAnalyticsForCheck(
-      APP_SETTINGS_3,
-      APP_DATA_3,
+      APP_SETTINGS_LOT_QUESTIONS,
+      APP_DATA_LOT_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 

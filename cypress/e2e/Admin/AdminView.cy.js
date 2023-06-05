@@ -15,8 +15,8 @@ import {
   buildTableByQuestionCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import { APP_DATA_2 } from '../../fixtures/appData';
-import { APP_SETTINGS_2 } from '../../fixtures/appSettings';
+import { APP_DATA_FEW_QUESTIONS_LOT_USERS } from '../../fixtures/appData';
+import { APP_SETTINGS_FEW_QUESTIONS } from '../../fixtures/appSettings';
 
 describe('Admin View', () => {
   /**
@@ -54,8 +54,8 @@ describe('Admin View', () => {
   it('Question data', () => {
     cy.setUpApi({
       database: {
-        appSettings: APP_SETTINGS_2,
-        appData: APP_DATA_2,
+        appSettings: APP_SETTINGS_FEW_QUESTIONS,
+        appData: APP_DATA_FEW_QUESTIONS_LOT_USERS,
       },
       appContext: {
         permission: PERMISSION_LEVELS.ADMIN,
@@ -66,11 +66,12 @@ describe('Admin View', () => {
     testAdminViewBaseLayout();
 
     cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
-    APP_SETTINGS_2.filter((s) => s.name === APP_SETTING_NAMES.QUESTION).forEach(
-      (s, idx) =>
-        cy
-          .get(dataCyWrapper(buildTableByQuestionCy(s.data.question)))
-          .should('have.text', APP_SETTINGS_2[idx].data.question)
+    APP_SETTINGS_FEW_QUESTIONS.filter(
+      (s) => s.name === APP_SETTING_NAMES.QUESTION
+    ).forEach((s, idx) =>
+      cy
+        .get(dataCyWrapper(buildTableByQuestionCy(s.data.question)))
+        .should('have.text', APP_SETTINGS_FEW_QUESTIONS[idx].data.question)
     );
   });
 });

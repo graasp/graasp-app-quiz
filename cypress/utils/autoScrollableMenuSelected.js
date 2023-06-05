@@ -3,7 +3,7 @@ import {
   dataCyWrapper,
 } from '../../src/config/selectors';
 import theme from '../../src/layout/theme';
-import { hexToRGB } from './Color';
+import { hexToRGB } from './color';
 
 /**
  * Helper function, to test that the selected label is correctly selected, and that the others are not selected

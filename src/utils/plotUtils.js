@@ -3,14 +3,14 @@
  *
  * @param hoverText Array of string with info to display when overing different part of the chart
  * @param meta Array containing complementary information to be displayed along
- * @param template The template to display the text when hovering
+ * @param hoverTemplate The template to display the text when hovering
  * @param borderColor The border color
  */
-export const hoverData = (hoverText, meta, template, borderColor) => {
+export const hoverData = ({ hoverText, meta, hoverTemplate, borderColor }) => {
   return {
     hovertext: hoverText,
     meta,
-    hovertemplate: template,
+    hovertemplate: hoverTemplate,
     hoverlabel: {
       bordercolor: borderColor,
       bgcolor: 'rgb(234,234,234)',

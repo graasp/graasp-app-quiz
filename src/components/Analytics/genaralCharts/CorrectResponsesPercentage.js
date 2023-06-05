@@ -84,14 +84,14 @@ const CorrectResponsesPercentage = ({
             marker: {
               color: theme.palette.primary.main,
             },
-            ...hoverData(
-              chartData.hoverText,
-              chartData.qIds,
-              `%{hovertext}<br><br> - ${t(
+            ...hoverData({
+              hoverText: chartData.hoverText,
+              meta: chartData.qIds,
+              hoverTemplate: `%{hovertext}<br><br> - ${t(
                 'Percentage correct responses'
               )}: %{y:.1%} <extra></extra>`,
-              theme.palette.primary.main
-            ),
+              borderColor: theme.palette.primary.main,
+            }),
             fill: 'tozeroy',
           },
         ]}
@@ -103,7 +103,7 @@ const CorrectResponsesPercentage = ({
             maxValueY: 1.1,
           }),
           xaxis: {
-            range: [-0.2, order.length - 0.8],
+            range: [-0.2, order.length - 0.8], // Make range a bit bigger at beginning and end, to fully display dot
           },
         }}
         config={defaultSettings('Quiz_correct_response_percentage')}

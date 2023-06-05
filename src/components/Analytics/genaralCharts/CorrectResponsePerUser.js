@@ -95,16 +95,15 @@ const CorrectResponsePerUser = ({
             marker: {
               color: theme.palette.primary.main,
             },
-            ...hoverData(
-              null,
-              chartData.percentageCorrect,
-              `%{y}<br><br> - ${t(
+            ...hoverData({
+              meta: chartData.percentageCorrect,
+              hoverTemplate: `%{y}<br><br> - ${t(
                 'Number of correct responses'
               )}: %{x} <br> - ${t(
                 'Percentage correct responses'
               )}: %{meta:.1%} <extra></extra>`,
-              theme.palette.primary.main
-            ),
+              borderColor: theme.palette.primary.main,
+            }),
             texttemplate: '%{x}',
             textangle: '0',
           },
