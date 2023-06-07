@@ -97,3 +97,5 @@ export const FILL_BLANKS_PLACEHOLDER_TEXT =
   'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. Phasellus aliquam, arcu vel <hendrerit> hendrerit, dui nulla <vulputate> sem, ut porta justo ipsum commodo dui. ';
 
 export const AUTO_SCROLLABLE_HOVER_COLOR = '#878383';
+
+export const CHART_SECONDARY_COLOR = '#d95557';

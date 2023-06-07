@@ -33,7 +33,7 @@ export const LIAM_RESPONSES = [
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
       questionId: 'id7',
-      text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
+      text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
     },
     id: '4',
   },
@@ -161,7 +161,7 @@ export const MASON_RESPONSES = [
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
       questionId: 'id7',
-      text: 'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ip sum> sem.',
+      text: 'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ipsum> sem.',
     },
     id: '13',
   },
@@ -243,7 +243,7 @@ export const ISABELLA_RESPONSES = [
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
       questionId: 'id7',
-      text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
+      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
     },
     id: '19',
   },
@@ -325,7 +325,7 @@ export const ETHAN_RESPONSES = [
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
       questionId: 'id7',
-      text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
+      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
     },
     id: '25',
   },
@@ -407,7 +407,7 @@ export const MIA_RESPONSES = [
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
       questionId: 'id7',
-      text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
+      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
     },
     id: '31',
   },
@@ -489,7 +489,7 @@ export const ALEXANDER_RESPONSES = [
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
       questionId: 'id7',
-      text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
+      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
     },
     id: '37',
   },
@@ -571,7 +571,7 @@ export const CHLOE_RESPONSES = [
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
       questionId: 'id7',
-      text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
+      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
     },
     id: '43',
   },
@@ -623,7 +623,7 @@ export const CHLOE_MORE_RESPONSES = [
 /**
  * Basic app data(i.e. user responses) used to test that display is good in table by user and by questions
  */
-export const APP_DATA = [
+export const APP_DATA_FEW_QUESTIONS_FEW_USERS = [
   ...LIAM_RESPONSES,
   ...HARPER_RESPONSES,
   ...MASON_RESPONSES,
@@ -633,7 +633,7 @@ export const APP_DATA = [
  * App data with more user to make te table bigger, and make it easier to test the scroll behaviour in
  * table by question
  */
-export const APP_DATA_2 = [
+export const APP_DATA_FEW_QUESTIONS_LOT_USERS = [
   ...LIAM_RESPONSES,
   ...HARPER_RESPONSES,
   ...MASON_RESPONSES,
@@ -647,7 +647,7 @@ export const APP_DATA_2 = [
 /**
  * App data with more users and responses, to make it easier to test the scroll behaviour in table by user
  */
-export const APP_DATA_3 = [
+export const APP_DATA_LOT_QUESTIONS_LOT_USERS = [
   ...LIAM_RESPONSES,
   ...LIAM_MORE_RESPONSES,
   ...HARPER_RESPONSES,

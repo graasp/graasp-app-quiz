@@ -23,11 +23,18 @@ import {
   comparatorArrayByElemName,
   getComparator,
 } from '../../../../src/utils/tableUtils';
-import { APP_DATA, APP_DATA_3 } from '../../../fixtures/appData';
-import { APP_SETTINGS_2, APP_SETTINGS_3 } from '../../../fixtures/appSettings';
+import {
+  APP_DATA_FEW_QUESTIONS_FEW_USERS,
+  APP_DATA_LOT_QUESTIONS_LOT_USERS,
+} from '../../../fixtures/appData';
+import {
+  APP_SETTINGS_FEW_QUESTIONS,
+  APP_SETTINGS_LOT_QUESTIONS,
+} from '../../../fixtures/appSettings';
 import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { USER_RESPONSES } from '../../../fixtures/tableByUserResponses';
-import { hexToRGB } from '../../../utils/Color';
+import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
+import { hexToRGB } from '../../../utils/color';
 
 describe('Table by User', () => {
   /**
@@ -35,29 +42,33 @@ describe('Table by User', () => {
    */
   it('Table by Question correctly display data', () => {
     cy.setupResultTablesByUserForCheck(
-      APP_SETTINGS_2,
-      APP_DATA,
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_DATA_FEW_QUESTIONS_FEW_USERS,
       MEMBERS_RESULT_TABLES
     );
 
     // Test that each table are correctly displayed
-    getUserNamesFromAppData(APP_DATA).forEach(({ id, name }) => {
-      console.log('name is: ', name);
-      cy.get(dataCyWrapper(buildTableByUserCy(name))).should('have.text', name);
+    getUserNamesFromAppData(APP_DATA_FEW_QUESTIONS_FEW_USERS).forEach(
+      ({ id, name }) => {
+        cy.get(dataCyWrapper(buildTableByUserCy(name))).should(
+          'have.text',
+          name
+        );
 
-      // test header
-      testTableHeader(name, 'sorted ascending');
-      // test content
-      testTableContent(name, id, true);
+        // test header
+        testTableHeader(name, 'sorted ascending');
+        // test content
+        testTableContent(name, id, true);
 
-      // sort descending
-      cy.get(dataCyWrapper(buildTableByUserQuestionHeaderCy(name))).click();
+        // sort descending
+        cy.get(dataCyWrapper(buildTableByUserQuestionHeaderCy(name))).click();
 
-      // test header
-      testTableHeader(name, 'sorted descending');
-      // test content
-      testTableContent(name, id, false);
-    });
+        // test header
+        testTableHeader(name, 'sorted descending');
+        // test content
+        testTableContent(name, id, false);
+      }
+    );
   });
 
   /**
@@ -65,13 +76,15 @@ describe('Table by User', () => {
    */
   it('Menu on left correctly display question title, in the correct order', () => {
     cy.setupResultTablesByUserForCheck(
-      APP_SETTINGS_2,
-      APP_DATA,
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_DATA_FEW_QUESTIONS_FEW_USERS,
       MEMBERS_RESULT_TABLES
     );
 
     // retrieved the users
-    const orderedUser = getUserNamesFromAppData(APP_DATA);
+    const orderedUser = getUserNamesFromAppData(
+      APP_DATA_FEW_QUESTIONS_FEW_USERS
+    );
 
     cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
       .children('a')
@@ -86,12 +99,14 @@ describe('Table by User', () => {
   it('Click on menu goes to question', () => {
     // Enough mock-user in APP_DATA2 to ensure that when one table is visible, all others are hidden
     cy.setupResultTablesByUserForCheck(
-      APP_SETTINGS_3,
-      APP_DATA_3,
+      APP_SETTINGS_LOT_QUESTIONS,
+      APP_DATA_LOT_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 
-    const orderedUser = getUserNamesFromAppData(APP_DATA_3);
+    const orderedUser = getUserNamesFromAppData(
+      APP_DATA_LOT_QUESTIONS_LOT_USERS
+    );
 
     orderedUser.forEach(({ id, name }, i) => {
       // click on the link
@@ -116,58 +131,46 @@ describe('Table by User', () => {
    */
   it('Scroll to table correctly display selected link', () => {
     cy.setupResultTablesByUserForCheck(
-      APP_SETTINGS_3,
-      APP_DATA_3,
+      APP_SETTINGS_LOT_QUESTIONS,
+      APP_DATA_LOT_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 
-    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
+    const orderedUser = getUserNamesFromAppData(
+      APP_DATA_LOT_QUESTIONS_LOT_USERS
+    ).map(({ name }) => ({
+      label: name,
+    }));
 
-    const orderedUser = getUserNamesFromAppData(APP_DATA_3);
-
-    orderedUser.forEach(({ name }, i) => {
+    orderedUser.forEach(({ label: name }, i) => {
       // Scroll element into view
       cy.get(dataCyWrapper(buildTableByUserCy(name))).scrollIntoView();
 
       // check that the correct link appear as selected
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(name))).should(
-        'have.css',
-        'border-color',
-        rgbBorderColor
-      );
-
-      // check that other border are transparent
-      orderedUser.forEach(({ name }, idx) => {
-        if (idx !== i) {
-          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(name))).should(
-            'have.css',
-            'border-color',
-            'rgba(0, 0, 0, 0)'
-          );
-        }
-      });
+      verifySelectedMenu(i, orderedUser);
     });
   });
 
   it('click on question redirect us to corresponding table by question', () => {
     cy.setupResultTablesByUserForCheck(
-      APP_SETTINGS_3,
-      APP_DATA_3,
+      APP_SETTINGS_LOT_QUESTIONS,
+      APP_DATA_LOT_QUESTIONS_LOT_USERS,
       MEMBERS_RESULT_TABLES
     );
 
     const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
-    const { id: fstUserId, name: fstUserName } =
-      getUserNamesFromAppData(APP_DATA_3)[0];
+    const { id: fstUserId, name: fstUserName } = getUserNamesFromAppData(
+      APP_DATA_LOT_QUESTIONS_LOT_USERS
+    )[0];
 
     // question id for first user
-    const fstUserQIds = APP_DATA_3.filter(
+    const fstUserQIds = APP_DATA_LOT_QUESTIONS_LOT_USERS.filter(
       (appData) => appData.memberId === fstUserId
     ).map((appData) => appData.data.questionId);
 
     const questionsNames = getSettingsByName(
-      APP_SETTINGS_3,
+      APP_SETTINGS_LOT_QUESTIONS,
       APP_SETTING_NAMES.QUESTION
     )
       .filter((setting) => fstUserQIds.includes(setting.id))

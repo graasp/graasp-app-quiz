@@ -8,7 +8,7 @@ import { buildMockLocalContext, mockApi } from '@graasp/apps-query-client';
 import App from './components/App';
 import { ENABLE_MOCK_API, SENTRY_DSN } from './config/constants';
 import { SENTRY_ENVIRONMENT, SENTRY_TRACE_SAMPLE_RATE } from './config/sentry';
-import buildDatabase from './data/db';
+import buildDatabase from './data/db10Users10Questions';
 
 if (SENTRY_DSN) {
   Sentry.init({

@@ -25,7 +25,7 @@ export const RESPONSES = {
       fields: {
         answer: LIAM_RESPONSES[2].data.text,
         date: new Date(LIAM_RESPONSES[2].updatedAt).toDateString(),
-        icon: IconTestText.WRONG,
+        icon: IconTestText.CORRECT,
       },
     },
     {

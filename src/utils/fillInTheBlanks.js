@@ -2,7 +2,7 @@ import { FILL_BLANKS_TYPE } from '../config/constants';
 
 const removeMarkup = (a) => a.trim().slice(1, -1);
 
-const ANSWER_REGEXP = /<[^<>]*>/g;
+export const ANSWER_REGEXP = /<[^<>]*>/g;
 
 export const splitSentence = (text = '', response = '') => {
   const responses = [...response.matchAll(ANSWER_REGEXP)].map(

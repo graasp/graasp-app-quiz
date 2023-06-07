@@ -52,5 +52,30 @@ export default {
     'Results by user': 'Résultats par utilisateur',
     'No users answered the quiz yet':
       "Aucun utilisateur n'a répondu au quiz pour l'instant",
+    Analytics: 'Analytique',
+    'Quiz performance': 'Performance du quiz',
+    'Users performance': 'Performance des utilisateurs',
+    'Quiz correct response percentage':
+      'Pourcentage de réponses correctes du quiz',
+    'Correct responses': 'Réponses correctes',
+    'Incorrect responses': 'Réponses incorrectes',
+    'Number of correct/incorrect responses per question':
+      'Nombre de réponses correctes/incorrectes par question',
+    'Number of correct responses': 'Nombre de réponses correctes',
+    'Percentage correct responses': 'Pourcentage de réponses correctes',
+    'Number of incorrect responses': 'Nombre de réponses incorrectes',
+    'Percentage incorrect responses': 'Pourcentage de réponses incorrectes',
+    'Number of correct responses per user':
+      'Nombre de réponses correctes par utilisateur',
+    General: 'Général',
+    'Question answer frequency': 'Fréquence des réponses à la question',
+    'Answers distribution': 'Distribution des réponses',
+    'Number of answers': 'Nombre de réponses',
+    'Number of time selected': 'Nombre de fois sélectionné',
+    'Percentage number of time selected':
+      'Pourcentage du nombre de fois sélectionné',
+    'Error, question type unknown': 'Erreur, type de question inconnu',
+    'Error, chart type unknown': 'Erreur, type de graphique inconnu',
+    blank: 'vide',
   },
 };

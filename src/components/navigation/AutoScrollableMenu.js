@@ -54,16 +54,20 @@ const AutoScrollableLink = styled(Link, {
  * @param {MutableRefObject<null>} initiallyClickedId The id of the link to click on when, wrapped in a `MutableRefObject`
  * so that we can reset its value directly after having click on it (without triggering a re-render),
  * so that it doesn't always go there upon re-render
+ * @param triggerVal Value to pass, to manually re-trigger the `DynamicHighlightedLink` hook, if no value passed,
+ * the hook will only be triggered once upon component creation
  */
 const AutoScrollableMenu = ({
   containerRef,
   elemRefs,
   links,
   initiallyClickedId,
+  triggerVal,
 }) => {
   const [highlightedLink, clickOnLink] = useDynamicHighlightedLink(
     containerRef,
-    elemRefs
+    elemRefs,
+    triggerVal
   );
 
   /**

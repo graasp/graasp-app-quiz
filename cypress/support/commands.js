@@ -6,6 +6,7 @@ import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   EXPLANATION_CY,
   EXPLANATION_PLAY_CY,
+  NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
   RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
   buildQuestionStepCy,
@@ -98,6 +99,28 @@ Cypress.Commands.add(
     // TODO Cypress doesn't wait long enough, and the members are not fully retrieved, but it freeze the
     //  render like that, and thus the AutoScrollablePanel is not fully initialized
     cy.wait(2000);
+  }
+);
+
+Cypress.Commands.add(
+  'setupAnalyticsForCheck',
+  (app_settings, app_data, members) => {
+    cy.setUpApi({
+      database: {
+        appSettings: app_settings,
+        appData: app_data,
+      },
+      appContext: {
+        permission: PERMISSION_LEVELS.ADMIN,
+        context: CONTEXTS.BUILDER,
+      },
+      members,
+    });
+
+    cy.visit('/');
+
+    // navigate to Analytics
+    cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
   }
 );
 

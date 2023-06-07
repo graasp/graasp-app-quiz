@@ -14,10 +14,12 @@
     "@sentry/tracing": "7.8.1",
     "i18next": "21.8.8",
     "lodash.clonedeep": "4.5.0",
+    "plotly.js-basic-dist-min": "2.22.0",
     "prop-types": "15.8.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-i18next": "11.17.0",
+    "react-plotly.js": "2.6.0",
     "react-scripts": "5.0.1",
     "react-toastify": "9.0.3",
     "web-vitals": "^2.1.4"
