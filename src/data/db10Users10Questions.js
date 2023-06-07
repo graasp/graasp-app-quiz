@@ -1,30 +1,30 @@
 import { APP_SETTING_NAMES, QUESTION_TYPES } from '../config/constants';
-import { appData_Chloé } from './appData_Chloé';
-import { appData_Emily } from './appData_Emily';
-import { appData_James } from './appData_James';
-import { appData_Jessica } from './appData_Jessica';
-import { appData_Luca } from './appData_Luca';
-import { appData_Micheal } from './appData_Micheal';
-import { appData_Olivia } from './appData_Olivia';
-import { appData_Sarah } from './appData_Sarah';
-import { appData_William } from './appData_William';
-import { appData_Xavier } from './appData_Xavier';
+import { appDataChloe } from './appDataChloe';
+import { appDataEmily } from './appDataEmily';
+import { appDataJames } from './appDataJames';
+import { appDataJessica } from './appDataJessica';
+import { appDataLuca } from './appDataLuca';
+import { appDataMicheal } from './appDataMicheal';
+import { appDataOlivia } from './appDataOlivia';
+import { appDataSarah } from './appDataSarah';
+import { appDataWilliam } from './appDataWilliam';
+import { appDataXavier } from './appDataXavier';
 
 /**
  * This database contains 10 questions, with 10 mock users, help display more data, to better see tables and charts
  */
 const buildDatabase = (appContext) => ({
   appData: [
-    ...appData_James,
-    ...appData_Sarah,
-    ...appData_Emily,
-    ...appData_Micheal,
-    ...appData_Jessica,
-    ...appData_William,
-    ...appData_Olivia,
-    ...appData_Chloé,
-    ...appData_Xavier,
-    ...appData_Luca,
+    ...appDataJames,
+    ...appDataSarah,
+    ...appDataEmily,
+    ...appDataMicheal,
+    ...appDataJessica,
+    ...appDataWilliam,
+    ...appDataOlivia,
+    ...appDataChloe,
+    ...appDataXavier,
+    ...appDataLuca,
   ],
   appSettings: [
     {

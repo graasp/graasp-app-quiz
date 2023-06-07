@@ -1,4 +1,4 @@
-export const appData_Luca = [
+export const appDataLuca = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-10',

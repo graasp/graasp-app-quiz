@@ -50,7 +50,6 @@ describe('Table by User', () => {
     // Test that each table are correctly displayed
     getUserNamesFromAppData(APP_DATA_FEW_QUESTIONS_FEW_USERS).forEach(
       ({ id, name }) => {
-        console.log('name is: ', name);
         cy.get(dataCyWrapper(buildTableByUserCy(name))).should(
           'have.text',
           name

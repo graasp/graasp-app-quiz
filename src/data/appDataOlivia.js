@@ -1,4 +1,4 @@
-export const appData_Olivia = [
+export const appDataOlivia = [
   {
     itemId: 'mock-item-id',
     memberId: 'mock-member-id-7',
