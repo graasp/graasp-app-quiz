@@ -24,7 +24,7 @@ export const RESPONSES = {
       userId: MEMBERS_RESULT_TABLES.LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[2].data.text,
-        date: new Date(LIAM_RESPONSES[2].updatedAt).toDateString(),
+        date: LIAM_RESPONSES[2].updatedAt.toDateString(),
         icon: IconTestText.CORRECT,
       },
     },
@@ -32,7 +32,7 @@ export const RESPONSES = {
       userId: MEMBERS_RESULT_TABLES.MASON.name,
       fields: {
         answer: MASON_RESPONSES[0].data.text,
-        date: new Date(MASON_RESPONSES[0].updatedAt).toDateString(),
+        date: MASON_RESPONSES[0].updatedAt.toDateString(),
         icon: IconTestText.WRONG,
       },
     },
@@ -43,7 +43,7 @@ export const RESPONSES = {
       userId: MEMBERS_RESULT_TABLES.HARPER.name,
       fields: {
         answer: HARPER_RESPONSES[0].data.value,
-        date: new Date(HARPER_RESPONSES[0].updatedAt).toDateString(),
+        date: HARPER_RESPONSES[0].updatedAt.toDateString(),
         icon: IconTestText.WRONG,
       },
     },
@@ -72,7 +72,7 @@ export const RESPONSES = {
       userId: MEMBERS_RESULT_TABLES.LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[1].data.text,
-        date: new Date(LIAM_RESPONSES[1].updatedAt).toDateString(),
+        date: LIAM_RESPONSES[1].updatedAt.toDateString(),
         icon: IconTestText.WRONG,
       },
     },
@@ -89,7 +89,7 @@ export const RESPONSES = {
       userId: MEMBERS_RESULT_TABLES.HARPER.name,
       fields: {
         answer: HARPER_RESPONSES[1].data.choices.join(', '),
-        date: new Date(HARPER_RESPONSES[1].updatedAt).toDateString(),
+        date: HARPER_RESPONSES[1].updatedAt.toDateString(),
         icon: IconTestText.WRONG,
       },
     },
@@ -97,7 +97,7 @@ export const RESPONSES = {
       userId: MEMBERS_RESULT_TABLES.LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[0].data.choices[0],
-        date: new Date(LIAM_RESPONSES[0].updatedAt).toDateString(),
+        date: LIAM_RESPONSES[0].updatedAt.toDateString(),
         icon: IconTestText.CORRECT,
       },
     },

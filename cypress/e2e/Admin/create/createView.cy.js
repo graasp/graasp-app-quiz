@@ -1,4 +1,4 @@
-import { PermissionLevel } from '@graasp/sdk';
+import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { DEFAULT_QUESTION_TYPE } from '../../../../src/config/constants';
 import {

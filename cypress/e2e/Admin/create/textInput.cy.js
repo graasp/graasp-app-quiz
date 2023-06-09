@@ -1,4 +1,4 @@
-import { PermissionLevel } from '@graasp/sdk';
+import { Context, PermissionLevel } from '@graasp/sdk';
 
 import {
   APP_SETTING_NAMES,

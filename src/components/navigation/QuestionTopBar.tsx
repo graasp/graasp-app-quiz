@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 
 import { useLocalContext } from '@graasp/apps-query-client';
+import { Context } from '@graasp/sdk';
 
 import { hooks } from '../../config/queryClient';
 import {

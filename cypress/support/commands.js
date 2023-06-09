@@ -1,4 +1,4 @@
-import { PermissionLevel } from '@graasp/sdk';
+import { Context, PermissionLevel } from '@graasp/sdk';
 
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
