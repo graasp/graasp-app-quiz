@@ -61,7 +61,7 @@ export const getComparator = (
   order?: string,
   comp?: (a: unknown, b: unknown) => number
 ) => {
-  let fn = comp ?? comparator;
+  const fn = comp ?? comparator;
   return order === Order.DESC
     ? (a: string, b: string) => fn(a, b)
     : (a: string, b: string) => -fn(a, b);

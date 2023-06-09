@@ -58,7 +58,7 @@ export const QuizProvider = ({ children }: Props) => {
 
   const deleteQuestion = (questionId: string) => () => {
     // update list order
-    let newOrder = order.toJS();
+    const newOrder = order.toJS();
     const idx = order.findIndex((id) => id === questionId);
     newOrder.splice(idx, 1);
     if (orderSetting) {
