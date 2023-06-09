@@ -44,11 +44,8 @@ import {
 import { computeCorrectness } from '../context/utilities';
 import {
   AppDataDataRecord,
-  MultipleChoiceAppDataData,
   MultipleChoiceAppDataDataRecord,
-  QuestionDataAppSettingRecord,
   QuestionDataRecord,
-  SliderAppDataData,
   SliderAppDataDataRecord,
   TextAppDataDataRecord,
 } from '../types/types';

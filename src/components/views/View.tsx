@@ -21,7 +21,6 @@ const View = (): JSX.Element => {
   });
 
   const renderContent = () => {
-    return <AdminView />;
     switch (context.get('context')) {
       case CONTEXTS.BUILDER: {
         switch (context.get('permission')) {

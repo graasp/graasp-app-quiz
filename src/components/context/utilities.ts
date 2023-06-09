@@ -12,7 +12,6 @@ import {
   QuestionDataAppSettingRecord,
   QuestionDataRecord,
   SliderAppDataDataRecord,
-  TextAppDataData,
   TextAppDataDataRecord,
 } from '../types/types';
 

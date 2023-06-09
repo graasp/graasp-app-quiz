@@ -11,6 +11,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:cypress/recommended',
     'react-app',
+    'plugin:@typescript-eslint/recommended',
   ],
   globals: {
     cy: true,
