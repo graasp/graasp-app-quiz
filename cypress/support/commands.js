@@ -1,7 +1,5 @@
-import { buildDatabase } from '@graasp/apps-query-client';
+import { PermissionLevel } from '@graasp/sdk';
 
-import { PermissionLevel } from '../../src/config/constants';
-import { CONTEXTS } from '../../src/config/contexts';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   EXPLANATION_CY,
@@ -13,6 +11,7 @@ import {
   buildQuestionTypeOption,
   dataCyWrapper,
 } from '../../src/config/selectors';
+import { item as MOCK_ITEM } from '../../src/data/db';
 import { MEMBERS } from '../fixtures/members';
 
 Cypress.Commands.add(
@@ -20,10 +19,11 @@ Cypress.Commands.add(
   ({ database = {}, appContext, members = MEMBERS } = {}) => {
     // mock api and database
     Cypress.on('window:before:load', (win) => {
-      win.database = buildDatabase({
+      win.database = {
+        items: [MOCK_ITEM],
         members: Object.values(members),
         ...database,
-      });
+      };
       win.appContext = appContext;
     });
   }
@@ -87,7 +87,7 @@ Cypress.Commands.add(
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: CONTEXTS.BUILDER,
+        context: Context.Builder,
       },
       members,
     });
@@ -113,7 +113,7 @@ Cypress.Commands.add(
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: CONTEXTS.BUILDER,
+        context: Context.Builder,
       },
       members,
     });

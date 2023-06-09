@@ -213,7 +213,6 @@ const AnalyticsMenu = ({ headerElem }) => {
             </TabPanel>
             {order?.map((qId, idx) => {
               const question = questionById.get(qId)?.first();
-              console.log(charts);
               return (
                 // The +1 is here to account for the General tab, that is at index 0
                 <TabPanel tab={tab} index={idx + 1} key={qId}>

@@ -79,13 +79,6 @@ export const FAILURE_MESSAGES = {
   FILL_BLANKS_UNMATCHING_TAGS: 'FILL_BLANKS_UNMATCHING_TAGS',
 };
 
-// todo: use from graasp constants
-export const PermissionLevel = {
-  WRITE: 'write',
-  READ: 'read',
-  ADMIN: 'admin',
-};
-
 export const DEFAULT_LANG = 'en';
 
 export const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API === 'true';

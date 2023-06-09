@@ -1,9 +1,9 @@
+import { PermissionLevel } from '@graasp/sdk';
+
 import {
   APP_SETTING_NAMES,
-  PermissionLevel,
   QuestionType,
 } from '../../../../src/config/constants';
-import { CONTEXTS } from '../../../../src/config/contexts';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
@@ -60,7 +60,7 @@ describe('Text Input', () => {
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: CONTEXTS.BUILDER,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -84,7 +84,7 @@ describe('Text Input', () => {
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: CONTEXTS.BUILDER,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -103,7 +103,7 @@ describe('Text Input', () => {
         },
         appContext: {
           permission: PermissionLevel.Admin,
-          context: CONTEXTS.BUILDER,
+          context: Context.Builder,
         },
       });
       cy.visit('/');

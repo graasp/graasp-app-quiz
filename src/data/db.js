@@ -1,6 +1,6 @@
 import { APP_SETTING_NAMES, QuestionType } from '../config/constants';
 
-const item = { id: 'mock-item-id' };
+export const item = { id: 'mock-item-id' };
 const member = { id: 'mock-member-id-1' };
 const buildDatabase = (appContext) => ({
   appData: [

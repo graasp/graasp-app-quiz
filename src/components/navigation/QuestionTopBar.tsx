@@ -17,7 +17,6 @@ import {
 
 import { useLocalContext } from '@graasp/apps-query-client';
 
-import { CONTEXTS } from '../../config/contexts';
 import { hooks } from '../../config/queryClient';
 import {
   QUESTION_BAR_CY,
@@ -65,7 +64,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
       return null;
     }
 
-    if (context.get('context') === CONTEXTS.BUILDER) {
+    if (context.get('context') === Context.Builder) {
       return (
         <StepButton onClick={() => setCurrentIdx(index)}>
           {question.data.question}

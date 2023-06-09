@@ -3,10 +3,9 @@ import { useEffect } from 'react';
 import { Container } from '@mui/material';
 
 import { useLocalContext } from '@graasp/apps-query-client';
-import { PermissionLevel } from '@graasp/sdk';
+import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { DEFAULT_LANG } from '../../config/constants';
-import { CONTEXTS } from '../../config/contexts';
 import i18n from '../../config/i18n';
 import { QuizProvider } from '../context/QuizContext';
 import AdminView from '../navigation/AdminView';
@@ -22,7 +21,7 @@ const View = (): JSX.Element => {
 
   const renderContent = () => {
     switch (context.get('context')) {
-      case CONTEXTS.BUILDER: {
+      case Context.Builder: {
         switch (context.get('permission')) {
           case PermissionLevel.Admin:
           case PermissionLevel.Write:

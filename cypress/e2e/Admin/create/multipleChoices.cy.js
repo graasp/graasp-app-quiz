@@ -1,10 +1,10 @@
+import { PermissionLevel } from '@graasp/sdk';
+
 import {
   APP_SETTING_NAMES,
   FAILURE_MESSAGES,
-  PermissionLevel,
   QuestionType,
 } from '../../../../src/config/constants';
-import { CONTEXTS } from '../../../../src/config/contexts';
 import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -122,7 +122,7 @@ describe('Multiple Choices', () => {
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: CONTEXTS.BUILDER,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -178,7 +178,7 @@ describe('Multiple Choices', () => {
         },
         appContext: {
           permission: PermissionLevel.Admin,
-          context: CONTEXTS.BUILDER,
+          context: Context.Builder,
         },
       });
       cy.visit('/');

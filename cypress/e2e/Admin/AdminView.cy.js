@@ -1,8 +1,6 @@
-import {
-  APP_SETTING_NAMES,
-  PermissionLevel,
-} from '../../../src/config/constants';
-import { CONTEXTS } from '../../../src/config/contexts';
+import { PermissionLevel } from '@graasp/sdk';
+
+import { APP_SETTING_NAMES } from '../../../src/config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   ANALYTICS_CONTAINER_CY,
@@ -29,7 +27,7 @@ describe('Admin View', () => {
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: CONTEXTS.BUILDER,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -59,7 +57,7 @@ describe('Admin View', () => {
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: CONTEXTS.BUILDER,
+        context: Context.Builder,
       },
     });
     cy.visit('/');

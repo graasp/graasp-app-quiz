@@ -1,11 +1,11 @@
+import { PermissionLevel } from '@graasp/sdk';
+
 import {
   APP_SETTING_NAMES,
   DEFAULT_QUESTION,
   FAILURE_MESSAGES,
-  PermissionLevel,
   QuestionType,
 } from '../../../../src/config/constants';
-import { CONTEXTS } from '../../../../src/config/contexts';
 import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -81,7 +81,7 @@ describe('Slider', () => {
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: CONTEXTS.BUILDER,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -122,7 +122,7 @@ describe('Slider', () => {
         },
         appContext: {
           permission: PermissionLevel.Admin,
-          context: CONTEXTS.BUILDER,
+          context: Context.Builder,
         },
       });
       cy.visit('/');

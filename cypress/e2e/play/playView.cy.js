@@ -1,4 +1,5 @@
-import { PermissionLevel } from '../../../src/config/constants';
+import { PermissionLevel } from '@graasp/sdk';
+
 import {
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
