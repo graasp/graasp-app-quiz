@@ -123,7 +123,7 @@ describe('Analytics General', () => {
       MEMBERS_RESULT_TABLES
     );
 
-    generalCharts.forEach(({ label, selector }, index) => {
+    generalCharts.forEach(({ selector }, index) => {
       cy.get(dataCyWrapper(selector)).scrollIntoView().should('be.visible');
 
       verifySelectedMenu(index, generalCharts);

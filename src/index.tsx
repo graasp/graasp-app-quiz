@@ -29,10 +29,11 @@ if (ENABLE_MOCK_API) {
     appContext: window.Cypress ? window.appContext : appContext,
     // database: window.Cypress ? window.database : undefined,
     // enable next line to use mock data
-    database: window.Cypress ? window.database : buildDatabase(appContext),
+    database: window.Cypress ? window.database : buildDatabase(),
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(document.getElementById('root')!);
 
 root.render(<App />);

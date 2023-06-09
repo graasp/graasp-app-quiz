@@ -108,7 +108,7 @@ describe('Table by User', () => {
       APP_DATA_LOT_QUESTIONS_LOT_USERS
     );
 
-    orderedUser.forEach(({ id, name }, i) => {
+    orderedUser.forEach(({ name }, i) => {
       // click on the link
       cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(name))).click();
 
@@ -263,7 +263,7 @@ const testTableContent = (uName, uId, ascending) => {
    * @param n the current index when iterating through each child
    * @param length the length of the array we are indexing
    */
-  const index = ascending ? (n, _) => n : (n, length) => length - 1 - n;
+  const index = ascending ? (n) => n : (n, length) => length - 1 - n;
 
   cy.get(dataCyWrapper(buildTableByUserTableBodyCy(uName)))
     .children(dataCyWrapper(TABLE_BY_USER_ENTRY_CY))

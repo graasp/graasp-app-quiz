@@ -38,6 +38,8 @@ const fillBlanksQuestion = (
   originalAppSettingData = DEFAULT_QUESTION.data,
   { shouldSave = true } = {}
 ) => {
+  console.log(originalAppSettingData);
+
   // fill question
   cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
   if (question.length) {

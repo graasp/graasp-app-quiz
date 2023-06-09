@@ -57,7 +57,7 @@ type Props = {
   };
   memberList: List<MemberRecord>;
   responses: List<AppDataRecord>;
-  handleUserClicked: any;
+  handleUserClicked: (id: string) => void;
 };
 
 const TableByQuestion = ({
@@ -195,7 +195,10 @@ const TableByQuestion = ({
               {memberList
                 // todo: fix type
                 ?.sort(
-                  getComparator(order, comparatorArrayByElemName as any) as any
+                  getComparator(
+                    order,
+                    comparatorArrayByElemName as never
+                  ) as never
                 )
                 .map(({ id, name }) => (
                   <TableRow

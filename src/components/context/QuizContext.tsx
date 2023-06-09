@@ -17,7 +17,7 @@ import {
 import { getSettingsByName } from './utilities';
 
 type ContextType = {
-  order: any;
+  order: List<string>;
   questions: List<QuestionDataAppSettingRecord>;
   currentQuestion: QuestionDataAppSettingRecord;
   currentIdx: number;
@@ -99,7 +99,7 @@ export const QuizProvider = ({ children }: Props) => {
       } else {
         patchAppSetting({
           id: orderSetting.id,
-          data: { list: [...order, newQuestion.id] },
+          data: { list: order.push(newQuestion.id) },
         });
       }
       setCurrentIdx(order.size);

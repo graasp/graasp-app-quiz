@@ -98,6 +98,7 @@ Cypress.Commands.add(
 
     // TODO Cypress doesn't wait long enough, and the members are not fully retrieved, but it freeze the
     //  render like that, and thus the AutoScrollablePanel is not fully initialized
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000);
   }
 );
@@ -137,6 +138,7 @@ Cypress.Commands.add(
 
     // TODO Cypress doesn't wait long enough, and the members are not fully retrieved, but it freeze the
     //  render like that, and thus the AutoScrollablePanel is not fully initialized
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000);
     // navigate to the table by user
     cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_USER_BUTTON_CY)).click();

@@ -34,7 +34,7 @@ import {
 import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
 
 type Props = {
-  additionalSteps: JSX.Element;
+  additionalSteps?: JSX.Element;
 };
 
 const QuestionTopBar = ({ additionalSteps }: Props) => {

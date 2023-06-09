@@ -1,3 +1,5 @@
+import { List } from 'immutable';
+
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +10,8 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
+
+import { AppDataRecord } from '@graasp/sdk/frontend';
 
 import { APP_DATA_TYPES, QuestionType } from '../../config/constants';
 import { hooks, mutations } from '../../config/queryClient';
@@ -20,8 +24,13 @@ import {
 import { QuizContext } from '../context/QuizContext';
 import { getAppDataByQuestionId } from '../context/utilities';
 import QuestionTopBar from '../navigation/QuestionTopBar';
-import PlayMultipleChoices from '../play/PlayMultipleChoices';
+import {
+  AppDataQuestionRecord,
+  MultipleChoiceAppDataDataRecord,
+  SliderAppDataDataRecord,
+} from '../types/types';
 import PlayFillInTheBlanks from './PlayFillInTheBlanks';
+import PlayMultipleChoices from './PlayMultipleChoices';
 import PlaySlider from './PlaySlider';
 import PlayTextInput from './PlayTextInput';
 
@@ -35,19 +44,27 @@ const PlayView = () => {
 
   const [showCorrection, setShowCorrection] = React.useState(false);
 
-  const [newResponse, setNewResponse] = useState(
-    getAppDataByQuestionId(responses, currentQuestion?.id)
+  const [newResponse, setNewResponse] = useState<AppDataRecord>(
+    getAppDataByQuestionId(
+      responses as List<AppDataQuestionRecord>,
+      currentQuestion?.id
+    )
   );
 
   useEffect(() => {
     if (responses && currentQuestion) {
       // assume there's only one response for a question
-      setNewResponse(getAppDataByQuestionId(responses, currentQuestion.id));
+      setNewResponse(
+        getAppDataByQuestionId(
+          responses as List<AppDataQuestionRecord>,
+          currentQuestion.id
+        )
+      );
     }
   }, [responses, currentQuestion]);
 
   useEffect(() => {
-    setShowCorrection(newResponse?.id);
+    setShowCorrection(Boolean(newResponse?.id));
   }, [newResponse]);
 
   const onSubmit = () => {
@@ -102,15 +119,11 @@ const PlayView = () => {
               return (
                 <PlayMultipleChoices
                   choices={currentQuestion.data.choices}
-                  response={newResponse.data}
+                  response={newResponse.data as MultipleChoiceAppDataDataRecord}
                   setResponse={(choices) => {
-                    setNewResponse({
-                      ...newResponse,
-                      data: {
-                        ...newResponse.data,
-                        choices,
-                      },
-                    });
+                    setNewResponse(
+                      newResponse.setIn(['data', 'choices'], choices)
+                    );
                   }}
                   showCorrection={showCorrection}
                 />
@@ -121,14 +134,8 @@ const PlayView = () => {
                 <PlayTextInput
                   values={currentQuestion.data}
                   response={newResponse.data}
-                  setResponse={(text) => {
-                    setNewResponse({
-                      ...newResponse,
-                      data: {
-                        ...newResponse.data,
-                        text,
-                      },
-                    });
+                  setResponse={(text: string) => {
+                    setNewResponse(newResponse.setIn(['data', 'text'], text));
                   }}
                   showCorrection={showCorrection}
                 />
@@ -139,14 +146,8 @@ const PlayView = () => {
                 <PlayFillInTheBlanks
                   values={currentQuestion.data}
                   response={newResponse.data}
-                  setResponse={(text) => {
-                    setNewResponse({
-                      ...newResponse,
-                      data: {
-                        ...newResponse.data,
-                        text,
-                      },
-                    });
+                  setResponse={(text: string) => {
+                    setNewResponse(newResponse.setIn(['data', 'text'], text));
                   }}
                   showCorrection={showCorrection}
                 />
@@ -157,14 +158,10 @@ const PlayView = () => {
                 <PlaySlider
                   values={currentQuestion.data}
                   response={newResponse.data}
-                  setResponse={(value) => {
-                    setNewResponse({
-                      ...newResponse,
-                      data: {
-                        ...newResponse.data,
-                        value,
-                      },
-                    });
+                  setResponse={(value: SliderAppDataDataRecord) => {
+                    setNewResponse(
+                      newResponse.update('data', (data) => data.merge(value))
+                    );
                   }}
                   showCorrection={showCorrection}
                 />

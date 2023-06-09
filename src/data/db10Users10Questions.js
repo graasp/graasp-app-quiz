@@ -13,7 +13,7 @@ import { appDataXavier } from './appDataXavier';
 /**
  * This database contains 10 questions, with 10 mock users, help display more data, to better see tables and charts
  */
-const buildDatabase = (appContext) => ({
+const buildDatabase = () => ({
   appData: [
     ...appDataJames,
     ...appDataSarah,

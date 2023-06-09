@@ -10,7 +10,7 @@ import {
 type Props = {
   choices: MultipleChoicesAppSettingDataRecord['choices'];
   response: MultipleChoiceAppDataDataRecord;
-  setResponse: (d: any) => void;
+  setResponse: (d: MultipleChoiceAppDataDataRecord['choices']) => void;
   showCorrection: boolean;
 };
 
