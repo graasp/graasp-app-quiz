@@ -28,6 +28,8 @@ const PlayFillInTheBlanks = ({
     })()
   );
 
+  console.log(values, response);
+
   useEffect(() => {
     const { words, answers } = splitSentence(values.text ?? '', response.text);
     setState({ ...state, words, answers });

@@ -33,19 +33,6 @@ if (ENABLE_MOCK_API) {
   });
 }
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root')!);
 
-const renderApp = (Component) => {
-  root.render(<Component />);
-};
-
-// render app to the dom
-renderApp(App);
-
-if (module.hot) {
-  module.hot.accept('./components/App', () => {
-    // eslint-disable-next-line global-require
-    const NextRoot = require('./components/App').default;
-    renderApp(NextRoot);
-  });
-}
+root.render(<App />);

@@ -1,6 +1,6 @@
 import { buildDatabase } from '@graasp/apps-query-client';
 
-import { PERMISSION_LEVELS } from '../../src/config/constants';
+import { PermissionLevel } from '../../src/config/constants';
 import { CONTEXTS } from '../../src/config/contexts';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -86,7 +86,7 @@ Cypress.Commands.add(
         appData: app_data,
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
+        permission: PermissionLevel.Admin,
         context: CONTEXTS.BUILDER,
       },
       members,
@@ -111,7 +111,7 @@ Cypress.Commands.add(
         appData: app_data,
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
+        permission: PermissionLevel.Admin,
         context: CONTEXTS.BUILDER,
       },
       members,

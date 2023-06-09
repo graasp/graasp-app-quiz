@@ -1,4 +1,6 @@
-import React, { useContext } from 'react';
+import { List } from 'immutable';
+
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CheckIcon from '@mui/icons-material/Check';
@@ -13,7 +15,7 @@ import {
   Stepper,
 } from '@mui/material';
 
-import { Context } from '@graasp/apps-query-client';
+import { useLocalContext } from '@graasp/apps-query-client';
 
 import { CONTEXTS } from '../../config/contexts';
 import { hooks } from '../../config/queryClient';
@@ -27,10 +29,15 @@ import { QuizContext } from '../context/QuizContext';
 import {
   computeCorrectness,
   getAppDataByQuestionId,
-  getDataWithId,
+  getQuestionById,
 } from '../context/utilities';
+import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
 
-export default function QuestionTopBar({ additionalSteps }) {
+type Props = {
+  additionalSteps: JSX.Element;
+};
+
+const QuestionTopBar = ({ additionalSteps }: Props) => {
   const { t } = useTranslation();
   const {
     questions,
@@ -40,16 +47,19 @@ export default function QuestionTopBar({ additionalSteps }) {
     order,
     moveToNextQuestion,
   } = useContext(QuizContext);
-  const context = useContext(Context);
+  const context = useLocalContext();
   const { data: appData, isLoading } = hooks.useAppData();
 
   if (isLoading) {
-    return <Skeleton variant="rect" width="100%" height={70} />;
+    return <Skeleton variant="rectangular" width="100%" height={70} />;
   }
 
-  const renderLabel = (questionId, index) => {
-    const response = getAppDataByQuestionId(appData, questionId);
-    const question = getDataWithId(questions, questionId);
+  const renderLabel = (questionId: string, index: number) => {
+    const response = getAppDataByQuestionId(
+      appData as List<AppDataQuestionRecord>,
+      questionId
+    );
+    const question = getQuestionById(questions, questionId);
 
     if (!question) {
       return null;
@@ -64,7 +74,10 @@ export default function QuestionTopBar({ additionalSteps }) {
     }
 
     // show correctness in label only if a response exists
-    const isCorrect = computeCorrectness(response.data, question.data);
+    const isCorrect = computeCorrectness(
+      question.data as QuestionDataRecord,
+      response?.data
+    );
     const props = !response.id
       ? {}
       : {
@@ -109,7 +122,7 @@ export default function QuestionTopBar({ additionalSteps }) {
           activeStep={currentIdx}
           sx={{ pb: 3 }}
         >
-          {order?.map((qId, index) => (
+          {order?.map((qId: string, index: number) => (
             <Step key={qId} data-cy={buildQuestionStepCy(qId)}>
               {renderLabel(qId, index)}
             </Step>
@@ -123,11 +136,13 @@ export default function QuestionTopBar({ additionalSteps }) {
           sx={{ p: 0 }}
           color="primary"
           onClick={moveToNextQuestion}
-          disabled={currentIdx >= order.length - 1}
+          disabled={currentIdx >= order.size - 1}
         >
           {t('Next')}
         </Button>
       </Grid>
     </Grid>
   );
-}
+};
+
+export default QuestionTopBar;

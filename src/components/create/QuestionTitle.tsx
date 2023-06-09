@@ -1,11 +1,16 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Grid, TextField } from '@mui/material';
 
 import { CREATE_QUESTION_TITLE_CY } from '../../config/selectors';
 
-function QuestionTitle({ title, onChange }) {
+type Props = {
+  title?: string;
+  onChange: (e: string) => void;
+};
+
+const QuestionTitle = ({ title, onChange }: Props) => {
   const { t } = useTranslation();
 
   const text = useMemo(() => title ?? '', [title]);
@@ -24,6 +29,6 @@ function QuestionTitle({ title, onChange }) {
       />
     </Grid>
   );
-}
+};
 
 export default QuestionTitle;

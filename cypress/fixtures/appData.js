@@ -1,12 +1,16 @@
 // I tried to fill all the member IDs by using the reference to "MEMBERS_RESULT_TABLES.MEMBER.id
 // But for some reason, MEMBERS_RESULT_TABLES is undefined by the time the MOCK_USER are created
+
+const item = { id: 'mock-item-id' };
+const member = { id: 'mock-member-id-1' };
+
 export const LIAM_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-1',
-    creator: 'mock-member-id-1',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member,
+    creator: member,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id4',
       choices: ['Paris'],
@@ -14,11 +18,11 @@ export const LIAM_RESPONSES = [
     id: '2',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-1',
-    creator: 'mock-member-id-1',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member,
+    creator: member,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id6',
       text: '90',
@@ -26,11 +30,11 @@ export const LIAM_RESPONSES = [
     id: '3',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-1',
-    creator: 'mock-member-id-1',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member,
+    creator: member,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id7',
       text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
@@ -45,11 +49,11 @@ export const LIAM_RESPONSES = [
  */
 export const LIAM_MORE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-1',
-    creator: 'mock-member-id-1',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member,
+    creator: member,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id9',
       text: '<1> + <1> = <2>',
@@ -57,11 +61,11 @@ export const LIAM_MORE_RESPONSES = [
     id: '5',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-1',
-    creator: 'mock-member-id-1',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member,
+    creator: member,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id10',
       choices: ['Moon'],
@@ -69,11 +73,11 @@ export const LIAM_MORE_RESPONSES = [
     id: '6',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-1',
-    creator: 'mock-member-id-1',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member,
+    creator: member,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id11',
       value: 10,
@@ -82,13 +86,15 @@ export const LIAM_MORE_RESPONSES = [
   },
 ];
 
+const harper = { id: 'mock-member-id-2' };
+
 export const HARPER_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: harper,
+    creator: harper,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id5',
       value: 60,
@@ -96,11 +102,11 @@ export const HARPER_RESPONSES = [
     id: '8',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: harper,
+    creator: harper,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id4',
       choices: ['Tokyo', 'London'],
@@ -115,11 +121,11 @@ export const HARPER_RESPONSES = [
  */
 export const HARPER_MORE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: harper,
+    creator: harper,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id9',
       text: '<1> + <2> = <1>',
@@ -127,11 +133,11 @@ export const HARPER_MORE_RESPONSES = [
     id: '10',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: harper,
+    creator: harper,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id10',
       choices: ['Jupiter'],
@@ -139,11 +145,11 @@ export const HARPER_MORE_RESPONSES = [
     id: '11',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: harper,
+    creator: harper,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id11',
       value: 2,
@@ -151,14 +157,14 @@ export const HARPER_MORE_RESPONSES = [
     id: '12',
   },
 ];
-
+const mason = { id: 'mock-member-id-3' };
 export const MASON_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mason,
+    creator: mason,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id7',
       text: 'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ipsum> sem.',
@@ -173,11 +179,11 @@ export const MASON_RESPONSES = [
  */
 export const MASON_MORE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mason,
+    creator: mason,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id9',
       text: '<1> + <1> = <2>',
@@ -185,11 +191,11 @@ export const MASON_MORE_RESPONSES = [
     id: '14',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mason,
+    creator: mason,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id10',
       choices: ['Moon'],
@@ -197,11 +203,11 @@ export const MASON_MORE_RESPONSES = [
     id: '15',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mason,
+    creator: mason,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id11',
       value: 10,
@@ -210,13 +216,15 @@ export const MASON_MORE_RESPONSES = [
   },
 ];
 
+const isabella = 'mock-member-id-4';
+
 export const ISABELLA_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: isabella,
+    creator: isabella,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id4',
       choices: ['Paris'],
@@ -224,11 +232,11 @@ export const ISABELLA_RESPONSES = [
     id: '17',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: isabella,
+    creator: isabella,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id6',
       text: '90',
@@ -236,11 +244,11 @@ export const ISABELLA_RESPONSES = [
     id: '18',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: isabella,
+    creator: isabella,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id7',
       text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
@@ -255,11 +263,11 @@ export const ISABELLA_RESPONSES = [
  */
 export const ISABELLA_MORE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: isabella,
+    creator: isabella,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id9',
       text: '<1> + <1> = <2>',
@@ -267,11 +275,11 @@ export const ISABELLA_MORE_RESPONSES = [
     id: '20',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: isabella,
+    creator: isabella,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id10',
       choices: ['Moon'],
@@ -279,11 +287,11 @@ export const ISABELLA_MORE_RESPONSES = [
     id: '21',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: isabella,
+    creator: isabella,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id11',
       value: 10,
@@ -291,14 +299,14 @@ export const ISABELLA_MORE_RESPONSES = [
     id: '22',
   },
 ];
-
+const ethan = 'mock-member-id-5';
 export const ETHAN_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: ethan,
+    creator: ethan,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id4',
       choices: ['Paris'],
@@ -306,11 +314,11 @@ export const ETHAN_RESPONSES = [
     id: '23',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: ethan,
+    creator: ethan,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id6',
       text: '90',
@@ -318,11 +326,11 @@ export const ETHAN_RESPONSES = [
     id: '24',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: ethan,
+    creator: ethan,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id7',
       text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
@@ -337,11 +345,11 @@ export const ETHAN_RESPONSES = [
  */
 export const ETHAN_MORE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: ethan,
+    creator: ethan,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id9',
       text: '<1> + <1> = <2>',
@@ -349,11 +357,11 @@ export const ETHAN_MORE_RESPONSES = [
     id: '26',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: ethan,
+    creator: ethan,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id10',
       choices: ['Moon'],
@@ -361,11 +369,11 @@ export const ETHAN_MORE_RESPONSES = [
     id: '27',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: ethan,
+    creator: ethan,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id11',
       value: 10,
@@ -373,14 +381,14 @@ export const ETHAN_MORE_RESPONSES = [
     id: '28',
   },
 ];
-
+const mia = { id: 'mock-member-id-6' };
 export const MIA_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-6',
-    creator: 'mock-member-id-6',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mia,
+    creator: mia,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id4',
       choices: ['Paris'],
@@ -388,11 +396,11 @@ export const MIA_RESPONSES = [
     id: '29',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-6',
-    creator: 'mock-member-id-6',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mia,
+    creator: mia,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id6',
       text: '90',
@@ -400,11 +408,11 @@ export const MIA_RESPONSES = [
     id: '30',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-6',
-    creator: 'mock-member-id-6',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mia,
+    creator: mia,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id7',
       text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
@@ -419,11 +427,11 @@ export const MIA_RESPONSES = [
  */
 export const MIA_MORE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-6',
-    creator: 'mock-member-id-6',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mia,
+    creator: mia,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id9',
       text: '<1> + <1> = <2>',
@@ -431,11 +439,11 @@ export const MIA_MORE_RESPONSES = [
     id: '32',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-6',
-    creator: 'mock-member-id-6',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mia,
+    creator: mia,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id10',
       choices: ['Moon'],
@@ -443,11 +451,11 @@ export const MIA_MORE_RESPONSES = [
     id: '33',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-6',
-    creator: 'mock-member-id-6',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: mia,
+    creator: mia,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id11',
       value: 10,
@@ -456,13 +464,14 @@ export const MIA_MORE_RESPONSES = [
   },
 ];
 
+const alexander = { id: 'mock-member-id-7' };
 export const ALEXANDER_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: alexander,
+    creator: alexander,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id4',
       choices: ['Paris'],
@@ -470,11 +479,11 @@ export const ALEXANDER_RESPONSES = [
     id: '35',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: alexander,
+    creator: alexander,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id6',
       text: '90',
@@ -482,11 +491,11 @@ export const ALEXANDER_RESPONSES = [
     id: '36',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: alexander,
+    creator: alexander,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id7',
       text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
@@ -501,11 +510,11 @@ export const ALEXANDER_RESPONSES = [
  */
 export const ALEXANDER_MORE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: alexander,
+    creator: alexander,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id9',
       text: '<1> + <1> = <2>',
@@ -513,11 +522,11 @@ export const ALEXANDER_MORE_RESPONSES = [
     id: '38',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: alexander,
+    creator: alexander,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id10',
       choices: ['Moon'],
@@ -525,11 +534,11 @@ export const ALEXANDER_MORE_RESPONSES = [
     id: '39',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: alexander,
+    creator: alexander,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id11',
       value: 10,
@@ -537,14 +546,14 @@ export const ALEXANDER_MORE_RESPONSES = [
     id: '40',
   },
 ];
-
+const chloe = { id: 'mock-member-id-8' };
 export const CHLOE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
-    creator: 'mock-member-id-8',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: chloe,
+    creator: chloe,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id4',
       choices: ['Paris'],
@@ -552,11 +561,11 @@ export const CHLOE_RESPONSES = [
     id: '41',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
-    creator: 'mock-member-id-8',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: chloe,
+    creator: chloe,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id6',
       text: '90',
@@ -564,11 +573,11 @@ export const CHLOE_RESPONSES = [
     id: '42',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
-    creator: 'mock-member-id-8',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: chloe,
+    creator: chloe,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id7',
       text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
@@ -583,11 +592,11 @@ export const CHLOE_RESPONSES = [
  */
 export const CHLOE_MORE_RESPONSES = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
-    creator: 'mock-member-id-8',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: chloe,
+    creator: chloe,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id9',
       text: '<1> + <1> = <2>',
@@ -595,11 +604,11 @@ export const CHLOE_MORE_RESPONSES = [
     id: '44',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
-    creator: 'mock-member-id-8',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: chloe,
+    creator: chloe,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id10',
       choices: ['Moon'],
@@ -607,11 +616,11 @@ export const CHLOE_MORE_RESPONSES = [
     id: '45',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
-    creator: 'mock-member-id-8',
-    createdAt: '2022-07-22T12:35:50.195Z',
-    updatedAt: '2022-07-22T12:36:51.741Z',
+    item,
+    member: chloe,
+    creator: chloe,
+    createdAt: new Date('2022-07-22T12:35:50.195Z'),
+    updatedAt: new Date('2022-07-22T12:36:51.741Z'),
     data: {
       questionId: 'id11',
       value: 10,

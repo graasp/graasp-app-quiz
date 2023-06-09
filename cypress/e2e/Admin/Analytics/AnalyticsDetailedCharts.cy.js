@@ -1,7 +1,7 @@
 import { getSettingsByName } from '../../../../src/components/context/utilities';
 import {
   APP_SETTING_NAMES,
-  QUESTION_TYPES,
+  QuestionType,
 } from '../../../../src/config/constants';
 import {
   buildAnalyticsDetailedChartCy,
@@ -34,7 +34,7 @@ describe('Analytics Detailed', () => {
         .click();
 
       switch (q.data.type) {
-        case QUESTION_TYPES.FILL_BLANKS:
+        case QuestionType.FILL_BLANKS:
           q.data.text
             .match(ANSWER_REGEXP)
             .map((word, idx) => {
@@ -60,9 +60,9 @@ describe('Analytics Detailed', () => {
               verifySelectedMenu(idx, labels);
             });
           break;
-        case QUESTION_TYPES.SLIDER:
-        case QUESTION_TYPES.TEXT_INPUT:
-        case QUESTION_TYPES.MULTIPLE_CHOICES:
+        case QuestionType.SLIDER:
+        case QuestionType.TEXT_INPUT:
+        case QuestionType.MULTIPLE_CHOICES:
           // go to chart
           cy.get(
             dataCyWrapper(

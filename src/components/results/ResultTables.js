@@ -5,6 +5,8 @@ import { CircularProgress, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+import { convertJs } from '@graasp/sdk';
+
 import { hooks } from '../../config/queryClient';
 import { TABLE_BY_QUESTION_CONTAINER_CY } from '../../config/selectors';
 import {
@@ -74,10 +76,10 @@ const ResultTables = ({ headerElem }) => {
       .groupBy((q) => q.id)
       .map((e) => {
         return e.map((el) => {
-          return {
-            ...el.data,
+          return convertJs({
+            ...el.data.toJS(),
             innerLink: formatInnerLink(el.data.question),
-          };
+          });
         });
       });
   }, [questions]);
@@ -112,10 +114,10 @@ const ResultTables = ({ headerElem }) => {
   /**
    * Helper function to get the name of all users that have answered to at least one question.
    *
-   * @returns Immutable set of user's memberId
+   * @returns Immutable set of user's id
    */
   const getAllUsers = useCallback(() => {
-    return responses?.map((r) => r.memberId).toSet();
+    return responses?.map((r) => r.member.id).toSet();
   }, [responses]);
 
   const [users, setUsers] = useState(getAllUsers());
@@ -156,7 +158,7 @@ const ResultTables = ({ headerElem }) => {
     return <CircularProgress />;
   }
 
-  return order.length > 0 ? (
+  return order.size > 0 ? (
     users?.size > 0 ? (
       <Stack direction="row" spacing={5}>
         <Box sx={{ maxHeight: maxResultViewHeight }}>

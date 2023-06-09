@@ -1,8 +1,10 @@
+const item = { id: 'mock-item-id' };
+const member = { id: 'mock-member-id-7' };
 export const appDataOlivia = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:31:42.992Z',
     updatedAt: '2022-05-07T09:31:42.992Z',
     data: {
@@ -12,9 +14,9 @@ export const appDataOlivia = [
     id: '7',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-28T16:30:50.400Z',
     updatedAt: '2022-07-28T16:31:51.000Z',
     data: {
@@ -24,9 +26,9 @@ export const appDataOlivia = [
     id: '14',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:31:42.992Z',
     updatedAt: '2022-05-07T09:31:42.992Z',
     data: {
@@ -36,9 +38,9 @@ export const appDataOlivia = [
     id: '117',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-28T16:30:50.400Z',
     updatedAt: '2022-07-28T16:31:51.000Z',
     data: {
@@ -48,9 +50,9 @@ export const appDataOlivia = [
     id: '1114',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-22T12:35:50.195Z',
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
@@ -60,9 +62,9 @@ export const appDataOlivia = [
     id: '1121',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-7',
-    creator: 'mock-member-id-7',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-08-18T09:30:15.004Z',
     updatedAt: '2022-08-18T09:31:21.072Z',
     data: {

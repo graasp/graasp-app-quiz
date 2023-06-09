@@ -1,4 +1,4 @@
-import { APP_SETTING_NAMES, QUESTION_TYPES } from '../config/constants';
+import { APP_SETTING_NAMES, QuestionType } from '../config/constants';
 import { appDataChloe } from './appDataChloe';
 import { appDataEmily } from './appDataEmily';
 import { appDataJames } from './appDataJames';
@@ -49,7 +49,7 @@ const buildDatabase = (appContext) => ({
       id: 'id1',
       data: {
         question: 'What is the capital of Australia?',
-        type: QUESTION_TYPES.MULTIPLE_CHOICES,
+        type: QuestionType.MULTIPLE_CHOICES,
         choices: [
           { value: 'Sydney', isCorrect: false },
           { value: 'Melbourne', isCorrect: false },
@@ -64,7 +64,7 @@ const buildDatabase = (appContext) => ({
       id: 'id2',
       data: {
         question: 'What is the symbol for potassium on the periodic table?',
-        type: QUESTION_TYPES.MULTIPLE_CHOICES,
+        type: QuestionType.MULTIPLE_CHOICES,
         choices: [
           { value: 'P', isCorrect: false },
           { value: 'K', isCorrect: true },
@@ -79,7 +79,7 @@ const buildDatabase = (appContext) => ({
       id: 'id3',
       data: {
         question: 'How many elements are in the periodic table?',
-        type: QUESTION_TYPES.SLIDER,
+        type: QuestionType.SLIDER,
         min: 50,
         max: 120,
         value: 118,
@@ -92,7 +92,7 @@ const buildDatabase = (appContext) => ({
       id: 'id4',
       data: {
         question: 'What is the smallest country in the world?',
-        type: QUESTION_TYPES.TEXT_INPUT,
+        type: QuestionType.TEXT_INPUT,
         text: 'Vatican City',
         explanation: 'Vatican City is the smallest country in the world.',
       },
@@ -103,7 +103,7 @@ const buildDatabase = (appContext) => ({
       data: {
         question: 'Fill In The Blanks 1',
 
-        type: QUESTION_TYPES.FILL_BLANKS,
+        type: QuestionType.FILL_BLANKS,
         text: 'Roses are <red>, violets are <blue>, sugar is <sweet>.',
       },
       name: APP_SETTING_NAMES.QUESTION,
@@ -112,7 +112,7 @@ const buildDatabase = (appContext) => ({
       id: 'id6',
       data: {
         question: 'What is the largest planet in our solar system?',
-        type: QUESTION_TYPES.MULTIPLE_CHOICES,
+        type: QuestionType.MULTIPLE_CHOICES,
         choices: [
           { value: 'Jupiter', isCorrect: true },
           { value: 'Saturn', isCorrect: false },
@@ -127,7 +127,7 @@ const buildDatabase = (appContext) => ({
       id: 'id7',
       data: {
         question: 'How many sides does a hexagon have?',
-        type: QUESTION_TYPES.MULTIPLE_CHOICES,
+        type: QuestionType.MULTIPLE_CHOICES,
         choices: [
           { value: '4', isCorrect: false },
           { value: '5', isCorrect: false },
@@ -142,7 +142,7 @@ const buildDatabase = (appContext) => ({
       id: 'id8',
       data: {
         question: 'What is the atomic number of oxygen?',
-        type: QUESTION_TYPES.SLIDER,
+        type: QuestionType.SLIDER,
         min: 1,
         max: 100,
         value: 8,
@@ -154,7 +154,7 @@ const buildDatabase = (appContext) => ({
       id: 'id9',
       data: {
         question: 'Name one natural satellite of the Earth.',
-        type: QUESTION_TYPES.TEXT_INPUT,
+        type: QuestionType.TEXT_INPUT,
         text: 'Moon',
         explanation: 'The Moon is a natural satellite of the Earth.',
       },
@@ -164,8 +164,7 @@ const buildDatabase = (appContext) => ({
       id: 'id10',
       data: {
         question: 'Fill In The Blanks 2',
-
-        type: QUESTION_TYPES.FILL_BLANKS,
+        type: QuestionType.FILL_BLANKS,
         text: 'All roads lead to <Rome>, and every journey begins with a single <step>.',
       },
       name: APP_SETTING_NAMES.QUESTION,

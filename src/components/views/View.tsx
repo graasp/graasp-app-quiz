@@ -1,19 +1,19 @@
-import React, { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { Container } from '@mui/material';
 
-import { Context } from '@graasp/apps-query-client';
+import { useLocalContext } from '@graasp/apps-query-client';
+import { PermissionLevel } from '@graasp/sdk';
 
 import { DEFAULT_LANG } from '../../config/constants';
-import { PERMISSION_LEVELS } from '../../config/constants';
 import { CONTEXTS } from '../../config/contexts';
 import i18n from '../../config/i18n';
 import { QuizProvider } from '../context/QuizContext';
 import AdminView from '../navigation/AdminView';
 import PlayView from '../play/PlayView';
 
-const View = () => {
-  const context = useContext(Context);
+const View = (): JSX.Element => {
+  const context = useLocalContext();
 
   useEffect(() => {
     const lang = context.get('lang');
@@ -21,13 +21,14 @@ const View = () => {
   });
 
   const renderContent = () => {
+    return <AdminView />;
     switch (context.get('context')) {
       case CONTEXTS.BUILDER: {
         switch (context.get('permission')) {
-          case PERMISSION_LEVELS.ADMIN:
-          case PERMISSION_LEVELS.WRITE:
+          case PermissionLevel.Admin:
+          case PermissionLevel.Write:
             return <AdminView />;
-          case PERMISSION_LEVELS.READ:
+          case PermissionLevel.Read:
           default:
             return <PlayView />;
         }

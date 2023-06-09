@@ -1,4 +1,4 @@
-import { PERMISSION_LEVELS } from '../../../src/config/constants';
+import { PermissionLevel } from '../../../src/config/constants';
 import {
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -28,7 +28,7 @@ describe('Play View', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
+          permission: PermissionLevel.Admin,
         },
       });
       cy.visit('/');

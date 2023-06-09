@@ -28,6 +28,7 @@ export const App = () => {
   const AppWithContextAndToken = withContext(AppWithContext, {
     LoadingComponent: <CircularProgress />,
     useGetLocalContext: hooks.useGetLocalContext,
+    useAutoResize: hooks.useAutoResize,
     onError: () => {
       console.log('An error occured while fetching the context.');
     },

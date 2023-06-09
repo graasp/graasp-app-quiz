@@ -1,6 +1,6 @@
 import {
   APP_SETTING_NAMES,
-  PERMISSION_LEVELS,
+  PermissionLevel,
 } from '../../../src/config/constants';
 import { CONTEXTS } from '../../../src/config/contexts';
 import {
@@ -28,7 +28,7 @@ describe('Admin View', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
+        permission: PermissionLevel.Admin,
         context: CONTEXTS.BUILDER,
       },
     });
@@ -58,7 +58,7 @@ describe('Admin View', () => {
         appData: APP_DATA_FEW_QUESTIONS_LOT_USERS,
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
+        permission: PermissionLevel.Admin,
         context: CONTEXTS.BUILDER,
       },
     });

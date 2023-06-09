@@ -1,26 +1,40 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectProps,
+} from '@mui/material';
 
 import {
   DEFAULT_QUESTION_TYPE,
   DEFAULT_QUESTION_VALUES,
-  QUESTION_TYPES_TO_NAME,
+  QuestionType,
+  QuestionType_TO_NAME,
 } from '../../config/constants';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   buildQuestionTypeOption,
 } from '../../config/selectors';
+import { QuestionDataRecord } from '../types/types';
 
-const QuestionTypeSelect = ({ value, onChange }) => {
+type Props = {
+  value: QuestionType;
+  onChange: (d: QuestionDataRecord) => void;
+};
+
+const QuestionTypeSelect = ({ value, onChange }: Props) => {
   const { t } = useTranslation();
 
   const type = useMemo(() => value ?? DEFAULT_QUESTION_TYPE, [value]);
 
-  const onTypeChange = (e) => {
-    const type = e.target.value;
-    onChange(DEFAULT_QUESTION_VALUES[type]);
+  const onTypeChange: SelectProps['onChange'] = (e) => {
+    const t = e.target.value as QuestionType;
+    onChange(DEFAULT_QUESTION_VALUES[t]);
   };
 
   return (
@@ -33,7 +47,7 @@ const QuestionTypeSelect = ({ value, onChange }) => {
           label={t('Answer Type')}
           onChange={onTypeChange}
         >
-          {Object.entries(QUESTION_TYPES_TO_NAME).map(([key, value]) => (
+          {Object.entries(QuestionType_TO_NAME).map(([key, value]) => (
             <MenuItem
               key={key}
               value={key}

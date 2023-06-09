@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 
-import { APP_DATA_TYPES, QUESTION_TYPES } from '../../config/constants';
-import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
+import { APP_DATA_TYPES, QuestionType } from '../../config/constants';
+import { hooks, mutations } from '../../config/queryClient';
 import {
   EXPLANATION_PLAY_CY,
   PLAY_VIEW_EMPTY_QUIZ_CY,
@@ -28,8 +28,8 @@ import PlayTextInput from './PlayTextInput';
 const PlayView = () => {
   const { t } = useTranslation();
   const { data: responses, isLoading } = hooks.useAppData();
-  const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
-  const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
+  const { mutate: postAppData } = mutations.usePostAppData();
+  const { mutate: patchAppData } = mutations.usePatchAppData();
 
   const { currentQuestion, questions } = useContext(QuizContext);
 
@@ -78,7 +78,7 @@ const PlayView = () => {
   }
 
   if (!currentQuestion) {
-    return 'no current question';
+    return <Typography>no current question</Typography>;
   }
 
   return (
@@ -98,7 +98,7 @@ const PlayView = () => {
       <Grid container>
         {(() => {
           switch (currentQuestion.data.type) {
-            case QUESTION_TYPES.MULTIPLE_CHOICES: {
+            case QuestionType.MULTIPLE_CHOICES: {
               return (
                 <PlayMultipleChoices
                   choices={currentQuestion.data.choices}
@@ -116,7 +116,7 @@ const PlayView = () => {
                 />
               );
             }
-            case QUESTION_TYPES.TEXT_INPUT: {
+            case QuestionType.TEXT_INPUT: {
               return (
                 <PlayTextInput
                   values={currentQuestion.data}
@@ -134,7 +134,7 @@ const PlayView = () => {
                 />
               );
             }
-            case QUESTION_TYPES.FILL_BLANKS: {
+            case QuestionType.FILL_BLANKS: {
               return (
                 <PlayFillInTheBlanks
                   values={currentQuestion.data}
@@ -152,7 +152,7 @@ const PlayView = () => {
                 />
               );
             }
-            case QUESTION_TYPES.SLIDER: {
+            case QuestionType.SLIDER: {
               return (
                 <PlaySlider
                   values={currentQuestion.data}

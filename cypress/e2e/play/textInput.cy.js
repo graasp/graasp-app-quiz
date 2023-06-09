@@ -1,7 +1,4 @@
-import {
-  APP_SETTING_NAMES,
-  QUESTION_TYPES,
-} from '../../../src/config/constants';
+import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
@@ -13,8 +10,7 @@ import { APP_SETTINGS } from '../../fixtures/appSettings';
 
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
-    name === APP_SETTING_NAMES.QUESTION &&
-    data.type === QUESTION_TYPES.TEXT_INPUT
+    name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.TEXT_INPUT
 );
 
 const checkAnswer = (isCorrect) => {

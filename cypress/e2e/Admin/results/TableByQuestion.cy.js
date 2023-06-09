@@ -187,7 +187,9 @@ describe('Table by Question', () => {
     ).find((setting) => setting.id === fstQuestionId).data.question;
 
     const users = [
-      ...new Set(APP_DATA_FEW_QUESTIONS_LOT_USERS.map((data) => data.memberId)),
+      ...new Set(
+        APP_DATA_FEW_QUESTIONS_LOT_USERS.map((data) => data.member.id)
+      ),
     ]
       .map(
         (id) =>

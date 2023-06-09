@@ -166,7 +166,7 @@ describe('Table by User', () => {
 
     // question id for first user
     const fstUserQIds = APP_DATA_LOT_QUESTIONS_LOT_USERS.filter(
-      (appData) => appData.memberId === fstUserId
+      (appData) => appData.member.id === fstUserId
     ).map((appData) => appData.data.questionId);
 
     const questionsNames = getSettingsByName(
@@ -236,7 +236,7 @@ const testTableHeader = (uId, ascending) => {
  * @return list of tuple containing the user id along with its name, sorted by name
  */
 const getUserNamesFromAppData = (appData) => {
-  return [...new Set(appData.map((data) => data.memberId))]
+  return [...new Set(appData.map((data) => data.member.id))]
     .map(
       (uId) =>
         Object.values(MEMBERS_RESULT_TABLES).filter(

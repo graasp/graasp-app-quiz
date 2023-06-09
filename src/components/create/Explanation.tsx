@@ -1,11 +1,13 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextField, Typography } from '@mui/material';
 
 import { EXPLANATION_CY } from '../../config/selectors';
 
-const Explanation = ({ value: explanation, onChange }) => {
+type Props = { value?: string; onChange: (s: string) => void };
+
+const Explanation = ({ value: explanation, onChange }: Props) => {
   const { t } = useTranslation();
 
   const value = useMemo(() => explanation ?? '', [explanation]);

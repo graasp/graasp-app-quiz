@@ -5,7 +5,7 @@ import { CircularProgress, Stack, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { QUESTION_TYPES } from '../../config/constants';
+import { QuestionType } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
 import {
   ANALYTICS_CONTAINER_CY,
@@ -28,7 +28,7 @@ import {
   textInputCharts,
 } from './AnalyticsCharts';
 import QuestionDetailedCharts from './detailedCharts/QuestionDetailedCharts';
-import GeneralCharts from './genaralCharts/GeneralCharts';
+import GeneralCharts from './generalCharts/GeneralCharts';
 
 const SLIDE_BAR_WIDTH = 16;
 
@@ -84,13 +84,13 @@ const AnalyticsMenu = ({ headerElem }) => {
   const getChartsForType = useCallback(
     (question) => {
       switch (question?.data?.type) {
-        case QUESTION_TYPES.FILL_BLANKS:
+        case QuestionType.FILL_BLANKS:
           return fillInTheBlankCharts(t, question);
-        case QUESTION_TYPES.SLIDER:
+        case QuestionType.SLIDER:
           return sliderCharts(t);
-        case QUESTION_TYPES.TEXT_INPUT:
+        case QuestionType.TEXT_INPUT:
           return textInputCharts(t);
-        case QUESTION_TYPES.MULTIPLE_CHOICES:
+        case QuestionType.MULTIPLE_CHOICES:
           return multipleChoicesCharts(t);
         default:
           console.error(
@@ -109,7 +109,7 @@ const AnalyticsMenu = ({ headerElem }) => {
       if (v === 0) {
         setCharts(generalCharts(t));
       } else {
-        setCharts(getChartsForType(detailedChartTabQuestion[v - 1]));
+        setCharts(getChartsForType(detailedChartTabQuestion.get(v - 1)));
       }
       setTab(v);
     },
@@ -135,7 +135,7 @@ const AnalyticsMenu = ({ headerElem }) => {
     return <CircularProgress />;
   }
 
-  return order.length > 0 ? (
+  return order.size > 0 ? (
     responses?.size > 0 ? (
       <Box data-cy={ANALYTICS_CONTAINER_CY}>
         <Stack direction="row" ref={(elem) => setStackElem(elem)}>
@@ -213,6 +213,7 @@ const AnalyticsMenu = ({ headerElem }) => {
             </TabPanel>
             {order?.map((qId, idx) => {
               const question = questionById.get(qId)?.first();
+              console.log(charts);
               return (
                 // The +1 is here to account for the General tab, that is at index 0
                 <TabPanel tab={tab} index={idx + 1} key={qId}>

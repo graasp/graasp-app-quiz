@@ -1,8 +1,10 @@
+const item = { id: 'mock-item-id' };
+const member = { id: 'mock-member-id-9' };
 export const appDataXavier = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:16:22.357Z',
     updatedAt: '2022-05-07T09:16:22.357Z',
     data: {
@@ -12,9 +14,9 @@ export const appDataXavier = [
     id: '37',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-08-05T16:40:27.802Z',
     updatedAt: '2022-08-05T16:40:27.802Z',
     data: {
@@ -24,9 +26,9 @@ export const appDataXavier = [
     id: '40',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-10-05T14:25:11.112Z',
     updatedAt: '2022-10-05T14:25:11.112Z',
     data: {
@@ -36,9 +38,9 @@ export const appDataXavier = [
     id: '43',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-10-06T11:47:29.611Z',
     updatedAt: '2022-10-06T11:47:29.611Z',
     data: {
@@ -48,9 +50,9 @@ export const appDataXavier = [
     id: '46',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-10-02T09:45:50.195Z',
     updatedAt: '2022-10-02T09:46:51.741Z',
     data: {
@@ -60,9 +62,9 @@ export const appDataXavier = [
     id: '49',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:16:22.357Z',
     updatedAt: '2022-05-07T09:16:22.357Z',
     data: {
@@ -72,9 +74,9 @@ export const appDataXavier = [
     id: '1137',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-08-05T16:40:27.802Z',
     updatedAt: '2022-08-05T16:40:27.802Z',
     data: {
@@ -84,9 +86,9 @@ export const appDataXavier = [
     id: '1140',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-10-05T14:25:11.112Z',
     updatedAt: '2022-10-05T14:25:11.112Z',
     data: {
@@ -96,9 +98,9 @@ export const appDataXavier = [
     id: '1143',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-10-06T11:47:29.611Z',
     updatedAt: '2022-10-06T11:47:29.611Z',
     data: {
@@ -108,9 +110,9 @@ export const appDataXavier = [
     id: '1146',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-9',
-    creator: 'mock-member-id-9',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-10-02T09:45:50.195Z',
     updatedAt: '2022-10-02T09:46:51.741Z',
     data: {

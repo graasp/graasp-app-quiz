@@ -14,7 +14,7 @@ import {
   defaultSettings,
   hoverData,
 } from '../../../utils/plotUtils';
-import { computeCorrectness, getDataWithId } from '../../context/utilities';
+import { computeCorrectness, getQuestionById } from '../../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -49,11 +49,11 @@ const QuestionDifficulty = ({
     const responsesByQId = responses.groupBy((r) => r.data.questionId);
     return order?.reduce(
       (acc, qId, idx) => {
-        const question = getDataWithId(questions, qId);
+        const question = getQuestionById(questions, qId);
         const responses = responsesByQId.get(qId);
         const nbCorrectAndIncorrect = responses.reduce(
           ([correct, incorrect], next) =>
-            computeCorrectness(next.data, question.data)
+            computeCorrectness(question.data, next.data)
               ? [correct + 1, incorrect]
               : [correct, incorrect + 1],
           [0, 0]

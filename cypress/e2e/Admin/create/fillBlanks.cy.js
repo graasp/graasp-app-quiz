@@ -2,8 +2,8 @@ import {
   APP_SETTING_NAMES,
   DEFAULT_QUESTION,
   FAILURE_MESSAGES,
-  PERMISSION_LEVELS,
-  QUESTION_TYPES,
+  PermissionLevel,
+  QuestionType,
 } from '../../../../src/config/constants';
 import { CONTEXTS } from '../../../../src/config/contexts';
 import i18n from '../../../../src/config/i18n';
@@ -30,7 +30,7 @@ const newFillBlanksData = {
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
-    data.type === QUESTION_TYPES.FILL_BLANKS
+    data.type === QuestionType.FILL_BLANKS
 );
 
 const fillBlanksQuestion = (
@@ -63,13 +63,13 @@ describe('Fill in the Blanks', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
+        permission: PermissionLevel.Admin,
         context: CONTEXTS.BUILDER,
       },
     });
     cy.visit('/');
 
-    cy.switchQuestionType(QUESTION_TYPES.FILL_BLANKS);
+    cy.switchQuestionType(QuestionType.FILL_BLANKS);
 
     // empty text
     const new1 = { ...newFillBlanksData, text: '' };
@@ -102,7 +102,7 @@ describe('Fill in the Blanks', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
+          permission: PermissionLevel.Admin,
           context: CONTEXTS.BUILDER,
         },
       });
@@ -117,7 +117,7 @@ describe('Fill in the Blanks', () => {
         .should('have.value', data.question);
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        QUESTION_TYPES.FILL_BLANKS
+        QuestionType.FILL_BLANKS
       );
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')

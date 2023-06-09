@@ -1,7 +1,7 @@
 import {
   APP_SETTING_NAMES,
-  PERMISSION_LEVELS,
-  QUESTION_TYPES,
+  PermissionLevel,
+  QuestionType,
 } from '../../../../src/config/constants';
 import { CONTEXTS } from '../../../../src/config/contexts';
 import {
@@ -24,8 +24,7 @@ const newTextInputData = {
 
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
-    name === APP_SETTING_NAMES.QUESTION &&
-    data.type === QUESTION_TYPES.TEXT_INPUT
+    name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.TEXT_INPUT
 );
 
 const fillTextInputQuestion = (
@@ -60,13 +59,13 @@ describe('Text Input', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
+        permission: PermissionLevel.Admin,
         context: CONTEXTS.BUILDER,
       },
     });
     cy.visit('/');
 
-    cy.switchQuestionType(QUESTION_TYPES.TEXT_INPUT);
+    cy.switchQuestionType(QuestionType.TEXT_INPUT);
 
     // empty answer
     const new1 = {
@@ -84,13 +83,13 @@ describe('Text Input', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
+        permission: PermissionLevel.Admin,
         context: CONTEXTS.BUILDER,
       },
     });
     cy.visit('/');
 
-    cy.switchQuestionType(QUESTION_TYPES.TEXT_INPUT);
+    cy.switchQuestionType(QuestionType.TEXT_INPUT);
 
     fillTextInputQuestion(newTextInputData);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
@@ -103,7 +102,7 @@ describe('Text Input', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
+          permission: PermissionLevel.Admin,
           context: CONTEXTS.BUILDER,
         },
       });
@@ -118,7 +117,7 @@ describe('Text Input', () => {
         .should('have.value', data.question);
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        QUESTION_TYPES.TEXT_INPUT
+        QuestionType.TEXT_INPUT
       );
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')

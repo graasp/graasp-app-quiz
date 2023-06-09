@@ -1,6 +1,6 @@
 import {
   DEFAULT_QUESTION_TYPE,
-  PERMISSION_LEVELS,
+  PermissionLevel,
 } from '../../../../src/config/constants';
 import { CONTEXTS } from '../../../../src/config/contexts';
 import {
@@ -23,7 +23,7 @@ describe('Create View', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
+        permission: PermissionLevel.Admin,
         context: CONTEXTS.BUILDER,
       },
     });
@@ -48,7 +48,7 @@ describe('Create View', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
+          permission: PermissionLevel.Admin,
           context: CONTEXTS.BUILDER,
         },
       });

@@ -14,5 +14,8 @@ module.exports = defineConfig({
   },
   env: {
     REACT_APP_GRAASP_DOMAIN: process.env.REACT_APP_GRAASP_DOMAIN,
+    REACT_APP_API_HOST: process.env.REACT_APP_API_HOST,
+    REACT_APP_ENABLE_MOCK_API: process.env.REACT_APP_ENABLE_MOCK_API,
+    REACT_APP_GRAASP_APP_KEY: process.env.REACT_APP_GRAASP_APP_KEY,
   },
 });

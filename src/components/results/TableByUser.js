@@ -235,8 +235,8 @@ const TableByUser = ({ user, questions, responses, handleQuestionClicked }) => {
                     data-cy={TABLE_BY_USER_CORRECT_ICON_CY}
                   >
                     {computeCorrectness(
-                      getResponseForQuestionName(qName)?.data,
-                      questionByName.get(qName).first()?.data
+                      questionByName.get(qName).first()?.data,
+                      getResponseForQuestionName(qName)?.data
                     ) ? (
                       <CheckCircleOutlined color="success" />
                     ) : (

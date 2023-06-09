@@ -12,6 +12,7 @@ export const splitSentence = (text = '', response = '') => {
     text: removeMarkup(a),
     placed: false,
   }));
+
   const words = text.split(ANSWER_REGEXP);
 
   const result = words.reduce(

@@ -12,19 +12,18 @@ module.exports = {
     'plugin:cypress/recommended',
     'react-app',
   ],
-  parser: '@babel/eslint-parser', // Uses babel-eslint transforms.
+  globals: {
+    cy: true,
+    Cypress: true,
+  },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module', // Allows for the use of imports
-    requireConfigFile: false,
-    babelOptions: {
-      presets: ['@babel/preset-react'],
-    },
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
-  plugins: ['import'],
   root: true, // For configuration cascading.
   rules: {},
   settings: {

@@ -1,3 +1,5 @@
+import { List } from 'immutable';
+
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +19,9 @@ import {
 import Box from '@mui/material/Box';
 import { visuallyHidden } from '@mui/utils';
 
-import { QUESTION_TYPES } from '../../config/constants';
+import { AppDataRecord, MemberRecord } from '@graasp/sdk/frontend';
+
+import { QuestionType } from '../../config/constants';
 import {
   TABLE_BY_QUESTION_ANSWER_DATA_CY,
   TABLE_BY_QUESTION_CONTAINER_CY,
@@ -38,21 +42,41 @@ import {
   getComparator,
 } from '../../utils/tableUtils';
 import { computeCorrectness } from '../context/utilities';
+import {
+  AppDataDataRecord,
+  MultipleChoiceAppDataData,
+  MultipleChoiceAppDataDataRecord,
+  QuestionDataAppSettingRecord,
+  QuestionDataRecord,
+  SliderAppDataData,
+  SliderAppDataDataRecord,
+  TextAppDataDataRecord,
+} from '../types/types';
+
+type Props = {
+  question: {
+    data: QuestionDataRecord & { innerlink: string };
+    id: string;
+  };
+  memberList: List<MemberRecord>;
+  responses: List<AppDataRecord>;
+  handleUserClicked: any;
+};
 
 const TableByQuestion = ({
   question,
   memberList,
   responses,
   handleUserClicked,
-}) => {
+}: Props) => {
   const { t } = useTranslation();
-  const [order, setOrder] = useState(Order.ASC);
+  const [order, setOrder] = useState<'desc' | 'asc' | undefined>('asc');
   const [responsesByUser, setResponsesByUser] = useState(
-    responses.groupBy((res) => res.memberId)
+    responses.groupBy((res) => res.member.id)
   );
 
   useEffect(() => {
-    setResponsesByUser(responses.groupBy((res) => res.memberId));
+    setResponsesByUser(responses.groupBy((res) => res.member.id));
   }, [responses]);
 
   /**
@@ -61,7 +85,7 @@ const TableByQuestion = ({
    * @param {string} userId The name of the user
    * @returns A user response (May be undefined if user didn't respond to the current question)
    */
-  const getResponseForUserId = (userId) => {
+  const getResponseForUserId = (userId: string): AppDataRecord | undefined => {
     return responsesByUser.get(userId)?.first();
   };
 
@@ -71,19 +95,20 @@ const TableByQuestion = ({
    * @param {string} userId The name of the user
    * @returns {string} Response for given user.
    */
-  const getResponseDataForUserId = (userId) => {
-    const { text, value, choices } = getResponseForUserId(userId)?.data ?? {
-      text: '',
-    };
+  const getResponseDataForUserId = (userId: string) => {
+    const response = getResponseForUserId(userId)?.data;
 
     switch (question.data.type) {
-      case QUESTION_TYPES.TEXT_INPUT:
-      case QUESTION_TYPES.FILL_BLANKS:
-        return text;
-      case QUESTION_TYPES.SLIDER:
-        return value;
-      case QUESTION_TYPES.MULTIPLE_CHOICES:
-        return choices?.join(', ');
+      case QuestionType.TEXT_INPUT:
+      case QuestionType.FILL_BLANKS:
+        return (response as TextAppDataDataRecord)?.text ?? '';
+      case QuestionType.SLIDER:
+        return (response as SliderAppDataDataRecord)?.value ?? '';
+      case QuestionType.MULTIPLE_CHOICES:
+        return (
+          (response as MultipleChoiceAppDataDataRecord)?.choices?.join(', ') ??
+          ''
+        );
       default:
         return '';
     }
@@ -95,7 +120,7 @@ const TableByQuestion = ({
    * @param {string} userId The name of the user
    * @returns {string} return the date of answer's last modification
    */
-  const getResponseDateForUserId = (userId) => {
+  const getResponseDateForUserId = (userId: string) => {
     const updatedAt = getResponseForUserId(userId)?.updatedAt;
 
     return updatedAt ? new Date(updatedAt).toDateString() : '';
@@ -105,10 +130,9 @@ const TableByQuestion = ({
    * Helper function to invert the current order when clicking on sorted column header
    */
   const handleRequestSort = () => {
-    const isAsc = order === Order.ASC;
-    setOrder(isAsc ? Order.DESC : Order.ASC);
+    const isAsc = order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
   };
-
   return (
     <Box sx={{ mb: 8 }} data-cy={TABLE_BY_QUESTION_CONTAINER_CY}>
       <Stack direction="column" spacing={4}>
@@ -172,7 +196,10 @@ const TableByQuestion = ({
               data-cy={buildTableByQuestionTableBodyCy(question.data.question)}
             >
               {memberList
-                ?.sort(getComparator(order, comparatorArrayByElemName))
+                // todo: fix type
+                ?.sort(
+                  getComparator(order, comparatorArrayByElemName as any) as any
+                )
                 .map(({ id, name }) => (
                   <TableRow
                     key={id}
@@ -209,8 +236,8 @@ const TableByQuestion = ({
                           data-cy={TABLE_BY_QUESTION_CORRECT_ICON_CY}
                         >
                           {computeCorrectness(
-                            getResponseForUserId(id)?.data,
-                            question.data
+                            question.data as QuestionDataRecord,
+                            getResponseForUserId(id)?.data as AppDataDataRecord
                           ) ? (
                             <CheckCircleOutlined color="success" />
                           ) : (

@@ -1,8 +1,10 @@
+const item = { id: 'mock-item-id' };
+const member = { id: 'mock-member-id-2' };
 export const appDataSarah = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:17:30.268Z',
     updatedAt: '2022-05-07T09:17:30.268Z',
     data: {
@@ -12,9 +14,9 @@ export const appDataSarah = [
     id: '2',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-23T14:20:30.500Z',
     updatedAt: '2022-07-23T14:21:31.000Z',
     data: {
@@ -24,9 +26,9 @@ export const appDataSarah = [
     id: '9',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-22T12:35:50.195Z',
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
@@ -36,9 +38,9 @@ export const appDataSarah = [
     id: '16',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-23T13:45:52.312Z',
     updatedAt: '2022-07-23T13:47:22.999Z',
     data: {
@@ -48,9 +50,9 @@ export const appDataSarah = [
     id: '23',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-23T10:22:15.123Z',
     updatedAt: '2022-07-23T10:23:10.456Z',
     data: {
@@ -60,9 +62,9 @@ export const appDataSarah = [
     id: '30',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:17:30.268Z',
     updatedAt: '2022-05-07T09:17:30.268Z',
     data: {
@@ -72,9 +74,9 @@ export const appDataSarah = [
     id: '112',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-23T14:20:30.500Z',
     updatedAt: '2022-07-23T14:21:31.000Z',
     data: {
@@ -84,9 +86,9 @@ export const appDataSarah = [
     id: '119',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-22T12:35:50.195Z',
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
@@ -96,9 +98,9 @@ export const appDataSarah = [
     id: '1116',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-23T13:45:52.312Z',
     updatedAt: '2022-07-23T13:47:22.999Z',
     data: {
@@ -108,9 +110,9 @@ export const appDataSarah = [
     id: '1123',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-2',
-    creator: 'mock-member-id-2',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-23T10:22:15.123Z',
     updatedAt: '2022-07-23T10:23:10.456Z',
     data: {

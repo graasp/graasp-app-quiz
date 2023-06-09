@@ -21,7 +21,7 @@ function PlaySlider({ values, response, setResponse, showCorrection }) {
     ];
 
     if (showCorrection) {
-      const isCorrect = computeCorrectness(response, values);
+      const isCorrect = computeCorrectness(values, response);
       setIsCorrect(isCorrect);
       if (!isCorrect) {
         newMarks = [

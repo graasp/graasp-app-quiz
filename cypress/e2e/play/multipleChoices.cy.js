@@ -1,7 +1,7 @@
 import {
   APP_DATA_TYPES,
   APP_SETTING_NAMES,
-  QUESTION_TYPES,
+  QuestionType,
 } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -15,7 +15,7 @@ import { APP_SETTINGS } from '../../fixtures/appSettings';
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
-    data.type === QUESTION_TYPES.MULTIPLE_CHOICES
+    data.type === QuestionType.MULTIPLE_CHOICES
 );
 
 // click on choices -> become selected
