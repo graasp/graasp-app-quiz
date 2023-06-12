@@ -55,9 +55,14 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
   }
 
   const renderLabel = (questionId: string, index: number) => {
+    const q = questions.find(({ id }) => id === questionId);
+    if (!q) {
+      console.error('question does not exist');
+      return null;
+    }
     const response = getAppDataByQuestionId(
       appData as List<AppDataQuestionRecord>,
-      questionId
+      q
     );
     const question = getQuestionById(questions, questionId);
 

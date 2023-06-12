@@ -154,9 +154,9 @@ const TableByUser = ({ user, questions, responses, handleQuestionClicked }) => {
         <Typography
           variant="h5"
           component="h5"
-          data-cy={buildTableByUserCy(user)}
+          data-cy={buildTableByUserCy(user.id)}
         >
-          {user}
+          {user.name}
         </Typography>
         <TableContainer component={Paper}>
           <Table>
@@ -167,7 +167,7 @@ const TableByUser = ({ user, questions, responses, handleQuestionClicked }) => {
                     active={true}
                     direction={order}
                     onClick={handleRequestSort}
-                    data-cy={buildTableByUserQuestionHeaderCy(user)}
+                    data-cy={buildTableByUserQuestionHeaderCy(user.id)}
                   >
                     {t('Question')}
                     {
@@ -181,25 +181,25 @@ const TableByUser = ({ user, questions, responses, handleQuestionClicked }) => {
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByUserAnswerHeaderCy(user)}
+                  data-cy={buildTableByUserAnswerHeaderCy(user.id)}
                 >
                   {t('Answer')}
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByUserDateHeaderCy(user)}
+                  data-cy={buildTableByUserDateHeaderCy(user.id)}
                 >
                   {t('Date')}
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByUserCorrectHeaderCy(user)}
+                  data-cy={buildTableByUserCorrectHeaderCy(user.id)}
                 >
                   {t('Correct')}
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody data-cy={buildTableByUserTableBodyCy(user)}>
+            <TableBody data-cy={buildTableByUserTableBodyCy(user.id)}>
               {questionNames?.sort(getComparator(order)).map((qName) => (
                 <TableRow
                   key={qName}

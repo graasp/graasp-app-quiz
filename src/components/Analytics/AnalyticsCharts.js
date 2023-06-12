@@ -29,14 +29,17 @@ export const generalCharts = (t) =>
   adaptWithLink([
     {
       label: t('Quiz performance'),
+      id: 'quiz-performance',
       chartType: GeneralChartType.QUIZ_PERFORMANCE,
     },
     {
       label: t('Users performance'),
+      id: 'users-performance',
       chartType: GeneralChartType.USER_PERFORMANCE,
     },
     {
       label: t('Quiz correct response percentage'),
+      id: 'quiz-correctness-percentage',
       chartType: GeneralChartType.QUIZ_CORRECT_PERCENTAGE,
     },
   ]);
@@ -56,6 +59,7 @@ export const fillInTheBlankCharts = (t, question) =>
     question.data.text.match(ANSWER_REGEXP).map((word, idx) => {
       return {
         label: `${t('Question answer frequency')} ${t('blank')} ${idx + 1}`,
+        id: `${t('Question answer frequency')} ${t('blank')} ${idx + 1}`,
         chartType: DetailedChartType.ANSWER_FREQUENCY,
         chartIndex: idx,
       };
@@ -74,6 +78,8 @@ export const multipleChoicesCharts = (t) =>
   adaptWithLink([
     {
       label: t('Question answer frequency'),
+      // todo: use this id for building class and data-cy
+      id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
     },
   ]);
@@ -90,6 +96,8 @@ export const sliderCharts = (t) =>
   adaptWithLink([
     {
       label: t('Question answer frequency'),
+      // todo: use this id for building class and data-cy
+      id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
     },
   ]);
@@ -106,6 +114,8 @@ export const textInputCharts = (t) =>
   adaptWithLink([
     {
       label: t('Question answer frequency'),
+      // todo: use this id for building class and data-cy
+      id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
     },
   ]);

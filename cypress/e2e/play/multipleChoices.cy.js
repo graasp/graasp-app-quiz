@@ -52,7 +52,7 @@ const checkCorrection = (selection) => {
   cy.checkExplanationPlay(data.explanation);
 };
 
-describe('Multiple Choices', () => {
+describe('Play Multiple Choices', () => {
   describe('Empty data', () => {
     beforeEach(() => {
       cy.setUpApi({

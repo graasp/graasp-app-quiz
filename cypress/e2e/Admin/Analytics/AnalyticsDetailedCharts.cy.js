@@ -38,8 +38,10 @@ describe('Analytics Detailed', () => {
           q.data.text
             .match(ANSWER_REGEXP)
             .map((word, idx) => {
+              // todo: use id instead of label
               return {
                 label: `Question answer frequency blank ${idx + 1}`,
+                id: `Question answer frequency blank ${idx + 1}`,
               };
             })
             .forEach((qLabel, idx, labels) => {
@@ -82,7 +84,13 @@ describe('Analytics Detailed', () => {
             .should('have.text', `Answers distribution -${q.data.question}`);
 
           // verify the correct menu is selected
-          verifySelectedMenu(0, [{ label: 'Question answer frequency' }]);
+          // todo: use id instead of label
+          verifySelectedMenu(0, [
+            {
+              label: 'Question answer frequency',
+              id: 'Question answer frequency',
+            },
+          ]);
           break;
         default:
           throw new Error('Unknown question type, test should fail');

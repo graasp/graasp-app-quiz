@@ -60,6 +60,21 @@ export const DEFAULT_QUESTION_VALUES = {
   }),
 };
 
+export const DEFAULT_APP_DATA_VALUES = {
+  [QuestionType.MULTIPLE_CHOICES]: {
+    choices: [],
+  },
+  [QuestionType.SLIDER]: {
+    value: null,
+  },
+  [QuestionType.TEXT_INPUT]: {
+    text: null,
+  },
+  [QuestionType.FILL_BLANKS]: {
+    text: null,
+  },
+};
+
 export const DEFAULT_QUESTION_TYPE = QuestionType.MULTIPLE_CHOICES;
 
 export const DEFAULT_QUESTION = convertJs({

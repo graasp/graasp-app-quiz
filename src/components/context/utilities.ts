@@ -3,7 +3,11 @@ import { List } from 'immutable';
 import { convertJs } from '@graasp/sdk';
 import { AppDataRecord, AppSettingRecord } from '@graasp/sdk/frontend';
 
-import { FAILURE_MESSAGES, QuestionType } from '../../config/constants';
+import {
+  DEFAULT_APP_DATA_VALUES,
+  FAILURE_MESSAGES,
+  QuestionType,
+} from '../../config/constants';
 import {
   AppDataDataRecord,
   AppDataQuestionRecord,
@@ -76,13 +80,15 @@ export const computeCorrectness = (
 
 export const getAppDataByQuestionId = (
   appData: List<AppDataQuestionRecord> = List(),
-  qId: string
+  question: QuestionDataAppSettingRecord
 ) => {
+  const qId = question.id;
   return (
     appData?.find(({ data }) => data?.questionId === qId) ??
     convertJs({
       data: {
         questionId: qId,
+        ...DEFAULT_APP_DATA_VALUES[question.data.type],
       },
     })
   );

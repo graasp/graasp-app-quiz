@@ -2,7 +2,7 @@
 // But for some reason, MEMBERS_RESULT_TABLES is undefined by the time the MOCK_USER are created
 
 const item = { id: 'mock-item-id' };
-const member = { id: 'mock-member-id-1' };
+const member = { id: 'mock-member-id-1', name: 'liam' };
 
 export const LIAM_RESPONSES = [
   {
@@ -86,7 +86,7 @@ export const LIAM_MORE_RESPONSES = [
   },
 ];
 
-const harper = { id: 'mock-member-id-2' };
+const harper = { id: 'mock-member-id-2', name: 'harper' };
 
 export const HARPER_RESPONSES = [
   {
@@ -157,7 +157,7 @@ export const HARPER_MORE_RESPONSES = [
     id: '12',
   },
 ];
-const mason = { id: 'mock-member-id-3' };
+const mason = { id: 'mock-member-id-3', name: 'mason' };
 export const MASON_RESPONSES = [
   {
     item,
@@ -216,7 +216,7 @@ export const MASON_MORE_RESPONSES = [
   },
 ];
 
-const isabella = 'mock-member-id-4';
+const isabella = { id: 'mock-member-id-4', name: 'isabella' };
 
 export const ISABELLA_RESPONSES = [
   {
@@ -299,7 +299,7 @@ export const ISABELLA_MORE_RESPONSES = [
     id: '22',
   },
 ];
-const ethan = 'mock-member-id-5';
+const ethan = { id: 'mock-member-id-5', name: 'ethan' };
 export const ETHAN_RESPONSES = [
   {
     item,
@@ -381,7 +381,7 @@ export const ETHAN_MORE_RESPONSES = [
     id: '28',
   },
 ];
-const mia = { id: 'mock-member-id-6' };
+const mia = { id: 'mock-member-id-6', name: 'mia' };
 export const MIA_RESPONSES = [
   {
     item,
@@ -464,7 +464,7 @@ export const MIA_MORE_RESPONSES = [
   },
 ];
 
-const alexander = { id: 'mock-member-id-7' };
+const alexander = { id: 'mock-member-id-7', name: 'alexander' };
 export const ALEXANDER_RESPONSES = [
   {
     item,
@@ -546,7 +546,7 @@ export const ALEXANDER_MORE_RESPONSES = [
     id: '40',
   },
 ];
-const chloe = { id: 'mock-member-id-8' };
+const chloe = { id: 'mock-member-id-8', name: 'chloe' };
 export const CHLOE_RESPONSES = [
   {
     item,

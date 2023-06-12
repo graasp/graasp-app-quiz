@@ -136,7 +136,7 @@ const TableByQuestion = ({
         <Typography
           variant="h5"
           component="h5"
-          data-cy={buildTableByQuestionCy(question.data.question)}
+          data-cy={buildTableByQuestionCy(question.id)}
         >
           {question.data.question}
         </Typography>
@@ -149,9 +149,7 @@ const TableByQuestion = ({
                     active={true}
                     direction={order}
                     onClick={handleRequestSort}
-                    data-cy={buildTableByQuestionUserHeaderCy(
-                      question.data.question
-                    )}
+                    data-cy={buildTableByQuestionUserHeaderCy(question.id)}
                   >
                     {t('User')}
                     {
@@ -165,33 +163,25 @@ const TableByQuestion = ({
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByQuestionAnswerHeaderCy(
-                    question.data.question
-                  )}
+                  data-cy={buildTableByQuestionAnswerHeaderCy(question.id)}
                 >
                   {t('Answer')}
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByQuestionDateHeaderCy(
-                    question.data.question
-                  )}
+                  data-cy={buildTableByQuestionDateHeaderCy(question.id)}
                 >
                   {t('Date')}
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByQuestionCorrectHeaderCy(
-                    question.data.question
-                  )}
+                  data-cy={buildTableByQuestionCorrectHeaderCy(question.id)}
                 >
                   {t('Correct')}
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody
-              data-cy={buildTableByQuestionTableBodyCy(question.data.question)}
-            >
+            <TableBody data-cy={buildTableByQuestionTableBodyCy(question.id)}>
               {memberList
                 // todo: fix type
                 ?.sort(

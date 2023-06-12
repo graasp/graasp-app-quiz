@@ -1,3 +1,5 @@
+import { List } from 'immutable';
+
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, ButtonProps, Grid } from '@mui/material';
 
@@ -21,16 +23,18 @@ const PlayMultipleChoices = ({
   showCorrection,
 }: Props): JSX.Element => {
   const onResponseClick =
-    (idx: number): ButtonProps['onClick'] =>
+    (value: string): ButtonProps['onClick'] =>
     (e) => {
-      if (idx >= 0) {
-        setResponse(response.choices.delete(idx));
+      const choiceIdx = response.choices?.findIndex(
+        (choice) => choice === value
+      );
+      if (choiceIdx >= 0) {
+        setResponse(response.choices.delete(choiceIdx));
       } else {
-        const value = response.choices?.get(idx);
         if (!value) {
-          return console.error('choice for id ' + idx + ' does not exist');
+          return console.error('choice for value ' + value + ' does not exist');
         }
-        setResponse(response.choices.push(value));
+        setResponse((response.choices ?? List()).push(value));
       }
     };
 
@@ -81,7 +85,7 @@ const PlayMultipleChoices = ({
       {choices?.map((choice, idx) => (
         <Grid item key={choice.value}>
           <Button
-            onClick={onResponseClick(idx)}
+            onClick={onResponseClick(choice.value)}
             fullWidth
             {...computeStyles(choice, idx)}
           >

@@ -47,7 +47,7 @@ const PlayView = () => {
   const [newResponse, setNewResponse] = useState<AppDataRecord>(
     getAppDataByQuestionId(
       responses as List<AppDataQuestionRecord>,
-      currentQuestion?.id
+      currentQuestion
     )
   );
 
@@ -57,7 +57,7 @@ const PlayView = () => {
       setNewResponse(
         getAppDataByQuestionId(
           responses as List<AppDataQuestionRecord>,
-          currentQuestion.id
+          currentQuestion
         )
       );
     }

@@ -14,15 +14,15 @@ import { hexToRGB } from './color';
 export const verifySelectedMenu = (selectedLabelIndex, labels) => {
   const rgbBorderColor = hexToRGB(theme.palette.primary.main);
 
-  labels.forEach(({ label }, index) => {
+  labels.forEach(({ id }, index) => {
     if (selectedLabelIndex === index) {
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(label))).should(
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).should(
         'have.css',
         'border-color',
         rgbBorderColor
       );
     } else {
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(label))).should(
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).should(
         'have.css',
         'border-color',
         'rgba(0, 0, 0, 0)'
