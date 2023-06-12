@@ -3,13 +3,7 @@ import { List } from 'immutable';
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Alert,
-  Button,
-  CircularProgress,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, Grid, Typography } from '@mui/material';
 
 import { AppDataRecord } from '@graasp/sdk/frontend';
 
@@ -36,7 +30,7 @@ import PlayTextInput from './PlayTextInput';
 
 const PlayView = () => {
   const { t } = useTranslation();
-  const { data: responses, isLoading } = hooks.useAppData();
+  const { data: responses, isSuccess } = hooks.useAppData();
   const { mutate: postAppData } = mutations.usePostAppData();
   const { mutate: patchAppData } = mutations.usePatchAppData();
 
@@ -61,7 +55,8 @@ const PlayView = () => {
         )
       );
     }
-  }, [responses, currentQuestion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, currentQuestion]);
 
   useEffect(() => {
     setShowCorrection(Boolean(newResponse?.id));
@@ -81,10 +76,6 @@ const PlayView = () => {
       });
     }
   };
-
-  if (isLoading) {
-    return <CircularProgress />;
-  }
 
   if (!questions || questions.isEmpty()) {
     return (

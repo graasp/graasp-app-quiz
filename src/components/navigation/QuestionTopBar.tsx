@@ -61,7 +61,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
       return null;
     }
     const response = getAppDataByQuestionId(
-      appData as List<AppDataQuestionRecord>,
+      (appData as List<AppDataQuestionRecord>) ?? List(),
       q
     );
     const question = getQuestionById(questions, questionId);
