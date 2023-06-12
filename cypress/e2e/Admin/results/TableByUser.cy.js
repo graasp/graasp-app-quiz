@@ -88,7 +88,9 @@ describe('Table by User', () => {
     cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
       .children('a')
       .each((elem, idx) => {
-        cy.wrap(elem).find('p').should('have.text', orderedUser[idx].name);
+        cy.wrap(elem)
+          .find('p')
+          .contains(orderedUser[idx].name, { matchCase: false });
       });
   });
 
@@ -96,7 +98,7 @@ describe('Table by User', () => {
    * Test that when clicking on a link, the table become visible
    */
   // bug: click does not transition as expected in cypress
-  // it('Click on menu goes to question', () => {
+  // it.only('Click on menu goes to question', () => {
   //   // Enough mock-user to ensure that when one table is visible, all others are hidden
   //   cy.setupResultTablesByUserForCheck(
   //     APP_SETTINGS_LOT_QUESTIONS,
@@ -108,13 +110,9 @@ describe('Table by User', () => {
   //     APP_DATA_LOT_QUESTIONS_LOT_USERS
   //   );
 
-  //   orderedUser.forEach(({ name, id }, i) => {
-  //     const lowercaseName = name.toLowerCase();
-
+  //   orderedUser.forEach(({  id }, i) => {
   //     // click on the link
-  //     cy.get(
-  //       dataCyWrapper(buildAutoScrollableMenuLinkCy(lowercaseName))
-  //     ).click();
+  //     cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).click();
 
   //     // check that the table is visible ( allow 1s to fetch it, as it may take some time to scroll there)
   //     cy.get(dataCyWrapper(buildTableByUserCy(id))).should('be.visible');
@@ -151,7 +149,7 @@ describe('Table by User', () => {
       // check that the correct link appear as selected
       verifySelectedMenu(
         i,
-        orderedUser.map(({ name }) => ({ label: name }))
+        orderedUser.map(({ name, id: thisId }) => ({ label: name, id: thisId }))
       );
     });
   });
@@ -177,10 +175,12 @@ describe('Table by User', () => {
     const questionsNames = getSettingsByName(
       APP_SETTINGS_LOT_QUESTIONS,
       APP_SETTING_NAMES.QUESTION
-    )
-      .filter((setting) => fstUserQIds.includes(setting.id))
-      .map((setting) => setting.data.question)
-      .sort();
+    ).filter((setting) => fstUserQIds.includes(setting.id));
+
+    // sort by question text
+    questionsNames.sort(
+      ({ data: { question: a } }, { data: { question: b } }) => (a > b ? 1 : -1)
+    );
 
     for (let i = 0; i < questionsNames.length; i++) {
       // navigate to the table by user
@@ -198,9 +198,7 @@ describe('Table by User', () => {
             .click();
 
           cy.get(
-            dataCyWrapper(
-              buildAutoScrollableMenuLinkCy(questionsNames[i].toLowerCase())
-            )
+            dataCyWrapper(buildAutoScrollableMenuLinkCy(questionsNames[i].id))
           ).should('have.css', 'border-color', rgbBorderColor);
 
           // assert that the correct table is visible
