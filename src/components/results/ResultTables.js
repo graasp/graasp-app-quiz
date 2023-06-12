@@ -234,7 +234,7 @@ const ResultTables = ({ headerElem }) => {
             ref={userContainerRef}
           >
             {members?.map((member) => {
-              const { id, name } = member;
+              const { id } = member;
               return (
                 <Box
                   key={id}
