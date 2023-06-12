@@ -68,7 +68,7 @@ describe('Admin View', () => {
       (s) => s.name === APP_SETTING_NAMES.QUESTION
     ).forEach((s, idx) =>
       cy
-        .get(dataCyWrapper(buildTableByQuestionCy(s.data.question)))
+        .get(dataCyWrapper(buildTableByQuestionCy(s.id)))
         .should('have.text', APP_SETTINGS_FEW_QUESTIONS[idx].data.question)
     );
   });

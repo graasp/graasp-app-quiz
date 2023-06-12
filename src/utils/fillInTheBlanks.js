@@ -4,8 +4,8 @@ const removeMarkup = (a) => a.trim().slice(1, -1);
 
 export const ANSWER_REGEXP = /<[^<>]*>/g;
 
-export const splitSentence = (text = '', response = '') => {
-  const responses = [...response.matchAll(ANSWER_REGEXP)].map(
+export const splitSentence = (text = '', response) => {
+  const responses = [...(response ?? '').matchAll(ANSWER_REGEXP)].map(
     ([a]) => removeMarkup(a) ?? ''
   );
   const answers = [...text.matchAll(ANSWER_REGEXP)].map(([a]) => ({

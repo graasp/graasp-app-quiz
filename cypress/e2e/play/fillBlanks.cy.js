@@ -64,7 +64,7 @@ const checkCorrection = ({ answers: responseAnswers }) => {
   });
 };
 
-describe('Fill In The Blanks', () => {
+describe('Play Fill In The Blanks', () => {
   describe('Empty data', () => {
     beforeEach(() => {
       cy.setUpApi({
@@ -76,7 +76,7 @@ describe('Fill In The Blanks', () => {
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
     });
 
-    it('Start with empty app data', () => {
+    it.only('Start with empty app data', () => {
       cy.get(dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)).should(
         'contain',
         data.question
