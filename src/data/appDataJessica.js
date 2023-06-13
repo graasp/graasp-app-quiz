@@ -1,8 +1,10 @@
+const item = { id: 'mock-item-id' };
+const member = { id: 'mock-member-id-5' };
 export const appDataJessica = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:25:55.728Z',
     updatedAt: '2022-05-07T09:25:55.728Z',
     data: {
@@ -12,9 +14,9 @@ export const appDataJessica = [
     id: '5',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-26T10:30:15.700Z',
     updatedAt: '2022-07-26T10:31:16.300Z',
     data: {
@@ -24,9 +26,9 @@ export const appDataJessica = [
     id: '12',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-26T16:15:40.145Z',
     updatedAt: '2022-07-26T16:16:51.432Z',
     data: {
@@ -36,9 +38,9 @@ export const appDataJessica = [
     id: '26',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-26T16:58:10.234Z',
     updatedAt: '2022-07-26T16:59:05.321Z',
     data: {
@@ -48,9 +50,9 @@ export const appDataJessica = [
     id: '33',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-26T16:15:40.145Z',
     updatedAt: '2022-07-26T16:16:51.432Z',
     data: {
@@ -60,9 +62,9 @@ export const appDataJessica = [
     id: '1126',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-5',
-    creator: 'mock-member-id-5',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-26T16:58:10.234Z',
     updatedAt: '2022-07-26T16:59:05.321Z',
     data: {

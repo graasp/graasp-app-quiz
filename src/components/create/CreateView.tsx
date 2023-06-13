@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import { Alert, Button, Grid, Typography } from '@mui/material';
 
-import { QUESTION_TYPES } from '../../config/constants';
+import { QuestionType } from '../../config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   CREATE_VIEW_CONTAINER_CY,
@@ -17,6 +17,12 @@ import { QuizContext } from '../context/QuizContext';
 import { isDifferent, validateQuestionData } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
 import QuestionTopBar from '../navigation/QuestionTopBar';
+import {
+  AppSettingDataRecord,
+  MultipleChoicesAppSettingDataRecord,
+  SliderAppSettingDataRecord,
+} from '../types/types';
+import { QuestionDataRecord } from '../types/types';
 import Explanation from './Explanation';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
@@ -30,12 +36,14 @@ const CreateView = () => {
   const { currentQuestion, deleteQuestion, addQuestion, saveQuestion } =
     useContext(QuizContext);
 
-  const [newData, setNewData] = useState(currentQuestion?.data);
-  const [errorMessage, setErrorMessage] = useState();
+  const [newData, setNewData] = useState<QuestionDataRecord>(
+    currentQuestion?.data as QuestionDataRecord
+  );
+  const [errorMessage, setErrorMessage] = useState<string | null>();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    setNewData(currentQuestion?.data);
+    setNewData(currentQuestion?.data as QuestionDataRecord);
   }, [currentQuestion]);
 
   // validate data to enable save
@@ -45,7 +53,7 @@ const CreateView = () => {
         validateQuestionData(newData);
         setErrorMessage(null);
       } catch (e) {
-        setErrorMessage(e);
+        setErrorMessage(e as string);
       }
     }
   }, [newData, isSubmitted]);
@@ -57,7 +65,7 @@ const CreateView = () => {
       setErrorMessage(null);
       saveQuestion(newData);
     } catch (e) {
-      setErrorMessage(e);
+      setErrorMessage(e as string);
     }
   };
 
@@ -85,68 +93,73 @@ const CreateView = () => {
           {t('Add a new question')}
         </Typography>
       )}
-      <Grid container direction="column" align="left" spacing={3}>
+      <Grid container direction="column" spacing={3}>
         <Grid item>
           <QuestionTitle
             title={newData?.question}
-            onChange={(question) => {
-              setNewData({ ...newData, question });
+            onChange={(question: string) => {
+              setNewData(
+                (newData as AppSettingDataRecord).set(
+                  'question',
+                  question
+                ) as QuestionDataRecord
+              );
             }}
           />
         </Grid>
         <Grid item>
           <QuestionTypeSelect
             value={newData?.type}
-            onChange={(changes) => {
-              setNewData({ ...newData, ...changes });
+            onChange={(changes: QuestionDataRecord) => {
+              setNewData(
+                (changes as AppSettingDataRecord)
+                  .set('question', newData.question)
+                  .set('explanation', newData.explanation) as QuestionDataRecord
+              );
             }}
           />
         </Grid>
         <Grid item>
           {(() => {
             switch (newData?.type) {
-              case QUESTION_TYPES.TEXT_INPUT: {
+              case QuestionType.TEXT_INPUT: {
                 return (
                   <TextInput
                     text={newData?.text}
-                    onChangeData={(text) => {
-                      setNewData({
-                        ...newData,
-                        text,
-                      });
+                    onChangeData={(text: string) => {
+                      setNewData(newData.set('text', text));
                     }}
                   />
                 );
               }
-              case QUESTION_TYPES.SLIDER: {
+              case QuestionType.SLIDER: {
                 return (
                   <Slider
                     data={newData}
-                    onChangeData={(d) => {
-                      setNewData({
-                        ...newData,
-                        ...d,
-                      });
+                    onChangeData={(d: SliderAppSettingDataRecord) => {
+                      setNewData(newData.merge(d));
                     }}
                   />
                 );
               }
-              case QUESTION_TYPES.FILL_BLANKS: {
+              case QuestionType.FILL_BLANKS: {
                 return (
                   <FillInTheBlanks
                     text={newData?.text}
-                    onChangeData={(text) => setNewData({ ...newData, text })}
+                    onChangeData={(text: string) =>
+                      setNewData(newData.set('text', text))
+                    }
                   />
                 );
               }
-              case QUESTION_TYPES.MULTIPLE_CHOICES:
+              case QuestionType.MULTIPLE_CHOICES:
               default: {
                 return (
                   <MultipleChoices
                     choices={newData?.choices}
-                    setChoices={(newChoices) =>
-                      setNewData({ ...newData, choices: newChoices })
-                    }
+                    setChoices={(
+                      newChoices: MultipleChoicesAppSettingDataRecord['choices']
+                    ) => setNewData(newData.set('choices', newChoices))}
                   />
                 );
               }
@@ -157,8 +170,13 @@ const CreateView = () => {
         <Grid item>
           <Explanation
             value={newData?.explanation}
-            onChange={(explanation) => {
-              setNewData({ ...newData, explanation });
+            onChange={(explanation: string) => {
+              setNewData(
+                (newData as AppSettingDataRecord).set(
+                  'explanation',
+                  explanation
+                ) as QuestionDataRecord
+              );
             }}
           />
         </Grid>
@@ -190,7 +208,8 @@ const CreateView = () => {
               color="success"
               startIcon={<SaveIcon />}
               disabled={
-                !isDifferent(newData, currentQuestion?.data) || errorMessage
+                !isDifferent(newData, currentQuestion?.data) ||
+                Boolean(errorMessage)
               }
             >
               {t('Save')}

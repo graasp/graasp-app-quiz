@@ -1,13 +1,15 @@
-import { APP_SETTING_NAMES, QUESTION_TYPES } from '../config/constants';
+import { APP_SETTING_NAMES, QuestionType } from '../config/constants';
 
+export const item = { id: 'mock-item-id' };
+const member = { id: 'mock-member-id-1' };
 const buildDatabase = (appContext) => ({
   appData: [
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-1',
-      creator: 'mock-member-id-1',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member,
+      creator: member,
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id4',
         choices: ['Paris'],
@@ -15,11 +17,11 @@ const buildDatabase = (appContext) => ({
       id: '2',
     },
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-1',
-      creator: 'mock-member-id-1',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member,
+      creator: member,
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id6',
         text: '90',
@@ -27,11 +29,11 @@ const buildDatabase = (appContext) => ({
       id: '3',
     },
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-1',
-      creator: 'mock-member-id-1',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member,
+      creator: member,
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id7',
         text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <ips um> ut fermentum nulla, sed <suscipit> sem.',
@@ -39,11 +41,11 @@ const buildDatabase = (appContext) => ({
       id: '4',
     },
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-2',
-      creator: 'mock-member-id-2',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member: { id: 'mock-member-id-2' },
+      creator: { id: 'mock-member-id-2' },
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id5',
         value: 60,
@@ -51,11 +53,11 @@ const buildDatabase = (appContext) => ({
       id: '5',
     },
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-2',
-      creator: 'mock-member-id-2',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member: { id: 'mock-member-id-2' },
+      creator: { id: 'mock-member-id-2' },
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id4',
         choices: ['Tokyo', 'London'],
@@ -63,11 +65,11 @@ const buildDatabase = (appContext) => ({
       id: '6',
     },
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-2',
-      creator: 'mock-member-id-2',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member: { id: 'mock-member-id-2' },
+      creator: { id: 'mock-member-id-2' },
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id6',
         text: 'kitten',
@@ -75,11 +77,11 @@ const buildDatabase = (appContext) => ({
       id: '7',
     },
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-2',
-      creator: 'mock-member-id-2',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member: { id: 'mock-member-id-2' },
+      creator: { id: 'mock-member-id-2' },
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id7',
         text: 'Lorem <ips um> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
@@ -87,11 +89,11 @@ const buildDatabase = (appContext) => ({
       id: '8',
     },
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-3',
-      creator: 'mock-member-id-3',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member: { id: 'mock-member-id-3' },
+      creator: { id: 'mock-member-id-3' },
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id7',
         text: 'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ip sum> sem.',
@@ -99,11 +101,11 @@ const buildDatabase = (appContext) => ({
       id: '9',
     },
     {
-      itemId: 'mock-item-id',
-      memberId: 'mock-member-id-3',
-      creator: 'mock-member-id-3',
-      createdAt: '2022-07-22T12:35:50.195Z',
-      updatedAt: '2022-07-22T12:36:51.741Z',
+      item,
+      member: { id: 'mock-member-id-3' },
+      creator: { id: 'mock-member-id-3' },
+      createdAt: new Date('2022-07-22T12:35:50.195Z'),
+      updatedAt: new Date('2022-07-22T12:35:50.195Z'),
       data: {
         questionId: 'id6',
         text: 'bird',
@@ -123,7 +125,7 @@ const buildDatabase = (appContext) => ({
       id: 'id4',
       data: {
         question: 'What is the capital of France?',
-        type: QUESTION_TYPES.MULTIPLE_CHOICES,
+        type: QuestionType.MULTIPLE_CHOICES,
         choices: [
           { value: 'London', isCorrect: false },
           { value: 'Paris', isCorrect: true },
@@ -138,7 +140,7 @@ const buildDatabase = (appContext) => ({
       id: 'id5',
       data: {
         question: 'How happy are you?',
-        type: QUESTION_TYPES.SLIDER,
+        type: QuestionType.SLIDER,
         min: 10,
         max: 90,
         value: 20,
@@ -150,7 +152,7 @@ const buildDatabase = (appContext) => ({
       id: 'id6',
       data: {
         question: 'What is a baby cat called?',
-        type: QUESTION_TYPES.TEXT_INPUT,
+        type: QuestionType.TEXT_INPUT,
         text: 'kitten',
       },
       name: APP_SETTING_NAMES.QUESTION,
@@ -160,7 +162,7 @@ const buildDatabase = (appContext) => ({
       data: {
         question: 'Fill In The Blanks',
 
-        type: QUESTION_TYPES.FILL_BLANKS,
+        type: QuestionType.FILL_BLANKS,
         text: 'Lorem <ips um> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
       },
       name: APP_SETTING_NAMES.QUESTION,

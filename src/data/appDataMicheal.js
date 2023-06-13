@@ -1,8 +1,10 @@
+const item = { id: 'mock-item-id' };
+const member = { id: 'mock-member-id-4' };
 export const appDataMicheal = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:23:12.413Z',
     updatedAt: '2022-05-07T09:23:12.413Z',
     data: {
@@ -12,9 +14,9 @@ export const appDataMicheal = [
     id: '4',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-25T18:10:20.900Z',
     updatedAt: '2022-07-25T18:11:21.400Z',
     data: {
@@ -24,9 +26,9 @@ export const appDataMicheal = [
     id: '11',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-25T15:05:55.981Z',
     updatedAt: '2022-07-25T15:07:10.789Z',
     data: {
@@ -36,9 +38,9 @@ export const appDataMicheal = [
     id: '25',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-25T08:12:45.789Z',
     updatedAt: '2022-07-25T08:13:50.321Z',
     data: {
@@ -48,9 +50,9 @@ export const appDataMicheal = [
     id: '32',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:23:12.413Z',
     updatedAt: '2022-05-07T09:23:12.413Z',
     data: {
@@ -60,9 +62,9 @@ export const appDataMicheal = [
     id: '114',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-25T18:10:20.900Z',
     updatedAt: '2022-07-25T18:11:21.400Z',
     data: {
@@ -72,9 +74,9 @@ export const appDataMicheal = [
     id: '1111',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-25T15:05:55.981Z',
     updatedAt: '2022-07-25T15:07:10.789Z',
     data: {
@@ -84,9 +86,9 @@ export const appDataMicheal = [
     id: '1125',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-4',
-    creator: 'mock-member-id-4',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-25T08:12:45.789Z',
     updatedAt: '2022-07-25T08:13:50.321Z',
     data: {

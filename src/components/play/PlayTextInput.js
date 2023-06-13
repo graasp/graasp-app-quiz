@@ -13,7 +13,7 @@ const PlayTextInput = ({ values, response, setResponse, showCorrection }) => {
 
   useEffect(() => {
     if (showCorrection) {
-      setIsCorrect(computeCorrectness(response, values));
+      setIsCorrect(computeCorrectness(values, response));
     }
   }, [showCorrection, response, values]);
 

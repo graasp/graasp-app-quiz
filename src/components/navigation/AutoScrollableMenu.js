@@ -96,14 +96,14 @@ const AutoScrollableMenu = ({
 
   return (
     <Stack data-cy={AUTO_SCROLLABLE_MENU_LINK_LIST_CY}>
-      {links?.map(({ label, link }) => {
+      {links?.map(({ label, id, link }) => {
         return (
           <AutoScrollableLink
             isHighlighted={highlightedLink === link}
             key={label}
             href={`#${link}`}
             onClick={() => handleLinkClicked(link)}
-            data-cy={buildAutoScrollableMenuLinkCy(label)}
+            data-cy={buildAutoScrollableMenuLinkCy(id)}
           >
             <Typography>{label}</Typography>
           </AutoScrollableLink>

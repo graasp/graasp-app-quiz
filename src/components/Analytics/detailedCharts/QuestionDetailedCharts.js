@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 
-import { QUESTION_TYPES } from '../../../config/constants';
+import { QuestionType } from '../../../config/constants';
 import { buildAnalyticsDetailedChartCy } from '../../../config/selectors';
 import { getAllAppDataByQuestionId } from '../../context/utilities';
 import { DetailedChartType } from '../AnalyticsCharts';
@@ -43,7 +43,7 @@ const QuestionDetailedCharts = ({
   const renderAnswerDistributionChart = useCallback(
     (chartIndex) => {
       switch (question.data.type) {
-        case QUESTION_TYPES.MULTIPLE_CHOICES:
+        case QuestionType.MULTIPLE_CHOICES:
           return (
             <AnswersDistributionMultipleChoices
               maxWidth={maxWidth}
@@ -51,7 +51,7 @@ const QuestionDetailedCharts = ({
               appDataForQuestion={appDataForQuestion}
             />
           );
-        case QUESTION_TYPES.SLIDER:
+        case QuestionType.SLIDER:
           return (
             <AnswersDistributionSlider
               maxWidth={maxWidth}
@@ -59,7 +59,7 @@ const QuestionDetailedCharts = ({
               appDataForQuestion={appDataForQuestion}
             />
           );
-        case QUESTION_TYPES.TEXT_INPUT:
+        case QuestionType.TEXT_INPUT:
           return (
             <AnswersDistributionTextInput
               maxWidth={maxWidth}
@@ -67,7 +67,7 @@ const QuestionDetailedCharts = ({
               appDataForQuestion={appDataForQuestion}
             />
           );
-        case QUESTION_TYPES.FILL_BLANKS:
+        case QuestionType.FILL_BLANKS:
           return (
             <AnswersDistributionFillInTheBlanks
               maxWidth={maxWidth}

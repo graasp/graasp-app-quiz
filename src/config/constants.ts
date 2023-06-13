@@ -1,3 +1,5 @@
+import { convertJs } from '@graasp/sdk';
+
 export const APP_SETTING_NAMES = {
   QUESTION: 'question',
   QUESTION_LIST: 'questionList',
@@ -7,55 +9,78 @@ export const APP_DATA_TYPES = {
   RESPONSE: 'response',
 };
 
-export const QUESTION_TYPES = {
-  MULTIPLE_CHOICES: 'multipleChoices',
-  TEXT_INPUT: 'textInput',
-  SLIDER: 'slider',
-  FILL_BLANKS: 'fillBlanks',
+export enum QuestionType {
+  MULTIPLE_CHOICES = 'multipleChoices',
+  TEXT_INPUT = 'textInput',
+  SLIDER = 'slider',
+  FILL_BLANKS = 'fillBlanks',
+}
+
+export const QuestionType_TO_NAME = {
+  [QuestionType.MULTIPLE_CHOICES]: 'Multiple Choices',
+  [QuestionType.TEXT_INPUT]: 'Text Input',
+  [QuestionType.SLIDER]: 'Slider',
+  [QuestionType.FILL_BLANKS]: 'Fill In The Blanks',
 };
 
-export const QUESTION_TYPES_TO_NAME = {
-  [QUESTION_TYPES.MULTIPLE_CHOICES]: 'Multiple Choices',
-  [QUESTION_TYPES.TEXT_INPUT]: 'Text Input',
-  [QUESTION_TYPES.SLIDER]: 'Slider',
-  [QUESTION_TYPES.FILL_BLANKS]: 'Fill In The Blanks',
-};
-
-export const DEFAULT_CHOICE = { value: '', isCorrect: false };
+export const DEFAULT_CHOICE = convertJs({ value: '', isCorrect: false });
 
 export const SLIDER_DEFAULT_MAX_VALUE = 100;
 export const SLIDER_DEFAULT_MIN_VALUE = 0;
 
 export const DEFAULT_QUESTION_VALUES = {
-  [QUESTION_TYPES.MULTIPLE_CHOICES]: {
-    type: QUESTION_TYPES.MULTIPLE_CHOICES,
+  [QuestionType.MULTIPLE_CHOICES]: convertJs({
+    question: '',
+    explanation: '',
+    type: QuestionType.MULTIPLE_CHOICES,
     choices: [
       { value: '', isCorrect: true },
       { value: '', isCorrect: false },
     ],
-  },
-  [QUESTION_TYPES.SLIDER]: {
-    type: QUESTION_TYPES.SLIDER,
+  }),
+  [QuestionType.SLIDER]: convertJs({
+    question: '',
+    explanation: '',
+    type: QuestionType.SLIDER,
     min: SLIDER_DEFAULT_MIN_VALUE,
     max: SLIDER_DEFAULT_MAX_VALUE,
     value: (SLIDER_DEFAULT_MAX_VALUE - SLIDER_DEFAULT_MIN_VALUE) / 2,
-  },
-  [QUESTION_TYPES.TEXT_INPUT]: {
-    type: QUESTION_TYPES.TEXT_INPUT,
+  }),
+  [QuestionType.TEXT_INPUT]: convertJs({
+    question: '',
+    explanation: '',
+    type: QuestionType.TEXT_INPUT,
     text: '',
-  },
-  [QUESTION_TYPES.FILL_BLANKS]: {
-    type: QUESTION_TYPES.FILL_BLANKS,
+  }),
+  [QuestionType.FILL_BLANKS]: convertJs({
+    question: '',
+    explanation: '',
+    type: QuestionType.FILL_BLANKS,
     text: '',
+  }),
+};
+
+export const DEFAULT_APP_DATA_VALUES = {
+  [QuestionType.MULTIPLE_CHOICES]: {
+    choices: [],
+  },
+  [QuestionType.SLIDER]: {
+    value: null,
+  },
+  [QuestionType.TEXT_INPUT]: {
+    text: null,
+  },
+  [QuestionType.FILL_BLANKS]: {
+    text: null,
   },
 };
 
-export const DEFAULT_QUESTION_TYPE = QUESTION_TYPES.MULTIPLE_CHOICES;
+export const DEFAULT_QUESTION_TYPE = QuestionType.MULTIPLE_CHOICES;
 
-export const DEFAULT_QUESTION = {
+export const DEFAULT_QUESTION = convertJs({
   name: APP_SETTING_NAMES.QUESTION,
-  data: DEFAULT_QUESTION_VALUES[DEFAULT_QUESTION_TYPE],
-};
+  data: DEFAULT_QUESTION_VALUES[DEFAULT_QUESTION_TYPE].toJS(),
+});
 
 export const FAILURE_MESSAGES = {
   EMPTY_QUESTION: 'EMPTY_QUESTION',
@@ -69,18 +94,11 @@ export const FAILURE_MESSAGES = {
   FILL_BLANKS_UNMATCHING_TAGS: 'FILL_BLANKS_UNMATCHING_TAGS',
 };
 
-// todo: use from graasp constants
-export const PERMISSION_LEVELS = {
-  WRITE: 'write',
-  READ: 'read',
-  ADMIN: 'admin',
-};
-
 export const DEFAULT_LANG = 'en';
 
 export const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API === 'true';
 export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
-export const REACT_APP_GRAASP_APP_ID = process.env.REACT_APP_GRAASP_APP_ID;
+export const REACT_APP_GRAASP_APP_KEY = process.env.REACT_APP_GRAASP_APP_KEY;
 
 export const ENV = {
   DEVELOPMENT: 'development',

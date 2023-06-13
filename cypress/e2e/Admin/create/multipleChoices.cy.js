@@ -1,10 +1,10 @@
+import { Context, PermissionLevel } from '@graasp/sdk';
+
 import {
   APP_SETTING_NAMES,
   FAILURE_MESSAGES,
-  PERMISSION_LEVELS,
-  QUESTION_TYPES,
+  QuestionType,
 } from '../../../../src/config/constants';
-import { CONTEXTS } from '../../../../src/config/contexts';
 import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -27,7 +27,7 @@ const t = i18n.t;
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
-    data.type === QUESTION_TYPES.MULTIPLE_CHOICES
+    data.type === QuestionType.MULTIPLE_CHOICES
 );
 
 const newMultipleChoiceData = {
@@ -121,8 +121,8 @@ describe('Multiple Choices', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -177,8 +177,8 @@ describe('Multiple Choices', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
-          context: CONTEXTS.BUILDER,
+          permission: PermissionLevel.Admin,
+          context: Context.Builder,
         },
       });
       cy.visit('/');
@@ -190,7 +190,7 @@ describe('Multiple Choices', () => {
         .should('have.value', data.question);
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        QUESTION_TYPES.MULTIPLE_CHOICES
+        QuestionType.MULTIPLE_CHOICES
       );
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')

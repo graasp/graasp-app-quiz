@@ -1,8 +1,10 @@
+const member = { id: 'mock-member-id-3' };
+const item = { id: 'mock-item-id' };
 export const appDataEmily = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:20:45.981Z',
     updatedAt: '2022-05-07T09:20:45.981Z',
     data: {
@@ -12,9 +14,9 @@ export const appDataEmily = [
     id: '3',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-24T15:40:45.800Z',
     updatedAt: '2022-07-24T15:41:46.200Z',
     data: {
@@ -24,9 +26,9 @@ export const appDataEmily = [
     id: '10',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-22T12:35:50.195Z',
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
@@ -36,9 +38,9 @@ export const appDataEmily = [
     id: '17',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-24T14:55:20.876Z',
     updatedAt: '2022-07-24T14:56:30.123Z',
     data: {
@@ -48,9 +50,9 @@ export const appDataEmily = [
     id: '24',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-24T15:47:30.987Z',
     updatedAt: '2022-07-24T15:48:20.654Z',
     data: {
@@ -60,9 +62,9 @@ export const appDataEmily = [
     id: '31',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-05-07T09:20:45.981Z',
     updatedAt: '2022-05-07T09:20:45.981Z',
     data: {
@@ -72,9 +74,9 @@ export const appDataEmily = [
     id: '113',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-22T12:35:50.195Z',
     updatedAt: '2022-07-22T12:36:51.741Z',
     data: {
@@ -84,9 +86,9 @@ export const appDataEmily = [
     id: '1117',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-24T14:55:20.876Z',
     updatedAt: '2022-07-24T14:56:30.123Z',
     data: {
@@ -96,9 +98,9 @@ export const appDataEmily = [
     id: '1124',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-3',
-    creator: 'mock-member-id-3',
+    item,
+    member,
+    creator: member,
     createdAt: '2022-07-24T15:47:30.987Z',
     updatedAt: '2022-07-24T15:48:20.654Z',
     data: {

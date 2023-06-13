@@ -29,23 +29,11 @@ if (ENABLE_MOCK_API) {
     appContext: window.Cypress ? window.appContext : appContext,
     // database: window.Cypress ? window.database : undefined,
     // enable next line to use mock data
-    database: window.Cypress ? window.database : buildDatabase(appContext),
+    database: window.Cypress ? window.database : buildDatabase(),
   });
 }
 
-const root = createRoot(document.getElementById('root'));
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const root = createRoot(document.getElementById('root')!);
 
-const renderApp = (Component) => {
-  root.render(<Component />);
-};
-
-// render app to the dom
-renderApp(App);
-
-if (module.hot) {
-  module.hot.accept('./components/App', () => {
-    // eslint-disable-next-line global-require
-    const NextRoot = require('./components/App').default;
-    renderApp(NextRoot);
-  });
-}
+root.render(<App />);

@@ -1,34 +1,55 @@
-import clonedeep from 'lodash.clonedeep';
-
-import React from 'react';
+import { List } from 'immutable';
 
 import CheckIcon from '@mui/icons-material/Check';
-import { Button, Grid } from '@mui/material';
+import { Button, ButtonProps, Grid } from '@mui/material';
 
 import { buildMultipleChoicesButtonCy } from '../../config/selectors';
+import {
+  MultipleChoiceAppDataDataRecord,
+  MultipleChoicesAppSettingDataRecord,
+} from '../types/types';
+
+type Props = {
+  choices: MultipleChoicesAppSettingDataRecord['choices'];
+  response: MultipleChoiceAppDataDataRecord;
+  setResponse: (d: MultipleChoiceAppDataDataRecord['choices']) => void;
+  showCorrection: boolean;
+};
 
 const PlayMultipleChoices = ({
   choices,
   response,
   setResponse,
   showCorrection,
-}) => {
-  const onResponseClick = (e) => {
-    // toggle selected choice
-    const { value } = e.target;
-    let newResponse = clonedeep(response.choices || []);
-    const choiceIdx = response.choices?.findIndex((choice) => choice === value);
-    if (choiceIdx >= 0) {
-      newResponse.splice(choiceIdx, 1);
-    } else {
-      newResponse.push(value);
-    }
-    setResponse(newResponse);
-  };
+}: Props): JSX.Element => {
+  const onResponseClick =
+    (value: string): ButtonProps['onClick'] =>
+    (e) => {
+      const choiceIdx = response.choices?.findIndex(
+        (choice) => choice === value
+      );
+      if (choiceIdx >= 0) {
+        setResponse(response.choices.delete(choiceIdx));
+      } else {
+        if (!value) {
+          return console.error('choice for value ' + value + ' does not exist');
+        }
+        setResponse((response.choices ?? List()).push(value));
+      }
+    };
 
-  const computeStyles = ({ value, isCorrect }, idx) => {
+  const computeStyles = (
+    { value, isCorrect }: { value: string; isCorrect: boolean },
+    idx: number
+  ): {
+    color: 'success' | 'error' | 'primary';
+    variant: 'contained' | 'outlined';
+    endIcon?: JSX.Element;
+    'data-cy': string;
+  } => {
     const isSelected = Boolean(response.choices?.includes(value));
     const dataCy = buildMultipleChoicesButtonCy(idx, isSelected);
+
     if (showCorrection) {
       switch (true) {
         case isCorrect && isSelected:
@@ -62,10 +83,9 @@ const PlayMultipleChoices = ({
   return (
     <Grid container direction="column" spacing={2}>
       {choices?.map((choice, idx) => (
-        <Grid item key={choice.value}>
+        <Grid item key={choice.value + '-' + idx}>
           <Button
-            value={choice.value}
-            onClick={onResponseClick}
+            onClick={onResponseClick(choice.value)}
             fullWidth
             {...computeStyles(choice, idx)}
           >

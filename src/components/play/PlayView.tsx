@@ -1,16 +1,14 @@
+import { List } from 'immutable';
+
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Alert,
-  Button,
-  CircularProgress,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, Grid, Typography } from '@mui/material';
 
-import { APP_DATA_TYPES, QUESTION_TYPES } from '../../config/constants';
-import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
+import { AppDataRecord } from '@graasp/sdk/frontend';
+
+import { APP_DATA_TYPES, QuestionType } from '../../config/constants';
+import { hooks, mutations } from '../../config/queryClient';
 import {
   EXPLANATION_PLAY_CY,
   PLAY_VIEW_EMPTY_QUIZ_CY,
@@ -20,34 +18,48 @@ import {
 import { QuizContext } from '../context/QuizContext';
 import { getAppDataByQuestionId } from '../context/utilities';
 import QuestionTopBar from '../navigation/QuestionTopBar';
-import PlayMultipleChoices from '../play/PlayMultipleChoices';
+import {
+  AppDataQuestionRecord,
+  MultipleChoiceAppDataDataRecord,
+  SliderAppDataDataRecord,
+} from '../types/types';
 import PlayFillInTheBlanks from './PlayFillInTheBlanks';
+import PlayMultipleChoices from './PlayMultipleChoices';
 import PlaySlider from './PlaySlider';
 import PlayTextInput from './PlayTextInput';
 
 const PlayView = () => {
   const { t } = useTranslation();
-  const { data: responses, isLoading } = hooks.useAppData();
-  const { mutate: postAppData } = useMutation(MUTATION_KEYS.POST_APP_DATA);
-  const { mutate: patchAppData } = useMutation(MUTATION_KEYS.PATCH_APP_DATA);
+  const { data: responses, isSuccess } = hooks.useAppData();
+  const { mutate: postAppData } = mutations.usePostAppData();
+  const { mutate: patchAppData } = mutations.usePatchAppData();
 
   const { currentQuestion, questions } = useContext(QuizContext);
 
   const [showCorrection, setShowCorrection] = React.useState(false);
 
-  const [newResponse, setNewResponse] = useState(
-    getAppDataByQuestionId(responses, currentQuestion?.id)
+  const [newResponse, setNewResponse] = useState<AppDataRecord>(
+    getAppDataByQuestionId(
+      responses as List<AppDataQuestionRecord>,
+      currentQuestion
+    )
   );
 
   useEffect(() => {
     if (responses && currentQuestion) {
       // assume there's only one response for a question
-      setNewResponse(getAppDataByQuestionId(responses, currentQuestion.id));
+      setNewResponse(
+        getAppDataByQuestionId(
+          responses as List<AppDataQuestionRecord>,
+          currentQuestion
+        )
+      );
     }
-  }, [responses, currentQuestion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, currentQuestion]);
 
   useEffect(() => {
-    setShowCorrection(newResponse?.id);
+    setShowCorrection(Boolean(newResponse?.id));
   }, [newResponse]);
 
   const onSubmit = () => {
@@ -65,10 +77,6 @@ const PlayView = () => {
     }
   };
 
-  if (isLoading) {
-    return <CircularProgress />;
-  }
-
   if (!questions || questions.isEmpty()) {
     return (
       <Alert severity="info" data-cy={PLAY_VIEW_EMPTY_QUIZ_CY}>
@@ -78,7 +86,7 @@ const PlayView = () => {
   }
 
   if (!currentQuestion) {
-    return 'no current question';
+    return <Typography>no current question</Typography>;
   }
 
   return (
@@ -98,73 +106,53 @@ const PlayView = () => {
       <Grid container>
         {(() => {
           switch (currentQuestion.data.type) {
-            case QUESTION_TYPES.MULTIPLE_CHOICES: {
+            case QuestionType.MULTIPLE_CHOICES: {
               return (
                 <PlayMultipleChoices
                   choices={currentQuestion.data.choices}
-                  response={newResponse.data}
+                  response={newResponse.data as MultipleChoiceAppDataDataRecord}
                   setResponse={(choices) => {
-                    setNewResponse({
-                      ...newResponse,
-                      data: {
-                        ...newResponse.data,
-                        choices,
-                      },
-                    });
+                    setNewResponse(
+                      newResponse.setIn(['data', 'choices'], choices)
+                    );
                   }}
                   showCorrection={showCorrection}
                 />
               );
             }
-            case QUESTION_TYPES.TEXT_INPUT: {
+            case QuestionType.TEXT_INPUT: {
               return (
                 <PlayTextInput
                   values={currentQuestion.data}
                   response={newResponse.data}
-                  setResponse={(text) => {
-                    setNewResponse({
-                      ...newResponse,
-                      data: {
-                        ...newResponse.data,
-                        text,
-                      },
-                    });
+                  setResponse={(text: string) => {
+                    setNewResponse(newResponse.setIn(['data', 'text'], text));
                   }}
                   showCorrection={showCorrection}
                 />
               );
             }
-            case QUESTION_TYPES.FILL_BLANKS: {
+            case QuestionType.FILL_BLANKS: {
               return (
                 <PlayFillInTheBlanks
                   values={currentQuestion.data}
                   response={newResponse.data}
-                  setResponse={(text) => {
-                    setNewResponse({
-                      ...newResponse,
-                      data: {
-                        ...newResponse.data,
-                        text,
-                      },
-                    });
+                  setResponse={(text: string) => {
+                    setNewResponse(newResponse.setIn(['data', 'text'], text));
                   }}
                   showCorrection={showCorrection}
                 />
               );
             }
-            case QUESTION_TYPES.SLIDER: {
+            case QuestionType.SLIDER: {
               return (
                 <PlaySlider
                   values={currentQuestion.data}
                   response={newResponse.data}
-                  setResponse={(value) => {
-                    setNewResponse({
-                      ...newResponse,
-                      data: {
-                        ...newResponse.data,
-                        value,
-                      },
-                    });
+                  setResponse={(value: SliderAppDataDataRecord) => {
+                    setNewResponse(
+                      newResponse.update('data', (data) => data.merge(value))
+                    );
                   }}
                   showCorrection={showCorrection}
                 />

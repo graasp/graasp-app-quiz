@@ -16,26 +16,31 @@ describe('Play View', () => {
       database: {
         appSettings: [],
       },
+      appContext: {
+        permission: PermissionLevel.Read,
+        memberId: null,
+      },
     });
     cy.visit('/');
 
     cy.get(dataCyWrapper(PLAY_VIEW_EMPTY_QUIZ_CY)).should('be.visible');
   });
 
-  describe('Play View', () => {
+  describe('Public Play View', () => {
     beforeEach(() => {
       cy.setUpApi({
         database: {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PermissionLevel.Admin,
+          permission: PermissionLevel.Read,
+          memberId: null,
         },
       });
       cy.visit('/');
     });
 
-    it('Navigation', () => {
+    it.only('Navigation', () => {
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
       cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
 

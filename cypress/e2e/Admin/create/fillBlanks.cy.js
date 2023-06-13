@@ -1,11 +1,11 @@
+import { Context, PermissionLevel } from '@graasp/sdk';
+
 import {
   APP_SETTING_NAMES,
   DEFAULT_QUESTION,
   FAILURE_MESSAGES,
-  PERMISSION_LEVELS,
-  QUESTION_TYPES,
+  QuestionType,
 } from '../../../../src/config/constants';
-import { CONTEXTS } from '../../../../src/config/contexts';
 import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -30,7 +30,7 @@ const newFillBlanksData = {
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
-    data.type === QUESTION_TYPES.FILL_BLANKS
+    data.type === QuestionType.FILL_BLANKS
 );
 
 const fillBlanksQuestion = (
@@ -38,6 +38,8 @@ const fillBlanksQuestion = (
   originalAppSettingData = DEFAULT_QUESTION.data,
   { shouldSave = true } = {}
 ) => {
+  console.log(originalAppSettingData);
+
   // fill question
   cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
   if (question.length) {
@@ -63,13 +65,13 @@ describe('Fill in the Blanks', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
 
-    cy.switchQuestionType(QUESTION_TYPES.FILL_BLANKS);
+    cy.switchQuestionType(QuestionType.FILL_BLANKS);
 
     // empty text
     const new1 = { ...newFillBlanksData, text: '' };
@@ -102,8 +104,8 @@ describe('Fill in the Blanks', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
-          context: CONTEXTS.BUILDER,
+          permission: PermissionLevel.Admin,
+          context: Context.Builder,
         },
       });
       cy.visit('/');
@@ -117,7 +119,7 @@ describe('Fill in the Blanks', () => {
         .should('have.value', data.question);
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        QUESTION_TYPES.FILL_BLANKS
+        QuestionType.FILL_BLANKS
       );
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')

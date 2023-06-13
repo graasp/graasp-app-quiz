@@ -1,7 +1,7 @@
 import { getSettingsByName } from '../../../../src/components/context/utilities';
 import {
   APP_SETTING_NAMES,
-  QUESTION_TYPES,
+  QuestionType,
 } from '../../../../src/config/constants';
 import {
   buildAnalyticsDetailedChartCy,
@@ -34,12 +34,14 @@ describe('Analytics Detailed', () => {
         .click();
 
       switch (q.data.type) {
-        case QUESTION_TYPES.FILL_BLANKS:
+        case QuestionType.FILL_BLANKS:
           q.data.text
             .match(ANSWER_REGEXP)
             .map((word, idx) => {
+              // todo: use id instead of label
               return {
                 label: `Question answer frequency blank ${idx + 1}`,
+                id: `Question answer frequency blank ${idx + 1}`,
               };
             })
             .forEach((qLabel, idx, labels) => {
@@ -60,9 +62,9 @@ describe('Analytics Detailed', () => {
               verifySelectedMenu(idx, labels);
             });
           break;
-        case QUESTION_TYPES.SLIDER:
-        case QUESTION_TYPES.TEXT_INPUT:
-        case QUESTION_TYPES.MULTIPLE_CHOICES:
+        case QuestionType.SLIDER:
+        case QuestionType.TEXT_INPUT:
+        case QuestionType.MULTIPLE_CHOICES:
           // go to chart
           cy.get(
             dataCyWrapper(
@@ -82,7 +84,13 @@ describe('Analytics Detailed', () => {
             .should('have.text', `Answers distribution -${q.data.question}`);
 
           // verify the correct menu is selected
-          verifySelectedMenu(0, [{ label: 'Question answer frequency' }]);
+          // todo: use id instead of label
+          verifySelectedMenu(0, [
+            {
+              label: 'Question answer frequency',
+              id: 'Question answer frequency',
+            },
+          ]);
           break;
         default:
           throw new Error('Unknown question type, test should fail');

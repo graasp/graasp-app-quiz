@@ -1,8 +1,6 @@
-import {
-  DEFAULT_QUESTION_TYPE,
-  PERMISSION_LEVELS,
-} from '../../../../src/config/constants';
-import { CONTEXTS } from '../../../../src/config/contexts';
+import { Context, PermissionLevel } from '@graasp/sdk';
+
+import { DEFAULT_QUESTION_TYPE } from '../../../../src/config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -23,8 +21,8 @@ describe('Create View', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -48,8 +46,8 @@ describe('Create View', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
-          context: CONTEXTS.BUILDER,
+          permission: PermissionLevel.Admin,
+          context: Context.Builder,
         },
       });
       cy.visit('/');

@@ -1,8 +1,6 @@
-import {
-  APP_SETTING_NAMES,
-  PERMISSION_LEVELS,
-} from '../../../src/config/constants';
-import { CONTEXTS } from '../../../src/config/contexts';
+import { Context, PermissionLevel } from '@graasp/sdk';
+
+import { APP_SETTING_NAMES } from '../../../src/config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   ANALYTICS_CONTAINER_CY,
@@ -28,8 +26,8 @@ describe('Admin View', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -58,8 +56,8 @@ describe('Admin View', () => {
         appData: APP_DATA_FEW_QUESTIONS_LOT_USERS,
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
@@ -70,7 +68,7 @@ describe('Admin View', () => {
       (s) => s.name === APP_SETTING_NAMES.QUESTION
     ).forEach((s, idx) =>
       cy
-        .get(dataCyWrapper(buildTableByQuestionCy(s.data.question)))
+        .get(dataCyWrapper(buildTableByQuestionCy(s.id)))
         .should('have.text', APP_SETTINGS_FEW_QUESTIONS[idx].data.question)
     );
   });

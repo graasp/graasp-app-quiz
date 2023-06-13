@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -8,31 +8,33 @@ import {
   Typography,
 } from '@mui/material';
 
-import {
-  DEFAULT_QUESTION_VALUES,
-  QUESTION_TYPES,
-} from '../../config/constants';
+import { convertJs } from '@graasp/sdk';
+
+import { DEFAULT_QUESTION_VALUES, QuestionType } from '../../config/constants';
 import {
   SLIDER_CY,
   SLIDER_MAX_FIELD_CY,
   SLIDER_MIN_FIELD_CY,
 } from '../../config/selectors';
+import { SliderAppSettingDataRecord } from '../types/types';
 
-const Slider = ({ data, onChangeData }) => {
+type Props = {
+  data: SliderAppSettingDataRecord;
+  onChangeData: (d: SliderAppSettingDataRecord) => void;
+};
+
+const Slider = ({ data, onChangeData }: Props) => {
   const { t } = useTranslation();
 
   const values = useMemo(() => {
-    return {
-      ...DEFAULT_QUESTION_VALUES[QUESTION_TYPES.SLIDER],
-      ...data,
-    };
+    return DEFAULT_QUESTION_VALUES[QuestionType.SLIDER].merge(data);
   }, [data]);
 
   const middleValue = (values.max - values.min) / 2;
 
   return (
-    <div align="center">
-      <Grid container direction="column" align="left">
+    <div>
+      <Grid container direction="column">
         <Grid item sx={{ pb: 2 }}>
           <Typography variant="body1">
             {t('Slide the cursor to the correct value')}
@@ -46,7 +48,7 @@ const Slider = ({ data, onChangeData }) => {
             min={values.min}
             max={values.max}
             onChange={(_, value) => {
-              onChangeData({ value });
+              onChangeData(convertJs({ value }));
             }}
           />
         </Grid>
@@ -60,7 +62,7 @@ const Slider = ({ data, onChangeData }) => {
                 variant="outlined"
                 type="number"
                 onChange={(t) => {
-                  onChangeData({ min: parseInt(t.target.value) });
+                  onChangeData(convertJs({ min: parseInt(t.target.value) }));
                 }}
               />
             </Grid>
@@ -73,7 +75,7 @@ const Slider = ({ data, onChangeData }) => {
                 variant="outlined"
                 type="number"
                 onChange={(t) => {
-                  onChangeData({ max: parseInt(t.target.value) });
+                  onChangeData(convertJs({ max: parseInt(t.target.value) }));
                 }}
               />
             </Grid>

@@ -1,5 +1,3 @@
-import clonedeep from 'lodash.clonedeep';
-
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,35 +23,46 @@ import {
   buildMultipleChoiceAnswerCy,
   buildMultipleChoiceDeleteAnswerButtonCy,
 } from '../../config/selectors';
+import { MultipleChoicesAppSettingDataRecord } from '../types/types';
 
-const MultipleChoices = ({ choices, setChoices }) => {
+type Props = {
+  choices: MultipleChoicesAppSettingDataRecord['choices'];
+  setChoices: (d: MultipleChoicesAppSettingDataRecord['choices']) => void;
+};
+
+const MultipleChoices = ({
+  choices = DEFAULT_QUESTION.data.choices,
+  setChoices,
+}: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const handleAnswerCorrectnessChange = (index, e) => {
-    let newChoices = clonedeep(choices);
-    newChoices[index] = { ...choices[index], isCorrect: e.target.checked };
-    setChoices(newChoices);
+  const handleAnswerCorrectnessChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const d = choices.setIn([index, 'isCorrect'], e.target.checked);
+    setChoices(d);
   };
 
-  const handleChoiceChange = (index, e) => {
-    let newChoices = clonedeep(choices);
-    newChoices[index] = { ...choices[index], value: e.target.value };
-    setChoices(newChoices);
+  const handleChoiceChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const d = choices.setIn([index, 'value'], e.target.value);
+    setChoices(d);
   };
 
   const addAnswer = () => {
-    setChoices([...choices, DEFAULT_CHOICE]);
+    setChoices(choices.push(DEFAULT_CHOICE));
   };
 
-  const onDelete = (index) => () => {
+  const onDelete = (index: number) => () => {
     // delete only possible if there's at least three choices
-    if (choices.length <= 2) {
+    if (choices.size <= 2) {
       return;
     }
 
-    let newChoices = clonedeep(choices);
-    newChoices.splice(index, 1);
-    setChoices(newChoices);
+    setChoices(choices.delete(index));
   };
 
   return (
@@ -71,7 +80,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
             alignItems="center"
             sx={{ pb: 2 }}
           >
-            <Grid item variant="outlined" xs={11}>
+            <Grid item xs={11}>
               <FormControl variant="outlined" fullWidth>
                 <InputLabel>{t('Answer nb', { nb: readableIndex })}</InputLabel>
                 <OutlinedInput
@@ -84,6 +93,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
                   endAdornment={
                     <InputAdornment position="end">
                       <FormControlLabel
+                        label=""
                         control={
                           <Checkbox
                             className={
@@ -108,7 +118,7 @@ const MultipleChoices = ({ choices, setChoices }) => {
                 <IconButton
                   data-cy={buildMultipleChoiceDeleteAnswerButtonCy(index)}
                   type="button"
-                  disabled={choices.length <= 2}
+                  disabled={choices.size <= 2}
                   onClick={onDelete(index)}
                 >
                   <CloseIcon />
@@ -127,10 +137,6 @@ const MultipleChoices = ({ choices, setChoices }) => {
       </Button>
     </>
   );
-};
-
-MultipleChoices.defaultProps = {
-  choices: DEFAULT_QUESTION.data.choices,
 };
 
 export default MultipleChoices;

@@ -13,7 +13,7 @@ import {
   defaultSettings,
   hoverData,
 } from '../../../utils/plotUtils';
-import { computeCorrectness, getDataWithId } from '../../context/utilities';
+import { computeCorrectness, getQuestionById } from '../../context/utilities';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -45,11 +45,11 @@ const CorrectResponsesPercentage = ({
   const chartData = useMemo(() => {
     return order.reduce(
       (acc, qId, idx) => {
-        const question = getDataWithId(questions, qId);
+        const question = getQuestionById(questions, qId);
         const responses = responsesByQId.get(qId);
         const nbCorrect = responses.reduce(
           (acc, next) =>
-            computeCorrectness(next.data, question.data) ? acc + 1 : acc,
+            computeCorrectness(question.data, next.data) ? acc + 1 : acc,
           0
         );
 
@@ -103,7 +103,7 @@ const CorrectResponsesPercentage = ({
             maxValueY: 1.1,
           }),
           xaxis: {
-            range: [-0.2, order.length - 0.8], // Make range a bit bigger at beginning and end, to fully display dot
+            range: [-0.2, order.size - 0.8], // Make range a bit bigger at beginning and end, to fully display dot
           },
         }}
         config={defaultSettings('Quiz_correct_response_percentage')}

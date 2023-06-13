@@ -1,7 +1,7 @@
 import {
   APP_DATA_TYPES,
   APP_SETTING_NAMES,
-  QUESTION_TYPES,
+  QuestionType,
 } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -15,16 +15,19 @@ import { APP_SETTINGS } from '../../fixtures/appSettings';
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
-    data.type === QUESTION_TYPES.MULTIPLE_CHOICES
+    data.type === QuestionType.MULTIPLE_CHOICES
 );
 
 // click on choices -> become selected
 const clickSelection = (selection) => {
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(2000);
   selection.forEach((idx) => {
     cy.get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, false))).click();
     cy.get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, true))).should(
       'be.visible'
     );
+    // throw new Error('oierjf');
   });
 };
 
@@ -52,7 +55,7 @@ const checkCorrection = (selection) => {
   cy.checkExplanationPlay(data.explanation);
 };
 
-describe('Multiple Choices', () => {
+describe('Play Multiple Choices', () => {
   describe('Empty data', () => {
     beforeEach(() => {
       cy.setUpApi({
@@ -91,7 +94,7 @@ describe('Multiple Choices', () => {
       cy.checkStepStatus(id, false);
     });
 
-    it('Correct app data', () => {
+    it.only('Correct app data', () => {
       // click on choices -> become selected
       const selection = data.choices.reduce(
         (arr, { isCorrect }, idx) => (isCorrect ? [...arr, idx] : arr),

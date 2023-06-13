@@ -1,8 +1,9 @@
-const { defineConfig } = require('cypress');
+import { defineConfig } from 'cypress';
 
-module.exports = defineConfig({
+export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('@cypress/code-coverage/task')(on, config);
       // include any other plugin code...
 
@@ -14,5 +15,8 @@ module.exports = defineConfig({
   },
   env: {
     REACT_APP_GRAASP_DOMAIN: process.env.REACT_APP_GRAASP_DOMAIN,
+    REACT_APP_API_HOST: process.env.REACT_APP_API_HOST,
+    REACT_APP_ENABLE_MOCK_API: process.env.REACT_APP_ENABLE_MOCK_API,
+    REACT_APP_GRAASP_APP_KEY: process.env.REACT_APP_GRAASP_APP_KEY,
   },
 });

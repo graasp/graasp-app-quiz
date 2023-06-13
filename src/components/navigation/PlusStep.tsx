@@ -1,8 +1,7 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Fab, Step, StepLabel } from '@mui/material';
+import { Fab, FabProps, Step, StepLabel } from '@mui/material';
 
 import { QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME } from '../../config/selectors';
 
@@ -12,7 +11,9 @@ const buttonStyle = {
   width: '23px',
 };
 
-const PlusStep = ({ onClick }) => {
+type Props = { onClick: FabProps['onClick'] };
+
+const PlusStep = ({ onClick }: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -25,7 +26,6 @@ const PlusStep = ({ onClick }) => {
             justify-content="center"
             style={buttonStyle}
             onClick={onClick}
-            align="center"
           >
             <AddIcon />
           </Fab>

@@ -41,7 +41,7 @@ const AnswersDistributionTextInput = ({
             hoverText: [...acc.hoverText, text],
             barColors: [
               ...acc.barColors,
-              computeCorrectness(list.get(0).data, question.data)
+              computeCorrectness(question.data, list.get(0).data)
                 ? theme.palette.success.main
                 : theme.palette.primary.main,
             ],

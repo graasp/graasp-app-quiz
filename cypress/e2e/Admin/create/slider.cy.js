@@ -1,11 +1,11 @@
+import { Context, PermissionLevel } from '@graasp/sdk';
+
 import {
   APP_SETTING_NAMES,
   DEFAULT_QUESTION,
   FAILURE_MESSAGES,
-  PERMISSION_LEVELS,
-  QUESTION_TYPES,
+  QuestionType,
 } from '../../../../src/config/constants';
-import { CONTEXTS } from '../../../../src/config/contexts';
 import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -33,7 +33,7 @@ const newSliderData = {
 
 const { data, id } = APP_SETTINGS.find(
   ({ name, data }) =>
-    name === APP_SETTING_NAMES.QUESTION && data.type === QUESTION_TYPES.SLIDER
+    name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.SLIDER
 );
 
 const fillSliderQuestion = (
@@ -80,13 +80,13 @@ describe('Slider', () => {
         appSettings: [],
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
       },
     });
     cy.visit('/');
 
-    cy.switchQuestionType(QUESTION_TYPES.SLIDER);
+    cy.switchQuestionType(QuestionType.SLIDER);
 
     // empty min
     const new1 = { ...newSliderData, min: null };
@@ -121,8 +121,8 @@ describe('Slider', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
-          permission: PERMISSION_LEVELS.ADMIN,
-          context: CONTEXTS.BUILDER,
+          permission: PermissionLevel.Admin,
+          context: Context.Builder,
         },
       });
       cy.visit('/');
@@ -136,7 +136,7 @@ describe('Slider', () => {
         .should('have.value', data.question);
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        QUESTION_TYPES.SLIDER
+        QuestionType.SLIDER
       );
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')

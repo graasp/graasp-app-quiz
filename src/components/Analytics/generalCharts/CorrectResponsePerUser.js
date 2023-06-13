@@ -46,13 +46,13 @@ const CorrectResponsePerUser = ({
 
   const chartData = useMemo(
     () =>
-      Array.from(responses?.groupBy((response) => response.memberId)).reduce(
+      Array.from(responses?.groupBy((response) => response.member.id)).reduce(
         (acc, [id, list]) => {
           const nbCorrect = list.reduce(
             (acc, next) =>
               computeCorrectness(
-                next.data,
-                questionsById?.get(next.data.questionId)?.first()?.data
+                questionsById?.get(next.data.questionId)?.first()?.data,
+                next.data
               )
                 ? acc + 1
                 : acc,

@@ -1,7 +1,5 @@
-import { buildDatabase } from '@graasp/apps-query-client';
+import { Context, PermissionLevel } from '@graasp/sdk';
 
-import { PERMISSION_LEVELS } from '../../src/config/constants';
-import { CONTEXTS } from '../../src/config/contexts';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   EXPLANATION_CY,
@@ -13,6 +11,7 @@ import {
   buildQuestionTypeOption,
   dataCyWrapper,
 } from '../../src/config/selectors';
+import { item as MOCK_ITEM } from '../../src/data/db';
 import { MEMBERS } from '../fixtures/members';
 
 Cypress.Commands.add(
@@ -20,10 +19,11 @@ Cypress.Commands.add(
   ({ database = {}, appContext, members = MEMBERS } = {}) => {
     // mock api and database
     Cypress.on('window:before:load', (win) => {
-      win.database = buildDatabase({
+      win.database = {
+        items: [MOCK_ITEM],
         members: Object.values(members),
         ...database,
-      });
+      };
       win.appContext = appContext;
     });
   }
@@ -86,8 +86,8 @@ Cypress.Commands.add(
         appData: app_data,
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
       },
       members,
     });
@@ -98,6 +98,7 @@ Cypress.Commands.add(
 
     // TODO Cypress doesn't wait long enough, and the members are not fully retrieved, but it freeze the
     //  render like that, and thus the AutoScrollablePanel is not fully initialized
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000);
   }
 );
@@ -111,8 +112,8 @@ Cypress.Commands.add(
         appData: app_data,
       },
       appContext: {
-        permission: PERMISSION_LEVELS.ADMIN,
-        context: CONTEXTS.BUILDER,
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
       },
       members,
     });
@@ -137,6 +138,7 @@ Cypress.Commands.add(
 
     // TODO Cypress doesn't wait long enough, and the members are not fully retrieved, but it freeze the
     //  render like that, and thus the AutoScrollablePanel is not fully initialized
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000);
     // navigate to the table by user
     cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_USER_BUTTON_CY)).click();

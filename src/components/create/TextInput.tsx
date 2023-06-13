@@ -1,11 +1,13 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TextField } from '@mui/material';
 
 import { TEXT_INPUT_FIELD_CY } from '../../config/selectors';
 
-const TextInput = ({ text, onChangeData }) => {
+type Props = { text: string; onChangeData: (s: string) => void };
+
+const TextInput = ({ text, onChangeData }: Props) => {
   const { t } = useTranslation();
 
   const value = useMemo(() => text ?? '', [text]);

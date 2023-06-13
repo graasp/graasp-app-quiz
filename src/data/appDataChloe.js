@@ -1,7 +1,9 @@
+const item = { id: 'mock-item-id' };
+const member = { id: 'mock-member-id-8' };
 export const appDataChloe = [
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-05-07T09:15:22.357Z',
     updatedAt: '2022-05-07T09:15:22.357Z',
@@ -12,8 +14,8 @@ export const appDataChloe = [
     id: '36',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-08-02T08:13:18.125Z',
     updatedAt: '2022-08-02T08:13:18.125Z',
@@ -24,8 +26,8 @@ export const appDataChloe = [
     id: '39',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-10-05T14:21:32.321Z',
     updatedAt: '2022-10-05T14:21:32.321Z',
@@ -36,8 +38,8 @@ export const appDataChloe = [
     id: '42',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-10-05T15:22:11.387Z',
     updatedAt: '2022-10-05T15:22:11.387Z',
@@ -48,8 +50,8 @@ export const appDataChloe = [
     id: '45',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-10-01T14:20:50.195Z',
     updatedAt: '2022-10-01T14:21:51.741Z',
@@ -60,8 +62,8 @@ export const appDataChloe = [
     id: '48',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-05-07T09:15:22.357Z',
     updatedAt: '2022-05-07T09:15:22.357Z',
@@ -72,8 +74,8 @@ export const appDataChloe = [
     id: '1136',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-08-02T08:13:18.125Z',
     updatedAt: '2022-08-02T08:13:18.125Z',
@@ -84,8 +86,8 @@ export const appDataChloe = [
     id: '1139',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-10-05T14:21:32.321Z',
     updatedAt: '2022-10-05T14:21:32.321Z',
@@ -96,8 +98,8 @@ export const appDataChloe = [
     id: '1142',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-10-05T15:22:11.387Z',
     updatedAt: '2022-10-05T15:22:11.387Z',
@@ -108,8 +110,8 @@ export const appDataChloe = [
     id: '1145',
   },
   {
-    itemId: 'mock-item-id',
-    memberId: 'mock-member-id-8',
+    item,
+    member,
     creator: 'mock-member-id-8',
     createdAt: '2022-10-01T14:20:50.195Z',
     updatedAt: '2022-10-01T14:21:51.741Z',

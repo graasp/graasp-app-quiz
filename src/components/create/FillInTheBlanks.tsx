@@ -1,15 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { TextField, Typography } from '@mui/material';
+import { TextField, TextFieldProps, Typography } from '@mui/material';
 
 import { FILL_BLANKS_PLACEHOLDER_TEXT } from '../../config/constants';
 import { FILL_BLANKS_TEXT_FIELD_CY } from '../../config/selectors';
 
-const FillInTheBlanks = ({ onChangeData, text }) => {
+type Props = { onChangeData: (s: string) => void; text: string };
+
+const FillInTheBlanks = ({ onChangeData, text }: Props) => {
   const { t } = useTranslation();
 
-  const onChange = (e) => {
+  const onChange: TextFieldProps['onChange'] = (e) => {
     onChangeData(e.target.value);
   };
 
