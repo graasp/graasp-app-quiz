@@ -20,7 +20,7 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
     formatSeparator: ',',
   },
-  useSuspense: true,
+  returnNull: false,
 });
 
 export default i18n;

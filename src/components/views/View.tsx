@@ -19,7 +19,6 @@ const View = (): JSX.Element => {
     const lang = context.get('lang');
     i18n.changeLanguage(lang ?? DEFAULT_LANG);
   });
-  console.log('iowjfioweoif');
   const renderContent = () => {
     switch (context.get('context')) {
       case Context.Builder: {
