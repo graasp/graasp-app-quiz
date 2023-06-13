@@ -83,7 +83,7 @@ const PlayMultipleChoices = ({
   return (
     <Grid container direction="column" spacing={2}>
       {choices?.map((choice, idx) => (
-        <Grid item key={choice.value}>
+        <Grid item key={choice.value + '-' + idx}>
           <Button
             onClick={onResponseClick(choice.value)}
             fullWidth

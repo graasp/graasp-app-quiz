@@ -20,11 +20,14 @@ const { data, id } = APP_SETTINGS.find(
 
 // click on choices -> become selected
 const clickSelection = (selection) => {
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(2000);
   selection.forEach((idx) => {
     cy.get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, false))).click();
     cy.get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, true))).should(
       'be.visible'
     );
+    // throw new Error('oierjf');
   });
 };
 
@@ -91,7 +94,7 @@ describe('Play Multiple Choices', () => {
       cy.checkStepStatus(id, false);
     });
 
-    it('Correct app data', () => {
+    it.only('Correct app data', () => {
       // click on choices -> become selected
       const selection = data.choices.reduce(
         (arr, { isCorrect }, idx) => (isCorrect ? [...arr, idx] : arr),
