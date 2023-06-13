@@ -8951,7 +8951,7 @@ __metadata:
     eslint-config-react-app: 7.0.1
     eslint-plugin-cypress: 2.12.1
     eslint-plugin-import: 2.27.5
-    i18next: 21.8.8
+    i18next: 21.10.0
     immutable: 4.3.0
     lodash.clonedeep: 4.5.0
     plotly.js-basic-dist-min: 2.22.0
@@ -9426,12 +9426,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:21.8.8":
-  version: 21.8.8
-  resolution: "i18next@npm:21.8.8"
+"i18next@npm:21.10.0":
+  version: 21.10.0
+  resolution: "i18next@npm:21.10.0"
   dependencies:
     "@babel/runtime": ^7.17.2
-  checksum: 2d5e1868f2830b8487014b7bf8dfa72af13224c0991892d7e0ccc56ceabab35a60ca285a90d2a9f587c49ab67ea8e0d0f032a3fd1d14ff0ecbfd3e1a5c1e8510
+  checksum: f997985e2d4d15a62a0936a82ff6420b97f3f971e776fe685bdd50b4de0cb4dc2198bc75efe6b152844794ebd5040d8060d6d152506a687affad534834836d81
   languageName: node
   linkType: hard
 
