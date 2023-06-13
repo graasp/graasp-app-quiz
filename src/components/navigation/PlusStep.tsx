@@ -22,7 +22,7 @@ const PlusStep = ({ onClick }: Props) => {
         icon={
           <Fab
             color="success"
-            aria-label={t('Add a new question')}
+            aria-label={t('Add a new question') ?? 'Add a new question'}
             justify-content="center"
             style={buttonStyle}
             onClick={onClick}

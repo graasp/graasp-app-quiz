@@ -17,7 +17,7 @@ const TextInput = ({ text, onChangeData }: Props) => {
       data-cy={TEXT_INPUT_FIELD_CY}
       fullWidth
       value={value}
-      placeholder={t('Type your answer')}
+      placeholder={t('Type your answer') ?? 'Type your answer'}
       label={t('Answer')}
       variant="outlined"
       onChange={(t) => onChangeData(t.target.value)}

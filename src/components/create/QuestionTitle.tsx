@@ -20,7 +20,7 @@ const QuestionTitle = ({ title, onChange }: Props) => {
       <TextField
         data-cy={CREATE_QUESTION_TITLE_CY}
         value={text}
-        placeholder={t('Enter Question')}
+        placeholder={t('Enter Question') ?? 'Enter Question'}
         label={t('Question')}
         variant="outlined"
         fullWidth
