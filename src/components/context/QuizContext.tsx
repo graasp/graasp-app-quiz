@@ -77,11 +77,24 @@ export const QuizProvider = ({ children }: Props) => {
     }
   };
 
-  const addQuestion = () => {
+  const addQuestion = async () => {
     // setting the current idx to -1 will display a mock question structure
-    setCurrentIdx(-1);
+    //setCurrentIdx(-1);
+    const newOrder = order.toJS();
+    const defaultData = DEFAULT_QUESTION.data as QuestionDataRecord;
+    const { id: newAppDataId } = await postAppSettingAsync({
+        data: defaultData.toJS(),
+        name: APP_SETTING_NAMES.QUESTION,
+      });
+    newOrder.splice(currentIdx, 0, newAppDataId);
+    if (orderSetting) {
+      patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
+    }
+    //setCurrentIdxBounded(currentIdx + 1);
+    setCurrentQuestion(DEFAULT_QUESTION);
   };
 
+  // Saves Data of current question in db and adds its id to order list (at the end)
   const saveQuestion = async (newData: QuestionDataRecord) => {
     // add new question
     if (!currentQuestion?.id) {
