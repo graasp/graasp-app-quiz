@@ -51,6 +51,8 @@ export const QuizProvider = ({ children }: Props) => {
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionDataAppSettingRecord>(DEFAULT_QUESTION);
 
+  const defaultData = DEFAULT_QUESTION.data as QuestionDataRecord;
+
   const setCurrentIdxBounded = (newIdx: number) => {
     const computedIdx = Math.min(Math.max(0, newIdx), order.size - 1);
     setCurrentIdx(computedIdx);
@@ -78,7 +80,6 @@ export const QuizProvider = ({ children }: Props) => {
   };
 
   const createNewQuestion = async (callback: (id: string) => void) => {
-    const defaultData = DEFAULT_QUESTION.data as QuestionDataRecord;
     const { id: newAppDataId } = await postAppSettingAsync({
         data: defaultData.toJS(),
         name: APP_SETTING_NAMES.QUESTION,
@@ -96,6 +97,7 @@ export const QuizProvider = ({ children }: Props) => {
         patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
       }
       setCurrentIdx(currentIdx + 1);
+      //saveQuestion(defaultData);
     })
     const newOrder = order.toJS();
     newOrder.splice(currentIdx + 1, 0, "");
@@ -191,7 +193,7 @@ export const QuizProvider = ({ children }: Props) => {
             APP_SETTING_NAMES.QUESTION
           ) as List<QuestionDataAppSettingRecord>)
         : List<QuestionDataAppSettingRecord>();
-
+      console.log(questions);
       return {
         order,
         questions,
