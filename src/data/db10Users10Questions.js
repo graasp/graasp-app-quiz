@@ -48,6 +48,7 @@ const buildDatabase = () => ({
     {
       id: 'id1',
       data: {
+        questionId: 'id1',
         question: 'What is the capital of Australia?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
@@ -63,6 +64,7 @@ const buildDatabase = () => ({
     {
       id: 'id2',
       data: {
+        questionId: 'id2',
         question: 'What is the symbol for potassium on the periodic table?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
@@ -78,6 +80,7 @@ const buildDatabase = () => ({
     {
       id: 'id3',
       data: {
+        questionId: 'id3',
         question: 'How many elements are in the periodic table?',
         type: QuestionType.SLIDER,
         min: 50,
@@ -91,6 +94,7 @@ const buildDatabase = () => ({
     {
       id: 'id4',
       data: {
+        questionId: 'id4',
         question: 'What is the smallest country in the world?',
         type: QuestionType.TEXT_INPUT,
         text: 'Vatican City',
@@ -101,6 +105,7 @@ const buildDatabase = () => ({
     {
       id: 'id5',
       data: {
+        questionId: 'id5',
         question: 'Fill In The Blanks 1',
 
         type: QuestionType.FILL_BLANKS,
@@ -111,6 +116,7 @@ const buildDatabase = () => ({
     {
       id: 'id6',
       data: {
+        questionId: 'id6',
         question: 'What is the largest planet in our solar system?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
@@ -126,6 +132,7 @@ const buildDatabase = () => ({
     {
       id: 'id7',
       data: {
+        questionId: 'id7',
         question: 'How many sides does a hexagon have?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
@@ -141,6 +148,7 @@ const buildDatabase = () => ({
     {
       id: 'id8',
       data: {
+        questionId: 'id8',
         question: 'What is the atomic number of oxygen?',
         type: QuestionType.SLIDER,
         min: 1,
@@ -153,6 +161,7 @@ const buildDatabase = () => ({
     {
       id: 'id9',
       data: {
+        questionId: 'id9',
         question: 'Name one natural satellite of the Earth.',
         type: QuestionType.TEXT_INPUT,
         text: 'Moon',
@@ -163,6 +172,7 @@ const buildDatabase = () => ({
     {
       id: 'id10',
       data: {
+        questionId: 'id10',
         question: 'Fill In The Blanks 2',
         type: QuestionType.FILL_BLANKS,
         text: 'All roads lead to <Rome>, and every journey begins with a single <step>.',

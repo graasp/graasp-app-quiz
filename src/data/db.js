@@ -124,6 +124,7 @@ const buildDatabase = (appContext) => ({
     {
       id: 'id4',
       data: {
+        questionId: 'id4',
         question: 'What is the capital of France?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
@@ -139,6 +140,7 @@ const buildDatabase = (appContext) => ({
     {
       id: 'id5',
       data: {
+        questionId: 'id5',
         question: 'How happy are you?',
         type: QuestionType.SLIDER,
         min: 10,
@@ -151,6 +153,7 @@ const buildDatabase = (appContext) => ({
     {
       id: 'id6',
       data: {
+        questionId: 'id6',
         question: 'What is a baby cat called?',
         type: QuestionType.TEXT_INPUT,
         text: 'kitten',
@@ -160,6 +163,7 @@ const buildDatabase = (appContext) => ({
     {
       id: 'id7',
       data: {
+        questionId: 'id7',
         question: 'Fill In The Blanks',
 
         type: QuestionType.FILL_BLANKS,
