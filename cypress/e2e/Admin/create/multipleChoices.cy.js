@@ -53,7 +53,7 @@ const newMultipleChoiceData = {
   explanation: 'my new explanation',
 };
 
-const fillMultipleChoiceQuestion = (
+export const fillMultipleChoiceQuestion = (
   { choices, question, explanation },
   { shouldSave = true } = {}
 ) => {
