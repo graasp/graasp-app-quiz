@@ -150,5 +150,25 @@ describe('Text Input', () => {
 
       cy.checkExplanationField(newTextInputData.explanation);
     });
+
+    it('Add question', () => {
+      fillTextInputQuestion(newTextInputData);
+
+      // click new question and come back
+      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+
+      //assert.isTrue(APP_SETTINGS.size === 6);
+      // question bar should be updated
+      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+        .should('be.visible')
+        .should('contain', newTextInputData.question);
+
+      cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).should(
+        'have.value',
+        newTextInputData.text
+      );
+
+      cy.checkExplanationField(newTextInputData.explanation);
+    });
   });
 });

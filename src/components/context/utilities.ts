@@ -3,6 +3,8 @@ import { List } from 'immutable';
 import { convertJs } from '@graasp/sdk';
 import { AppDataRecord, AppSettingRecord } from '@graasp/sdk/frontend';
 
+import {v4 as uuidv4} from 'uuid';
+
 import {
   DEFAULT_APP_DATA_VALUES,
   FAILURE_MESSAGES,
@@ -18,6 +20,10 @@ import {
   SliderAppDataDataRecord,
   TextAppDataDataRecord,
 } from '../types/types';
+
+export const generateId = (): string => {
+  return uuidv4();
+}
 
 export const getQuestionById = (
   data: List<QuestionDataAppSettingRecord>,
