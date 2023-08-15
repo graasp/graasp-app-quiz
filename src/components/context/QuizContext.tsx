@@ -101,7 +101,7 @@ export const QuizProvider = ({ children }: Props) => {
       } else {
         patchAppSetting({
           id: orderSetting.id,
-          data: { list: order.splice(currentIdx + 1, 0, newQuestion.id).toJS() },
+          data: { list: order.push(newQuestion.id).toJS() },
         });
       }
       setCurrentIdx(currentIdx + 1);
