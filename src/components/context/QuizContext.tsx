@@ -51,7 +51,6 @@ export const QuizProvider = ({ children }: Props) => {
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionDataAppSettingRecord>(DEFAULT_QUESTION);
 
-  const defaultData = DEFAULT_QUESTION.data as QuestionDataRecord;
 
   const setCurrentIdxBounded = (newIdx: number) => {
     const computedIdx = Math.min(Math.max(0, newIdx), order.size - 1);
@@ -79,54 +78,9 @@ export const QuizProvider = ({ children }: Props) => {
     }
   };
 
-  const createNewQuestion = async (callback: (id: string) => void) => {
-    const { id: newAppDataId } = await postAppSettingAsync({
-        data: defaultData.toJS(),
-        name: APP_SETTING_NAMES.QUESTION,
-    });
-    callback(newAppDataId);
-  }
-
   const addQuestion = () => {
     // setting the current idx to -1 will display a mock question structure
-    //setCurrentIdx(-1);
-    /*
-    const newQuestion = await postAppSettingAsync({
-      data: defaultData.toJS(),
-      name: APP_SETTING_NAMES.QUESTION,
-    });
-    // add question in order if new
-    // create order setting if doesn't exist
-    if (!orderSetting) {
-      postAppSetting({
-        name: APP_SETTING_NAMES.QUESTION_LIST,
-        data: { list: [newQuestion.id] },
-      });
-    } else {
-      patchAppSetting({
-        id: orderSetting.id,
-        data: { list: order.splice(currentIdx + 1, 0, newQuestion.id).toJS() },
-      });
-    }
-    setCurrentIdx(currentIdx + 1);
-    */
-    
-    createNewQuestion((id: string) => {
-      const newOrder = order.toJS();
-      newOrder.splice(currentIdx + 1, 0, id);
-      if (orderSetting) {
-        patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
-      }
-      setCurrentIdx(currentIdx + 1);
-      //saveQuestion(defaultData);
-    })
-    
-    const newOrder = order.toJS();
-    newOrder.splice(currentIdx + 1, 0, "");
-    if (orderSetting) {   
-      patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
-    }
-    setCurrentIdxBounded(currentIdx + 1);
+    setCurrentQuestion(DEFAULT_QUESTION);
   };
 
   // Saves Data of current question in db and adds its id to order list (at the end)
@@ -147,10 +101,10 @@ export const QuizProvider = ({ children }: Props) => {
       } else {
         patchAppSetting({
           id: orderSetting.id,
-          data: { list: order.push(newQuestion.id).toJS() },
+          data: { list: order.splice(currentIdx + 1, 0, newQuestion.id).toJS() },
         });
       }
-      setCurrentIdx(order.size);
+      setCurrentIdx(currentIdx + 1);
     }
 
     // update question
@@ -214,7 +168,6 @@ export const QuizProvider = ({ children }: Props) => {
             APP_SETTING_NAMES.QUESTION
           ) as List<QuestionDataAppSettingRecord>)
         : List<QuestionDataAppSettingRecord>();
-      console.log(questions);
       return {
         order,
         questions,
