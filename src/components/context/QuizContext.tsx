@@ -104,7 +104,7 @@ export const QuizProvider = ({ children }: Props) => {
           data: { list: order.push(newQuestion.id).toJS() },
         });
       }
-      setCurrentIdx(currentIdx + 1);
+      setCurrentIdx(order.size);
     }
 
     // update question
