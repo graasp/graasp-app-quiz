@@ -7,6 +7,7 @@ import {
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_DELETE_BUTTON_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
+  QUESTION_STEP_CLASSNAME,
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
@@ -32,7 +33,7 @@ const newMultipleChoiceData = {
 };
 
 describe('Create View', () => {
-  it('Empty data', () => {
+  beforeEach(() => {
     cy.setUpApi({
       database: {
         appSettings: [],
@@ -43,6 +44,9 @@ describe('Create View', () => {
       },
     });
     cy.visit('/');
+  });
+
+  it('Empty data', () => {
     cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
     cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
       .should('be.visible')
@@ -55,6 +59,25 @@ describe('Create View', () => {
     cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).should('be.disabled');
     cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
   });
+
+  it('Add questions with empty data', () => {
+    cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
+    fillMultipleChoiceQuestion(newMultipleChoiceData);
+    cy.wait(2000); // Wait for the new question to appear
+    cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+    cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
+      .should('be.visible')
+      .should('have.value', '');
+    fillMultipleChoiceQuestion(newMultipleChoiceData);
+    cy.wait(2000);
+    cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+    cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
+      .should('be.visible')
+      .should('have.value', '');
+    fillMultipleChoiceQuestion(newMultipleChoiceData);
+    cy.get('html').find(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 3);
+  });
+  
 
   describe('Create View', () => {
     beforeEach(() => {
@@ -127,7 +150,6 @@ describe('Create View', () => {
 
     it('Add question', () => {
       const currentQuestion = APP_SETTINGS[1];
-      const previousLength = APP_SETTINGS.length;
       cy.get(dataCyWrapper(buildQuestionStepCy(currentQuestion.id))).click();
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
@@ -143,19 +165,7 @@ describe('Create View', () => {
       );
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
       fillMultipleChoiceQuestion(newMultipleChoiceData);
-      /*
-      cy.intercept('POST', '/').as('postQuestion')
-      cy.wait('@postQuestion').its('response').then((response) => {
-        const { statusCode, body } = response
-        // confirm the status code is 201
-        cy.expect(statusCode).to.equal(201)
-      })*/
-      /*
-      cy.get('@post').should('have.property', 'status', 201)
-      cy.expect(APP_SETTINGS.length).to.equal(previousLength + 1);
-      const newQuestionId = APP_SETTINGS[previousLength].id;
-      cy.get(dataCyWrapper(buildQuestionStepCy(newQuestionId))).should('be.visible');*/
-      
+      cy.get('html').find(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 5);
     });
   });
 });
