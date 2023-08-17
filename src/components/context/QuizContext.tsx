@@ -41,7 +41,7 @@ export const QuizProvider = ({ children }: Props) => {
   const { mutate: deleteAppSetting } = mutations.useDeleteAppSetting();
   const { mutateAsync: postAppSettingAsync, mutate: postAppSetting } =
     mutations.usePostAppSetting();
-  const { mutate: patchAppSetting } = mutations.usePatchAppSetting();
+  const { mutateAsync: patchAppSetting } = mutations.usePatchAppSetting();
   // current question idx
   // -1 if we are adding a new question
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -50,6 +50,7 @@ export const QuizProvider = ({ children }: Props) => {
   const [order, setOrder] = useState<List<string>>(List());
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionDataAppSettingRecord>(DEFAULT_QUESTION);
+
 
   const setCurrentIdxBounded = (newIdx: number) => {
     const computedIdx = Math.min(Math.max(0, newIdx), order.size - 1);
@@ -82,6 +83,7 @@ export const QuizProvider = ({ children }: Props) => {
     setCurrentIdx(-1);
   };
 
+  // Saves Data of current question in db and adds its id to order list (at the end)
   const saveQuestion = async (newData: QuestionDataRecord) => {
     // add new question
     if (!currentQuestion?.id) {
@@ -99,7 +101,7 @@ export const QuizProvider = ({ children }: Props) => {
       } else {
         patchAppSetting({
           id: orderSetting.id,
-          data: { list: order.push(newQuestion.id) },
+          data: { list: order.push(newQuestion.id).toJS() },
         });
       }
       setCurrentIdx(order.size);
@@ -166,7 +168,6 @@ export const QuizProvider = ({ children }: Props) => {
             APP_SETTING_NAMES.QUESTION
           ) as List<QuestionDataAppSettingRecord>)
         : List<QuestionDataAppSettingRecord>();
-
       return {
         order,
         questions,
