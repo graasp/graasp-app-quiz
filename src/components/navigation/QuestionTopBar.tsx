@@ -54,7 +54,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
     return <Skeleton variant="rectangular" width="100%" height={70} />;
   }
 
-  const renderLabel = (questionId: string, index: number) => {
+  const   renderLabel = (questionId: string, index: number) => {
     const q = questions.find((q) => q.data.questionId === questionId);
     if (!q) {
       console.error('question does not exist');

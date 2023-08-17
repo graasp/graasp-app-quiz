@@ -22,7 +22,7 @@ type ContextType = {
   currentQuestion: QuestionDataAppSettingRecord;
   currentIdx: number;
   setCurrentIdx: (idx: number) => void;
-  deleteQuestion: (questionId: string) => () => void;
+  deleteQuestion: (question: QuestionDataAppSettingRecord) => () => void;
   moveToNextQuestion: () => void;
   moveToPreviousQuestion: () => void;
   addQuestion: () => void;
@@ -56,16 +56,16 @@ export const QuizProvider = ({ children }: Props) => {
     setCurrentIdx(computedIdx);
   };
 
-  const deleteQuestion = (questionId: string) => () => {
+  const deleteQuestion = (question: QuestionDataAppSettingRecord) => () => {
     // update list order
     const newOrder = order.toJS();
-    const idx = order.findIndex((id) => id === questionId);
+    const idx = order.findIndex((id) => id === question?.data?.questionId);
     newOrder.splice(idx, 1);
     if (orderSetting) {
       patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
     }
     // delete question
-    deleteAppSetting({ id: questionId });
+    deleteAppSetting({ id: question?.id });
 
     // change current idx
     // go to previous, bound by number of questions
