@@ -10,6 +10,8 @@ export const buildMultipleChoiceAnswerCy = (idx) =>
   `multipleChoiceAnswer-${idx}`;
 export const MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME =
   'multipleChoicesAnswerCorrectness';
+export const QUESTION_STEP_CLASSNAME =
+  'questionStep';
 export const buildMultipleChoiceDeleteAnswerButtonCy = (idx) =>
   `multipleChoiceDeleteAnswerButton-${idx}`;
 export const CREATE_VIEW_SAVE_BUTTON_CY = 'createViewSaveButton';

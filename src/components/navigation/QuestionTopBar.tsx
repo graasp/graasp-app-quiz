@@ -23,6 +23,7 @@ import {
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
+  QUESTION_STEP_CLASSNAME,
   buildQuestionStepCy,
 } from '../../config/selectors';
 import { QuizContext } from '../context/QuizContext';
@@ -128,7 +129,9 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
           sx={{ pb: 3 }}
         >
           {order?.map((qId: string, index: number) => (
-            <Step key={qId} data-cy={buildQuestionStepCy(qId)}>
+            <Step key={qId} data-cy={buildQuestionStepCy(qId)} className={
+              QUESTION_STEP_CLASSNAME
+            }>
               {renderLabel(qId, index)}
             </Step>
           ))}
