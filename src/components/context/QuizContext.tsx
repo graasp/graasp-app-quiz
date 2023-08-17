@@ -14,7 +14,7 @@ import {
   QuestionDataRecord,
   QuestionListTypeRecord,
 } from '../types/types';
-import { getSettingsByName } from './utilities';
+import { generateId, getSettingsByName } from './utilities';
 
 type ContextType = {
   order: List<string>;
@@ -85,8 +85,10 @@ export const QuizProvider = ({ children }: Props) => {
   const saveQuestion = async (newData: QuestionDataRecord) => {
     // add new question
     if (!currentQuestion?.id) {
-      const newQuestion = await postAppSettingAsync({
-        data: newData.toJS(),
+      const newQuestionId = generateId();
+      const newQidComponent = { questionId: newQuestionId };
+      await postAppSettingAsync({
+        data: {...newQidComponent, ...newData.toJS()},
         name: APP_SETTING_NAMES.QUESTION,
       });
       // add question in order if new
@@ -94,12 +96,12 @@ export const QuizProvider = ({ children }: Props) => {
       if (!orderSetting) {
         postAppSetting({
           name: APP_SETTING_NAMES.QUESTION_LIST,
-          data: { list: [newQuestion.id] },
+          data: { list: [newQuestionId] },
         });
       } else {
         patchAppSetting({
           id: orderSetting.id,
-          data: { list: order.push(newQuestion.id) },
+          data: { list: order.push(newQuestionId) },
         });
       }
       setCurrentIdx(order.size);
@@ -152,7 +154,7 @@ export const QuizProvider = ({ children }: Props) => {
         currentIdx !== -1 &&
         currentIdx < order.size
       ) {
-        newValue = questions.find(({ id }) => id === order.get(currentIdx));
+        newValue = questions.find((q) => q.data.questionId === order.get(currentIdx));
       }
       setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
     }
