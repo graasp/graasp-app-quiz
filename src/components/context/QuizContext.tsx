@@ -80,7 +80,7 @@ export const QuizProvider = ({ children }: Props) => {
 
   const addQuestion = () => {
     // setting the current idx to -1 will display a mock question structure
-    setCurrentQuestion(DEFAULT_QUESTION);
+    setCurrentIdx(-1);
   };
 
   // Saves Data of current question in db and adds its id to order list (at the end)

@@ -60,7 +60,8 @@ describe('Create View', () => {
     cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
   });
 
-  it('Add questions with empty data', () => {
+  it('Add questions from empty quiz', () => {
+    // Add three questions and make sure they are added to the QuestionTopBar
     cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
     fillMultipleChoiceQuestion(newMultipleChoiceData);
     cy.wait(2000); // Wait for the new question to appear
@@ -75,6 +76,8 @@ describe('Create View', () => {
       .should('be.visible')
       .should('have.value', '');
     fillMultipleChoiceQuestion(newMultipleChoiceData);
+    // Verify the questions are added to the order list by checking the number of
+    // question nodes in the QuestionTopBar, as we cannot check the app settings directly
     cy.get('html').find(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 3);
   });
   
@@ -148,7 +151,7 @@ describe('Create View', () => {
       cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
     });
 
-    it('Add question', () => {
+    it('Add question from existing quiz', () => {
       const currentQuestion = APP_SETTINGS[1];
       cy.get(dataCyWrapper(buildQuestionStepCy(currentQuestion.id))).click();
       // click new question and come back
