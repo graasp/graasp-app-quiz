@@ -33,6 +33,7 @@ import {
   getQuestionById,
 } from '../context/utilities';
 import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 type Props = {
   additionalSteps?: JSX.Element;
@@ -46,6 +47,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
     setCurrentIdx,
     moveToPreviousQuestion,
     order,
+    setOrder,
     moveToNextQuestion,
   } = useContext(QuizContext);
   const context = useLocalContext();
@@ -102,6 +104,19 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
     );
   };
 
+  // Function to update list on drop
+  const handleDrop = (droppedItem: any) => {
+    // Ignore drop outside droppable container
+    if (!droppedItem.destination) return;
+    const updatedList = [...order];
+    // Remove dragged item
+    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
+    // Add dropped item
+    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
+    // Update State
+    setOrder(List(updatedList));
+  };
+
   return (
     <Grid
       container
@@ -121,22 +136,43 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
         </Button>
       </Grid>
       <Grid item>
-        <Stepper
-          data-cy={QUESTION_BAR_CY}
-          nonLinear
-          alternativeLabel
-          activeStep={currentIdx}
-          sx={{ pb: 3 }}
-        >
-          {order?.map((qId: string, index: number) => (
-            <Step key={qId} data-cy={buildQuestionStepCy(qId)} className={
-              QUESTION_STEP_CLASSNAME
-            }>
-              {renderLabel(qId, index)}
-            </Step>
-          ))}
-          {additionalSteps}
-        </Stepper>
+        <DragDropContext onDragEnd={handleDrop}>
+          <Droppable droppableId="list-container">
+            {(provided) => (
+              <div
+                className="list-container"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+              <Stepper
+                data-cy={QUESTION_BAR_CY}
+                className="question-container"
+                nonLinear
+                alternativeLabel
+                activeStep={currentIdx}
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                sx={{ pb: 3 }}
+              >
+                {order?.map((qId: string, index: number) => (
+                  <Draggable key={qId} draggableId={qId} index={index}>
+                    {(provided) => (
+                      <Step key={qId} data-cy={buildQuestionStepCy(qId)} className={
+                        QUESTION_STEP_CLASSNAME
+                      } ref={provided.innerRef}
+                      {...provided.dragHandleProps}
+                      {...provided.draggableProps}>
+                        {renderLabel(qId, index)}
+                      </Step>
+                    )}
+                  </Draggable>
+                ))}
+                {additionalSteps}
+                </Stepper>
+                </div>
+                )}
+          </Droppable>
+        </DragDropContext>
       </Grid>
       <Grid item>
         <Button

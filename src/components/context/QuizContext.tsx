@@ -18,6 +18,7 @@ import { getSettingsByName } from './utilities';
 
 type ContextType = {
   order: List<string>;
+  setOrder: (order: List<string>) => void;
   questions: List<QuestionDataAppSettingRecord>;
   currentQuestion: QuestionDataAppSettingRecord;
   currentIdx: number;
@@ -170,6 +171,7 @@ export const QuizProvider = ({ children }: Props) => {
         : List<QuestionDataAppSettingRecord>();
       return {
         order,
+        setOrder,
         questions,
         currentQuestion,
         currentIdx,

@@ -7,10 +7,10 @@ import {
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_DELETE_BUTTON_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
-  QUESTION_STEP_CLASSNAME,
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
+  QUESTION_STEP_CLASSNAME,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
@@ -80,7 +80,6 @@ describe('Create View', () => {
     // question nodes in the QuestionTopBar, as we cannot check the app settings directly
     cy.get('html').find(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 3);
   });
-  
 
   describe('Create View', () => {
     beforeEach(() => {
@@ -168,7 +167,9 @@ describe('Create View', () => {
       );
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
       fillMultipleChoiceQuestion(newMultipleChoiceData);
-      cy.get('html').find(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 5);
+      cy.get('html')
+        .find(`.${QUESTION_STEP_CLASSNAME}`)
+        .should('have.length', 5);
     });
   });
 });
