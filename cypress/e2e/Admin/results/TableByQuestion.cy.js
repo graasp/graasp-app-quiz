@@ -204,9 +204,9 @@ describe('Table by Question', () => {
             })
             .click();
 
-            // testing the moving tables and the left navigation is flacky
-            // this test at least test it doesn't crash
-          });
+          // testing the moving tables and the left navigation is flacky
+          // this test at least test it doesn't crash
+        });
     }
   });
 });
