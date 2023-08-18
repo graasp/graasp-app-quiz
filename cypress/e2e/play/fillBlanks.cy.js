@@ -76,7 +76,7 @@ describe('Play Fill In The Blanks', () => {
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
     });
 
-    it.only('Start with empty app data', () => {
+    it('Start with empty app data', () => {
       cy.get(dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)).should(
         'contain',
         data.question

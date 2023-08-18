@@ -17,7 +17,6 @@ import {
   buildTableByUserTableBodyCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import theme from '../../../../src/layout/theme';
 import {
   Order,
   comparatorArrayByElemName,
@@ -34,7 +33,6 @@ import {
 import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { USER_RESPONSES } from '../../../fixtures/tableByUserResponses';
 import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
-import { hexToRGB } from '../../../utils/color';
 
 describe('Table by User', () => {
   /**
@@ -161,8 +159,6 @@ describe('Table by User', () => {
       MEMBERS_RESULT_TABLES
     );
 
-    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
-
     const { id: fstUserId } = getUserNamesFromAppData(
       APP_DATA_LOT_QUESTIONS_LOT_USERS
     )[0];
@@ -198,8 +194,10 @@ describe('Table by User', () => {
             .click();
 
           cy.get(
-            dataCyWrapper(buildAutoScrollableMenuLinkCy(questionsNames[i].id))
-          ).should('have.css', 'border-color', rgbBorderColor);
+            dataCyWrapper(
+              buildAutoScrollableMenuLinkCy(questionsNames[i].id, true)
+            )
+          ).should('be.visible');
 
           // assert that the correct table is visible
           // This test doesn't work for now, cypress seems to prevent the document.scrollIntoView behaviour

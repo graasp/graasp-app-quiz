@@ -18,7 +18,6 @@ import {
   buildTableByQuestionUserHeaderCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import theme from '../../../../src/layout/theme';
 import {
   APP_DATA_FEW_QUESTIONS_FEW_USERS,
   APP_DATA_FEW_QUESTIONS_LOT_USERS,
@@ -27,7 +26,6 @@ import { APP_SETTINGS_FEW_QUESTIONS } from '../../../fixtures/appSettings';
 import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { RESPONSES } from '../../../fixtures/tableByQuestionsResponses';
 import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
-import { hexToRGB } from '../../../utils/color';
 
 describe('Table by Question', () => {
   it('Table by Question no app data', () => {
@@ -174,8 +172,6 @@ describe('Table by Question', () => {
       MEMBERS_RESULT_TABLES
     );
 
-    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
-
     const fstQuestionId = getSettingsByName(
       APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
@@ -208,10 +204,8 @@ describe('Table by Question', () => {
             .click();
 
           // SHOULD FIND NAME NOT MEMBER-ID
-          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).should(
-            'have.css',
-            'border-color',
-            rgbBorderColor
+          cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id, true))).should(
+            'be.visible'
           );
 
           // assert that the correct table is visible

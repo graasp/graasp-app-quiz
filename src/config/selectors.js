@@ -10,8 +10,7 @@ export const buildMultipleChoiceAnswerCy = (idx) =>
   `multipleChoiceAnswer-${idx}`;
 export const MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME =
   'multipleChoicesAnswerCorrectness';
-export const QUESTION_STEP_CLASSNAME =
-  'questionStep';
+export const QUESTION_STEP_CLASSNAME = 'questionStep';
 export const buildMultipleChoiceDeleteAnswerButtonCy = (idx) =>
   `multipleChoiceDeleteAnswerButton-${idx}`;
 export const CREATE_VIEW_SAVE_BUTTON_CY = 'createViewSaveButton';
@@ -61,8 +60,8 @@ export const TABLE_BY_QUESTION_ANSWER_DATA_CY = 'tableByQuestionAnswerData';
 export const TABLE_BY_QUESTION_DATE_DATA_CY = 'tableByQuestionDateData';
 export const TABLE_BY_QUESTION_CORRECT_ICON_CY = 'tableByQuestionCorrectIcon';
 export const TABLE_BY_QUESTION_ENTRY_CY = 'tableByQuestionEntry';
-export const buildAutoScrollableMenuLinkCy = (label) =>
-  `autoScrollableMenuLink-${label}`;
+export const buildAutoScrollableMenuLinkCy = (label, isHighlighted) =>
+  `autoScrollableMenuLink-${label}${isHighlighted ? '-active' : ''}`;
 export const AUTO_SCROLLABLE_MENU_LINK_LIST_CY = 'autoScrollableMenuLinkList';
 export const RESULT_TABLES_TAB_CONTAINERS_CY = 'resultTablesTabContainers';
 export const RESULT_TABLES_RESULT_BY_QUESTION_BUTTON_CY =
