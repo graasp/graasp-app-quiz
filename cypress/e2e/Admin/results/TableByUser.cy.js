@@ -199,10 +199,9 @@ describe('Table by User', () => {
             )
           ).should('be.visible');
 
-          // assert that the correct table is visible
-          // This test doesn't work for now, cypress seems to prevent the document.scrollIntoView behaviour
-          // comment for now
-          //cy.get(dataCyWrapper(buildTableByQuestionCy(questions[i]))).should('be.visible');
+    
+            // testing the moving tables and the left navigation is flacky
+            // this test at least test it doesn't crash    
         });
     }
   });
