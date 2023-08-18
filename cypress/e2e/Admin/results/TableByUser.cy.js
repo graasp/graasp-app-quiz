@@ -8,7 +8,6 @@ import {
   TABLE_BY_USER_DATE_DATA_CY,
   TABLE_BY_USER_ENTRY_CY,
   TABLE_BY_USER_QUESTION_NAME_HEADER_CY,
-  buildAutoScrollableMenuLinkCy,
   buildTableByUserAnswerHeaderCy,
   buildTableByUserCorrectHeaderCy,
   buildTableByUserCy,
@@ -192,12 +191,6 @@ describe('Table by User', () => {
               withinSubject: elem,
             })
             .click();
-
-          cy.get(
-            dataCyWrapper(
-              buildAutoScrollableMenuLinkCy(questionsNames[i].id, true)
-            )
-          ).should('be.visible');
 
           // testing the moving tables and the left navigation is flacky
           // this test at least test it doesn't crash

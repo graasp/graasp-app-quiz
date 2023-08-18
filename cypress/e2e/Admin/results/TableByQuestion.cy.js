@@ -9,14 +9,12 @@ import {
   TABLE_BY_QUESTION_DATE_DATA_CY,
   TABLE_BY_QUESTION_ENTRY_CY,
   TABLE_BY_QUESTION_USER_ID_HEADER_CY,
-  buildAutoScrollableMenuLinkCy,
   buildTableByQuestionAnswerHeaderCy,
   buildTableByQuestionCorrectHeaderCy,
   buildTableByQuestionCy,
   buildTableByQuestionDateHeaderCy,
   buildTableByQuestionTableBodyCy,
   buildTableByQuestionUserHeaderCy,
-  buildTableByUserCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import {

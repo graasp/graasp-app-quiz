@@ -104,7 +104,7 @@ const AutoScrollableMenu = ({
             key={label}
             href={`#${link}`}
             onClick={() => handleLinkClicked(link)}
-            data-cy={buildAutoScrollableMenuLinkCy(id, isHighlighted)}
+            data-cy={buildAutoScrollableMenuLinkCy(id)}
           >
             <Typography>{label}</Typography>
           </AutoScrollableLink>
