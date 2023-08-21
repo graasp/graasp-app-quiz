@@ -29,7 +29,7 @@ export const getQuestionById = (
   data: List<QuestionDataAppSettingRecord>,
   id: string
 ) => {
-  return data?.filter((d) => d.data.questionId === id)?.first();
+  return data.find((d) => d.data.questionId === id);
 };
 
 export const getSettingsByName = (
