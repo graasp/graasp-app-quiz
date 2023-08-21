@@ -40,7 +40,7 @@ describe('Play View', () => {
       cy.visit('/');
     });
 
-    it.only('Navigation', () => {
+    it('Navigation', () => {
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
       cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
 

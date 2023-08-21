@@ -6,8 +6,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@graasp/apps-query-client": "2.0.0-rc.1",
-    "@graasp/sdk": "1.0.0",
+    "@graasp/apps-query-client": "2.0.1",
+    "@graasp/sdk": "1.2.1",
     "@mui/icons-material": "5.11.16",
     "@mui/material": "^5.13.5",
     "@mui/utils": "5.13.6",
@@ -16,7 +16,7 @@
     "@tanstack/react-query": "4.29.15",
     "@tanstack/react-query-devtools": "4.29.15",
     "i18next": "22.5.1",
-    "immutable": "4.3.0",
+    "immutable": "4.3.2",
     "lodash.clonedeep": "4.5.0",
     "plotly.js-basic-dist-min": "2.24.2",
     "prop-types": "15.8.1",
@@ -45,7 +45,7 @@
     "build:local": "env-cmd -f ./.env.local yarn build",
     "build:dev": "env-cmd -f ./.env.dev yarn build",
     "build:prod": "env-cmd -f ./.env.prod yarn build",
-    "cypress:open": "env-cmd -f ./.env.local cypress open",
+    "cypress:open": "env-cmd -f ./.env.test cypress open",
     "cypress:run": "env-cmd -f ./.env.test cypress run --headless --browser chrome --spec \"cypress/**/*.cy.js\"",
     "release:first": "standard-version -a --first-release",
     "release:minor": "standard-version -a --release-as minor",
@@ -88,6 +88,9 @@
     "prettier": "2.8.8",
     "standard-version": "9.5.0",
     "typescript": "5.1.6"
+  },
+  "resolutions": {
+    "immutable": "4.3.2"
   },
   "packageManager": "yarn@3.6.0"
 }
