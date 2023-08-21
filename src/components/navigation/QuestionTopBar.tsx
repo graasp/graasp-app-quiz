@@ -57,7 +57,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
   }
 
   const   renderLabel = (questionId: string, index: number) => {
-    const q = questions.find((q) => q.data.questionId === questionId);
+    const q = getQuestionById(questions, questionId);
     if (!q) {
       console.error('question does not exist');
       return null;
