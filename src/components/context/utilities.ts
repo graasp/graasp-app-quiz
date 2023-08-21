@@ -32,6 +32,13 @@ export const getQuestionById = (
   return data?.filter((d) => d.data.questionId === id)?.first();
 };
 
+export const getQuestionId = (
+  data: List<QuestionDataAppSettingRecord>,
+  questionId: string
+) => {
+  return getQuestionById(data, questionId)?.id;
+};
+
 export const getSettingsByName = (
   data: List<AppSettingRecord> = List(),
   name: string

@@ -117,14 +117,14 @@ const buildDatabase = (appContext) => ({
     {
       id: 'question-list',
       data: {
-        list: ['id7', 'id5', 'id6', 'id4'],
+        list: ['id71', 'id51', 'id61', 'id41'],
       },
       name: APP_SETTING_NAMES.QUESTION_LIST,
     },
     {
       id: 'id4',
       data: {
-        questionId: 'id4',
+        questionId: 'id41',
         question: 'What is the capital of France?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
@@ -140,7 +140,7 @@ const buildDatabase = (appContext) => ({
     {
       id: 'id5',
       data: {
-        questionId: 'id5',
+        questionId: 'id51',
         question: 'How happy are you?',
         type: QuestionType.SLIDER,
         min: 10,
@@ -153,7 +153,7 @@ const buildDatabase = (appContext) => ({
     {
       id: 'id6',
       data: {
-        questionId: 'id6',
+        questionId: 'id61',
         question: 'What is a baby cat called?',
         type: QuestionType.TEXT_INPUT,
         text: 'kitten',
@@ -163,7 +163,7 @@ const buildDatabase = (appContext) => ({
     {
       id: 'id7',
       data: {
-        questionId: 'id7',
+        questionId: 'id71',
         question: 'Fill In The Blanks',
 
         type: QuestionType.FILL_BLANKS,
