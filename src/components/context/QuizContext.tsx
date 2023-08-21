@@ -89,7 +89,7 @@ export const QuizProvider = ({ children }: Props) => {
     if (!currentQuestion?.id) {
       const newQuestionId = generateId();
       await postAppSettingAsync({
-        data: { questionId: newQuestionId, ...newData.toJS()},
+        data: { ...newData.toJS(), questionId: newQuestionId },
         name: APP_SETTING_NAMES.QUESTION,
       });
       // add question in order if new
