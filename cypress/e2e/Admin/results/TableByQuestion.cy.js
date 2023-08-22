@@ -65,7 +65,9 @@ describe('Table by Question', () => {
       testTableContent(s.data.questionId, s.data.question, true);
 
       // sort descending
-      cy.get(dataCyWrapper(buildTableByQuestionUserHeaderCy(s.data.questionId))).click();
+      cy.get(
+        dataCyWrapper(buildTableByQuestionUserHeaderCy(s.data.questionId))
+      ).click();
 
       // test header
       testTableHeader(s.data.questionId, 'sorted descending');
@@ -89,8 +91,9 @@ describe('Table by Question', () => {
       APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      return APP_SETTINGS_FEW_QUESTIONS.find((el) => el.data.questionId === elem).data
-        .question;
+      return APP_SETTINGS_FEW_QUESTIONS.find(
+        (el) => el.data.questionId === elem
+      ).data.question;
     });
 
     cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
@@ -151,7 +154,9 @@ describe('Table by Question', () => {
       APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      const e = APP_SETTINGS_FEW_QUESTIONS.find((el) => el.data.questionId === elem);
+      const e = APP_SETTINGS_FEW_QUESTIONS.find(
+        (el) => el.data.questionId === elem
+      );
       return {
         label: e.data.question,
         id: e.data.questionId,
