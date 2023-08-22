@@ -87,7 +87,7 @@ describe('Slider', () => {
     const appData = {
       id: 'app-data-id',
       data: {
-        questionId: id,
+        questionId: data.questionId,
         value: 30,
       },
     };

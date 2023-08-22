@@ -121,7 +121,7 @@ describe('Play Text Input', () => {
     const appData = {
       id: 'app-data-id',
       data: {
-        questionId: id,
+        questionId: data.questionId,
         text: 'my answer',
       },
     };
