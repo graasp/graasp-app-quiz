@@ -54,23 +54,23 @@ describe('Table by Question', () => {
     APP_SETTINGS_FEW_QUESTIONS.filter(
       (s) => s.name === APP_SETTING_NAMES.QUESTION
     ).forEach((s, idx) => {
-      cy.get(dataCyWrapper(buildTableByQuestionCy(s.id))).should(
+      cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.questionId))).should(
         'have.text',
         APP_SETTINGS_FEW_QUESTIONS[idx].data.question
       );
 
       // test header
-      testTableHeader(s.id, 'sorted ascending');
+      testTableHeader(s.data.questionId, 'sorted ascending');
       // test content
-      testTableContent(s.id, s.data.question, true);
+      testTableContent(s.data.questionId, s.data.question, true);
 
       // sort descending
-      cy.get(dataCyWrapper(buildTableByQuestionUserHeaderCy(s.id))).click();
+      cy.get(dataCyWrapper(buildTableByQuestionUserHeaderCy(s.data.questionId))).click();
 
       // test header
-      testTableHeader(s.id, 'sorted descending');
+      testTableHeader(s.data.questionId, 'sorted descending');
       // test content
-      testTableContent(s.id, s.data.question, false);
+      testTableContent(s.data.questionId, s.data.question, false);
     });
   });
 
@@ -89,7 +89,7 @@ describe('Table by Question', () => {
       APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      return APP_SETTINGS_FEW_QUESTIONS.find((el) => el.id === elem).data
+      return APP_SETTINGS_FEW_QUESTIONS.find((el) => el.data.questionId === elem).data
         .question;
     });
 
@@ -151,10 +151,10 @@ describe('Table by Question', () => {
       APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list.map((elem) => {
-      const e = APP_SETTINGS_FEW_QUESTIONS.find((el) => el.id === elem);
+      const e = APP_SETTINGS_FEW_QUESTIONS.find((el) => el.data.questionId === elem);
       return {
         label: e.data.question,
-        id: e.id,
+        id: e.data.questionId,
       };
     });
 

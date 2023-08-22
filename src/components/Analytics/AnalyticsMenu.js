@@ -62,7 +62,7 @@ const AnalyticsMenu = ({ headerElem }) => {
   const [tab, setTab] = useState(0);
 
   const questionById = useMemo(
-    () => questions.groupBy((q) => q.id),
+    () => questions.groupBy((q) => q.data.questionId),
     [questions]
   );
 

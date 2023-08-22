@@ -95,7 +95,7 @@ export const getAppDataByQuestionId = (
   appData: List<AppDataQuestionRecord> = List(),
   question: QuestionDataAppSettingRecord
 ) => {
-  const qId = question.id;
+  const qId = question.data.questionId;
   return (
     appData?.find(({ data }) => data?.questionId === qId) ??
     convertJs({
@@ -112,7 +112,7 @@ export const getQuestionNameFromId = (
   qId: string
 ) => {
   return (
-    appSettings?.find((setting) => setting.id === qId)?.data?.question ?? ''
+    appSettings?.find((setting) => setting.data.questionId === qId)?.data?.question ?? ''
   );
 };
 

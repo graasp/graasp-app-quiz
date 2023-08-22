@@ -73,7 +73,7 @@ const ResultTables = ({ headerElem }) => {
    */
   const extractQuestionData = useCallback(() => {
     return questions
-      .groupBy((q) => q.id)
+      .groupBy((q) => q.data.questionId)
       .map((e) => {
         return e.map((el) => {
           return convertJs({
