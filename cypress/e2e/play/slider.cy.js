@@ -77,7 +77,7 @@ describe('Slider', () => {
       });
 
       // go to another question and comeback, data should have been saved
-      cy.get(dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[0].id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[0].data.questionId))).click();
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       checkCorrection({ value: 60 });
 
