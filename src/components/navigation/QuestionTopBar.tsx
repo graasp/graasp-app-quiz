@@ -55,6 +55,12 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
   const { data: appData, isLoading } = hooks.useAppData();
   const [dragged, setDragged] = useState(true);
 
+  const itemStyle = {
+    "display": "flex",
+    "font-size": "18px",
+    "flex-direction": "row",
+  };
+
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={70} />;
   }
@@ -92,7 +98,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
       ? {}
       : {
           StepIconComponent: isCorrect ? CheckIcon : CloseIcon,
-          StepIconProps: { color: isCorrect ? 'success' : 'error' },
+          StepIconProps: { color: isCorrect ? 'success' : 'error',sx: { '&:hover': { cursor: 'ew-resize' } } },
         };
 
     return (
@@ -154,6 +160,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
             className="list-container"
             {...provided.droppableProps}
             ref={provided.innerRef}
+            style = {itemStyle}
           >
             {order?.map((qId: string, index: number) => (
               <Draggable key={qId} draggableId={qId} index={index}>
@@ -195,7 +202,43 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
         </Button>
       </Grid>
       <Grid item>
-          {dragged ? renderDndBalls() : renderQuestionBar()}
+      <DragDropContext onDragEnd={handleDrop}>
+      <Droppable droppableId="list-container" direction="horizontal">
+        {(provided) => (
+          <div
+            className="list-container"
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+          >
+          <Stepper
+            data-cy={QUESTION_BAR_CY}
+            className="question-container"
+            nonLinear
+            alternativeLabel
+            activeStep={currentIdx}
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            sx={{ pb: 3 }}
+          >
+            {order?.map((qId: string, index: number) => (
+              <Draggable key={qId} draggableId={qId} index={index}>
+                {(provided) => (
+                  <Step key={qId} data-cy={buildQuestionStepCy(qId)} className={
+                    QUESTION_STEP_CLASSNAME
+                  } ref={provided.innerRef}
+                  {...provided.dragHandleProps}
+                  {...provided.draggableProps}>
+                    {renderLabel(qId, index)}
+                  </Step>
+                )}
+              </Draggable>
+            ))}
+            {additionalSteps}
+            </Stepper>
+            </div>
+            )}
+      </Droppable>
+    </DragDropContext>
       </Grid>
       <Grid item>
         <Button
