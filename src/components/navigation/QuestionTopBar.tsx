@@ -31,7 +31,6 @@ import {
   computeCorrectness,
   getAppDataByQuestionId,
   getQuestionById,
-  getQuestionId,
 } from '../context/utilities';
 import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
 
@@ -130,7 +129,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
           sx={{ pb: 3 }}
         >
           {order?.map((qId: string, index: number) => (
-            <Step key={qId} data-cy={buildQuestionStepCy(getQuestionId(questions, qId))} className={
+            <Step key={qId} data-cy={buildQuestionStepCy(qId)} className={
               QUESTION_STEP_CLASSNAME
             }>
               {renderLabel(qId, index)}

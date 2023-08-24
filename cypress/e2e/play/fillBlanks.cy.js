@@ -16,11 +16,13 @@ import {
 import { splitSentence } from '../../../src/utils/fillInTheBlanks';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
 
-const { data, id } = APP_SETTINGS.find(
+const { data } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
     data.type === QuestionType.FILL_BLANKS
 );
+
+const id = data.questionId;
 
 const { text } = data;
 const { answers, words } = splitSentence(text);

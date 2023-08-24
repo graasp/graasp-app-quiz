@@ -8,10 +8,12 @@ import {
 } from '../../../src/config/selectors';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
 
-const { data, id } = APP_SETTINGS.find(
+const { data } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.SLIDER
 );
+
+const id = data.questionId;
 
 const checkCorrection = (responseData) => {
   // cannot check slider value because we cannot move it

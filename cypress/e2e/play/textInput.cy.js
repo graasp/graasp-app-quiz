@@ -8,10 +8,12 @@ import {
 } from '../../../src/config/selectors';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
 
-const { data, id } = APP_SETTINGS.find(
+const { data } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.TEXT_INPUT
 );
+
+const id = data.questionId;
 
 const checkAnswer = (isCorrect) => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting

@@ -24,11 +24,13 @@ import { APP_SETTINGS } from '../../../fixtures/appSettings';
 
 const t = i18n.t;
 
-const { data, id } = APP_SETTINGS.find(
+const { data } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
     data.type === QuestionType.MULTIPLE_CHOICES
 );
+
+const id = data.questionId;
 
 const newMultipleChoiceData = {
   question: 'new question text',
