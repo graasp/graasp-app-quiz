@@ -52,7 +52,6 @@ export const QuizProvider = ({ children }: Props) => {
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionDataAppSettingRecord>(DEFAULT_QUESTION);
 
-
   const setCurrentIdxBounded = (newIdx: number) => {
     const computedIdx = Math.min(Math.max(0, newIdx), order.size - 1);
     setCurrentIdx(computedIdx);

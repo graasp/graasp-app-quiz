@@ -1,6 +1,7 @@
 import { List } from 'immutable';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 
 import CheckIcon from '@mui/icons-material/Check';
@@ -13,7 +14,6 @@ import {
   StepButton,
   StepLabel,
   Stepper,
-  Fab,
 } from '@mui/material';
 
 import { useLocalContext } from '@graasp/apps-query-client';
@@ -34,7 +34,6 @@ import {
   getQuestionById,
 } from '../context/utilities';
 import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 type Props = {
   additionalSteps?: JSX.Element;
@@ -91,7 +90,10 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
       ? {}
       : {
           StepIconComponent: isCorrect ? CheckIcon : CloseIcon,
-          StepIconProps: { color: isCorrect ? 'success' : 'error',sx: { '&:hover': { cursor: 'ew-resize' } } },
+          StepIconProps: {
+            color: isCorrect ? 'success' : 'error',
+            sx: { '&:hover': { cursor: 'ew-resize' } },
+          },
         };
 
     return (
@@ -137,43 +139,46 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
         </Button>
       </Grid>
       <Grid item>
-      <DragDropContext onDragEnd={handleDrop}>
-      <Droppable droppableId="list-container" direction="horizontal">
-        {(provided) => (
-          <div
-            className="list-container"
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-          <Stepper
-            data-cy={QUESTION_BAR_CY}
-            className="question-container"
-            nonLinear
-            alternativeLabel
-            activeStep={currentIdx}
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            sx={{ pb: 3 }}
-          >
-            {order?.map((qId: string, index: number) => (
-              <Draggable key={qId} draggableId={qId} index={index}>
-                {(provided) => (
-                  <Step key={qId} data-cy={buildQuestionStepCy(qId)} className={
-                    QUESTION_STEP_CLASSNAME
-                  } ref={provided.innerRef}
-                  {...provided.dragHandleProps}
-                  {...provided.draggableProps}>
-                    {renderLabel(qId, index)}
-                  </Step>
-                )}
-              </Draggable>
-            ))}
-            {additionalSteps}
-            </Stepper>
-            </div>
+        <DragDropContext onDragEnd={handleDrop}>
+          <Droppable droppableId="list-container" direction="horizontal">
+            {(provided) => (
+              <div
+                className="list-container"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <Stepper
+                  data-cy={QUESTION_BAR_CY}
+                  nonLinear
+                  alternativeLabel
+                  activeStep={currentIdx}
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  sx={{ pb: 3 }}
+                >
+                  {order?.map((qId: string, index: number) => (
+                    <Draggable key={qId} draggableId={qId} index={index}>
+                      {(provided) => (
+                        <Step
+                          key={qId}
+                          data-cy={buildQuestionStepCy(qId)}
+                          className={QUESTION_STEP_CLASSNAME}
+                          ref={provided.innerRef}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                        >
+                          {renderLabel(qId, index)}
+                        </Step>
+                      )}
+                    </Draggable>
+                  ))}
+                  {additionalSteps}
+                  {provided.placeholder}
+                </Stepper>
+              </div>
             )}
-      </Droppable>
-    </DragDropContext>
+          </Droppable>
+        </DragDropContext>
       </Grid>
       <Grid item>
         <Button

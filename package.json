@@ -42,7 +42,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "prettier:write": "prettier --write '{src,cypress}/**/*.js'",
+    "prettier:write": "prettier --write '{src,cypress}/**/*.{js,jsx,ts,tsx}'",
     "build:local": "env-cmd -f ./.env.local yarn build",
     "build:dev": "env-cmd -f ./.env.dev yarn build",
     "build:prod": "env-cmd -f ./.env.prod yarn build",
