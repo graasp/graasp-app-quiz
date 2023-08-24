@@ -32,7 +32,7 @@ const View = (): JSX.Element => {
         }
       }
       default:
-        return <PlayView />;
+        return <AdminView />;
     }
   };
 
