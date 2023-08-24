@@ -116,7 +116,7 @@ describe('Play Fill In The Blanks', () => {
       id: 'app-data-1',
       type: APP_DATA_TYPES.RESPONSE,
       data: {
-        questionId: data.questionId,
+        questionId: id,
         text,
       },
     });

@@ -124,7 +124,7 @@ describe('Play Multiple Choices', () => {
       id: 'app-data-1',
       type: APP_DATA_TYPES.RESPONSE,
       data: {
-        questionId: data.questionId,
+        questionId: id,
         choices: data.choices.slice(2),
       },
     };
