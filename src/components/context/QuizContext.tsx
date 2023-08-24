@@ -57,16 +57,19 @@ export const QuizProvider = ({ children }: Props) => {
     setCurrentIdx(computedIdx);
   };
 
-  const deleteQuestion = (question: QuestionDataAppSettingRecord) => () => {
+  const deleteQuestion = (question?: QuestionDataAppSettingRecord) => () => {
+    if (!question) {
+      return;
+    }
     // update list order
     const newOrder = order.toJS();
-    const idx = order.findIndex((id) => id === question?.data?.questionId);
+    const idx = order.findIndex((id) => id === question.data.questionId);
     newOrder.splice(idx, 1);
     if (orderSetting) {
       patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
     }
     // delete question
-    deleteAppSetting({ id: question?.id });
+    deleteAppSetting({ id: question.id });
 
     // change current idx
     // go to previous, bound by number of questions
@@ -155,7 +158,8 @@ export const QuizProvider = ({ children }: Props) => {
         currentIdx !== -1 &&
         currentIdx < order.size
       ) {
-        newValue = questions.find(({ data: { questionId } }) => questionId === order.get(currentIdx));
+        const currentQId = order.get(currentIdx);
+        newValue = questions.find(({ data: { questionId } }) => questionId === currentQId);
       }
       setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
     }
