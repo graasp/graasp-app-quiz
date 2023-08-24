@@ -155,7 +155,7 @@ export const QuizProvider = ({ children }: Props) => {
         currentIdx !== -1 &&
         currentIdx < order.size
       ) {
-        newValue = questions.find((q) => q.data.questionId === order.get(currentIdx));
+        newValue = questions.find(({ data: { questionId } }) => questionId === order.get(currentIdx));
       }
       setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
     }
