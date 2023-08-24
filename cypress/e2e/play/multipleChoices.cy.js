@@ -94,7 +94,7 @@ describe('Play Multiple Choices', () => {
       cy.checkStepStatus(id, false);
     });
 
-    it.only('Correct app data', () => {
+    it('Correct app data', () => {
       // click on choices -> become selected
       const selection = data.choices.reduce(
         (arr, { isCorrect }, idx) => (isCorrect ? [...arr, idx] : arr),

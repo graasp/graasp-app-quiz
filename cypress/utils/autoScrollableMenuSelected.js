@@ -2,8 +2,6 @@ import {
   buildAutoScrollableMenuLinkCy,
   dataCyWrapper,
 } from '../../src/config/selectors';
-import theme from '../../src/layout/theme';
-import { hexToRGB } from './color';
 
 /**
  * Helper function, to test that the selected label is correctly selected, and that the others are not selected
@@ -12,21 +10,11 @@ import { hexToRGB } from './color';
  * @param {[{ label: String }]} labels The list of all labels
  */
 export const verifySelectedMenu = (selectedLabelIndex, labels) => {
-  const rgbBorderColor = hexToRGB(theme.palette.primary.main);
-
   labels.forEach(({ id }, index) => {
-    if (selectedLabelIndex === index) {
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).should(
-        'have.css',
-        'border-color',
-        rgbBorderColor
-      );
-    } else {
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).should(
-        'have.css',
-        'border-color',
-        'rgba(0, 0, 0, 0)'
-      );
-    }
+    cy.get(
+      dataCyWrapper(
+        buildAutoScrollableMenuLinkCy(id, selectedLabelIndex === index)
+      )
+    ).should('be.visible');
   });
 };

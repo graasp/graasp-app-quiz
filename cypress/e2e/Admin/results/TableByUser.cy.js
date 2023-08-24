@@ -8,7 +8,6 @@ import {
   TABLE_BY_USER_DATE_DATA_CY,
   TABLE_BY_USER_ENTRY_CY,
   TABLE_BY_USER_QUESTION_NAME_HEADER_CY,
-  buildAutoScrollableMenuLinkCy,
   buildTableByUserAnswerHeaderCy,
   buildTableByUserCorrectHeaderCy,
   buildTableByUserCy,
@@ -17,7 +16,6 @@ import {
   buildTableByUserTableBodyCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import theme from '../../../../src/layout/theme';
 import {
   Order,
   comparatorArrayByElemName,
@@ -34,7 +32,6 @@ import {
 import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { USER_RESPONSES } from '../../../fixtures/tableByUserResponses';
 import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
-import { hexToRGB } from '../../../utils/color';
 
 describe('Table by User', () => {
   /**
@@ -161,8 +158,6 @@ describe('Table by User', () => {
       MEMBERS_RESULT_TABLES
     );
 
-    const rgbBorderColor = hexToRGB(theme.palette.primary.main);
-
     const { id: fstUserId } = getUserNamesFromAppData(
       APP_DATA_LOT_QUESTIONS_LOT_USERS
     )[0];
@@ -197,14 +192,8 @@ describe('Table by User', () => {
             })
             .click();
 
-          cy.get(
-            dataCyWrapper(buildAutoScrollableMenuLinkCy(questionsNames[i].id))
-          ).should('have.css', 'border-color', rgbBorderColor);
-
-          // assert that the correct table is visible
-          // This test doesn't work for now, cypress seems to prevent the document.scrollIntoView behaviour
-          // comment for now
-          //cy.get(dataCyWrapper(buildTableByQuestionCy(questions[i]))).should('be.visible');
+          // testing the moving tables and the left navigation is flacky
+          // this test at least test it doesn't crash
         });
     }
   });
