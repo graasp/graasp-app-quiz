@@ -59,6 +59,7 @@ export const QuizProvider = ({ children }: Props) => {
 
   const deleteQuestion = (question?: QuestionDataAppSettingRecord) => () => {
     if (!question) {
+      console.error("Cannot delete a question that does not exist")
       return;
     }
     // update list order
