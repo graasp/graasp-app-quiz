@@ -1,9 +1,8 @@
 import { List } from 'immutable';
+import { v4 as uuidv4 } from 'uuid';
 
 import { convertJs } from '@graasp/sdk';
 import { AppDataRecord, AppSettingRecord } from '@graasp/sdk/frontend';
-
-import {v4 as uuidv4} from 'uuid';
 
 import {
   DEFAULT_APP_DATA_VALUES,
@@ -23,7 +22,7 @@ import {
 
 export const generateId = (): string => {
   return uuidv4();
-}
+};
 
 export const getQuestionById = (
   data: List<QuestionDataAppSettingRecord>,
@@ -105,7 +104,8 @@ export const getQuestionNameFromId = (
   qId: string
 ) => {
   return (
-    appSettings?.find((setting) => setting.data.questionId === qId)?.data?.question ?? ''
+    appSettings?.find((setting) => setting.data.questionId === qId)?.data
+      ?.question ?? ''
   );
 };
 

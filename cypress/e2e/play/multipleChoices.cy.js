@@ -113,7 +113,9 @@ describe('Play Multiple Choices', () => {
       cy.checkStepStatus(id, true);
 
       // go to another question and comeback, data should have been saved
-      cy.get(dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[1].data.questionId))).click();
+      cy.get(
+        dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[1].data.questionId))
+      ).click();
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       checkCorrection(selection);
     });

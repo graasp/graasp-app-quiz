@@ -139,7 +139,7 @@ describe('Play Fill In The Blanks', () => {
       cy.checkStepStatus(id, true);
 
       // delete one answer
-      cy.get(`[data-id="${answers[0].data.questionId}"]`).click().should('contain', '');
+      cy.get(`[data-id="${answers[0].id}"]`).click().should('contain', '');
     });
 
     it('Show partially correct saved question', () => {

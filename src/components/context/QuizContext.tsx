@@ -51,7 +51,6 @@ export const QuizProvider = ({ children }: Props) => {
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionDataAppSettingRecord>(DEFAULT_QUESTION);
 
-
   const setCurrentIdxBounded = (newIdx: number) => {
     const computedIdx = Math.min(Math.max(0, newIdx), order.size - 1);
     setCurrentIdx(computedIdx);
@@ -59,7 +58,7 @@ export const QuizProvider = ({ children }: Props) => {
 
   const deleteQuestion = (question?: QuestionDataAppSettingRecord) => () => {
     if (!question) {
-      console.error("Cannot delete a question that does not exist")
+      console.error('Cannot delete a question that does not exist');
       return;
     }
     // update list order
@@ -160,7 +159,9 @@ export const QuizProvider = ({ children }: Props) => {
         currentIdx < order.size
       ) {
         const currentQId = order.get(currentIdx);
-        newValue = questions.find(({ data: { questionId } }) => questionId === currentQId);
+        newValue = questions.find(
+          ({ data: { questionId } }) => questionId === currentQId
+        );
       }
       setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
     }
