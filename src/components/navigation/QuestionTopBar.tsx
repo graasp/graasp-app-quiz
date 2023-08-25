@@ -1,7 +1,12 @@
 import { List } from 'immutable';
 
 import { useContext } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 
 import CheckIcon from '@mui/icons-material/Check';
@@ -108,7 +113,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
   };
 
   // Function to update list on drop
-  const handleDrop = (droppedItem: any) => {
+  const handleDrop = (droppedItem: DropResult) => {
     // Ignore drop outside droppable container
     if (!droppedItem.destination) return;
     const updatedList = [...order];
