@@ -75,10 +75,19 @@ const MultipleChoices = ({
         return (
           <Grid
             container
+            direction="column"
+            sx={{ pb: 2 }}
+          >
+            <Grid
+    item
+    xs
+    style={{ display: "flex", justifyContent: "flex-start" }}
+  >
+          <Grid
+            container
             direction="row"
             key={index}
             alignItems="center"
-            sx={{ pb: 2 }}
           >
             <Grid item xs={11}>
               <FormControl variant="outlined" fullWidth>
@@ -126,6 +135,23 @@ const MultipleChoices = ({
               }
             </Grid>
           </Grid>
+          </Grid>
+          <Grid
+    item
+    xs
+    style={{ display: "flex", alignItems: "center" }}
+  >
+          <Button
+          variant="text"
+          onClick={addAnswer}
+          data-cy={index}
+        >
+          <AddIcon fontSize="small" /> <Typography align="center" sx={{ textTransform: 'lowercase' }}>
+        {t('Add Explanation')}
+      </Typography>
+        </Button>
+        </Grid>
+        </Grid>
         );
       })}
       <Button
