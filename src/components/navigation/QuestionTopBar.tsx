@@ -163,8 +163,20 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
                 >
                   {order?.map((qId: string, index: number) => (
                     <Draggable key={qId} draggableId={qId} index={index}>
-                      {(provided) => (
-                        <Step
+                      {(provided) => {
+                        if (index === 0) {
+                          return (<Step
+                          key={qId}
+                          data-cy={buildQuestionStepCy(qId)}
+                          className={QUESTION_STEP_CLASSNAME}
+                          ref={provided.innerRef}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps, disableInteractiveElementBlocking: true}
+                        >
+                          {renderLabel(qId, index)}
+                        </Step>);
+                        } else {
+                          return (<Step
                           key={qId}
                           data-cy={buildQuestionStepCy(qId)}
                           className={QUESTION_STEP_CLASSNAME}
@@ -173,8 +185,10 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
                           {...provided.draggableProps}
                         >
                           {renderLabel(qId, index)}
-                        </Step>
-                      )}
+                        </Step>);
+                        }
+                        
+                      }}
                     </Draggable>
                   ))}
                   {additionalSteps}
