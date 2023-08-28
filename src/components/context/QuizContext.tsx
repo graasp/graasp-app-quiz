@@ -167,6 +167,21 @@ export const QuizProvider = ({ children }: Props) => {
     }
   }, [order, currentIdx, settings]);
 
+  // back track legacy data to match order list
+  useEffect(() => {
+    if (settings) {
+      const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
+      for (const q of questions) {
+        if (!q.data.questionId) {
+          patchAppSetting({
+            id: q.id,
+            data: { ...q.data.toJS(), questionId: q.id },
+          });
+        }
+      }
+    }
+  }, [patchAppSetting, settings]);
+
   const value: ContextType = useMemo(
     () => {
       const questions = settings
