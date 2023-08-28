@@ -128,10 +128,26 @@ const buildDatabase = (appContext) => ({
         question: 'What is the capital of France?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
-          { value: 'London', isCorrect: false, explanation: 'London is the capital of England' },
-          { value: 'Paris', isCorrect: true, explanation: 'Paris is the capital of France' },
-          { value: 'New York', isCorrect: false, explanation: 'New York is not located in France' },
-          { value: 'Tokyo', isCorrect: false, explanation: 'Tokyo is the capital of Japan' },
+          {
+            value: 'London',
+            isCorrect: false,
+            explanation: 'London is the capital of England',
+          },
+          {
+            value: 'Paris',
+            isCorrect: true,
+            explanation: 'Paris is the capital of France',
+          },
+          {
+            value: 'New York',
+            isCorrect: false,
+            explanation: 'New York is not located in France',
+          },
+          {
+            value: 'Tokyo',
+            isCorrect: false,
+            explanation: 'Tokyo is the capital of Japan',
+          },
         ],
         explanation: 'Paris is the capital of France.',
       },

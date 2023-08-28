@@ -73,85 +73,71 @@ const MultipleChoices = ({
       {choices?.map(({ value, isCorrect }, index) => {
         const readableIndex = index + 1;
         return (
-          <Grid
-            container
-            direction="column"
-            sx={{ pb: 2 }}
-          >
+          <Grid container direction="column" sx={{ pb: 2 }}>
             <Grid
-    item
-    xs
-    style={{ display: "flex", justifyContent: "flex-start" }}
-  >
-          <Grid
-            container
-            direction="row"
-            key={index}
-            alignItems="center"
-          >
-            <Grid item xs={11}>
-              <FormControl variant="outlined" fullWidth>
-                <InputLabel>{t('Answer nb', { nb: readableIndex })}</InputLabel>
-                <OutlinedInput
-                  data-cy={buildMultipleChoiceAnswerCy(index)}
-                  type="text"
-                  label={`Answer ${readableIndex}`}
-                  value={value}
-                  placeholder={`Enter Answer ${readableIndex}`}
-                  onChange={(e) => handleChoiceChange(index, e)}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <FormControlLabel
-                        label=""
-                        control={
-                          <Checkbox
-                            className={
-                              MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME
+              item
+              xs
+              style={{ display: 'flex', justifyContent: 'flex-start' }}
+            >
+              <Grid container direction="row" key={index} alignItems="center">
+                <Grid item xs={11}>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel>
+                      {t('Answer nb', { nb: readableIndex })}
+                    </InputLabel>
+                    <OutlinedInput
+                      data-cy={buildMultipleChoiceAnswerCy(index)}
+                      type="text"
+                      label={`Answer ${readableIndex}`}
+                      value={value}
+                      placeholder={`Enter Answer ${readableIndex}`}
+                      onChange={(e) => handleChoiceChange(index, e)}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <FormControlLabel
+                            label=""
+                            control={
+                              <Checkbox
+                                className={
+                                  MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME
+                                }
+                                checked={isCorrect}
+                                onChange={(e) =>
+                                  handleAnswerCorrectnessChange(index, e)
+                                }
+                                edge="end"
+                                sx={{ p: 0 }}
+                              />
                             }
-                            checked={isCorrect}
-                            onChange={(e) =>
-                              handleAnswerCorrectnessChange(index, e)
-                            }
-                            edge="end"
-                            sx={{ p: 0 }}
                           />
-                        }
-                      />
-                    </InputAdornment>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center' }}>
+                  {
+                    <IconButton
+                      data-cy={buildMultipleChoiceDeleteAnswerButtonCy(index)}
+                      type="button"
+                      disabled={choices.size <= 2}
+                      onClick={onDelete(index)}
+                    >
+                      <CloseIcon />
+                    </IconButton>
                   }
-                />
-              </FormControl>
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={1} sx={{ textAlign: 'center' }}>
-              {
-                <IconButton
-                  data-cy={buildMultipleChoiceDeleteAnswerButtonCy(index)}
-                  type="button"
-                  disabled={choices.size <= 2}
-                  onClick={onDelete(index)}
-                >
-                  <CloseIcon />
-                </IconButton>
-              }
+            <Grid item xs style={{ display: 'flex', alignItems: 'center' }}>
+              <Button variant="text" onClick={addAnswer} data-cy={index}>
+                <AddIcon fontSize="small" />{' '}
+                <Typography align="center" sx={{ textTransform: 'lowercase' }}>
+                  {t('Add Explanation')}
+                </Typography>
+              </Button>
             </Grid>
           </Grid>
-          </Grid>
-          <Grid
-    item
-    xs
-    style={{ display: "flex", alignItems: "center" }}
-  >
-          <Button
-          variant="text"
-          onClick={addAnswer}
-          data-cy={index}
-        >
-          <AddIcon fontSize="small" /> <Typography align="center" sx={{ textTransform: 'lowercase' }}>
-        {t('Add Explanation')}
-      </Typography>
-        </Button>
-        </Grid>
-        </Grid>
         );
       })}
       <Button
