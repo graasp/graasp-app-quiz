@@ -56,7 +56,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
   }
 
   const renderLabel = (questionId: string, index: number) => {
-    const q = questions.find(({ id }) => id === questionId);
+    const q = getQuestionById(questions, questionId);
     if (!q) {
       console.error('question does not exist');
       return null;
@@ -129,9 +129,11 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
           sx={{ pb: 3 }}
         >
           {order?.map((qId: string, index: number) => (
-            <Step key={qId} data-cy={buildQuestionStepCy(qId)} className={
-              QUESTION_STEP_CLASSNAME
-            }>
+            <Step
+              key={qId}
+              data-cy={buildQuestionStepCy(qId)}
+              className={QUESTION_STEP_CLASSNAME}
+            >
               {renderLabel(qId, index)}
             </Step>
           ))}

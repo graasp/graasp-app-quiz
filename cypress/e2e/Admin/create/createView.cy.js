@@ -132,13 +132,12 @@ describe('Create View', () => {
 
     it('Delete question', () => {
       const toDelete = APP_SETTINGS[1];
-      cy.get(dataCyWrapper(buildQuestionStepCy(toDelete.id))).click();
+      const id = toDelete.data.questionId;
+      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
       // delete one
       cy.get(dataCyWrapper(CREATE_VIEW_DELETE_BUTTON_CY)).click();
-      cy.get(dataCyWrapper(buildQuestionStepCy(toDelete.id))).should(
-        'not.exist'
-      );
+      cy.get(dataCyWrapper(buildQuestionStepCy(id))).should('not.exist');
 
       // delete all
       for (let i = 0; i < APP_SETTINGS.length - 2; i += 1) {
@@ -152,7 +151,8 @@ describe('Create View', () => {
 
     it('Add question from existing quiz', () => {
       const currentQuestion = APP_SETTINGS[1];
-      cy.get(dataCyWrapper(buildQuestionStepCy(currentQuestion.id))).click();
+      const id = currentQuestion.data.questionId;
+      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
 

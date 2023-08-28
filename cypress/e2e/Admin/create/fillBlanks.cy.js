@@ -27,11 +27,13 @@ const newFillBlanksData = {
   explanation: 'new explanation',
 };
 
-const { data, id } = APP_SETTINGS.find(
+const { data } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
     data.type === QuestionType.FILL_BLANKS
 );
+
+const id = data.questionId;
 
 const fillBlanksQuestion = (
   { text, question, explanation },

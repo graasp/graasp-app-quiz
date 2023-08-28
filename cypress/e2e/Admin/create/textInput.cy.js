@@ -22,10 +22,12 @@ const newTextInputData = {
   explanation: 'my explanation',
 };
 
-const { data, id } = APP_SETTINGS.find(
+const { data } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.TEXT_INPUT
 );
+
+const id = data.questionId;
 
 const fillTextInputQuestion = (
   { text, question, explanation },

@@ -213,7 +213,7 @@ const TableByUser = ({ user, questions, responses, handleQuestionClicked }) => {
                     sx={{ cursor: 'pointer' }}
                     onClick={() =>
                       handleQuestionClicked(
-                        questionByName.get(qName).first().id
+                        questionByName.get(qName).first().data.questionId
                       )
                     }
                     data-cy={TABLE_BY_USER_QUESTION_NAME_HEADER_CY}

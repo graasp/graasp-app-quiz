@@ -12,11 +12,13 @@ import {
 } from '../../../src/config/selectors';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
 
-const { data, id } = APP_SETTINGS.find(
+const { data } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
     data.type === QuestionType.MULTIPLE_CHOICES
 );
+
+const id = data.questionId;
 
 // click on choices -> become selected
 const clickSelection = (selection) => {
@@ -111,7 +113,9 @@ describe('Play Multiple Choices', () => {
       cy.checkStepStatus(id, true);
 
       // go to another question and comeback, data should have been saved
-      cy.get(dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[1].id))).click();
+      cy.get(
+        dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[1].data.questionId))
+      ).click();
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       checkCorrection(selection);
     });
