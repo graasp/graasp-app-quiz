@@ -52,10 +52,10 @@ const buildDatabase = () => ({
         question: 'What is the capital of Australia?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
-          { value: 'Sydney', isCorrect: false },
-          { value: 'Melbourne', isCorrect: false },
-          { value: 'Canberra', isCorrect: true },
-          { value: 'Brisbane', isCorrect: false },
+          { value: 'Sydney', isCorrect: false, explanation: '' },
+          { value: 'Melbourne', isCorrect: false, explanation: '' },
+          { value: 'Canberra', isCorrect: true, explanation: '' },
+          { value: 'Brisbane', isCorrect: false, explanation: '' },
         ],
         explanation: 'Canberra is the capital of Australia.',
       },
@@ -136,7 +136,7 @@ const buildDatabase = () => ({
         question: 'What is the largest planet in our solar system?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
-          { value: 'Jupiter', isCorrect: true },
+          { value: 'Jupiter', isCorrect: true, explanation: '' },
           {
             value: 'Saturn',
             isCorrect: false,
