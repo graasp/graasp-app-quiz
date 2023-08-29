@@ -72,7 +72,7 @@ const MultipleChoices = ({
     const newExplanationList = [...explanationList];
     newExplanationList[index] = false;
     setExplanationList(List(newExplanationList));
-  }
+  };
 
   const onDelete = (index: number) => () => {
     // delete only possible if there's at least three choices
@@ -148,12 +148,20 @@ const MultipleChoices = ({
               </Grid>
             </Grid>
             {explanationList.get(index) ? (
-              <Grid container direction="row" key={index} alignItems="center" sx={{ paddingTop: 2 }}>
-              <Grid item xs={11} style={{ display: 'flex', alignItems: 'center' }}>
-                <FormControl variant="outlined" fullWidth>
-                    <InputLabel>
-                      {t(`Explanation ${readableIndex}`)}
-                    </InputLabel>
+              <Grid
+                container
+                direction="row"
+                key={index}
+                alignItems="center"
+                sx={{ paddingTop: 2 }}
+              >
+                <Grid
+                  item
+                  xs={11}
+                  style={{ display: 'flex', alignItems: 'center' }}
+                >
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel>{t(`Explanation ${readableIndex}`)}</InputLabel>
                     <OutlinedInput
                       type="text"
                       label={`Explanation ${readableIndex}`}
@@ -162,8 +170,8 @@ const MultipleChoices = ({
                       onChange={(e) => handleChoiceChange(index, e)}
                     />
                   </FormControl>
-              </Grid>
-              <Grid item xs={1} sx={{ textAlign: 'center' }}>
+                </Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center' }}>
                   {
                     <IconButton
                       type="button"
@@ -180,6 +188,7 @@ const MultipleChoices = ({
                   variant="text"
                   onClick={() => addExplanation(index)}
                   data-cy={index}
+                  style={{ fontSize: 20 }}
                 >
                   <AddIcon fontSize="small" />{' '}
                   <Typography
@@ -195,11 +204,12 @@ const MultipleChoices = ({
         );
       })}
       <Button
-        variant="text"
+        variant="contained"
+        color="primary"
         onClick={addAnswer}
         data-cy={MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY}
       >
-        <AddIcon fontSize="small" /> {t('Add Answer')}
+        <AddIcon fontSize="small" sx={{ pr: 0.5 }} /> {t('Add Answer')}
       </Button>
     </>
   );
