@@ -34,8 +34,8 @@ export const DEFAULT_QUESTION_VALUES = {
     explanation: '',
     type: QuestionType.MULTIPLE_CHOICES,
     choices: [
-      { value: '', isCorrect: true },
-      { value: '', isCorrect: false },
+      { value: '', isCorrect: true, explanation: '' },
+      { value: '', isCorrect: false, explanation: '' },
     ],
   }),
   [QuestionType.SLIDER]: convertJs({

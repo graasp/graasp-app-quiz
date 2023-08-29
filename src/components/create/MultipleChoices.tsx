@@ -58,6 +58,14 @@ const MultipleChoices = ({
     setChoices(d);
   };
 
+  const handleExplanationChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const d = choices.setIn([index, 'explanation'], e.target.value);
+    setChoices(d);
+  };
+
   const addAnswer = () => {
     setChoices(choices.push(DEFAULT_CHOICE));
   };
@@ -147,7 +155,7 @@ const MultipleChoices = ({
                 </Grid>
               </Grid>
             </Grid>
-            {explanationList.get(index) ? (
+            {(explanationList.get(index) || explanation) ? (
               <Grid
                 container
                 direction="row"
@@ -165,9 +173,9 @@ const MultipleChoices = ({
                     <OutlinedInput
                       type="text"
                       label={`Explanation ${readableIndex}`}
-                      value={explanation ?? ''}
+                      value={explanation}
                       placeholder={`Enter Explanation ${readableIndex}`}
-                      onChange={(e) => handleChoiceChange(index, e)}
+                      onChange={(e) => handleExplanationChange(index, e)}
                     />
                   </FormControl>
                 </Grid>
