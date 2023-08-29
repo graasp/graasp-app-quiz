@@ -68,10 +68,26 @@ const buildDatabase = () => ({
         question: 'What is the symbol for potassium on the periodic table?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
-          { value: 'P', isCorrect: false, explanation: 'P is the symbol for Phosphorus' },
-          { value: 'K', isCorrect: true, explanation: 'K is the symbol for Potassium' },
-          { value: 'N', isCorrect: false, explanation: 'N is the symbol for Nitrogen' },
-          { value: 'O', isCorrect: false, explanation: 'O is the symbol for Oxygen' },
+          {
+            value: 'P',
+            isCorrect: false,
+            explanation: 'P is the symbol for Phosphorus',
+          },
+          {
+            value: 'K',
+            isCorrect: true,
+            explanation: 'K is the symbol for Potassium',
+          },
+          {
+            value: 'N',
+            isCorrect: false,
+            explanation: 'N is the symbol for Nitrogen',
+          },
+          {
+            value: 'O',
+            isCorrect: false,
+            explanation: 'O is the symbol for Oxygen',
+          },
         ],
         explanation: 'The symbol for potassium on the periodic table is K.',
       },
@@ -121,9 +137,21 @@ const buildDatabase = () => ({
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
           { value: 'Jupiter', isCorrect: true },
-          { value: 'Saturn', isCorrect: false, explanation: 'Saturn is not the largest planet in our solar system' },
-          { value: 'Mars', isCorrect: false, explanation: 'Mars is not the largest planet in our solar system' },
-          { value: 'Venus', isCorrect: false, explanation: 'Venus is not the largest planet in our solar system' },
+          {
+            value: 'Saturn',
+            isCorrect: false,
+            explanation: 'Saturn is not the largest planet in our solar system',
+          },
+          {
+            value: 'Mars',
+            isCorrect: false,
+            explanation: 'Mars is not the largest planet in our solar system',
+          },
+          {
+            value: 'Venus',
+            isCorrect: false,
+            explanation: 'Venus is not the largest planet in our solar system',
+          },
         ],
         explanation: 'Jupiter is the largest planet in our solar system.',
       },
@@ -136,10 +164,22 @@ const buildDatabase = () => ({
         question: 'How many sides does a hexagon have?',
         type: QuestionType.MULTIPLE_CHOICES,
         choices: [
-          { value: '4', isCorrect: false, explanation: 'A quadrilateral has 4 sides' },
-          { value: '5', isCorrect: false, explanation: 'A pentagon has 5 sides' },
+          {
+            value: '4',
+            isCorrect: false,
+            explanation: 'A quadrilateral has 4 sides',
+          },
+          {
+            value: '5',
+            isCorrect: false,
+            explanation: 'A pentagon has 5 sides',
+          },
           { value: '6', isCorrect: true, explanation: 'A hexagon has 6 sides' },
-          { value: '7', isCorrect: false, explanation: 'A heptagon has 7 sides' },
+          {
+            value: '7',
+            isCorrect: false,
+            explanation: 'A heptagon has 7 sides',
+          },
         ],
         explanation: 'A hexagon has 6 sides.',
       },

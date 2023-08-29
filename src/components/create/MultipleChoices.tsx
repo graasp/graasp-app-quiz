@@ -1,4 +1,6 @@
-import React from 'react';
+import { List } from 'immutable';
+
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -36,6 +38,10 @@ const MultipleChoices = ({
 }: Props): JSX.Element => {
   const { t } = useTranslation();
 
+  const [explanationList, setExplanationList] = useState<List<boolean>>(
+    List([false, false])
+  );
+
   const handleAnswerCorrectnessChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
@@ -56,6 +62,18 @@ const MultipleChoices = ({
     setChoices(choices.push(DEFAULT_CHOICE));
   };
 
+  const addExplanation = (index: number) => {
+    const newExplanationList = [...explanationList];
+    newExplanationList[index] = true;
+    setExplanationList(List(newExplanationList));
+  };
+
+  const onDeleteExplanation = (index: number) => {
+    const newExplanationList = [...explanationList];
+    newExplanationList[index] = false;
+    setExplanationList(List(newExplanationList));
+  }
+
   const onDelete = (index: number) => () => {
     // delete only possible if there's at least three choices
     if (choices.size <= 2) {
@@ -70,7 +88,7 @@ const MultipleChoices = ({
       <Typography variant="h6" sx={{ pb: 2 }}>
         {t('Answers')}
       </Typography>
-      {choices?.map(({ value, isCorrect }, index) => {
+      {choices?.map(({ value, isCorrect, explanation }, index) => {
         const readableIndex = index + 1;
         return (
           <Grid container direction="column" sx={{ pb: 2 }}>
@@ -129,14 +147,50 @@ const MultipleChoices = ({
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs style={{ display: 'flex', alignItems: 'center' }}>
-              <Button variant="text" onClick={addAnswer} data-cy={index}>
-                <AddIcon fontSize="small" />{' '}
-                <Typography align="center" sx={{ textTransform: 'lowercase' }}>
-                  {t('Add Explanation')}
-                </Typography>
-              </Button>
-            </Grid>
+            {explanationList.get(index) ? (
+              <Grid container direction="row" key={index} alignItems="center" sx={{ paddingTop: 2 }}>
+              <Grid item xs={11} style={{ display: 'flex', alignItems: 'center' }}>
+                <FormControl variant="outlined" fullWidth>
+                    <InputLabel>
+                      {t(`Explanation ${readableIndex}`)}
+                    </InputLabel>
+                    <OutlinedInput
+                      type="text"
+                      label={`Explanation ${readableIndex}`}
+                      value={explanation ?? ''}
+                      placeholder={`Enter Explanation ${readableIndex}`}
+                      onChange={(e) => handleChoiceChange(index, e)}
+                    />
+                  </FormControl>
+              </Grid>
+              <Grid item xs={1} sx={{ textAlign: 'center' }}>
+                  {
+                    <IconButton
+                      type="button"
+                      onClick={() => onDeleteExplanation(index)}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  }
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid item xs style={{ display: 'flex', alignItems: 'center' }}>
+                <Button
+                  variant="text"
+                  onClick={() => addExplanation(index)}
+                  data-cy={index}
+                >
+                  <AddIcon fontSize="small" />{' '}
+                  <Typography
+                    align="center"
+                    sx={{ textTransform: 'lowercase' }}
+                  >
+                    {t('Add Explanation')}
+                  </Typography>
+                </Button>
+              </Grid>
+            )}
           </Grid>
         );
       })}
