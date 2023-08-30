@@ -8,11 +8,17 @@ export const QUESTION_BAR_PREV_CY = 'questionBarPrev';
 export const buildQuestionStepCy = (id) => `questionStep-${id}`;
 export const buildMultipleChoiceAnswerCy = (idx) =>
   `multipleChoiceAnswer-${idx}`;
+export const buildMultipleChoiceAnswerExplanationCy = (idx) =>
+  `multipleChoiceAnswerExplanation-${idx}`;
+export const buildMultipleChoiceAddAnswerExplanationButtonCy = (idx) =>
+  `multipleChoiceAddAnswerExplanationButton-${idx}`;
 export const MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME =
   'multipleChoicesAnswerCorrectness';
 export const QUESTION_STEP_CLASSNAME = 'questionStep';
 export const buildMultipleChoiceDeleteAnswerButtonCy = (idx) =>
   `multipleChoiceDeleteAnswerButton-${idx}`;
+export const buildMultipleChoiceDeleteAnswerExplanationButtonCy = (idx) =>
+  `multipleChoiceDeleteAnswerExplanationButton-${idx}`;
 export const CREATE_VIEW_SAVE_BUTTON_CY = 'createViewSaveButton';
 export const QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME = 'questionBarAddNewButton';
 export const MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY =

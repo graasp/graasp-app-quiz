@@ -22,8 +22,11 @@ import { DEFAULT_CHOICE, DEFAULT_QUESTION } from '../../config/constants';
 import {
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
+  buildMultipleChoiceAddAnswerExplanationButtonCy,
   buildMultipleChoiceAnswerCy,
+  buildMultipleChoiceAnswerExplanationCy,
   buildMultipleChoiceDeleteAnswerButtonCy,
+  buildMultipleChoiceDeleteAnswerExplanationButtonCy,
 } from '../../config/selectors';
 import { MultipleChoicesAppSettingDataRecord } from '../types/types';
 
@@ -181,6 +184,9 @@ const MultipleChoices = ({
                           {t(`Explanation ${readableIndex}`)}
                         </InputLabel>
                         <OutlinedInput
+                          data-cy={buildMultipleChoiceAnswerExplanationCy(
+                            index
+                          )}
                           type="text"
                           label={`Explanation ${readableIndex}`}
                           value={explanation}
@@ -192,6 +198,9 @@ const MultipleChoices = ({
                     <Grid item xs={1} sx={{ textAlign: 'center' }}>
                       {
                         <IconButton
+                          data-cy={buildMultipleChoiceDeleteAnswerExplanationButtonCy(
+                            index
+                          )}
                           type="button"
                           onClick={() => onDeleteExplanation(index)}
                         >
@@ -205,9 +214,11 @@ const MultipleChoices = ({
             ) : (
               <Grid item xs style={{ display: 'flex', alignItems: 'center' }}>
                 <Button
+                  data-cy={buildMultipleChoiceAddAnswerExplanationButtonCy(
+                    index
+                  )}
                   variant="text"
                   onClick={() => addExplanation(index)}
-                  data-cy={index}
                   style={{ fontSize: 20 }}
                 >
                   <AddIcon fontSize="small" />{' '}

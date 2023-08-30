@@ -53,6 +53,9 @@ const checkCorrection = (selection) => {
         expect($el.attr('class').toLowerCase()).to.contain(correction);
       }
     );
+    if (correction === 'error') {
+      cy.get(dataCyWrapper());
+    }
   });
   cy.checkExplanationPlay(data.explanation);
 };

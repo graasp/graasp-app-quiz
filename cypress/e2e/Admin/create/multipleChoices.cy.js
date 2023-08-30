@@ -38,18 +38,22 @@ const newMultipleChoiceData = {
     {
       value: 'new choice 1',
       isCorrect: true,
+      explanation: 'reason 1',
     },
     {
       value: 'new choice 2',
       isCorrect: true,
+      explanation: 'reason 2',
     },
     {
       value: 'new choice 3',
       isCorrect: false,
+      explanation: 'reason 3',
     },
     {
       value: 'new choice 4',
       isCorrect: false,
+      explanation: 'reason 4',
     },
   ],
   explanation: 'my new explanation',
@@ -142,7 +146,7 @@ describe('Multiple Choices', () => {
       ...newMultipleChoiceData,
       choices: [
         ...newMultipleChoiceData.choices,
-        { value: '', isCorrect: true },
+        { value: '', isCorrect: true, explanation: '' },
       ],
     };
     fillMultipleChoiceQuestion(new2, { shouldSave: false });
@@ -155,9 +159,9 @@ describe('Multiple Choices', () => {
     const new3 = {
       ...newMultipleChoiceData,
       choices: [
-        { value: 'choice1', isCorrect: false },
-        { value: 'choice2', isCorrect: false },
-        { value: 'choice2', isCorrect: false },
+        { value: 'choice1', isCorrect: false, explanation: 'reason 1' },
+        { value: 'choice2', isCorrect: false, explanation: 'reason 2' },
+        { value: 'choice2', isCorrect: false, explanation: 'reason 3' },
       ],
     };
     fillMultipleChoiceQuestion(new3, { shouldSave: false });
