@@ -42,7 +42,7 @@ const MultipleChoices = ({
   const { t } = useTranslation();
 
   const [explanationList, setExplanationList] = useState<List<boolean>>(
-    List(choices.map((choice) => (choice.explanation ? true : false)))
+    List(choices.map((choice) => Boolean(choice.explanation)))
   );
 
   const handleAnswerCorrectnessChange = (
