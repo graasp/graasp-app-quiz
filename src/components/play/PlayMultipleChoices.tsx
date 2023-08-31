@@ -3,7 +3,10 @@ import { List } from 'immutable';
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, ButtonProps, Grid, Typography } from '@mui/material';
 
-import { buildMultipleChoicesButtonCy } from '../../config/selectors';
+import {
+  buildMultipleChoiceExplanationPlayCy,
+  buildMultipleChoicesButtonCy,
+} from '../../config/selectors';
 import {
   MultipleChoiceAppDataDataRecord,
   MultipleChoicesAppSettingDataRecord,
@@ -97,7 +100,10 @@ const PlayMultipleChoices = ({
                   <Typography variant="body1">{choice.value}</Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="caption">
+                  <Typography
+                    variant="caption"
+                    data-cy={buildMultipleChoiceExplanationPlayCy(idx)}
+                  >
                     {choice.explanation}
                   </Typography>
                 </Grid>

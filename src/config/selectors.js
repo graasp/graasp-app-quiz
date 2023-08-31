@@ -10,6 +10,8 @@ export const buildMultipleChoiceAnswerCy = (idx) =>
   `multipleChoiceAnswer-${idx}`;
 export const buildMultipleChoiceAnswerExplanationCy = (idx) =>
   `multipleChoiceAnswerExplanation-${idx}`;
+export const buildMultipleChoiceExplanationPlayCy = (idx) =>
+  `multipleChoiceExplanationPlay-${idx}`;
 export const buildMultipleChoiceAddAnswerExplanationButtonCy = (idx) =>
   `multipleChoiceAddAnswerExplanationButton-${idx}`;
 export const MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME =

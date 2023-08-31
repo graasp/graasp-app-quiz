@@ -6,6 +6,7 @@ import {
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
+  buildMultipleChoiceExplanationPlayCy,
   buildMultipleChoicesButtonCy,
   buildQuestionStepCy,
   dataCyWrapper,
@@ -37,7 +38,7 @@ const clickSelection = (selection) => {
 const checkCorrection = (selection) => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1500);
-  data.choices.forEach(({ isCorrect }, idx) => {
+  data.choices.forEach(({ isCorrect, explanation }, idx) => {
     const wasSelected = selection.includes(idx);
     const correction = (() => {
       if (wasSelected && isCorrect) {
@@ -53,8 +54,14 @@ const checkCorrection = (selection) => {
         expect($el.attr('class').toLowerCase()).to.contain(correction);
       }
     );
-    if (correction === 'error') {
-      cy.get(dataCyWrapper());
+    if (wasSelected && !isCorrect) {
+      cy.get(
+        dataCyWrapper(buildMultipleChoicesButtonCy(idx, wasSelected))
+      ).should('contain', explanation);
+    } else if (!wasSelected) {
+      cy.get(dataCyWrapper(buildMultipleChoiceExplanationPlayCy(idx))).should(
+        'not.exist'
+      );
     }
   });
   cy.checkExplanationPlay(data.explanation);
