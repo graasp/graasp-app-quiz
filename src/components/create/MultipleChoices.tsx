@@ -207,7 +207,7 @@ const MultipleChoices = ({
                   onClick={() => addExplanation(index)}
                   style={{ fontSize: 20 }}
                 >
-                  <AddIcon fontSize="small" />{' '}
+                  <AddIcon fontSize="small" />
                   <Typography
                     align="center"
                     sx={{ textTransform: 'lowercase' }}
