@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -161,32 +161,27 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
                   ref={provided.innerRef}
                   sx={{ pb: 3 }}
                 >
-                  {order?.map((qId: string, index: number) =>
-                    index === 0 ? (
-                      <Step
-                        key={qId}
-                        data-cy={buildQuestionStepCy(qId)}
-                        className={QUESTION_STEP_CLASSNAME}
-                      >
-                        {renderLabel(qId, index)}
-                      </Step>
-                    ) : (
-                      <Draggable key={qId} draggableId={qId} index={index} disableInteractiveElementBlocking={false}>
-                        {(provided, snapshot) => (
-                          <Step
-                            key={qId}
-                            data-cy={buildQuestionStepCy(qId)}
-                            className={QUESTION_STEP_CLASSNAME}
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}
-                          >
-                            {renderLabel(qId, index)}
-                          </Step>
-                        )}
-                      </Draggable>
-                    )
-                  )}
+                  {order?.map((qId: string, index: number) => (
+                    <Draggable
+                      key={qId}
+                      draggableId={qId}
+                      index={index}
+                      disableInteractiveElementBlocking={true}
+                    >
+                      {(provided) => (
+                        <Step
+                          key={qId}
+                          data-cy={buildQuestionStepCy(qId)}
+                          className={QUESTION_STEP_CLASSNAME}
+                          ref={provided.innerRef}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                        >
+                          {renderLabel(qId, index)}
+                        </Step>
+                      )}
+                    </Draggable>
+                  ))}
                   {additionalSteps}
                   {provided.placeholder}
                 </Stepper>
