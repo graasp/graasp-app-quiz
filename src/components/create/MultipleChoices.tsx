@@ -162,56 +162,39 @@ const MultipleChoices = ({
               </Grid>
             </Grid>
             {explanationList.get(index) || explanation ? (
-              <Grid container direction="column" key={index}>
-                <Grid item sx={{ paddingTop: 1.5 }}>
-                  <Typography variant="subtitle2" mb={1}>
-                    {t(
-                      'Type here an explanation on the correctness of this answer'
-                    )}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Grid
-                    container
-                    direction="row"
-                    key={index}
-                    alignItems="center"
-                  >
-                    <Grid
-                      item
-                      xs={11}
-                      style={{ display: 'flex', alignItems: 'center' }}
-                    >
-                      <FormControl variant="outlined" fullWidth>
-                        <InputLabel>
-                          {t(`Explanation ${readableIndex}`)}
-                        </InputLabel>
-                        <OutlinedInput
-                          data-cy={buildMultipleChoiceAnswerExplanationCy(
-                            index
-                          )}
-                          type="text"
-                          label={`Explanation ${readableIndex}`}
-                          value={explanation}
-                          placeholder={`Enter Explanation ${readableIndex}`}
-                          onChange={(e) => handleExplanationChange(index, e)}
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={1} sx={{ textAlign: 'center' }}>
-                      {
-                        <IconButton
-                          data-cy={buildMultipleChoiceDeleteAnswerExplanationButtonCy(
-                            index
-                          )}
-                          type="button"
-                          onClick={onDeleteExplanation(index)}
-                        >
-                          <CloseIcon />
-                        </IconButton>
+              <Grid container direction="row" key={index} alignItems="center">
+                <Grid
+                  item
+                  xs={11}
+                  style={{ display: 'flex', alignItems: 'center' }}
+                  sx={{ py: 2 }}
+                >
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel>{t(`Explanation ${readableIndex}`)}</InputLabel>
+                    <OutlinedInput
+                      data-cy={buildMultipleChoiceAnswerExplanationCy(index)}
+                      type="text"
+                      label={`Explanation ${readableIndex}`}
+                      value={explanation}
+                      placeholder={
+                        'Type here an explanation on the correctness of this answer'
                       }
-                    </Grid>
-                  </Grid>
+                      onChange={(e) => handleExplanationChange(index, e)}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center' }}>
+                  {
+                    <IconButton
+                      data-cy={buildMultipleChoiceDeleteAnswerExplanationButtonCy(
+                        index
+                      )}
+                      type="button"
+                      onClick={onDeleteExplanation(index)}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  }
                 </Grid>
               </Grid>
             ) : (
