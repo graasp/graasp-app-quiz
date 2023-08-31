@@ -15,8 +15,11 @@ import {
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   QUESTION_BAR_PREV_CY,
+  buildMultipleChoiceAddAnswerExplanationButtonCy,
   buildMultipleChoiceAnswerCy,
+  buildMultipleChoiceAnswerExplanationCy,
   buildMultipleChoiceDeleteAnswerButtonCy,
+  buildMultipleChoiceDeleteAnswerExplanationButtonCy,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
@@ -176,6 +179,55 @@ describe('Multiple Choices', () => {
     cy.checkExplanationField(newMultipleChoiceData.explanation);
   });
 
+  it('Add explanations', () => {
+    cy.setUpApi({
+      database: {
+        appSettings: [],
+      },
+      appContext: {
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
+      },
+    });
+    cy.visit('/');
+
+    fillMultipleChoiceQuestion(newMultipleChoiceData);
+
+    newMultipleChoiceData.choices.forEach(({ explanation }, idx) => {
+      cy.get(
+        dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+      ).should('be.visible');
+      cy.get(
+        dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+      ).click();
+      cy.get(
+        `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} input`
+      )
+        .should('be.visible')
+        .should('have.value', '');
+      if (explanation.length) {
+        cy.get(
+          `${dataCyWrapper(
+            buildMultipleChoiceAnswerExplanationCy(idx)
+          )} input[type="text"]`
+        ).type(explanation);
+        cy.get(
+          dataCyWrapper(buildMultipleChoiceDeleteAnswerExplanationButtonCy(idx))
+        ).should('be.visible');
+        cy.get(
+          dataCyWrapper(buildMultipleChoiceDeleteAnswerExplanationButtonCy(idx))
+        ).click();
+        cy.wait(2000);
+        cy.get(
+          `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} input`
+        ).should('not.exist');
+        cy.get(
+          dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+        ).should('be.visible');
+      }
+    });
+  });
+
   describe('Display saved settings', () => {
     beforeEach(() => {
       cy.setUpApi({
@@ -202,10 +254,15 @@ describe('Multiple Choices', () => {
         .should('be.visible')
         .should('contain', data.question);
 
-      data.choices.forEach(({ value, isCorrect }, idx) => {
+      data.choices.forEach(({ value, isCorrect, explanation }, idx) => {
         cy.get(
           `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input`
         ).should('have.value', value);
+        cy.get(
+          `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} input`
+        )
+          .should('be.visible')
+          .should('have.value', explanation);
         cy.get(
           `${dataCyWrapper(
             buildMultipleChoiceAnswerCy(idx)

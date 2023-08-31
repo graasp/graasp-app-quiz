@@ -42,7 +42,7 @@ const MultipleChoices = ({
   const { t } = useTranslation();
 
   const [explanationList, setExplanationList] = useState<List<boolean>>(
-    List([false, false])
+    List(choices.map((choice) => (choice.explanation ? true : false)))
   );
 
   const handleAnswerCorrectnessChange = (
@@ -71,6 +71,7 @@ const MultipleChoices = ({
 
   const addAnswer = () => {
     setChoices(choices.push(DEFAULT_CHOICE));
+    setExplanationList(explanationList.push(false));
   };
 
   const addExplanation = (index: number) => {
@@ -79,10 +80,12 @@ const MultipleChoices = ({
     setExplanationList(List(newExplanationList));
   };
 
-  const onDeleteExplanation = (index: number) => {
+  const onDeleteExplanation = (index: number) => () => {
     const newExplanationList = [...explanationList];
     newExplanationList[index] = false;
     setExplanationList(List(newExplanationList));
+    const newExplanation = choices.setIn([index, 'explanation'], '');
+    setChoices(newExplanation);
   };
 
   const onDelete = (index: number) => () => {
@@ -202,7 +205,7 @@ const MultipleChoices = ({
                             index
                           )}
                           type="button"
-                          onClick={() => onDeleteExplanation(index)}
+                          onClick={onDeleteExplanation(index)}
                         >
                           <CloseIcon />
                         </IconButton>
