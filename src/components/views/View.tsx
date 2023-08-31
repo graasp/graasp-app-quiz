@@ -33,7 +33,7 @@ const View = (): JSX.Element => {
       }
       case Context.Player:
       default:
-        return <AdminView />;
+        return <PlayView />;
     }
   };
 
