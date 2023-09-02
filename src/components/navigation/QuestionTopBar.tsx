@@ -115,7 +115,9 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
   // Function to update list on drop
   const handleDrop = (droppedItem: DropResult) => {
     // Ignore drop outside droppable container
-    if (!droppedItem.destination) return;
+    if (!droppedItem.destination) {
+       return;
+     }
     const updatedList = [...order];
     // Remove dragged item
     const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
