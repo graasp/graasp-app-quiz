@@ -26,6 +26,7 @@ import { Context } from '@graasp/sdk';
 
 import { hooks } from '../../config/queryClient';
 import {
+  PLAY_VIEW,
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
@@ -42,9 +43,10 @@ import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
 
 type Props = {
   additionalSteps?: JSX.Element;
+  view?: string;
 };
 
-const QuestionTopBar = ({ additionalSteps }: Props) => {
+const QuestionTopBar = ({ additionalSteps, view }: Props) => {
   const { t } = useTranslation();
   const {
     questions,
@@ -57,6 +59,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
   } = useContext(QuizContext);
   const context = useLocalContext();
   const { data: appData, isLoading } = hooks.useAppData();
+  const [isDragging, setIsDragging] = useState<boolean>(true);
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={70} />;
@@ -116,8 +119,8 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
   const handleDrop = (droppedItem: DropResult) => {
     // Ignore drop outside droppable container
     if (!droppedItem.destination) {
-       return;
-     }
+      return;
+    }
     const updatedList = [...order];
     // Remove dragged item
     const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
@@ -146,29 +149,29 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
         </Button>
       </Grid>
       <Grid item>
-        <DragDropContext onDragEnd={handleDrop}>
+        <DragDropContext
+          onDragEnd={handleDrop}
+          onBeforeDragStart={() => setIsDragging(true)}
+        >
           <Droppable droppableId="list-container" direction="horizontal">
             {(provided) => (
-              <div
-                className="list-container"
+              <Stepper
+                data-cy={QUESTION_BAR_CY}
+                nonLinear
+                alternativeLabel
+                activeStep={currentIdx}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
+                sx={{ pb: 3 }}
               >
-                <Stepper
-                  data-cy={QUESTION_BAR_CY}
-                  nonLinear
-                  alternativeLabel
-                  activeStep={currentIdx}
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  sx={{ pb: 3 }}
-                >
-                  {order?.map((qId: string, index: number) => (
+                {order?.map((qId: string, index: number) =>
+                  isDragging ? (
                     <Draggable
                       key={qId}
                       draggableId={qId}
                       index={index}
                       disableInteractiveElementBlocking={true}
+                      isDragDisabled={view === PLAY_VIEW}
                     >
                       {(provided) => (
                         <Step
@@ -183,11 +186,19 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
                         </Step>
                       )}
                     </Draggable>
-                  ))}
-                  {additionalSteps}
-                  {provided.placeholder}
-                </Stepper>
-              </div>
+                  ) : (
+                    <Step
+                      key={qId}
+                      data-cy={buildQuestionStepCy(qId)}
+                      className={QUESTION_STEP_CLASSNAME}
+                    >
+                      {renderLabel(qId, index)}
+                    </Step>
+                  )
+                )}
+                {additionalSteps}
+                {provided.placeholder}
+              </Stepper>
             )}
           </Droppable>
         </DragDropContext>

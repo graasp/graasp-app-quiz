@@ -28,6 +28,7 @@ export const PLAY_VIEW_EMPTY_QUIZ_CY = 'playViewEmptyquiz';
 export const PLAY_VIEW_QUESTION_TITLE_CY = 'playViewQuestionTitle';
 export const buildMultipleChoicesButtonCy = (idx, isSelected) =>
   `multipleChoicesButton-${idx}-${isSelected}`;
+export const PLAY_VIEW = 'playView';
 export const PLAY_VIEW_SUBMIT_BUTTON_CY = 'playViewSubmitButton';
 export const PLAY_VIEW_SLIDER_CY = 'playViewSlider';
 export const PLAY_VIEW_TEXT_INPUT_CY = 'playViewTextInput';
