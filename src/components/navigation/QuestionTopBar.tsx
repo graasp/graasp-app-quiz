@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -42,11 +42,11 @@ import {
 import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
 
 type Props = {
-  additionalSteps?: JSX.Element;
   view?: string;
+  additionalSteps?: JSX.Element;
 };
 
-const QuestionTopBar = ({ additionalSteps, view }: Props) => {
+const QuestionTopBar = ({ view, additionalSteps }: Props) => {
   const { t } = useTranslation();
   const {
     questions,
@@ -59,7 +59,6 @@ const QuestionTopBar = ({ additionalSteps, view }: Props) => {
   } = useContext(QuizContext);
   const context = useLocalContext();
   const { data: appData, isLoading } = hooks.useAppData();
-  const [isDragging, setIsDragging] = useState<boolean>(true);
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={70} />;
@@ -149,10 +148,7 @@ const QuestionTopBar = ({ additionalSteps, view }: Props) => {
         </Button>
       </Grid>
       <Grid item>
-        <DragDropContext
-          onDragEnd={handleDrop}
-          onBeforeDragStart={() => setIsDragging(true)}
-        >
+        <DragDropContext onDragEnd={handleDrop}>
           <Droppable droppableId="list-container" direction="horizontal">
             {(provided) => (
               <Stepper
@@ -162,42 +158,31 @@ const QuestionTopBar = ({ additionalSteps, view }: Props) => {
                 activeStep={currentIdx}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                sx={{ pb: 3 }}
               >
-                {order?.map((qId: string, index: number) =>
-                  isDragging ? (
-                    <Draggable
-                      key={qId}
-                      draggableId={qId}
-                      index={index}
-                      disableInteractiveElementBlocking={true}
-                      isDragDisabled={view === PLAY_VIEW}
-                    >
-                      {(provided) => (
-                        <Step
-                          key={qId}
-                          data-cy={buildQuestionStepCy(qId)}
-                          className={QUESTION_STEP_CLASSNAME}
-                          ref={provided.innerRef}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                        >
-                          {renderLabel(qId, index)}
-                        </Step>
-                      )}
-                    </Draggable>
-                  ) : (
-                    <Step
-                      key={qId}
-                      data-cy={buildQuestionStepCy(qId)}
-                      className={QUESTION_STEP_CLASSNAME}
-                    >
-                      {renderLabel(qId, index)}
-                    </Step>
-                  )
-                )}
-                {additionalSteps}
+                {order?.map((qId: string, index: number) => (
+                  <Draggable
+                    key={qId}
+                    draggableId={qId}
+                    index={index}
+                    disableInteractiveElementBlocking={true}
+                    isDragDisabled={view === PLAY_VIEW}
+                  >
+                    {(provided) => (
+                      <Step
+                        key={qId}
+                        data-cy={buildQuestionStepCy(qId)}
+                        className={QUESTION_STEP_CLASSNAME}
+                        ref={provided.innerRef}
+                        {...provided.dragHandleProps}
+                        {...provided.draggableProps}
+                      >
+                        {renderLabel(qId, index)}
+                      </Step>
+                    )}
+                  </Draggable>
+                ))}
                 {provided.placeholder}
+                {additionalSteps}
               </Stepper>
             )}
           </Droppable>
