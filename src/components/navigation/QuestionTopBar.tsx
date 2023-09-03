@@ -140,7 +140,7 @@ const QuestionTopBar = ({ additionalSteps, view }: Props) => {
       <Grid item>
         <Button
           data-cy={QUESTION_BAR_PREV_CY}
-          sx={{ p: 0 }}
+          sx={{ pr: 2 }}
           color="primary"
           onClick={moveToPreviousQuestion}
           disabled={currentIdx === 0}
