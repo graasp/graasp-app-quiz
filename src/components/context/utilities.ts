@@ -84,7 +84,7 @@ export const computeCorrectness = (
 };
 
 export const getAppDataByQuestionIdForMemberId = (
-  appData: List<AppDataQuestionRecord> = List(),
+  appData: List<AppDataQuestionRecord>,
   question: QuestionDataAppSettingRecord,
   memberId?: Member['id']
 ) => {
@@ -134,10 +134,10 @@ export const getAllAppDataByUserId = (
 
 export const areTagsMatching = (text: string) => {
   let acc = 0;
-  for (let i = 0; i < text.length; i++) {
-    if (text[i] === '<') {
+  for (const element of text) {
+    if (element === '<') {
       acc += 1;
-    } else if (text[i] === '>') {
+    } else if (element === '>') {
       acc -= 1;
     }
 
