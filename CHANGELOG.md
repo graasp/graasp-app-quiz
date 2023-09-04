@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.2](https://github.com/graasp/graasp-app-quiz/compare/v1.0.1...v1.0.2) (2023-08-28)
+
+
+### Bug Fixes
+
+* use internal question ids to fix copy  ([#79](https://github.com/graasp/graasp-app-quiz/issues/79)) ([a72f35d](https://github.com/graasp/graasp-app-quiz/commit/a72f35d24bfe3e7970dde4ad2df360ca3c6eb2dc))
+
 ## [1.0.1](https://github.com/graasp/graasp-app-quiz/compare/v1.0.0-rc.1...v1.0.1) (2023-08-21)
 
 

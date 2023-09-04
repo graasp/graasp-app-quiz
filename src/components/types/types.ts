@@ -45,6 +45,7 @@ export type AppDataDataRecord = ImmutableCast<
 export type AppSettingData = {
   type: string;
   question: string;
+  questionId: string;
   explanation?: string;
 };
 export type AppSettingDataRecord = ImmutableCast<AppSettingData>;

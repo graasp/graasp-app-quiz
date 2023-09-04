@@ -31,10 +31,12 @@ const newSliderData = {
   explanation: 'new explanation',
 };
 
-const { data, id } = APP_SETTINGS.find(
+const { data } = APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.SLIDER
 );
+
+const id = data.questionId;
 
 const fillSliderQuestion = (
   { min, max, value, question, explanation },

@@ -14,7 +14,7 @@ import {
   QuestionDataRecord,
   QuestionListTypeRecord,
 } from '../types/types';
-import { getSettingsByName } from './utilities';
+import { generateId, getSettingsByName } from './utilities';
 
 type ContextType = {
   order: List<string>;
@@ -23,7 +23,7 @@ type ContextType = {
   currentQuestion: QuestionDataAppSettingRecord;
   currentIdx: number;
   setCurrentIdx: (idx: number) => void;
-  deleteQuestion: (questionId: string) => () => void;
+  deleteQuestion: (question: QuestionDataAppSettingRecord) => () => void;
   moveToNextQuestion: () => void;
   moveToPreviousQuestion: () => void;
   addQuestion: () => void;
@@ -57,16 +57,20 @@ export const QuizProvider = ({ children }: Props) => {
     setCurrentIdx(computedIdx);
   };
 
-  const deleteQuestion = (questionId: string) => () => {
+  const deleteQuestion = (question?: QuestionDataAppSettingRecord) => () => {
+    if (!question) {
+      console.error('Cannot delete a question that does not exist');
+      return;
+    }
     // update list order
     const newOrder = order.toJS();
-    const idx = order.findIndex((id) => id === questionId);
+    const idx = order.findIndex((id) => id === question.data.questionId);
     newOrder.splice(idx, 1);
     if (orderSetting) {
       patchAppSetting({ id: orderSetting.id, data: { list: newOrder } });
     }
     // delete question
-    deleteAppSetting({ id: questionId });
+    deleteAppSetting({ id: question.id });
 
     // change current idx
     // go to previous, bound by number of questions
@@ -87,8 +91,9 @@ export const QuizProvider = ({ children }: Props) => {
   const saveQuestion = async (newData: QuestionDataRecord) => {
     // add new question
     if (!currentQuestion?.id) {
-      const newQuestion = await postAppSettingAsync({
-        data: newData.toJS(),
+      const newQuestionId = generateId();
+      await postAppSettingAsync({
+        data: { ...newData.toJS(), questionId: newQuestionId },
         name: APP_SETTING_NAMES.QUESTION,
       });
       // add question in order if new
@@ -96,12 +101,12 @@ export const QuizProvider = ({ children }: Props) => {
       if (!orderSetting) {
         postAppSetting({
           name: APP_SETTING_NAMES.QUESTION_LIST,
-          data: { list: [newQuestion.id] },
+          data: { list: [newQuestionId] },
         });
       } else {
         patchAppSetting({
           id: orderSetting.id,
-          data: { list: order.push(newQuestion.id).toJS() },
+          data: { list: order.push(newQuestionId).toJS() },
         });
       }
       setCurrentIdx(order.size);
@@ -154,11 +159,29 @@ export const QuizProvider = ({ children }: Props) => {
         currentIdx !== -1 &&
         currentIdx < order.size
       ) {
-        newValue = questions.find(({ id }) => id === order.get(currentIdx));
+        const currentQId = order.get(currentIdx);
+        newValue = questions.find(
+          ({ data: { questionId } }) => questionId === currentQId
+        );
       }
       setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
     }
   }, [order, currentIdx, settings]);
+
+  // back track legacy data to match order list
+  useEffect(() => {
+    if (settings) {
+      const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
+      for (const q of questions) {
+        if (!q.data.questionId) {
+          patchAppSetting({
+            id: q.id,
+            data: { ...q.data.toJS(), questionId: q.id },
+          });
+        }
+      }
+    }
+  }, [patchAppSetting, settings]);
 
   const value: ContextType = useMemo(
     () => {

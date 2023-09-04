@@ -194,7 +194,7 @@ const CreateView = () => {
               color="error"
               variant="contained"
               startIcon={<DeleteIcon />}
-              onClick={deleteQuestion(currentQuestion?.id)}
+              onClick={deleteQuestion(currentQuestion)}
               disabled={!currentQuestion.id}
             >
               {t('Delete')}
