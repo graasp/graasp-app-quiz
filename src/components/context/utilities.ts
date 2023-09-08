@@ -141,7 +141,7 @@ export const areTagsMatching = (text: string) => {
 };
 
 export const validateQuestionData = (data: QuestionDataRecord) => {
-  if (!data?.question) {
+  if (!data?.question?.trim()) {
     throw FAILURE_MESSAGES.EMPTY_QUESTION;
   }
 
@@ -161,7 +161,7 @@ export const validateQuestionData = (data: QuestionDataRecord) => {
       if (!data?.choices?.some(({ isCorrect }) => isCorrect)) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_CORRECT_ANSWER;
       }
-      if (data?.choices?.some(({ value }) => !value)) {
+      if (data?.choices?.some(({ value }) => !value?.trim())) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE;
       }
 

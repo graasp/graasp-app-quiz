@@ -41,6 +41,7 @@ const CreateView = () => {
   );
   const [errorMessage, setErrorMessage] = useState<string | null>();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
     setNewData(currentQuestion?.data as QuestionDataRecord);
@@ -57,6 +58,16 @@ const CreateView = () => {
       }
     }
   }, [newData, isSubmitted]);
+  
+  useEffect(() => {
+      try {
+        validateQuestionData(newData);
+        setIsValid(true);
+      } catch (e) {
+        setIsValid(false);
+      }
+    
+  }, [newData]);
 
   const saveNewQuestion = () => {
     setIsSubmitted(true);
@@ -209,7 +220,7 @@ const CreateView = () => {
               startIcon={<SaveIcon />}
               disabled={
                 !isDifferent(newData, currentQuestion?.data) ||
-                Boolean(errorMessage)
+                Boolean(errorMessage) || !isValid
               }
             >
               {t('Save')}
