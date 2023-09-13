@@ -11,7 +11,6 @@ import { APP_DATA_TYPES, QuestionType } from '../../config/constants';
 import { hooks, mutations } from '../../config/queryClient';
 import {
   EXPLANATION_PLAY_CY,
-  PLAY_VIEW,
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,

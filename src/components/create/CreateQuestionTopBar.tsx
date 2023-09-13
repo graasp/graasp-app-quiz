@@ -23,7 +23,6 @@ import { AppDataRecord } from '@graasp/sdk/frontend';
 
 import { hooks } from '../../config/queryClient';
 import {
-  PLAY_VIEW,
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
@@ -159,7 +158,6 @@ const CreateQuestionTopBar = ({ view, additionalSteps }: Props) => {
                         draggableId={qId}
                         index={index}
                         disableInteractiveElementBlocking={true}
-                        isDragDisabled={view === PLAY_VIEW}
                       >
                         {(draggableProvided) =>
                           renderLabel(
