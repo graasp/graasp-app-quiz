@@ -79,9 +79,7 @@ const CreateView = () => {
         data-cy={CREATE_VIEW_CONTAINER_CY}
       >
         <Grid item>
-          <CreateQuestionTopBar
-            additionalSteps={<PlusStep onClick={addQuestion} />}
-          />
+          <CreateQuestionTopBar />
         </Grid>
       </Grid>
       {!currentQuestion?.id && (

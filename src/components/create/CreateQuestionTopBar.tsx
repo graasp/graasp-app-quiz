@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 import { useContext } from 'react';
 import {
   DragDropContext,
@@ -19,9 +17,6 @@ import {
   Stepper,
 } from '@mui/material';
 
-import { AppDataRecord } from '@graasp/sdk/frontend';
-
-import { hooks } from '../../config/queryClient';
 import {
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
@@ -30,18 +25,15 @@ import {
   buildQuestionStepCy,
 } from '../../config/selectors';
 import { QuizContext } from '../context/QuizContext';
-import { getAppDataByQuestionId, getQuestionById } from '../context/utilities';
-import {
-  AppDataQuestionRecord,
-  QuestionDataAppSettingRecord,
-} from '../types/types';
+import { getQuestionById } from '../context/utilities';
+import PlusStep from '../navigation/PlusStep';
+import { QuestionDataAppSettingRecord } from '../types/types';
 
 type Props = {
-  view?: string;
-  additionalSteps?: JSX.Element;
+  //empty
 };
 
-const CreateQuestionTopBar = ({ view, additionalSteps }: Props) => {
+const CreateQuestionTopBar = ({}: Props) => {
   const { t } = useTranslation();
   const {
     questions,
@@ -52,16 +44,17 @@ const CreateQuestionTopBar = ({ view, additionalSteps }: Props) => {
     saveOrder,
     moveToNextQuestion,
     isSettingsFetching,
+    addQuestion,
   } = useContext(QuizContext);
-  const { data: appData, isLoading } = hooks.useAppData();
 
+  console.log(isSettingsFetching);
   // necessary isSettingsFetching to reload component and allow new questions to be draggable
-  if (isSettingsFetching || isLoading) {
+  if (isSettingsFetching) {
+    console.log('SKELETON');
     return <Skeleton variant="rectangular" width="100%" height={70} />;
   }
 
   const renderLabel = (
-    response: AppDataRecord,
     question: QuestionDataAppSettingRecord,
     index: number,
     provided: DraggableProvided
@@ -136,10 +129,7 @@ const CreateQuestionTopBar = ({ view, additionalSteps }: Props) => {
                     console.error('question does not exist');
                     return null;
                   }
-                  const response = getAppDataByQuestionId(
-                    (appData as List<AppDataQuestionRecord>) ?? List(),
-                    q
-                  );
+
                   const question = getQuestionById(questions, qId);
 
                   if (!question) {
@@ -160,19 +150,14 @@ const CreateQuestionTopBar = ({ view, additionalSteps }: Props) => {
                         disableInteractiveElementBlocking={true}
                       >
                         {(draggableProvided) =>
-                          renderLabel(
-                            response,
-                            question,
-                            index,
-                            draggableProvided
-                          )
+                          renderLabel(question, index, draggableProvided)
                         }
                       </Draggable>
                     </Step>
                   );
                 })}
                 {provided.placeholder}
-                {additionalSteps}
+                <PlusStep onClick={addQuestion} />
               </Stepper>
             )}
           </Droppable>

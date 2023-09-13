@@ -38,11 +38,7 @@ import {
   QuestionDataRecord,
 } from '../types/types';
 
-type Props = {
-  additionalSteps?: JSX.Element;
-};
-
-const QuestionTopBar = ({ additionalSteps }: Props) => {
+const QuestionTopBar = () => {
   const { t } = useTranslation();
   const {
     questions,
@@ -142,7 +138,6 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
               {renderLabel(qId, index)}
             </Step>
           ))}
-          {additionalSteps}
         </Stepper>
       </Grid>
       <Grid item>

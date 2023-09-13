@@ -20,6 +20,7 @@ const View = (): JSX.Element => {
     i18n.changeLanguage(lang ?? DEFAULT_LANG);
   });
   const renderContent = () => {
+    return <AdminView />;
     switch (context.get('context')) {
       case Context.Builder: {
         switch (context.get('permission')) {
