@@ -3971,13 +3971,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/sdk@npm:1.2.1":
-  version: 1.2.1
-  resolution: "@graasp/sdk@npm:1.2.1"
+"@graasp/sdk@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@graasp/sdk@npm:1.5.0"
   dependencies:
     "@aws-sdk/client-s3": 3.370.0
     "@fastify/secure-session": 6.1.0
     "@graasp/etherpad-api": 2.1.1
+    date-fns: 2.30.0
     fastify: 4.18.0
     fluent-json-schema: 4.1.0
     immutable: 4.3.2
@@ -3986,7 +3987,7 @@ __metadata:
     typeorm: 0.3.17
     uuid: 9.0.0
     validator: 13.11.0
-  checksum: 8507f3157e77a1cf0fb9e01a32c72cbfdb8bd3fd5a960a5fa299dbe36eba4a6f28f5f094a5d09214599e54a1fd91b95e945f80525a6165e4caf96ca9822544b7
+  checksum: ee6f6446137289e8f61fa2b2f43260077205274570c869536f46de92f858662264a065285c82861e70492d67ab1eecb8fb412600e74de41ed839b6eed6a073ed
   languageName: node
   linkType: hard
 
@@ -8930,7 +8931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.29.3":
+"date-fns@npm:2.30.0, date-fns@npm:^2.29.3":
   version: 2.30.0
   resolution: "date-fns@npm:2.30.0"
   dependencies:
@@ -11328,7 +11329,7 @@ __metadata:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
     "@graasp/apps-query-client": 2.0.1
-    "@graasp/sdk": 1.2.1
+    "@graasp/sdk": 1.5.0
     "@mui/icons-material": 5.11.16
     "@mui/material": ^5.13.5
     "@mui/utils": 5.13.6

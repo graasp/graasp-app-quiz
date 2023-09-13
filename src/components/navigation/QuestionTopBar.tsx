@@ -1,12 +1,6 @@
 import { List } from 'immutable';
 
 import { useContext } from 'react';
-import {
-  DragDropContext,
-  Draggable,
-  DropResult,
-  Droppable,
-} from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 
 import CheckIcon from '@mui/icons-material/Check';
@@ -26,7 +20,6 @@ import { Context } from '@graasp/sdk';
 
 import { hooks } from '../../config/queryClient';
 import {
-  PLAY_VIEW,
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
@@ -39,7 +32,11 @@ import {
   getAppDataByQuestionId,
   getQuestionById,
 } from '../context/utilities';
-import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
+import {
+  AppDataDataRecord,
+  AppDataQuestionRecord,
+  QuestionDataRecord,
+} from '../types/types';
 
 type Props = {
   view?: string;
@@ -54,7 +51,6 @@ const QuestionTopBar = ({ view, additionalSteps }: Props) => {
     setCurrentIdx,
     moveToPreviousQuestion,
     order,
-    setOrder,
     moveToNextQuestion,
   } = useContext(QuizContext);
   const context = useLocalContext();
@@ -91,7 +87,7 @@ const QuestionTopBar = ({ view, additionalSteps }: Props) => {
     // show correctness in label only if a response exists
     const isCorrect = computeCorrectness(
       question.data as QuestionDataRecord,
-      response?.data
+      response?.data as AppDataDataRecord
     );
     const props = !response.id
       ? {}
@@ -99,7 +95,6 @@ const QuestionTopBar = ({ view, additionalSteps }: Props) => {
           StepIconComponent: isCorrect ? CheckIcon : CloseIcon,
           StepIconProps: {
             color: isCorrect ? 'success' : 'error',
-            sx: { '&:hover': { cursor: 'ew-resize' } },
           },
         };
 
@@ -112,21 +107,6 @@ const QuestionTopBar = ({ view, additionalSteps }: Props) => {
         {question.data.question}
       </StepLabel>
     );
-  };
-
-  // Function to update list on drop
-  const handleDrop = (droppedItem: DropResult) => {
-    // Ignore drop outside droppable container
-    if (!droppedItem.destination) {
-      return;
-    }
-    const updatedList = [...order];
-    // Remove dragged item
-    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-    // Add dropped item
-    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-    // Update State
-    setOrder(List(updatedList));
   };
 
   return (
@@ -148,45 +128,23 @@ const QuestionTopBar = ({ view, additionalSteps }: Props) => {
         </Button>
       </Grid>
       <Grid item>
-        <DragDropContext onDragEnd={handleDrop}>
-          <Droppable droppableId="list-container" direction="horizontal">
-            {(provided) => (
-              <Stepper
-                data-cy={QUESTION_BAR_CY}
-                nonLinear
-                alternativeLabel
-                activeStep={currentIdx}
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {order?.map((qId: string, index: number) => (
-                  <Draggable
-                    key={qId}
-                    draggableId={qId}
-                    index={index}
-                    disableInteractiveElementBlocking={true}
-                    isDragDisabled={view === PLAY_VIEW}
-                  >
-                    {(provided) => (
-                      <Step
-                        key={qId}
-                        data-cy={buildQuestionStepCy(qId)}
-                        className={QUESTION_STEP_CLASSNAME}
-                        ref={provided.innerRef}
-                        {...provided.dragHandleProps}
-                        {...provided.draggableProps}
-                      >
-                        {renderLabel(qId, index)}
-                      </Step>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-                {additionalSteps}
-              </Stepper>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <Stepper
+          data-cy={QUESTION_BAR_CY}
+          nonLinear
+          alternativeLabel
+          activeStep={currentIdx}
+        >
+          {order?.map((qId: string, index: number) => (
+            <Step
+              key={qId}
+              data-cy={buildQuestionStepCy(qId)}
+              className={QUESTION_STEP_CLASSNAME}
+            >
+              {renderLabel(qId, index)}
+            </Step>
+          ))}
+          {additionalSteps}
+        </Stepper>
       </Grid>
       <Grid item>
         <Button

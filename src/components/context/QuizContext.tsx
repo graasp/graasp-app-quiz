@@ -28,6 +28,8 @@ type ContextType = {
   moveToPreviousQuestion: () => void;
   addQuestion: () => void;
   saveQuestion: (newData: QuestionDataRecord) => Promise<void>;
+  isSettingsFetching: boolean;
+  saveOrder: (order: string[]) => void;
 };
 
 export const QuizContext = React.createContext({} as ContextType);
@@ -38,7 +40,13 @@ type Props = {
 
 export const QuizProvider = ({ children }: Props) => {
   const { t } = useTranslation();
-  const { data: settings, isLoading, isError, error } = hooks.useAppSettings();
+  const {
+    data: settings,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+  } = hooks.useAppSettings();
   const { mutate: deleteAppSetting } = mutations.useDeleteAppSetting();
   const { mutateAsync: postAppSettingAsync, mutate: postAppSetting } =
     mutations.usePostAppSetting();
@@ -119,6 +127,17 @@ export const QuizProvider = ({ children }: Props) => {
         data: newData.toJS(),
       });
     }
+  };
+
+  const saveOrder = (newOrder: any) => {
+    if (!orderSetting) {
+      return console.error('order is not defined');
+    }
+    setOrder(List(newOrder));
+    patchAppSetting({
+      id: orderSetting.id,
+      data: { list: newOrder },
+    });
   };
 
   const moveToNextQuestion = () => {
@@ -203,6 +222,8 @@ export const QuizProvider = ({ children }: Props) => {
         moveToPreviousQuestion,
         addQuestion,
         saveQuestion,
+        isSettingsFetching: isFetching,
+        saveOrder,
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

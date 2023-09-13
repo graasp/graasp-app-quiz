@@ -16,13 +16,13 @@ import {
 import { QuizContext } from '../context/QuizContext';
 import { isDifferent, validateQuestionData } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
-import QuestionTopBar from '../navigation/QuestionTopBar';
 import {
   AppSettingDataRecord,
   MultipleChoicesAppSettingDataRecord,
   SliderAppSettingDataRecord,
 } from '../types/types';
 import { QuestionDataRecord } from '../types/types';
+import CreateQuestionTopBar from './CreateQuestionTopBar';
 import Explanation from './Explanation';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
@@ -79,7 +79,7 @@ const CreateView = () => {
         data-cy={CREATE_VIEW_CONTAINER_CY}
       >
         <Grid item>
-          <QuestionTopBar
+          <CreateQuestionTopBar
             additionalSteps={<PlusStep onClick={addQuestion} />}
           />
         </Grid>
