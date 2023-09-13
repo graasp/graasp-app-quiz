@@ -18,7 +18,6 @@ import { generateId, getSettingsByName } from './utilities';
 
 type ContextType = {
   order: List<string>;
-  setOrder: (order: List<string>) => void;
   questions: List<QuestionDataAppSettingRecord>;
   currentQuestion: QuestionDataAppSettingRecord;
   currentIdx: number;
@@ -129,7 +128,7 @@ export const QuizProvider = ({ children }: Props) => {
     }
   };
 
-  const saveOrder = (newOrder: any) => {
+  const saveOrder = (newOrder: string[]) => {
     if (!orderSetting) {
       return console.error('order is not defined');
     }
@@ -212,7 +211,6 @@ export const QuizProvider = ({ children }: Props) => {
         : List<QuestionDataAppSettingRecord>();
       return {
         order,
-        setOrder,
         questions,
         currentQuestion,
         currentIdx,

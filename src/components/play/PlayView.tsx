@@ -93,7 +93,7 @@ const PlayView = () => {
   return (
     <Grid container direction="column" alignItems="center" spacing={2}>
       <Grid item>
-        <QuestionTopBar view={PLAY_VIEW} />
+        <QuestionTopBar />
       </Grid>
       <Grid item>
         <Typography

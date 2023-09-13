@@ -39,11 +39,10 @@ import {
 } from '../types/types';
 
 type Props = {
-  view?: string;
   additionalSteps?: JSX.Element;
 };
 
-const QuestionTopBar = ({ view, additionalSteps }: Props) => {
+const QuestionTopBar = ({ additionalSteps }: Props) => {
   const { t } = useTranslation();
   const {
     questions,
