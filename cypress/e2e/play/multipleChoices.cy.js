@@ -54,15 +54,18 @@ const checkCorrection = (selection) => {
         expect($el.attr('class').toLowerCase()).to.contain(correction);
       }
     );
-    if (wasSelected && !isCorrect) {
-      cy.get(
-        dataCyWrapper(buildMultipleChoicesButtonCy(idx, wasSelected))
-      ).should('contain', explanation);
-    } else if (!wasSelected) {
-      cy.get(dataCyWrapper(buildMultipleChoiceExplanationPlayCy(idx))).should(
-        'not.exist'
-      );
-    }
+    // todo: enable back if explanations are shown only under some conditions
+    // if (wasSelected && !isCorrect) {
+    cy.get(dataCyWrapper(buildMultipleChoiceExplanationPlayCy(idx))).should(
+      'contain',
+      explanation
+    );
+    // }
+    // else if (!wasSelected) {
+    //   cy.get(dataCyWrapper(buildMultipleChoiceExplanationPlayCy(idx))).should(
+    //     'not.exist'
+    //   );
+    // }
   });
   cy.checkExplanationPlay(data.explanation);
 };

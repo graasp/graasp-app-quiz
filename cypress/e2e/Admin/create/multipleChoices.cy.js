@@ -201,7 +201,7 @@ describe('Multiple Choices', () => {
         dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
       ).click();
       cy.get(
-        `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} input`
+        `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} textarea`
       )
         .should('be.visible')
         .should('have.value', '');
@@ -209,17 +209,20 @@ describe('Multiple Choices', () => {
         cy.get(
           `${dataCyWrapper(
             buildMultipleChoiceAnswerExplanationCy(idx)
-          )} input[type="text"]`
-        ).type(explanation);
+          )} textarea`
+        )
+          .first()
+          .type(explanation);
         cy.get(
           dataCyWrapper(buildMultipleChoiceDeleteAnswerExplanationButtonCy(idx))
         ).should('be.visible');
         cy.get(
           dataCyWrapper(buildMultipleChoiceDeleteAnswerExplanationButtonCy(idx))
         ).click();
-        cy.wait(2000);
         cy.get(
-          `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} input`
+          `${dataCyWrapper(
+            buildMultipleChoiceAnswerExplanationCy(idx)
+          )} textarea`
         ).should('not.exist');
         cy.get(
           dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
@@ -259,7 +262,9 @@ describe('Multiple Choices', () => {
           `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input`
         ).should('have.value', value);
         cy.get(
-          `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} input`
+          `${dataCyWrapper(
+            buildMultipleChoiceAnswerExplanationCy(idx)
+          )} textarea`
         )
           .should('be.visible')
           .should('have.value', explanation);

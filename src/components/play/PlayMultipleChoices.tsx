@@ -1,12 +1,9 @@
 import { List } from 'immutable';
 
 import CheckIcon from '@mui/icons-material/Check';
-import { Button, ButtonProps, Grid, Typography } from '@mui/material';
+import { Button, ButtonProps, Typography } from '@mui/material';
 
-import {
-  buildMultipleChoiceExplanationPlayCy,
-  buildMultipleChoicesButtonCy,
-} from '../../config/selectors';
+import { buildMultipleChoicesButtonCy } from '../../config/selectors';
 import {
   MultipleChoiceAppDataDataRecord,
   MultipleChoicesAppSettingDataRecord,
@@ -84,37 +81,26 @@ const PlayMultipleChoices = ({
   };
 
   return (
-    <Grid container direction="column" spacing={2}>
+    <>
       {choices?.map((choice, idx) => (
-        <Grid item key={choice.value + '-' + idx}>
-          <Button
-            onClick={onResponseClick(choice.value)}
-            fullWidth
-            {...computeStyles(choice, idx)}
-          >
-            {showCorrection &&
-            choice.explanation &&
-            response.choices?.contains(choice.value) ? (
-              <Grid container direction="column">
-                <Grid item>
-                  <Typography variant="body1">{choice.value}</Typography>
-                </Grid>
-                <Grid item>
-                  <Typography
-                    variant="caption"
-                    data-cy={buildMultipleChoiceExplanationPlayCy(idx)}
-                  >
-                    {choice.explanation}
-                  </Typography>
-                </Grid>
-              </Grid>
-            ) : (
+        <Button
+          onClick={onResponseClick(choice.value)}
+          fullWidth
+          sx={{ mb: 1 }}
+          {...computeStyles(choice, idx)}
+        >
+          {showCorrection &&
+          choice.explanation &&
+          response.choices?.contains(choice.value) ? (
+            <>
               <Typography variant="body1">{choice.value}</Typography>
-            )}
-          </Button>
-        </Grid>
+            </>
+          ) : (
+            <Typography variant="body1">{choice.value}</Typography>
+          )}
+        </Button>
       ))}
-    </Grid>
+    </>
   );
 };
 
