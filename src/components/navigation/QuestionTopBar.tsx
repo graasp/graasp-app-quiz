@@ -32,13 +32,13 @@ import {
   getAppDataByQuestionId,
   getQuestionById,
 } from '../context/utilities';
-import { AppDataQuestionRecord, QuestionDataRecord } from '../types/types';
+import {
+  AppDataDataRecord,
+  AppDataQuestionRecord,
+  QuestionDataRecord,
+} from '../types/types';
 
-type Props = {
-  additionalSteps?: JSX.Element;
-};
-
-const QuestionTopBar = ({ additionalSteps }: Props) => {
+const QuestionTopBar = () => {
   const { t } = useTranslation();
   const {
     questions,
@@ -82,13 +82,15 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
     // show correctness in label only if a response exists
     const isCorrect = computeCorrectness(
       question.data as QuestionDataRecord,
-      response?.data
+      response?.data as AppDataDataRecord
     );
     const props = !response.id
       ? {}
       : {
           StepIconComponent: isCorrect ? CheckIcon : CloseIcon,
-          StepIconProps: { color: isCorrect ? 'success' : 'error' },
+          StepIconProps: {
+            color: isCorrect ? 'success' : 'error',
+          },
         };
 
     return (
@@ -112,7 +114,7 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
       <Grid item>
         <Button
           data-cy={QUESTION_BAR_PREV_CY}
-          sx={{ p: 0 }}
+          sx={{ pr: 2 }}
           color="primary"
           onClick={moveToPreviousQuestion}
           disabled={currentIdx === 0}
@@ -126,7 +128,6 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
           nonLinear
           alternativeLabel
           activeStep={currentIdx}
-          sx={{ pb: 3 }}
         >
           {order?.map((qId: string, index: number) => (
             <Step
@@ -137,7 +138,6 @@ const QuestionTopBar = ({ additionalSteps }: Props) => {
               {renderLabel(qId, index)}
             </Step>
           ))}
-          {additionalSteps}
         </Stepper>
       </Grid>
       <Grid item>

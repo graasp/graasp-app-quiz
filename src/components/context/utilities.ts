@@ -86,7 +86,7 @@ export const computeCorrectness = (
 export const getAppDataByQuestionId = (
   appData: List<AppDataQuestionRecord> = List(),
   question: QuestionDataAppSettingRecord
-) => {
+): AppDataRecord => {
   const qId = question.data.questionId;
   return (
     appData?.find(({ data }) => data?.questionId === qId) ??

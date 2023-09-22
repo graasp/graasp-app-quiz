@@ -15,14 +15,13 @@ import {
 } from '../../config/selectors';
 import { QuizContext } from '../context/QuizContext';
 import { isDifferent, validateQuestionData } from '../context/utilities';
-import PlusStep from '../navigation/PlusStep';
-import QuestionTopBar from '../navigation/QuestionTopBar';
 import {
   AppSettingDataRecord,
   MultipleChoicesAppSettingDataRecord,
   SliderAppSettingDataRecord,
 } from '../types/types';
 import { QuestionDataRecord } from '../types/types';
+import CreateQuestionTopBar from './CreateQuestionTopBar';
 import Explanation from './Explanation';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
@@ -33,7 +32,7 @@ import TextInput from './TextInput';
 
 const CreateView = () => {
   const { t } = useTranslation();
-  const { currentQuestion, deleteQuestion, addQuestion, saveQuestion } =
+  const { currentQuestion, deleteQuestion, saveQuestion } =
     useContext(QuizContext);
 
   const [newData, setNewData] = useState<QuestionDataRecord>(
@@ -78,10 +77,8 @@ const CreateView = () => {
         justifyContent="center"
         data-cy={CREATE_VIEW_CONTAINER_CY}
       >
-        <Grid item>
-          <QuestionTopBar
-            additionalSteps={<PlusStep onClick={addQuestion} />}
-          />
+        <Grid item width={'100%'}>
+          <CreateQuestionTopBar />
         </Grid>
       </Grid>
       {!currentQuestion?.id && (

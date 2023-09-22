@@ -31,6 +31,7 @@ const View = (): JSX.Element => {
             return <PlayView />;
         }
       }
+      case Context.Player:
       default:
         return <PlayView />;
     }
