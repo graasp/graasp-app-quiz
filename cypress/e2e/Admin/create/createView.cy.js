@@ -64,13 +64,13 @@ describe('Create View', () => {
     // Add three questions and make sure they are added to the QuestionTopBar
     cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
     fillMultipleChoiceQuestion(newMultipleChoiceData);
-    cy.wait(2000); // Wait for the new question to appear
+    cy.wait(1000); // Wait for the new question to appear
     cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
     cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
       .should('be.visible')
       .should('have.value', '');
     fillMultipleChoiceQuestion(newMultipleChoiceData);
-    cy.wait(2000);
+    cy.wait(1000);
     cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
     cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
       .should('be.visible')

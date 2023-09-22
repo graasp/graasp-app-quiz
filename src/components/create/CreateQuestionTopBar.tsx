@@ -64,7 +64,7 @@ const CreateQuestionTopBar = () => {
 
   // important that it reloads from first render
   // bug: but won't show anything if empty data
-  if (order.isEmpty() || isSettingsFetching) {
+  if (isSettingsFetching) {
     return (
       <Skeleton variant="rectangular" width="100%" height={50} sx={{ mb: 3 }} />
     );
