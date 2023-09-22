@@ -29,11 +29,7 @@ import { getQuestionById } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
 import { QuestionDataAppSettingRecord } from '../types/types';
 
-type Props = {
-  //empty
-};
-
-const CreateQuestionTopBar = ({}: Props) => {
+const CreateQuestionTopBar = () => {
   const { t } = useTranslation();
   const {
     questions,
@@ -47,11 +43,29 @@ const CreateQuestionTopBar = ({}: Props) => {
     addQuestion,
   } = useContext(QuizContext);
 
-  console.log(isSettingsFetching);
-  // necessary isSettingsFetching to reload component and allow new questions to be draggable
-  if (isSettingsFetching) {
-    console.log('SKELETON');
-    return <Skeleton variant="rectangular" width="100%" height={70} />;
+  const questionsInOrder = order
+    .map((qId: string, index: number) => {
+      const q = getQuestionById(questions, qId);
+      if (!q) {
+        console.error('question does not exist');
+        return null;
+      }
+
+      const question = getQuestionById(questions, qId);
+
+      if (!question) {
+        return null;
+      }
+      return question;
+    })
+    .filter(Boolean);
+
+  // important that it reloads from first render
+  // bug: but won't show anything if empty data
+  if (order.isEmpty() || isSettingsFetching) {
+    return (
+      <Skeleton variant="rectangular" width="100%" height={50} sx={{ mb: 3 }} />
+    );
   }
 
   const renderLabel = (
@@ -123,18 +137,8 @@ const CreateQuestionTopBar = ({}: Props) => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                {order?.map((qId: string, index: number) => {
-                  const q = getQuestionById(questions, qId);
-                  if (!q) {
-                    console.error('question does not exist');
-                    return null;
-                  }
-
-                  const question = getQuestionById(questions, qId);
-
-                  if (!question) {
-                    return null;
-                  }
+                {questionsInOrder?.map((question: any, index: number) => {
+                  const qId = question.data.questionId;
 
                   return (
                     <Step
@@ -148,6 +152,7 @@ const CreateQuestionTopBar = ({}: Props) => {
                         draggableId={qId}
                         index={index}
                         disableInteractiveElementBlocking={true}
+                        isDragDisabled={false}
                       >
                         {(draggableProvided) =>
                           renderLabel(question, index, draggableProvided)
