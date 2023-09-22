@@ -1,7 +1,7 @@
 import { List } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 
-import { convertJs } from '@graasp/sdk';
+import { Member, convertJs } from '@graasp/sdk';
 import { AppDataRecord, AppSettingRecord } from '@graasp/sdk/frontend';
 
 import {
@@ -83,19 +83,28 @@ export const computeCorrectness = (
   }
 };
 
-export const getAppDataByQuestionId = (
+export const getAppDataByQuestionIdForMemberId = (
   appData: List<AppDataQuestionRecord> = List(),
-  question: QuestionDataAppSettingRecord
-): AppDataRecord => {
+  question: QuestionDataAppSettingRecord,
+  memberId?: Member['id']
+) => {
   const qId = question.data.questionId;
+  const defaultValue = convertJs({
+    data: {
+      questionId: qId,
+      ...DEFAULT_APP_DATA_VALUES[question.data.type],
+    },
+  });
+
+  if (!memberId) {
+    return defaultValue;
+  }
+
   return (
-    appData?.find(({ data }) => data?.questionId === qId) ??
-    convertJs({
-      data: {
-        questionId: qId,
-        ...DEFAULT_APP_DATA_VALUES[question.data.type],
-      },
-    })
+    appData?.find(
+      ({ data, creator }) =>
+        data?.questionId === qId && creator?.id === memberId
+    ) ?? defaultValue
   );
 };
 
