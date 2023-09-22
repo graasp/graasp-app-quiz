@@ -132,7 +132,7 @@ const ResultTables = ({ headerElem }) => {
    */
   const getMembers = useCallback(() => {
     const listIdNames = data?.members?.reduce((acc, cur) => {
-      return users.contains(cur.id) ? [...acc, cur] : acc;
+      return users?.contains(cur.id) ? [...acc, cur] : acc;
     }, []);
     // directly sort the list descending
     return listIdNames?.sort(
