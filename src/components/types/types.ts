@@ -78,17 +78,7 @@ export type QuestionData =
   | TextAppSettingData
   | FillTheBlanksAppSettingData;
 
-export type QuestionDataRecord = ImmutableCast<
-  | MultipleChoicesAppSettingData
-  | SliderAppSettingData
-  | TextAppSettingData
-  | FillTheBlanksAppSettingData
->;
-// export type QuestionDataRecord =
-//   | ImmutableCast<MultipleChoicesAppSettingData>
-//   | ImmutableCast<SliderAppSettingData>
-//   | ImmutableCast<TextAppSettingData>
-//   | ImmutableCast<FillTheBlanksAppSettingData>;
+export type QuestionDataRecord = ImmutableCast<QuestionData>;
 
 export type QuestionListTypeRecord = ImmutableCast<
   AppSetting & {

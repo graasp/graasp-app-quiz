@@ -1,3 +1,5 @@
+import { List } from 'immutable';
+
 import { useContext } from 'react';
 import {
   DragDropContext,
@@ -58,7 +60,7 @@ const CreateQuestionTopBar = () => {
       }
       return question;
     })
-    .filter(Boolean);
+    .filter(Boolean) as List<QuestionDataAppSettingRecord>;
 
   // important that it reloads from first render
   // bug: but won't show anything if empty data
@@ -137,7 +139,7 @@ const CreateQuestionTopBar = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                {questionsInOrder?.map((question: any, index: number) => {
+                {questionsInOrder?.map((question, index: number) => {
                   const qId = question.data.questionId;
 
                   return (
