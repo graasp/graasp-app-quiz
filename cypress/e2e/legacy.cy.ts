@@ -59,7 +59,8 @@ describe('Legacy', () => {
     };
 
     const item = { id: 'mock-item-id' };
-    const member = { id: 'mock-member-id-1', name: 'liam' };
+    // current user
+    const member = { id: 'mock-member-id', name: 'liam' };
     const appData = [
       {
         item,

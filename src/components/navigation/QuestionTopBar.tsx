@@ -29,7 +29,7 @@ import {
 import { QuizContext } from '../context/QuizContext';
 import {
   computeCorrectness,
-  getAppDataByQuestionId,
+  getAppDataByQuestionIdForMemberId,
   getQuestionById,
 } from '../context/utilities';
 import {
@@ -50,6 +50,7 @@ const QuestionTopBar = () => {
   } = useContext(QuizContext);
   const context = useLocalContext();
   const { data: appData, isLoading } = hooks.useAppData();
+  const { memberId } = useLocalContext();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={70} />;
@@ -61,9 +62,10 @@ const QuestionTopBar = () => {
       console.error('question does not exist');
       return null;
     }
-    const response = getAppDataByQuestionId(
+    const response = getAppDataByQuestionIdForMemberId(
       (appData as List<AppDataQuestionRecord>) ?? List(),
-      q
+      q,
+      memberId
     );
     const question = getQuestionById(questions, questionId);
 

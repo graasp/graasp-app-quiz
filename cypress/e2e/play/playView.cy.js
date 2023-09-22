@@ -1,13 +1,16 @@
 import { PermissionLevel } from '@graasp/sdk';
 
 import {
+  EXPLANATION_PLAY_CY,
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
+  buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
+import { LIAM_RESPONSES } from '../../fixtures/appData';
 import { APP_SETTINGS } from '../../fixtures/appSettings';
 
 describe('Play View', () => {
@@ -20,6 +23,33 @@ describe('Play View', () => {
     cy.visit('/');
 
     cy.get(dataCyWrapper(PLAY_VIEW_EMPTY_QUIZ_CY)).should('be.visible');
+  });
+
+  it('Show nothing even if receive other users data', () => {
+    cy.setUpApi({
+      database: {
+        appSettings: APP_SETTINGS,
+        appData: LIAM_RESPONSES, // app data but not the current user's
+      },
+    });
+    cy.visit('/');
+
+    cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
+      'contain',
+      APP_SETTINGS[0].data.question
+    );
+
+    // should not display app data
+    cy.get(
+      `${dataCyWrapper(
+        buildQuestionStepCy(APP_SETTINGS[0].data.questionId)
+      )} svg`
+    ).then(($el) => {
+      expect($el.attr('class').toLowerCase()).not.to.contain('error');
+      expect($el.attr('class').toLowerCase()).not.to.contain('success');
+    });
+
+    cy.get(`${dataCyWrapper(EXPLANATION_PLAY_CY)}`).should('not.exist');
   });
 
   describe('Play View', () => {

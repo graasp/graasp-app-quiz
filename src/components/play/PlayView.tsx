@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Alert, Button, Grid, Typography } from '@mui/material';
 
+import { useLocalContext } from '@graasp/apps-query-client';
 import { AppDataRecord } from '@graasp/sdk/frontend';
 
 import { APP_DATA_TYPES, QuestionType } from '../../config/constants';
@@ -16,7 +17,7 @@ import {
   PLAY_VIEW_SUBMIT_BUTTON_CY,
 } from '../../config/selectors';
 import { QuizContext } from '../context/QuizContext';
-import { getAppDataByQuestionId } from '../context/utilities';
+import { getAppDataByQuestionIdForMemberId } from '../context/utilities';
 import QuestionTopBar from '../navigation/QuestionTopBar';
 import {
   AppDataQuestionRecord,
@@ -35,13 +36,15 @@ const PlayView = () => {
   const { mutate: patchAppData } = mutations.usePatchAppData();
 
   const { currentQuestion, questions } = useContext(QuizContext);
+  const { memberId } = useLocalContext();
 
   const [showCorrection, setShowCorrection] = React.useState(false);
 
   const [newResponse, setNewResponse] = useState<AppDataRecord>(
-    getAppDataByQuestionId(
-      responses as List<AppDataQuestionRecord>,
-      currentQuestion
+    getAppDataByQuestionIdForMemberId(
+      (responses as List<AppDataQuestionRecord>) ?? List(),
+      currentQuestion,
+      memberId
     )
   );
 
@@ -49,9 +52,10 @@ const PlayView = () => {
     if (responses && currentQuestion) {
       // assume there's only one response for a question
       setNewResponse(
-        getAppDataByQuestionId(
+        getAppDataByQuestionIdForMemberId(
           responses as List<AppDataQuestionRecord>,
-          currentQuestion
+          currentQuestion,
+          memberId
         )
       );
     }
