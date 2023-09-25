@@ -17,28 +17,39 @@ const PlayExplanation = ({
 }) => {
   const { t } = useTranslation();
 
-  if (!currentQuestionData.explanation) {
+  const renderMultipleChoicesExplanations = () => {
+    if (currentQuestionData.type !== QuestionType.MULTIPLE_CHOICES) {
+      return null;
+    }
+
+    if (!currentQuestionData.choices.some((c) => Boolean(c.explanation))) {
+      return (
+        <ul>
+          {currentQuestionData.choices.map((c, idx) => (
+            <li key={idx} data-cy={buildMultipleChoiceExplanationPlayCy(idx)}>
+              {c.explanation}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+  };
+
+  const mcExplanations = renderMultipleChoicesExplanations();
+
+  if (!currentQuestionData.explanation || !mcExplanations) {
     return null;
   }
 
   return (
     <Grid item xs={12} width={'100%'}>
       <Typography variant="h6" mb={1}>
-        {t('Explanation')}
+        {t('Explanations')}
       </Typography>
       <Typography variant="body1" mb={1} data-cy={EXPLANATION_PLAY_CY}>
         {currentQuestionData.explanation}
 
-        {/* show multiple choices explanations */}
-        {currentQuestionData.type === QuestionType.MULTIPLE_CHOICES && (
-          <ul>
-            {currentQuestionData.choices.map((c, idx) => (
-              <li key={idx} data-cy={buildMultipleChoiceExplanationPlayCy(idx)}>
-                {c.explanation}
-              </li>
-            ))}
-          </ul>
-        )}
+        {mcExplanations}
       </Typography>
     </Grid>
   );
