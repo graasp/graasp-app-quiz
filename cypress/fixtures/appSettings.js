@@ -11,18 +11,22 @@ export const MULTIPLE_CHOICES_APP_SETTING = {
       {
         value: 'choice 1',
         isCorrect: false,
+        explanation: 'reason 1',
       },
       {
         value: 'choice 2',
         isCorrect: true,
+        explanation: 'reason 2',
       },
       {
         value: 'choice 3',
         isCorrect: true,
+        explanation: 'reason 3',
       },
       {
         value: 'choice 4',
         isCorrect: false,
+        explanation: 'reason 4',
       },
     ],
     explanation: 'my explanation for multiple choice',
@@ -93,10 +97,26 @@ export const CAPITAL_FRANCE_SETTING = {
     question: 'What is the capital of France?',
     type: QuestionType.MULTIPLE_CHOICES,
     choices: [
-      { value: 'London', isCorrect: false },
-      { value: 'Paris', isCorrect: true },
-      { value: 'New York', isCorrect: false },
-      { value: 'Tokyo', isCorrect: false },
+      {
+        value: 'London',
+        isCorrect: false,
+        explanation: 'London is the capital of England',
+      },
+      {
+        value: 'Paris',
+        isCorrect: true,
+        explanation: 'Paris is the capital of France',
+      },
+      {
+        value: 'New York',
+        isCorrect: false,
+        explanation: 'New York is in the US',
+      },
+      {
+        value: 'Tokyo',
+        isCorrect: false,
+        explanation: 'Tokyo is the capital of Japan',
+      },
     ],
     explanation: 'Paris is the capital of France.',
   },
@@ -158,9 +178,9 @@ export const NAME_EARTH_SATELLITE = {
     question: "What is the name of earth's natural satellite",
     type: QuestionType.MULTIPLE_CHOICES,
     choices: [
-      { value: 'Moon', isCorrect: true },
-      { value: 'Jupiter', isCorrect: false },
-      { value: 'Mars', isCorrect: false },
+      { value: 'Moon', isCorrect: true, explanation: 'reason sat 1' },
+      { value: 'Jupiter', isCorrect: false, explanation: 'reason sat 2' },
+      { value: 'Mars', isCorrect: false, explanation: 'reason sat 3' },
     ],
   },
   name: APP_SETTING_NAMES.QUESTION,

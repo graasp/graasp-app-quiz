@@ -15,8 +15,11 @@ import {
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   QUESTION_BAR_PREV_CY,
+  buildMultipleChoiceAddAnswerExplanationButtonCy,
   buildMultipleChoiceAnswerCy,
+  buildMultipleChoiceAnswerExplanationCy,
   buildMultipleChoiceDeleteAnswerButtonCy,
+  buildMultipleChoiceDeleteAnswerExplanationButtonCy,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
@@ -38,18 +41,22 @@ const newMultipleChoiceData = {
     {
       value: 'new choice 1',
       isCorrect: true,
+      explanation: 'reason 1',
     },
     {
       value: 'new choice 2',
       isCorrect: true,
+      explanation: 'reason 2',
     },
     {
       value: 'new choice 3',
       isCorrect: false,
+      explanation: 'reason 3',
     },
     {
       value: 'new choice 4',
       isCorrect: false,
+      explanation: 'reason 4',
     },
   ],
   explanation: 'my new explanation',
@@ -142,7 +149,7 @@ describe('Multiple Choices', () => {
       ...newMultipleChoiceData,
       choices: [
         ...newMultipleChoiceData.choices,
-        { value: '', isCorrect: true },
+        { value: '', isCorrect: true, explanation: '' },
       ],
     };
     fillMultipleChoiceQuestion(new2, { shouldSave: false });
@@ -155,9 +162,9 @@ describe('Multiple Choices', () => {
     const new3 = {
       ...newMultipleChoiceData,
       choices: [
-        { value: 'choice1', isCorrect: false },
-        { value: 'choice2', isCorrect: false },
-        { value: 'choice2', isCorrect: false },
+        { value: 'choice1', isCorrect: false, explanation: 'reason 1' },
+        { value: 'choice2', isCorrect: false, explanation: 'reason 2' },
+        { value: 'choice2', isCorrect: false, explanation: 'reason 3' },
       ],
     };
     fillMultipleChoiceQuestion(new3, { shouldSave: false });
@@ -170,6 +177,58 @@ describe('Multiple Choices', () => {
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
 
     cy.checkExplanationField(newMultipleChoiceData.explanation);
+  });
+
+  it('Add explanations', () => {
+    cy.setUpApi({
+      database: {
+        appSettings: [],
+      },
+      appContext: {
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
+      },
+    });
+    cy.visit('/');
+
+    fillMultipleChoiceQuestion(newMultipleChoiceData);
+
+    newMultipleChoiceData.choices.forEach(({ explanation }, idx) => {
+      cy.get(
+        dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+      ).should('be.visible');
+      cy.get(
+        dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+      ).click();
+      cy.get(
+        `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} textarea`
+      )
+        .should('be.visible')
+        .should('have.value', '');
+      if (explanation.length) {
+        cy.get(
+          `${dataCyWrapper(
+            buildMultipleChoiceAnswerExplanationCy(idx)
+          )} textarea`
+        )
+          .first()
+          .type(explanation);
+        cy.get(
+          dataCyWrapper(buildMultipleChoiceDeleteAnswerExplanationButtonCy(idx))
+        ).should('be.visible');
+        cy.get(
+          dataCyWrapper(buildMultipleChoiceDeleteAnswerExplanationButtonCy(idx))
+        ).click();
+        cy.get(
+          `${dataCyWrapper(
+            buildMultipleChoiceAnswerExplanationCy(idx)
+          )} textarea`
+        ).should('not.exist');
+        cy.get(
+          dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+        ).should('be.visible');
+      }
+    });
   });
 
   describe('Display saved settings', () => {
@@ -198,10 +257,17 @@ describe('Multiple Choices', () => {
         .should('be.visible')
         .should('contain', data.question);
 
-      data.choices.forEach(({ value, isCorrect }, idx) => {
+      data.choices.forEach(({ value, isCorrect, explanation }, idx) => {
         cy.get(
           `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input`
         ).should('have.value', value);
+        cy.get(
+          `${dataCyWrapper(
+            buildMultipleChoiceAnswerExplanationCy(idx)
+          )} textarea`
+        )
+          .should('be.visible')
+          .should('have.value', explanation);
         cy.get(
           `${dataCyWrapper(
             buildMultipleChoiceAnswerCy(idx)

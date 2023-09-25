@@ -1,7 +1,7 @@
 import { List } from 'immutable';
 
 import CheckIcon from '@mui/icons-material/Check';
-import { Button, ButtonProps, Grid } from '@mui/material';
+import { Button, ButtonProps, Typography } from '@mui/material';
 
 import { buildMultipleChoicesButtonCy } from '../../config/selectors';
 import {
@@ -81,19 +81,26 @@ const PlayMultipleChoices = ({
   };
 
   return (
-    <Grid container direction="column" spacing={2}>
+    <>
       {choices?.map((choice, idx) => (
-        <Grid item key={choice.value + '-' + idx}>
-          <Button
-            onClick={onResponseClick(choice.value)}
-            fullWidth
-            {...computeStyles(choice, idx)}
-          >
-            {choice.value}
-          </Button>
-        </Grid>
+        <Button
+          onClick={onResponseClick(choice.value)}
+          fullWidth
+          sx={{ mb: 1 }}
+          {...computeStyles(choice, idx)}
+        >
+          {showCorrection &&
+          choice.explanation &&
+          response.choices?.contains(choice.value) ? (
+            <>
+              <Typography variant="body1">{choice.value}</Typography>
+            </>
+          ) : (
+            <Typography variant="body1">{choice.value}</Typography>
+          )}
+        </Button>
       ))}
-    </Grid>
+    </>
   );
 };
 

@@ -52,7 +52,7 @@ export type AppSettingDataRecord = ImmutableCast<AppSettingData>;
 
 export type MultipleChoicesAppSettingData = AppSettingData & {
   type: QuestionType.MULTIPLE_CHOICES;
-  choices: { value: string; isCorrect: boolean }[];
+  choices: { value: string; isCorrect: boolean; explanation?: string }[];
 };
 export type MultipleChoicesAppSettingDataRecord =
   ImmutableCast<MultipleChoicesAppSettingData>;

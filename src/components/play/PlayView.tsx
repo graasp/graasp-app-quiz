@@ -11,7 +11,6 @@ import { AppDataRecord } from '@graasp/sdk/frontend';
 import { APP_DATA_TYPES, QuestionType } from '../../config/constants';
 import { hooks, mutations } from '../../config/queryClient';
 import {
-  EXPLANATION_PLAY_CY,
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
@@ -22,8 +21,10 @@ import QuestionTopBar from '../navigation/QuestionTopBar';
 import {
   AppDataQuestionRecord,
   MultipleChoiceAppDataDataRecord,
+  QuestionDataRecord,
   SliderAppDataDataRecord,
 } from '../types/types';
+import PlayExplanation from './PlayExplanation';
 import PlayFillInTheBlanks from './PlayFillInTheBlanks';
 import PlayMultipleChoices from './PlayMultipleChoices';
 import PlaySlider from './PlaySlider';
@@ -169,15 +170,10 @@ const PlayView = () => {
           }
         })()}
       </Grid>
-      {showCorrection && currentQuestion.data.explanation && (
-        <Grid item xs={12} width={'100%'}>
-          <Typography variant="h6" mb={1}>
-            {t('Explanation')}
-          </Typography>
-          <Typography variant="body1" mb={1} data-cy={EXPLANATION_PLAY_CY}>
-            {currentQuestion.data.explanation}
-          </Typography>
-        </Grid>
+      {showCorrection && (
+        <PlayExplanation
+          currentQuestionData={currentQuestion.data as QuestionDataRecord}
+        />
       )}
       <Grid item xs={12}>
         <Button

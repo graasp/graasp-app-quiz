@@ -23,7 +23,11 @@ export const QuestionType_TO_NAME = {
   [QuestionType.FILL_BLANKS]: 'Fill In The Blanks',
 };
 
-export const DEFAULT_CHOICE = convertJs({ value: '', isCorrect: false });
+export const DEFAULT_CHOICE = convertJs({
+  value: '',
+  isCorrect: false,
+  explanation: '',
+});
 
 export const SLIDER_DEFAULT_MAX_VALUE = 100;
 export const SLIDER_DEFAULT_MIN_VALUE = 0;
@@ -34,8 +38,8 @@ export const DEFAULT_QUESTION_VALUES = {
     explanation: '',
     type: QuestionType.MULTIPLE_CHOICES,
     choices: [
-      { value: '', isCorrect: true },
-      { value: '', isCorrect: false },
+      { value: '', isCorrect: true, explanation: '' },
+      { value: '', isCorrect: false, explanation: '' },
     ],
   }),
   [QuestionType.SLIDER]: convertJs({
