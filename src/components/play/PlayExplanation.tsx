@@ -37,7 +37,7 @@ const PlayExplanation = ({
 
   const mcExplanations = renderMultipleChoicesExplanations();
 
-  if (!currentQuestionData.explanation || !mcExplanations) {
+  if (!currentQuestionData.explanation && !mcExplanations) {
     return null;
   }
 
