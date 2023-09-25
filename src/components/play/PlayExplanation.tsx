@@ -22,14 +22,16 @@ const PlayExplanation = ({
       return null;
     }
 
-    if (!currentQuestionData.choices.some((c) => Boolean(c.explanation))) {
+    if (currentQuestionData.choices.some((c) => Boolean(c.explanation))) {
       return (
         <ul>
-          {currentQuestionData.choices.map((c, idx) => (
-            <li key={idx} data-cy={buildMultipleChoiceExplanationPlayCy(idx)}>
-              {c.explanation}
-            </li>
-          ))}
+          {currentQuestionData.choices
+            .filter((c) => Boolean(c.explanation))
+            .map((c, idx) => (
+              <li key={idx} data-cy={buildMultipleChoiceExplanationPlayCy(idx)}>
+                {c.explanation}
+              </li>
+            ))}
         </ul>
       );
     }
