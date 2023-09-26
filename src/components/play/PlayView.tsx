@@ -156,7 +156,7 @@ const PlayView = () => {
                   response={newResponse.data}
                   setResponse={(value: SliderAppDataDataRecord) => {
                     setNewResponse(
-                      newResponse.update('data', (data) => data.merge(value))
+                      newResponse.update('data', (data) => data.merge({value}))
                     );
                   }}
                   showCorrection={showCorrection}
