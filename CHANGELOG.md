@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/graasp/graasp-app-quiz/compare/v1.0.2...v1.1.0) (2023-09-26)
+
+
+### Features
+
+* add explanation to each choice of the multiple choice questions ([#85](https://github.com/graasp/graasp-app-quiz/issues/85)) ([45d4df8](https://github.com/graasp/graasp-app-quiz/commit/45d4df89fcd6f4d4cc749059f4bc659b6fa10343))
+* allow question drag and drop ([#81](https://github.com/graasp/graasp-app-quiz/issues/81)) ([95bbdf1](https://github.com/graasp/graasp-app-quiz/commit/95bbdf1e9f1e126c1afdb90eed92044c82778333))
+
+
+### Bug Fixes
+
+* **deps:** update sentry packages to v7.70.0 ([#63](https://github.com/graasp/graasp-app-quiz/issues/63)) ([17351e6](https://github.com/graasp/graasp-app-quiz/commit/17351e60e83daad9b11ad75d583caad778ab5665))
+* show only current member data in playview ([#89](https://github.com/graasp/graasp-app-quiz/issues/89)) ([25ee459](https://github.com/graasp/graasp-app-quiz/commit/25ee45948a6d8d3c436ecd8921745cfd001ba047))
+* update value of slider ([#96](https://github.com/graasp/graasp-app-quiz/issues/96)) ([7cb2985](https://github.com/graasp/graasp-app-quiz/commit/7cb298564433a6cfe8627d146ea71b3e11c333fa))
+
 ## [1.0.2](https://github.com/graasp/graasp-app-quiz/compare/v1.0.1...v1.0.2) (2023-08-28)
 
 
