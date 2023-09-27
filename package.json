@@ -16,7 +16,7 @@
     "@tanstack/react-query": "4.29.15",
     "@tanstack/react-query-devtools": "4.29.15",
     "i18next": "22.5.1",
-    "immutable": "4.3.2",
+    "immutable": "4.3.4",
     "lodash.clonedeep": "4.5.0",
     "plotly.js-basic-dist-min": "2.24.2",
     "prop-types": "15.8.1",
@@ -92,7 +92,7 @@
     "typescript": "5.1.6"
   },
   "resolutions": {
-    "immutable": "4.3.2"
+    "immutable": "4.3.4"
   },
   "packageManager": "yarn@3.6.0"
 }
