@@ -1,18 +1,16 @@
-import { List } from 'immutable';
-
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, ButtonProps, Typography } from '@mui/material';
 
 import { buildMultipleChoicesButtonCy } from '../../config/selectors';
 import {
-  MultipleChoiceAppDataDataRecord,
-  MultipleChoicesAppSettingDataRecord,
+  MultipleChoiceAppDataData,
+  MultipleChoicesAppSettingData,
 } from '../types/types';
 
 type Props = {
-  choices: MultipleChoicesAppSettingDataRecord['choices'];
-  response: MultipleChoiceAppDataDataRecord;
-  setResponse: (d: MultipleChoiceAppDataDataRecord['choices']) => void;
+  choices: MultipleChoicesAppSettingData['choices'];
+  response: MultipleChoiceAppDataData;
+  setResponse: (d: MultipleChoiceAppDataData['choices']) => void;
   showCorrection: boolean;
 };
 
@@ -28,13 +26,18 @@ const PlayMultipleChoices = ({
       const choiceIdx = response.choices?.findIndex(
         (choice) => choice === value
       );
+
       if (choiceIdx >= 0) {
-        setResponse(response.choices.delete(choiceIdx));
+        const choicesWithoutChoiceIdx = [
+          ...response.choices.slice(0, choiceIdx),
+          ...response.choices.slice(choiceIdx + 1),
+        ];
+        setResponse(choicesWithoutChoiceIdx);
       } else {
         if (!value) {
           return console.error('choice for value ' + value + ' does not exist');
         }
-        setResponse((response.choices ?? List()).push(value));
+        setResponse([...(response.choices ?? []), value]);
       }
     };
 
@@ -91,7 +94,7 @@ const PlayMultipleChoices = ({
         >
           {showCorrection &&
           choice.explanation &&
-          response.choices?.contains(choice.value) ? (
+          response.choices?.some((c) => c === choice.value) ? (
             <>
               <Typography variant="body1">{choice.value}</Typography>
             </>

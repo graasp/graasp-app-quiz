@@ -1,4 +1,4 @@
-import { List } from 'immutable';
+import groupBy from 'lodash.groupby';
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ import {
 import Box from '@mui/material/Box';
 import { visuallyHidden } from '@mui/utils';
 
-import { AppDataRecord, MemberRecord } from '@graasp/sdk/frontend';
+import { AppData, Member } from '@graasp/sdk';
 
 import { QuestionType } from '../../config/constants';
 import {
@@ -43,20 +43,17 @@ import {
 } from '../../utils/tableUtils';
 import { computeCorrectness } from '../context/utilities';
 import {
-  AppDataDataRecord,
-  MultipleChoiceAppDataDataRecord,
-  QuestionDataRecord,
-  SliderAppDataDataRecord,
-  TextAppDataDataRecord,
+  MultipleChoiceAppDataData,
+  QuestionAppDataData,
+  QuestionDataAppSetting,
+  SliderAppDataData,
+  TextAppDataData,
 } from '../types/types';
 
 type Props = {
-  question: {
-    data: QuestionDataRecord & { innerlink: string };
-    id: string;
-  };
-  memberList: List<MemberRecord>;
-  responses: List<AppDataRecord>;
+  question: QuestionDataAppSetting;
+  memberList: Member[];
+  responses: AppData[];
   handleUserClicked: (id: string) => void;
 };
 
@@ -69,11 +66,11 @@ const TableByQuestion = ({
   const { t } = useTranslation();
   const [order, setOrder] = useState<'desc' | 'asc' | undefined>('asc');
   const [responsesByUser, setResponsesByUser] = useState(
-    responses.groupBy((res) => res.member.id)
+    groupBy(responses, (res) => res.member.id)
   );
 
   useEffect(() => {
-    setResponsesByUser(responses.groupBy((res) => res.member.id));
+    setResponsesByUser(groupBy(responses, (res) => res.member.id));
   }, [responses]);
 
   /**
@@ -82,8 +79,9 @@ const TableByQuestion = ({
    * @param {string} userId The name of the user
    * @returns A user response (May be undefined if user didn't respond to the current question)
    */
-  const getResponseForUserId = (userId: string): AppDataRecord | undefined => {
-    return responsesByUser.get(userId)?.first();
+  const getResponseForUserId = (userId: string): AppData | undefined => {
+    const userResponses = responsesByUser[userId];
+    return userResponses?.length > 0 ? userResponses[0] : undefined;
   };
 
   /**
@@ -98,13 +96,12 @@ const TableByQuestion = ({
     switch (question.data.type) {
       case QuestionType.TEXT_INPUT:
       case QuestionType.FILL_BLANKS:
-        return (response as TextAppDataDataRecord)?.text ?? '';
+        return (response as TextAppDataData)?.text ?? '';
       case QuestionType.SLIDER:
-        return (response as SliderAppDataDataRecord)?.value ?? '';
+        return (response as SliderAppDataData)?.value ?? '';
       case QuestionType.MULTIPLE_CHOICES:
         return (
-          (response as MultipleChoiceAppDataDataRecord)?.choices?.join(', ') ??
-          ''
+          (response as MultipleChoiceAppDataData)?.choices?.join(', ') ?? ''
         );
       default:
         return '';
@@ -136,7 +133,7 @@ const TableByQuestion = ({
         <Typography
           variant="h5"
           component="h5"
-          data-cy={buildTableByQuestionCy(question.id)}
+          data-cy={buildTableByQuestionCy(question.data.questionId)}
         >
           {question.data.question}
         </Typography>
@@ -149,7 +146,9 @@ const TableByQuestion = ({
                     active={true}
                     direction={order}
                     onClick={handleRequestSort}
-                    data-cy={buildTableByQuestionUserHeaderCy(question.id)}
+                    data-cy={buildTableByQuestionUserHeaderCy(
+                      question.data.questionId
+                    )}
                   >
                     {t('User')}
                     {
@@ -163,32 +162,39 @@ const TableByQuestion = ({
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByQuestionAnswerHeaderCy(question.id)}
+                  data-cy={buildTableByQuestionAnswerHeaderCy(
+                    question.data.questionId
+                  )}
                 >
                   {t('Answer')}
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByQuestionDateHeaderCy(question.id)}
+                  data-cy={buildTableByQuestionDateHeaderCy(
+                    question.data.questionId
+                  )}
                 >
                   {t('Date')}
                 </TableCell>
                 <TableCell
                   align="left"
-                  data-cy={buildTableByQuestionCorrectHeaderCy(question.id)}
+                  data-cy={buildTableByQuestionCorrectHeaderCy(
+                    question.data.questionId
+                  )}
                 >
                   {t('Correct')}
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody data-cy={buildTableByQuestionTableBodyCy(question.id)}>
+            <TableBody
+              data-cy={buildTableByQuestionTableBodyCy(question.data.questionId)}
+            >
               {memberList
-                // todo: fix type
                 ?.sort(
-                  getComparator(
+                  getComparator({
                     order,
-                    comparatorArrayByElemName as never
-                  ) as never
+                    comp: comparatorArrayByElemName,
+                  })
                 )
                 .map(({ id, name }) => (
                   <TableRow
@@ -226,8 +232,8 @@ const TableByQuestion = ({
                           data-cy={TABLE_BY_QUESTION_CORRECT_ICON_CY}
                         >
                           {computeCorrectness(
-                            question.data as QuestionDataRecord,
-                            getResponseForUserId(id)?.data as AppDataDataRecord
+                            question.data,
+                            getResponseForUserId(id)?.data as QuestionAppDataData
                           ) ? (
                             <CheckCircleOutlined color="success" />
                           ) : (

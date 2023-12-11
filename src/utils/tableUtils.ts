@@ -3,10 +3,10 @@
  *
  * @type {Readonly<{ASC: string, DESC: string}>}
  */
-export const Order = Object.freeze({
+export const Order = {
   ASC: 'asc',
   DESC: 'desc',
-});
+} as const;
 
 /**
  * Helper function to compare two elements
@@ -19,7 +19,7 @@ export const Order = Object.freeze({
  * @param {string} e2 The second username
  * @returns {number} Whether the first one or the second one is the biggest
  */
-export const comparator = (e1: string, e2: string) => {
+export const stringComparator = (e1: string, e2: string) => {
   if (e2 < e1) {
     return -1;
   }
@@ -57,14 +57,16 @@ export const comparatorArrayByElemName = (
  * @param comp The comparator to use to compare
  * @returns {{(string, string): number}} The comparator corresponding to the required order
  */
-export const getComparator = (
-  order?: string,
-  comp?: (a: unknown, b: unknown) => number
-) => {
-  const fn = comp ?? comparator;
+export const getComparator = <T>({
+  order,
+  comp,
+}: {
+  order?: string;
+  comp: (a: T, b: T) => number;
+}) => {
   return order === Order.DESC
-    ? (a: string, b: string) => fn(a, b)
-    : (a: string, b: string) => -fn(a, b);
+    ? (a: T, b: T) => comp(a, b)
+    : (a: T, b: T) => -comp(a, b);
 };
 
 /**

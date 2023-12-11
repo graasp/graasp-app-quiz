@@ -1,41 +1,54 @@
-import { List } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Member, convertJs } from '@graasp/sdk';
-import { AppDataRecord, AppSettingRecord } from '@graasp/sdk/frontend';
+import { AppData, AppSetting, Member } from '@graasp/sdk';
 
 import {
+  APP_SETTING_NAMES,
+  AppSettingName,
   DEFAULT_APP_DATA_VALUES,
   FAILURE_MESSAGES,
   QuestionType,
 } from '../../config/constants';
 import {
-  AppDataDataRecord,
-  AppDataQuestionRecord,
-  FillTheBlanksAppDataDataRecord,
-  MultipleChoiceAppDataDataRecord,
-  QuestionDataAppSettingRecord,
-  QuestionDataRecord,
-  SliderAppDataDataRecord,
-  TextAppDataDataRecord,
+  AppDataQuestion,
+  FillTheBlanksAppDataData,
+  MultipleChoiceAppDataData,
+  QuestionAppDataData,
+  QuestionData,
+  QuestionDataAppSetting,
+  QuestionListType,
+  SliderAppDataData,
+  TextAppDataData,
 } from '../types/types';
 
 export const generateId = (): string => {
   return uuidv4();
 };
 
-export const getQuestionById = (
-  data: List<QuestionDataAppSettingRecord>,
-  id: string
-) => {
+export const getQuestionById = (data: QuestionDataAppSetting[], id: string) => {
   return data.find((d) => d.data.questionId === id);
 };
 
-export const getSettingsByName = (
-  data: List<AppSettingRecord> = List(),
-  name: string
-) => {
-  return data?.filter((d) => d.name === name);
+// Define specific setting type depending on the app setting name.
+type SettingReturnTypeMap = {
+  [key in AppSettingName]: key extends typeof APP_SETTING_NAMES.QUESTION
+    ? QuestionDataAppSetting[]
+    : key extends typeof APP_SETTING_NAMES.QUESTION_LIST
+    ? QuestionListType[]
+    : AppSetting[];
+};
+
+// Define the return type a specific if exists, else return generic appSetting.
+export type GettingSettingsReturnType<T extends AppSettingName> =
+  T extends keyof SettingReturnTypeMap ? SettingReturnTypeMap[T] : AppSetting[];
+
+export const getSettingsByName = <T extends AppSettingName>(
+  settings: AppSetting[] = [],
+  name: T
+): GettingSettingsReturnType<T> => {
+  return settings?.filter(
+    (d) => d.name === name
+  ) as GettingSettingsReturnType<T>;
 };
 
 export const isDifferent = (obj1: object, obj2: object): boolean => {
@@ -43,18 +56,18 @@ export const isDifferent = (obj1: object, obj2: object): boolean => {
 };
 
 export const computeCorrectness = (
-  question: QuestionDataRecord,
-  data?: AppDataDataRecord
+  question: QuestionData,
+  data?: QuestionAppDataData
 ) => {
   switch (question?.type) {
     // cannot use switch because we need to check both types
     case QuestionType.SLIDER: {
-      const d = data as SliderAppDataDataRecord;
+      const d = data as SliderAppDataData | undefined;
       return d?.value === question.value;
     }
 
     case QuestionType.MULTIPLE_CHOICES: {
-      const d = data as MultipleChoiceAppDataDataRecord;
+      const d = data as MultipleChoiceAppDataData | undefined;
       if (!d?.choices) {
         return false;
       }
@@ -68,14 +81,14 @@ export const computeCorrectness = (
       if (!question.text) {
         return true;
       }
-      const d = data as TextAppDataDataRecord;
+      const d = data as TextAppDataData | undefined;
       return (
         d?.text?.toLowerCase().trim() === question.text.toLowerCase().trim()
       );
     }
 
     case QuestionType.FILL_BLANKS: {
-      const d = data as FillTheBlanksAppDataDataRecord;
+      const d = data as FillTheBlanksAppDataData;
       return d?.text === question.text;
     }
     default:
@@ -84,17 +97,20 @@ export const computeCorrectness = (
 };
 
 export const getAppDataByQuestionIdForMemberId = (
-  appData: List<AppDataQuestionRecord>,
-  question: QuestionDataAppSettingRecord,
+  appData: AppDataQuestion[],
+  question: QuestionDataAppSetting,
   memberId?: Member['id']
-) => {
+): Partial<AppData> | undefined => {
   const qId = question.data.questionId;
-  const defaultValue = convertJs({
+
+  // The default value is used to display the question
+  // to the user when it hasn't answered yet...
+  const defaultValue = {
     data: {
       questionId: qId,
       ...DEFAULT_APP_DATA_VALUES[question.data.type],
     },
-  });
+  };
 
   if (!memberId) {
     return defaultValue;
@@ -109,24 +125,24 @@ export const getAppDataByQuestionIdForMemberId = (
 };
 
 export const getQuestionNameFromId = (
-  appSettings: List<AppSettingRecord>,
+  appSettings: QuestionDataAppSetting[],
   qId: string
 ) => {
   return (
     appSettings?.find((setting) => setting.data.questionId === qId)?.data
-      ?.question ?? ''
+      .question ?? ''
   );
 };
 
 export const getAllAppDataByQuestionId = (
-  appData: List<AppDataRecord>,
+  appData: AppData[] | undefined,
   qId: string
 ) => {
   return appData?.filter(({ data }) => data?.questionId === qId) ?? [];
 };
 
 export const getAllAppDataByUserId = (
-  appData: List<AppDataRecord>,
+  appData: AppData[] | undefined,
   uId: string
 ) => {
   return appData?.filter((entry) => entry.member.id === uId) ?? [];
@@ -149,7 +165,7 @@ export const areTagsMatching = (text: string) => {
   return acc === 0;
 };
 
-export const validateQuestionData = (data: QuestionDataRecord) => {
+export const validateQuestionData = (data: QuestionData) => {
   if (!data?.question) {
     throw FAILURE_MESSAGES.EMPTY_QUESTION;
   }
@@ -164,7 +180,7 @@ export const validateQuestionData = (data: QuestionDataRecord) => {
       }
       break;
     case QuestionType.MULTIPLE_CHOICES:
-      if (data?.choices?.size < 2) {
+      if (data?.choices?.length < 2) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_ANSWER_COUNT;
       }
       if (!data?.choices?.some(({ isCorrect }) => isCorrect)) {
