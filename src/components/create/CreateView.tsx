@@ -25,6 +25,7 @@ import CreateQuestionTopBar from './CreateQuestionTopBar';
 import Explanation from './Explanation';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
+import NumberOfAttempts from './NumberOfAttempts';
 import QuestionTitle from './QuestionTitle';
 import QuestionTypeSelect from './QuestionTypeSelect';
 import Slider from './Slider';
@@ -67,6 +68,10 @@ const CreateView = () => {
       setErrorMessage(e as string);
     }
   };
+
+  useEffect(() => {
+    console.log(newData.toJS());
+  }, [newData]);
 
   return (
     <>
@@ -162,6 +167,19 @@ const CreateView = () => {
               }
             }
           })()}
+
+          <NumberOfAttempts
+            initAttempts={newData.numberOfAttempts}
+            onChange={(attempts: number) => {
+              // TODO: not working yet, migrate to TS and immutable before to continue here
+              // setNewData(
+              //   (newData as AppSettingDataRecord).set(
+              //     'numberOfAttempts',
+              //     attempts
+              //   ) as QuestionDataRecord
+              // );
+            }}
+          />
         </Grid>
 
         <Grid item>
