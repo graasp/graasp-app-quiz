@@ -1,8 +1,6 @@
-import { List } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Member, convertJs } from '@graasp/sdk';
-import { AppDataRecord, AppSettingRecord } from '@graasp/sdk/frontend';
+import { AppData, AppSetting, Member } from '@graasp/sdk';
 
 import {
   DEFAULT_APP_DATA_VALUES,
@@ -10,31 +8,25 @@ import {
   QuestionType,
 } from '../../config/constants';
 import {
-  AppDataDataRecord,
-  AppDataQuestionRecord,
-  FillTheBlanksAppDataDataRecord,
-  MultipleChoiceAppDataDataRecord,
-  QuestionDataAppSettingRecord,
-  QuestionDataRecord,
-  SliderAppDataDataRecord,
-  TextAppDataDataRecord,
+  AppDataQuestion,
+  FillTheBlanksAppDataData,
+  MultipleChoiceAppDataData,
+  QuestionAppDataData,
+  QuestionData,
+  QuestionDataAppSetting,
+  SliderAppDataData,
+  TextAppDataData,
 } from '../types/types';
 
 export const generateId = (): string => {
   return uuidv4();
 };
 
-export const getQuestionById = (
-  data: List<QuestionDataAppSettingRecord>,
-  id: string
-) => {
+export const getQuestionById = (data: QuestionDataAppSetting[], id: string) => {
   return data.find((d) => d.data.questionId === id);
 };
 
-export const getSettingsByName = (
-  data: List<AppSettingRecord> = List(),
-  name: string
-) => {
+export const getSettingsByName = (data: AppSetting[] = [], name: string) => {
   return data?.filter((d) => d.name === name);
 };
 
@@ -43,18 +35,18 @@ export const isDifferent = (obj1: object, obj2: object): boolean => {
 };
 
 export const computeCorrectness = (
-  question: QuestionDataRecord,
-  data?: AppDataDataRecord
+  question: QuestionData,
+  data?: QuestionAppDataData
 ) => {
   switch (question?.type) {
     // cannot use switch because we need to check both types
     case QuestionType.SLIDER: {
-      const d = data as SliderAppDataDataRecord;
+      const d = data as SliderAppDataData | undefined;
       return d?.value === question.value;
     }
 
     case QuestionType.MULTIPLE_CHOICES: {
-      const d = data as MultipleChoiceAppDataDataRecord;
+      const d = data as MultipleChoiceAppDataData | undefined;
       if (!d?.choices) {
         return false;
       }
@@ -68,14 +60,14 @@ export const computeCorrectness = (
       if (!question.text) {
         return true;
       }
-      const d = data as TextAppDataDataRecord;
+      const d = data as TextAppDataData | undefined;
       return (
         d?.text?.toLowerCase().trim() === question.text.toLowerCase().trim()
       );
     }
 
     case QuestionType.FILL_BLANKS: {
-      const d = data as FillTheBlanksAppDataDataRecord;
+      const d = data as FillTheBlanksAppDataData;
       return d?.text === question.text;
     }
     default:
@@ -84,17 +76,25 @@ export const computeCorrectness = (
 };
 
 export const getAppDataByQuestionIdForMemberId = (
-  appData: List<AppDataQuestionRecord>,
-  question: QuestionDataAppSettingRecord,
+  appData?: AppDataQuestion[],
+  question?: QuestionDataAppSetting, // TODO: question can be null ?
   memberId?: Member['id']
-) => {
+): Partial<AppData> | undefined => {
+  if (!question) {
+    return undefined;
+  }
+
   const qId = question.data.questionId;
-  const defaultValue = convertJs({
+
+  // TODO: check for a more elegant way to do that
+  // The default value is used to display the question
+  // to the user when it hasn't answered yet...
+  const defaultValue = {
     data: {
       questionId: qId,
       ...DEFAULT_APP_DATA_VALUES[question.data.type],
     },
-  });
+  };
 
   if (!memberId) {
     return defaultValue;
@@ -109,24 +109,24 @@ export const getAppDataByQuestionIdForMemberId = (
 };
 
 export const getQuestionNameFromId = (
-  appSettings: List<AppSettingRecord>,
+  appSettings: QuestionDataAppSetting[],
   qId: string
 ) => {
   return (
     appSettings?.find((setting) => setting.data.questionId === qId)?.data
-      ?.question ?? ''
+      .question ?? ''
   );
 };
 
 export const getAllAppDataByQuestionId = (
-  appData: List<AppDataRecord>,
+  appData: AppData[] | undefined,
   qId: string
 ) => {
   return appData?.filter(({ data }) => data?.questionId === qId) ?? [];
 };
 
 export const getAllAppDataByUserId = (
-  appData: List<AppDataRecord>,
+  appData: AppData[] | undefined,
   uId: string
 ) => {
   return appData?.filter((entry) => entry.member.id === uId) ?? [];
@@ -149,7 +149,7 @@ export const areTagsMatching = (text: string) => {
   return acc === 0;
 };
 
-export const validateQuestionData = (data: QuestionDataRecord) => {
+export const validateQuestionData = (data: QuestionData) => {
   if (!data?.question) {
     throw FAILURE_MESSAGES.EMPTY_QUESTION;
   }
@@ -164,7 +164,7 @@ export const validateQuestionData = (data: QuestionDataRecord) => {
       }
       break;
     case QuestionType.MULTIPLE_CHOICES:
-      if (data?.choices?.size < 2) {
+      if (data?.choices?.length < 2) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_ANSWER_COUNT;
       }
       if (!data?.choices?.some(({ isCorrect }) => isCorrect)) {

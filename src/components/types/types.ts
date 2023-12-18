@@ -1,46 +1,30 @@
+import { MutableRefObject } from 'react';
+
 import { AppData, AppSetting } from '@graasp/sdk';
-import { ImmutableCast } from '@graasp/sdk/frontend';
 
 import { QuestionType } from '../../config/constants';
+import { PlotDatum } from 'plotly.js-basic-dist-min';
 
 export type AppDataData = {
   questionId: string;
 };
-export type AppDataQuestionRecord = ImmutableCast<
-  AppData & { data: AppDataData }
->;
+export type AppDataQuestion = AppData & { data: AppDataData };
 
 export type MultipleChoiceAppDataData = AppDataData & {
   choices: string[];
 };
-export type MultipleChoiceAppDataDataRecord =
-  ImmutableCast<MultipleChoiceAppDataData>;
 
 export type TextAppDataData = AppDataData & {
   text: string;
 };
 
-export type TextAppDataDataRecord = ImmutableCast<TextAppDataData>;
-
 export type FillTheBlanksAppDataData = AppDataData & {
   text: string;
 };
 
-export type FillTheBlanksAppDataDataRecord =
-  ImmutableCast<FillTheBlanksAppDataData>;
-
 export type SliderAppDataData = AppDataData & {
   value: number;
 };
-
-export type SliderAppDataDataRecord = ImmutableCast<SliderAppDataData>;
-
-export type AppDataDataRecord = ImmutableCast<
-  | MultipleChoiceAppDataData
-  | TextAppDataData
-  | FillTheBlanksAppDataData
-  | SliderAppDataData
->;
 
 export type AppSettingData = {
   type: string;
@@ -49,14 +33,16 @@ export type AppSettingData = {
   explanation?: string;
   numberOfAttempts?: number;
 };
-export type AppSettingDataRecord = ImmutableCast<AppSettingData>;
 
+export type MultipleChoicesChoice = {
+  value: string;
+  isCorrect: boolean;
+  explanation?: string;
+};
 export type MultipleChoicesAppSettingData = AppSettingData & {
   type: QuestionType.MULTIPLE_CHOICES;
-  choices: { value: string; isCorrect: boolean; explanation?: string }[];
+  choices: MultipleChoicesChoice[];
 };
-export type MultipleChoicesAppSettingDataRecord =
-  ImmutableCast<MultipleChoicesAppSettingData>;
 
 export type SliderAppSettingData = AppSettingData & {
   type: QuestionType.SLIDER;
@@ -64,7 +50,6 @@ export type SliderAppSettingData = AppSettingData & {
   min: number;
   max: number;
 };
-export type SliderAppSettingDataRecord = ImmutableCast<SliderAppSettingData>;
 export type TextAppSettingData = AppSettingData & {
   type: QuestionType.TEXT_INPUT;
   text: string;
@@ -73,24 +58,68 @@ export type FillTheBlanksAppSettingData = AppSettingData & {
   type: QuestionType.FILL_BLANKS;
   text: string;
 };
+// TODO: AppDataDataRecord
 export type QuestionData =
   | MultipleChoicesAppSettingData
   | SliderAppSettingData
   | TextAppSettingData
   | FillTheBlanksAppSettingData;
 
-export type QuestionDataRecord = ImmutableCast<QuestionData>;
+export type QuestionListType = AppSetting & {
+  data: {
+    list: string[];
+  };
+};
 
-export type QuestionListTypeRecord = ImmutableCast<
-  AppSetting & {
-    data: {
-      list: string[];
-    };
-  }
->;
+export type QuestionDataAppSetting = AppSetting & {
+  data: QuestionData;
+};
 
-export type QuestionDataAppSettingRecord = ImmutableCast<
-  AppSetting & {
-    data: QuestionData;
-  }
+// TODO: check if it is possible to do without new type
+export type CurrentQuestion = Pick<AppSetting, 'id'> & { data: QuestionData };
+
+export type ChartData = {
+  data: {
+    x: string[];
+    y: number[];
+  };
+  percentage: number[];
+  maxValue: number;
+  hoverText: string[];
+  barColors: string[];
+};
+
+export type CommonChart = {
+  type: 'chart';
+};
+
+export type DetailedChart = {
+  type: QuestionType.FILL_BLANKS;
+  chartIndex: number;
+};
+
+export type Chart = {
+  label: string;
+  id: string;
+  link: string;
+  chartType: symbol;
+} & (CommonChart | DetailedChart);
+
+interface ChartPoint<T> extends PlotDatum {
+  meta?: T;
+}
+
+export interface ChartEvent<T> {
+  points: ChartPoint<T>[];
+}
+
+export type AllOfExcept<T, K extends keyof T> = Omit<T, K>;
+
+export type RefsObject<T> = { [key: string]: T };
+export type MultipleRefs<T> = MutableRefObject<RefsObject<T>>;
+
+export type QuestionAppData<T extends QuestionData> = Omit<
+  T,
+  keyof AppSettingData
 >;
+export type QuestionAppDataData = MultipleChoiceAppDataData | FillTheBlanksAppDataData | SliderAppDataData;

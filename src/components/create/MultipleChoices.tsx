@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -29,11 +27,14 @@ import {
   buildMultipleChoiceDeleteAnswerButtonCy,
   buildMultipleChoiceDeleteAnswerExplanationButtonCy,
 } from '../../config/selectors';
-import { MultipleChoicesAppSettingDataRecord } from '../types/types';
+import {
+  MultipleChoicesAppSettingData,
+  MultipleChoicesChoice,
+} from '../types/types';
 
 type Props = {
-  choices: MultipleChoicesAppSettingDataRecord['choices'];
-  setChoices: (d: MultipleChoicesAppSettingDataRecord['choices']) => void;
+  choices: MultipleChoicesAppSettingData['choices'];
+  setChoices: (d: MultipleChoicesAppSettingData['choices']) => void;
 };
 
 const MultipleChoices = ({
@@ -42,15 +43,37 @@ const MultipleChoices = ({
 }: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const [explanationList, setExplanationList] = useState<List<boolean>>(
-    List(choices.map((choice) => Boolean(choice.explanation)))
+  const updateAtIndex = <T,>(arr: T[], idx: number, newValue?: T) => [
+    ...arr.slice(0, idx),
+    ...(newValue ? [newValue] : []),
+    ...arr.slice(idx + 1),
+  ];
+
+  const removAtIndex = <T,>(arr: T[], idx: number) => updateAtIndex(arr, idx);
+
+  const setIn = <T extends MultipleChoicesChoice>(
+    choices: T[],
+    index: number,
+    key: keyof T,
+    value: T[keyof T]
+  ): T[] => {
+    const newChoice = {
+      ...choices[index],
+      [key]: value,
+    };
+
+    return updateAtIndex(choices, index, newChoice);
+  };
+
+  const [explanationList, setExplanationList] = useState<boolean[]>(
+    choices.map((choice) => Boolean(choice.explanation))
   );
 
   const handleAnswerCorrectnessChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const d = choices.setIn([index, 'isCorrect'], e.target.checked);
+    const d = setIn(choices, index, 'isCorrect', e.target.checked);
     setChoices(d);
   };
 
@@ -58,7 +81,7 @@ const MultipleChoices = ({
     index: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const d = choices.setIn([index, 'value'], e.target.value);
+    const d = setIn(choices, index, 'value', e.target.value);
     setChoices(d);
   };
 
@@ -66,36 +89,36 @@ const MultipleChoices = ({
     index: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const d = choices.setIn([index, 'explanation'], e.target.value);
+    const d = setIn(choices, index, 'explanation', e.target.value);
     setChoices(d);
   };
 
   const addAnswer = () => {
-    setChoices(choices.push(DEFAULT_CHOICE));
-    setExplanationList(explanationList.push(false));
+    setChoices([...choices, DEFAULT_CHOICE]);
+    setExplanationList([...explanationList, false]);
   };
 
   const addExplanation = (index: number) => {
     const newExplanationList = [...explanationList];
     newExplanationList[index] = true;
-    setExplanationList(List(newExplanationList));
+    setExplanationList(newExplanationList);
   };
 
   const onDeleteExplanation = (index: number) => () => {
     const newExplanationList = [...explanationList];
     newExplanationList[index] = false;
-    setExplanationList(List(newExplanationList));
-    const newExplanation = choices.setIn([index, 'explanation'], '');
+    setExplanationList(newExplanationList);
+    const newExplanation = setIn(choices, index, 'explanation', '');
     setChoices(newExplanation);
   };
 
   const onDelete = (index: number) => () => {
     // delete only possible if there's at least three choices
-    if (choices.size <= 2) {
+    if (choices.length <= 2) {
       return;
     }
 
-    setChoices(choices.delete(index));
+    setChoices(removAtIndex(choices, index));
   };
 
   return (
@@ -148,14 +171,14 @@ const MultipleChoices = ({
                 <IconButton
                   data-cy={buildMultipleChoiceDeleteAnswerButtonCy(index)}
                   type="button"
-                  disabled={choices.size <= 2}
+                  disabled={choices.length <= 2}
                   onClick={onDelete(index)}
                 >
                   <CloseIcon />
                 </IconButton>
               </Stack>
               <Stack>
-                {explanationList.get(index) || explanation ? (
+                {explanationList[index] || explanation ? (
                   <Stack
                     direction="row"
                     key={index}

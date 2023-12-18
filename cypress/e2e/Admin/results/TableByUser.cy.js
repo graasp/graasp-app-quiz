@@ -231,7 +231,7 @@ const testTableHeader = (uId, ascending) => {
  */
 const getUserNamesFromAppData = (appData) => {
   return [...new Set(appData.map((data) => data.member))].sort(
-    getComparator(Order.ASC, comparatorArrayByElemName)
+    getComparator({order: Order.ASC, comp: comparatorArrayByElemName})
   );
 };
 

@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 import { useContext } from 'react';
 import {
   DragDropContext,
@@ -29,7 +27,7 @@ import {
 import { QuizContext } from '../context/QuizContext';
 import { getQuestionById } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
-import { QuestionDataAppSettingRecord } from '../types/types';
+import { QuestionDataAppSetting } from '../types/types';
 
 const CreateQuestionTopBar = () => {
   const { t } = useTranslation();
@@ -47,12 +45,6 @@ const CreateQuestionTopBar = () => {
 
   const questionsInOrder = order
     .map((qId: string, index: number) => {
-      const q = getQuestionById(questions, qId);
-      if (!q) {
-        console.error('question does not exist');
-        return null;
-      }
-
       const question = getQuestionById(questions, qId);
 
       if (!question) {
@@ -60,7 +52,7 @@ const CreateQuestionTopBar = () => {
       }
       return question;
     })
-    .filter(Boolean) as List<QuestionDataAppSettingRecord>;
+    .filter(Boolean) as QuestionDataAppSetting[];
 
   // important that it reloads from first render
   // bug: but won't show anything if empty data
@@ -71,7 +63,7 @@ const CreateQuestionTopBar = () => {
   }
 
   const renderLabel = (
-    question: QuestionDataAppSettingRecord,
+    question: QuestionDataAppSetting,
     index: number,
     provided: DraggableProvided
   ): JSX.Element => {
@@ -176,7 +168,7 @@ const CreateQuestionTopBar = () => {
           sx={{ p: 0 }}
           color="primary"
           onClick={moveToNextQuestion}
-          disabled={currentIdx >= order.size - 1}
+          disabled={currentIdx >= order.length - 1}
         >
           {t('Next')}
         </Button>

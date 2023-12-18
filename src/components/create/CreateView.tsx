@@ -16,16 +16,14 @@ import {
 import { QuizContext } from '../context/QuizContext';
 import { isDifferent, validateQuestionData } from '../context/utilities';
 import {
-  AppSettingDataRecord,
-  MultipleChoicesAppSettingDataRecord,
-  SliderAppSettingDataRecord,
+  MultipleChoicesAppSettingData,
+  SliderAppSettingData,
 } from '../types/types';
-import { QuestionDataRecord } from '../types/types';
+import { QuestionData } from '../types/types';
 import CreateQuestionTopBar from './CreateQuestionTopBar';
 import Explanation from './Explanation';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
-import NumberOfAttempts from './NumberOfAttempts';
 import QuestionTitle from './QuestionTitle';
 import QuestionTypeSelect from './QuestionTypeSelect';
 import Slider from './Slider';
@@ -36,14 +34,14 @@ const CreateView = () => {
   const { currentQuestion, deleteQuestion, saveQuestion } =
     useContext(QuizContext);
 
-  const [newData, setNewData] = useState<QuestionDataRecord>(
-    currentQuestion?.data as QuestionDataRecord
+  const [newData, setNewData] = useState<QuestionData>(
+    currentQuestion.data as QuestionData
   );
   const [errorMessage, setErrorMessage] = useState<string | null>();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    setNewData(currentQuestion?.data as QuestionDataRecord);
+    setNewData(currentQuestion.data as QuestionData);
   }, [currentQuestion]);
 
   // validate data to enable save
@@ -61,6 +59,8 @@ const CreateView = () => {
   const saveNewQuestion = () => {
     setIsSubmitted(true);
     try {
+      console.log('Saving new question: ', newData);
+
       validateQuestionData(newData);
       setErrorMessage(null);
       saveQuestion(newData);
@@ -68,10 +68,6 @@ const CreateView = () => {
       setErrorMessage(e as string);
     }
   };
-
-  useEffect(() => {
-    console.log(newData.toJS());
-  }, [newData]);
 
   return (
     <>
@@ -86,7 +82,7 @@ const CreateView = () => {
           <CreateQuestionTopBar />
         </Grid>
       </Grid>
-      {!currentQuestion?.id && (
+      {!currentQuestion.id && (
         <Typography
           variant="h4"
           sx={{ pb: 4 }}
@@ -100,24 +96,23 @@ const CreateView = () => {
           <QuestionTitle
             title={newData?.question}
             onChange={(question: string) => {
-              setNewData(
-                (newData as AppSettingDataRecord).set(
-                  'question',
-                  question
-                ) as QuestionDataRecord
-              );
+              setNewData({
+                ...newData,
+                question,
+              });
             }}
           />
         </Grid>
         <Grid item>
           <QuestionTypeSelect
             value={newData?.type}
-            onChange={(changes: QuestionDataRecord) => {
-              setNewData(
-                (changes as AppSettingDataRecord)
-                  .set('question', newData.question)
-                  .set('explanation', newData.explanation) as QuestionDataRecord
-              );
+            onChange={(changes: QuestionData) => {
+              setNewData({
+                ...changes,
+                // TODO: check the nullable values
+                question: newData?.question,
+                explanation: newData?.explanation,
+              });
             }}
           />
         </Grid>
@@ -129,7 +124,10 @@ const CreateView = () => {
                   <TextInput
                     text={newData?.text}
                     onChangeData={(text: string) => {
-                      setNewData(newData.set('text', text));
+                      setNewData({
+                        ...newData,
+                        text,
+                      });
                     }}
                   />
                 );
@@ -138,8 +136,13 @@ const CreateView = () => {
                 return (
                   <Slider
                     data={newData}
-                    onChangeData={(d: SliderAppSettingDataRecord) => {
-                      setNewData(newData.merge(d));
+                    onChangeData={(d: SliderAppSettingData) => {
+                      // setNewData(newData.merge(d));
+                      // TODO: check this
+                      setNewData({
+                        ...newData,
+                        ...d,
+                      });
                     }}
                   />
                 );
@@ -149,7 +152,10 @@ const CreateView = () => {
                   <FillInTheBlanks
                     text={newData?.text}
                     onChangeData={(text: string) =>
-                      setNewData(newData.set('text', text))
+                      setNewData({
+                        ...newData,
+                        text,
+                      })
                     }
                   />
                 );
@@ -160,15 +166,20 @@ const CreateView = () => {
                   <MultipleChoices
                     choices={newData?.choices}
                     setChoices={(
-                      newChoices: MultipleChoicesAppSettingDataRecord['choices']
-                    ) => setNewData(newData.set('choices', newChoices))}
+                      newChoices: MultipleChoicesAppSettingData['choices']
+                    ) =>
+                      setNewData({
+                        ...newData,
+                        choices: newChoices,
+                      })
+                    }
                   />
                 );
               }
             }
           })()}
 
-          <NumberOfAttempts
+          {/* <NumberOfAttempts
             initAttempts={newData.numberOfAttempts}
             onChange={(attempts: number) => {
               // TODO: not working yet, migrate to TS and immutable before to continue here
@@ -179,19 +190,17 @@ const CreateView = () => {
               //   ) as QuestionDataRecord
               // );
             }}
-          />
+          /> */}
         </Grid>
 
         <Grid item>
           <Explanation
             value={newData?.explanation}
             onChange={(explanation: string) => {
-              setNewData(
-                (newData as AppSettingDataRecord).set(
-                  'explanation',
-                  explanation
-                ) as QuestionDataRecord
-              );
+              setNewData({
+                ...newData,
+                explanation,
+              });
             }}
           />
         </Grid>
@@ -223,7 +232,7 @@ const CreateView = () => {
               color="success"
               startIcon={<SaveIcon />}
               disabled={
-                !isDifferent(newData, currentQuestion?.data) ||
+                (!isDifferent(newData, currentQuestion.data)) ||
                 Boolean(errorMessage)
               }
             >

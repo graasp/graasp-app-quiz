@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -32,11 +30,7 @@ import {
   getAppDataByQuestionIdForMemberId,
   getQuestionById,
 } from '../context/utilities';
-import {
-  AppDataDataRecord,
-  AppDataQuestionRecord,
-  QuestionDataRecord,
-} from '../types/types';
+import { AppDataQuestion, QuestionAppDataData, QuestionData } from '../types/types';
 
 const QuestionTopBar = () => {
   const { t } = useTranslation();
@@ -63,7 +57,7 @@ const QuestionTopBar = () => {
       return null;
     }
     const response = getAppDataByQuestionIdForMemberId(
-      (appData as List<AppDataQuestionRecord>) ?? List(),
+      (appData as AppDataQuestion[]) ?? [],
       q,
       memberId
     );
@@ -73,7 +67,7 @@ const QuestionTopBar = () => {
       return null;
     }
 
-    if (context.get('context') === Context.Builder) {
+    if (context.context === Context.Builder) {
       return (
         <StepButton onClick={() => setCurrentIdx(index)}>
           {question.data.question}
@@ -83,10 +77,11 @@ const QuestionTopBar = () => {
 
     // show correctness in label only if a response exists
     const isCorrect = computeCorrectness(
-      question.data as QuestionDataRecord,
-      response?.data as AppDataDataRecord
+      question.data as QuestionData,
+      response?.data as QuestionAppDataData // TODO: avoid cast ?
     );
-    const props = !response.id
+    
+    const props = !response?.id
       ? {}
       : {
           StepIconComponent: isCorrect ? CheckIcon : CloseIcon,
@@ -148,7 +143,7 @@ const QuestionTopBar = () => {
           sx={{ p: 0 }}
           color="primary"
           onClick={moveToNextQuestion}
-          disabled={currentIdx >= order.size - 1}
+          disabled={currentIdx >= order.length - 1}
         >
           {t('Next')}
         </Button>
