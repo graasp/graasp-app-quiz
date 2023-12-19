@@ -1,3 +1,4 @@
+import { TextAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -6,16 +7,21 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../fixtures/appSettings';
 
-const { data } = APP_SETTINGS.find(
+const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.TEXT_INPUT
 );
 
 const id = data.questionId;
 
-const checkAnswer = (isCorrect) => {
+const { text } = data as TextAppDataData;
+
+const checkAnswer = (isCorrect: boolean) => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000);
   cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} div`).then(($el) => {
@@ -52,7 +58,7 @@ describe('Play Text Input', () => {
     });
 
     it('Correct app data', () => {
-      cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).type(data.text);
+      cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).type(text);
 
       cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
 
@@ -77,7 +83,9 @@ describe('Play Text Input', () => {
 
       // go to another question and comeback, data should have been saved
       cy.get(
-        dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[0].data.questionId))
+        dataCyWrapper(
+          buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId)
+        )
       ).click();
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       checkAnswer(false);
@@ -90,7 +98,7 @@ describe('Play Text Input', () => {
 
     it('Correct response but with unmatched case', () => {
       cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).type(
-        `${data.text.toUpperCase()}`
+        `${text.toUpperCase()}`
       );
       cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
       checkAnswer(true);

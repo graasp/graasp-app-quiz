@@ -11,7 +11,10 @@ import {
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { LIAM_RESPONSES } from '../../fixtures/appData';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../fixtures/appSettings';
 
 describe('Play View', () => {
   it('Empty data', () => {
@@ -36,13 +39,13 @@ describe('Play View', () => {
 
     cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
       'contain',
-      APP_SETTINGS[0].data.question
+      QUESTION_APP_SETTINGS[0].data.question
     );
 
     // should not display app data
     cy.get(
       `${dataCyWrapper(
-        buildQuestionStepCy(APP_SETTINGS[0].data.questionId)
+        buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId)
       )} svg`
     ).then(($el) => {
       expect($el.attr('class').toLowerCase()).not.to.contain('error');
@@ -71,32 +74,32 @@ describe('Play View', () => {
 
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
-        APP_SETTINGS[0].data.question
+        QUESTION_APP_SETTINGS[0].data.question
       );
 
       // go to next
       cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
-        APP_SETTINGS[1].data.question
+        QUESTION_APP_SETTINGS[1].data.question
       );
       // go to prev
       cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).click();
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
-        APP_SETTINGS[0].data.question
+        QUESTION_APP_SETTINGS[0].data.question
       );
       // go to next
       cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
-        APP_SETTINGS[1].data.question
+        QUESTION_APP_SETTINGS[1].data.question
       );
       // go to next
       cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
-        APP_SETTINGS[2].data.question
+        QUESTION_APP_SETTINGS[2].data.question
       );
     });
   });

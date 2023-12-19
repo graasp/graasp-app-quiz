@@ -1,5 +1,6 @@
+import { QuestionDataAppSetting } from '../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
-
+// TODO: add types
 export const MULTIPLE_CHOICES_APP_SETTING = {
   id: 'multiple-choice-id',
   name: APP_SETTING_NAMES.QUESTION,
@@ -89,6 +90,8 @@ export const APP_SETTINGS = [
     },
   },
 ];
+
+export const QUESTION_APP_SETTINGS = APP_SETTINGS as QuestionDataAppSetting[];
 
 export const CAPITAL_FRANCE_SETTING = {
   id: 'id4',

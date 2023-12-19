@@ -1,5 +1,6 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
+import { MultipleChoicesChoice } from '../../../../src/components/types/types';
 import {
   APP_SETTING_NAMES,
   FAILURE_MESSAGES,
@@ -23,11 +24,14 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_SETTINGS } from '../../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../../fixtures/appSettings';
 
 const t = i18n.t;
 
-const { data } = APP_SETTINGS.find(
+const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
     data.type === QuestionType.MULTIPLE_CHOICES
@@ -63,7 +67,15 @@ const newMultipleChoiceData = {
 };
 
 export const fillMultipleChoiceQuestion = (
-  { choices, question, explanation },
+  {
+    choices,
+    question,
+    explanation,
+  }: {
+    choices: MultipleChoicesChoice[];
+    question: string;
+    explanation: string;
+  },
   { shouldSave = true } = {}
 ) => {
   // fill question if not empty
@@ -257,7 +269,9 @@ describe('Multiple Choices', () => {
         .should('be.visible')
         .should('contain', data.question);
 
-      data.choices.forEach(({ value, isCorrect, explanation }, idx) => {
+      const choices = data.choices as MultipleChoicesChoice[];
+
+      choices.forEach(({ value, isCorrect, explanation }, idx) => {
         cy.get(
           `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input`
         ).should('have.value', value);

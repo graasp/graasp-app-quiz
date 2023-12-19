@@ -12,59 +12,52 @@ import {
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
+  FILL_BLANKS_TEXT_FIELD_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
-  SLIDER_CY,
-  SLIDER_MAX_FIELD_CY,
-  SLIDER_MIN_FIELD_CY,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_SETTINGS } from '../../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../../fixtures/appSettings';
 
 const t = i18n.t;
 
-const newSliderData = {
+const newFillBlanksData = {
   question: 'new question text',
-  min: 0,
-  max: 90,
-  value: 40,
+  text: 'My text with <blanks> and more <blanks>',
   explanation: 'new explanation',
 };
 
-const { data } = APP_SETTINGS.find(
+const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
-    name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.SLIDER
+    name === APP_SETTING_NAMES.QUESTION &&
+    data.type === QuestionType.FILL_BLANKS
 );
 
 const id = data.questionId;
 
-const fillSliderQuestion = (
-  { min, max, value, question, explanation },
-  originalAppSettingData = DEFAULT_QUESTION.data,
+const fillBlanksQuestion = (
+  {
+    text,
+    question,
+    explanation,
+  }: { text: string; question: string; explanation: string },
+  originalAppSettingData: any = DEFAULT_QUESTION.data, // TODO: check this type
   { shouldSave = true } = {}
 ) => {
+  console.debug(originalAppSettingData);
+
   // fill question
   cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
   if (question.length) {
     cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).type(question);
   }
 
-  // fill min, max
-  cy.get(`${dataCyWrapper(SLIDER_MIN_FIELD_CY)} input`).clear();
-  if (Number.isInteger(min)) {
-    cy.get(`${dataCyWrapper(SLIDER_MIN_FIELD_CY)} input`).type(min);
-  }
-  cy.get(`${dataCyWrapper(SLIDER_MAX_FIELD_CY)} input`).clear();
-  if (Number.isInteger(max)) {
-    cy.get(`${dataCyWrapper(SLIDER_MAX_FIELD_CY)} input`).type(max);
-  }
-
-  // change slider - randomly because it's difficult to move the slider precisely
-  const steps = value - originalAppSettingData.value;
-  if (steps) {
-    const direction = steps > 0 ? '{rightarrow}' : '{leftarrow}';
-    const stepsString = direction.repeat(steps);
-    cy.get(`${dataCyWrapper(SLIDER_CY)}`).type(stepsString);
+  if (text?.length) {
+    cy.get(dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)).clear();
+    cy.get(dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)).type(text);
   }
 
   cy.fillExplanation(explanation);
@@ -75,7 +68,7 @@ const fillSliderQuestion = (
   }
 };
 
-describe('Slider', () => {
+describe('Fill in the Blanks', () => {
   it('Start with empty data and save question', () => {
     cy.setUpApi({
       database: {
@@ -88,31 +81,29 @@ describe('Slider', () => {
     });
     cy.visit('/');
 
-    cy.switchQuestionType(QuestionType.SLIDER);
+    cy.switchQuestionType(QuestionType.FILL_BLANKS);
 
-    // empty min
-    const new1 = { ...newSliderData, min: null };
-    fillSliderQuestion(new1, DEFAULT_QUESTION.data);
+    // empty text
+    const new1 = { ...newFillBlanksData, text: '' };
+    fillBlanksQuestion(new1, DEFAULT_QUESTION.data);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
-      t(FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX)
-    );
-    // empty max
-    const new2 = { ...newSliderData, max: null };
-    fillSliderQuestion(new2, new1, { shouldSave: false });
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX)
-    );
-    // // min higher than max
-    const new3 = { ...newSliderData, min: 100, max: 30 };
-    fillSliderQuestion(new3, new2, { shouldSave: false });
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.SLIDER_MIN_SMALLER_THAN_MAX)
+      t(FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT)
     );
 
-    fillSliderQuestion(newSliderData, new3);
+    // faulty text
+    const new2 = {
+      ...newFillBlanksData,
+      text: 'my <faulty< text with <blanks>',
+    };
+    fillBlanksQuestion(new2, new1, { shouldSave: false });
+    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
+      'contain',
+      t(FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS)
+    );
+
+    fillBlanksQuestion(newFillBlanksData, new2);
+
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
   });
 
@@ -138,29 +129,21 @@ describe('Slider', () => {
         .should('have.value', data.question);
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        QuestionType.SLIDER
+        QuestionType.FILL_BLANKS
       );
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')
         .should('contain', data.question);
 
-      cy.get(`${dataCyWrapper(SLIDER_MIN_FIELD_CY)} input`).should(
+      cy.get(`${dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)} textarea`).should(
         'have.value',
-        data.min
-      );
-      cy.get(`${dataCyWrapper(SLIDER_MAX_FIELD_CY)} input`).should(
-        'have.value',
-        data.max
-      );
-      cy.get(`${dataCyWrapper(SLIDER_CY)} input`).should(
-        'have.value',
-        data.value
+        data.text
       );
       cy.checkExplanationField(data.explanation);
     });
 
     it('Update question', () => {
-      fillSliderQuestion(newSliderData, data);
+      fillBlanksQuestion(newFillBlanksData, data);
 
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
@@ -169,21 +152,13 @@ describe('Slider', () => {
       // question bar should be updated
       cy.get(dataCyWrapper(buildQuestionStepCy(id)))
         .should('be.visible')
-        .should('contain', newSliderData.question);
+        .should('contain', newFillBlanksData.question);
 
-      cy.get(`${dataCyWrapper(SLIDER_MIN_FIELD_CY)} input`).should(
+      cy.get(`${dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)} textarea`).should(
         'have.value',
-        newSliderData.min
+        newFillBlanksData.text
       );
-      cy.get(`${dataCyWrapper(SLIDER_MAX_FIELD_CY)} input`).should(
-        'have.value',
-        newSliderData.max
-      );
-      cy.get(`${dataCyWrapper(SLIDER_CY)} input`).should(
-        'not.have.value',
-        data.value
-      );
-      cy.checkExplanationField(newSliderData.explanation);
+      cy.checkExplanationField(newFillBlanksData.explanation);
     });
   });
 });

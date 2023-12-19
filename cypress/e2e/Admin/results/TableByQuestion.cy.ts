@@ -28,7 +28,7 @@ import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
 
 describe('Table by Question', () => {
   it('Table by Question no app data', () => {
-    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_FEW_QUESTIONS);
+    cy.setupResultTablesByQuestionForCheck(APP_SETTINGS_FEW_QUESTIONS, [], []);
 
     // if empty app data, then should display that no user have answered the quiz yet
     cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should(

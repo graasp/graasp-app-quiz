@@ -1,3 +1,4 @@
+import { MultipleChoicesAppSettingData } from '../../../src/components/types/types';
 import {
   APP_DATA_TYPES,
   APP_SETTING_NAMES,
@@ -11,18 +12,22 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../fixtures/appSettings';
 
-const { data } = APP_SETTINGS.find(
+const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
     data.type === QuestionType.MULTIPLE_CHOICES
 );
 
 const id = data.questionId;
+const { choices } = data as MultipleChoicesAppSettingData;
 
 // click on choices -> become selected
-const clickSelection = (selection) => {
+const clickSelection = (selection: number[]) => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(2000);
   selection.forEach((idx) => {
@@ -35,10 +40,10 @@ const clickSelection = (selection) => {
 };
 
 // verify all choices styles
-const checkCorrection = (selection) => {
+const checkCorrection = (selection: number[]) => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1500);
-  data.choices.forEach(({ isCorrect, explanation }, idx) => {
+  choices.forEach(({ isCorrect, explanation }, idx) => {
     const wasSelected = selection.includes(idx);
     const correction = (() => {
       if (wasSelected && isCorrect) {
@@ -88,7 +93,7 @@ describe('Play Multiple Choices', () => {
       );
 
       // all choices are displayed and are not selected
-      data.choices.forEach((_data, idx) => {
+      choices.forEach((_data, idx) => {
         cy.get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, false))).should(
           'be.visible'
         );
@@ -111,7 +116,7 @@ describe('Play Multiple Choices', () => {
 
     it('Correct app data', () => {
       // click on choices -> become selected
-      const selection = data.choices.reduce(
+      const selection = choices.reduce(
         (arr, { isCorrect }, idx) => (isCorrect ? [...arr, idx] : arr),
         []
       );
@@ -127,7 +132,9 @@ describe('Play Multiple Choices', () => {
 
       // go to another question and comeback, data should have been saved
       cy.get(
-        dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[1].data.questionId))
+        dataCyWrapper(
+          buildQuestionStepCy(QUESTION_APP_SETTINGS[1].data.questionId)
+        )
       ).click();
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       checkCorrection(selection);
@@ -140,7 +147,7 @@ describe('Play Multiple Choices', () => {
       type: APP_DATA_TYPES.RESPONSE,
       data: {
         questionId: id,
-        choices: data.choices.slice(2),
+        choices: choices.slice(2),
       },
     };
     beforeEach(() => {
@@ -154,8 +161,9 @@ describe('Play Multiple Choices', () => {
     });
 
     it('Show saved question', () => {
-      const selection = appData.data.choices.map((text) =>
-        data.choices.findIndex(({ value }) => value === text)
+      // TODO: check the choice is good shape
+      const selection = appData.data.choices.map((choice) =>
+        choices.findIndex(({ value }) => value === choice.value)
       );
       checkCorrection(selection);
     });

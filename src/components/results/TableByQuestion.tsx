@@ -134,7 +134,7 @@ const TableByQuestion = ({
         <Typography
           variant="h5"
           component="h5"
-          data-cy={buildTableByQuestionCy(question.id)}
+          data-cy={buildTableByQuestionCy(question.data.questionId)}
         >
           {question.data.question}
         </Typography>

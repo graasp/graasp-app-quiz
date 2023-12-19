@@ -66,8 +66,8 @@ describe('Legacy', () => {
         item,
         member,
         creator: member,
-        createdAt: new Date('2022-07-22T12:35:50.195Z'),
-        updatedAt: new Date('2022-07-22T12:36:51.741Z'),
+        createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
+        updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
         data: {
           // refer to real question id
           questionId: MULTIPLE_CHOICES_APP_SETTING.id,
@@ -79,8 +79,8 @@ describe('Legacy', () => {
         item,
         member,
         creator: member,
-        createdAt: new Date('2022-07-22T12:35:50.195Z'),
-        updatedAt: new Date('2022-07-22T12:36:51.741Z'),
+        createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
+        updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
         data: {
           // refer to real question id
           questionId: TEXT_INPUT_APP_SETTING.id,

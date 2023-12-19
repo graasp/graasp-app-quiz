@@ -1,3 +1,4 @@
+import { SliderAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -6,16 +7,16 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../fixtures/appSettings';
 
-const { data } = APP_SETTINGS.find(
+const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION && data.type === QuestionType.SLIDER
 );
 
 const id = data.questionId;
 
-const checkCorrection = (responseData) => {
+const checkCorrection = (responseData: Pick<SliderAppDataData, 'value'>) => {
   // cannot check slider value because we cannot move it
   // cy.get(`${dataCyWrapper(PLAY_VIEW_SLIDER_CY)} input`).should('have.value', responseData.value)
   // display correct answer
@@ -78,7 +79,7 @@ describe('Slider', () => {
 
       // go to another question and comeback, data should have been saved
       cy.get(
-        dataCyWrapper(buildQuestionStepCy(APP_SETTINGS[0].data.questionId))
+        dataCyWrapper(buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId))
       ).click();
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       checkCorrection({ value: 60 });

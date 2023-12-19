@@ -9,7 +9,10 @@ import {
  * @param selectedLabelIndex The index of the label to be selected
  * @param {[{ label: String }]} labels The list of all labels
  */
-export const verifySelectedMenu = (selectedLabelIndex, labels) => {
+export const verifySelectedMenu = (
+  selectedLabelIndex: number,
+  labels: [{ id: string }]
+) => {
   labels.forEach(({ id }, index) => {
     cy.get(
       dataCyWrapper(

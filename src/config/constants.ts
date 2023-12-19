@@ -1,3 +1,5 @@
+import { QuestionDataAppSetting } from "../components/types/types";
+
 export const APP_SETTING_NAMES = {
   QUESTION: 'question',
   QUESTION_LIST: 'questionList',
@@ -87,7 +89,7 @@ export const DEFAULT_QUESTION = {
   id: '',
   name: APP_SETTING_NAMES.QUESTION,
   data: DEFAULT_QUESTION_VALUES[DEFAULT_QUESTION_TYPE],
-};
+} as QuestionDataAppSetting;
 
 export const FAILURE_MESSAGES = {
   EMPTY_QUESTION: 'EMPTY_QUESTION',
@@ -108,11 +110,6 @@ export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
 export const REACT_APP_GRAASP_APP_KEY = process.env.REACT_APP_GRAASP_APP_KEY;
 export const API_HOST =
   process.env.REACT_APP_API_HOST || 'http://localhost:3000';
-
-// TODO: check if this is good
-if (!REACT_APP_GRAASP_APP_KEY) {
-  throw new Error('The graasp app key is not defined !');
-}
 export const GRAASP_APP_KEY = REACT_APP_GRAASP_APP_KEY;
 
 export const ENV = {

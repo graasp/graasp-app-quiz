@@ -38,7 +38,7 @@ export const ANSWER_REGEXP = /<[^<>]*>/g;
  */
 export const splitSentence = (
   text: string | undefined = '',
-  response: string | undefined
+  response?: string
 ) => {
   const responses = [...(response ?? '').matchAll(ANSWER_REGEXP)].map(
     ([a]) => removeMarkup(a) ?? ''

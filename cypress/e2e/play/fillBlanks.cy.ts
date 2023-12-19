@@ -1,4 +1,8 @@
 import {
+  FillTheBlanksAppDataData,
+  TextAppDataData,
+} from '../../../src/components/types/types';
+import {
   APP_DATA_TYPES,
   APP_SETTING_NAMES,
   FILL_BLANKS_TYPE,
@@ -13,10 +17,13 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import { splitSentence } from '../../../src/utils/fillInTheBlanks';
-import { APP_SETTINGS } from '../../fixtures/appSettings';
+import { Word, splitSentence } from '../../../src/utils/fillInTheBlanks';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../fixtures/appSettings';
 
-const { data } = APP_SETTINGS.find(
+const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
     name === APP_SETTING_NAMES.QUESTION &&
     data.type === QuestionType.FILL_BLANKS
@@ -24,11 +31,11 @@ const { data } = APP_SETTINGS.find(
 
 const id = data.questionId;
 
-const { text } = data;
+const { text } = data as TextAppDataData;
 const { answers, words } = splitSentence(text);
 
 // verify all answers styles
-const checkCorrection = ({ answers: responseAnswers }) => {
+const checkCorrection = ({ answers: responseAnswers }: { answers: Word[] }) => {
   answers.forEach((answer, idx) => {
     cy.get(dataCyWrapper(FILL_BLANKS_CORRECTION_CY), { timeout: 5500 }).should(
       'contain',
@@ -112,7 +119,7 @@ describe('Play Fill In The Blanks', () => {
   });
 
   describe('Display saved settings', () => {
-    const buildAppData = (text) => ({
+    const buildAppData = (text: string) => ({
       id: 'app-data-1',
       type: APP_DATA_TYPES.RESPONSE,
       data: {
@@ -120,7 +127,7 @@ describe('Play Fill In The Blanks', () => {
         text,
       },
     });
-    it('Show correct saved question', () => {
+    it.only('Show correct saved question', () => {
       const correctAppData = buildAppData(
         'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.'
       );
@@ -132,14 +139,19 @@ describe('Play Fill In The Blanks', () => {
       });
       cy.visit('/');
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      const data = correctAppData.data as FillTheBlanksAppDataData;
 
-      checkCorrection(splitSentence(correctAppData.data.text));
+      console.log('correctData', data)
+      console.log(splitSentence(data.text))
+
+      checkCorrection(splitSentence(data.text));
 
       // success displayed in question bar
       cy.checkStepStatus(id, true);
 
       // delete one answer
-      cy.get(`[data-id="${answers[0].id}"]`).click().should('contain', '');
+      cy.get(`[data-id="${answers[0].id}"]`).click();
+      cy.get(`[data-id="${answers[0].id}"]`).should('contain', '');
     });
 
     it('Show partially correct saved question', () => {

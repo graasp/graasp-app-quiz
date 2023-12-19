@@ -11,20 +11,32 @@ import {
   buildQuestionTypeOption,
   dataCyWrapper,
 } from '../../src/config/selectors';
-import { item as MOCK_ITEM } from '../../src/data/db';
-import { MEMBERS } from '../fixtures/members';
+import { mockCurrentMember, mockMembers } from '../../src/data/config';
+import { API_HOST } from '../../src/config/constants';
+import { mockItem } from '../../src/data/items';
 
 Cypress.Commands.add(
   'setUpApi',
-  ({ database = {}, appContext, members = MEMBERS } = {}) => {
+  ({ currentMember = mockCurrentMember, database, appContext } = {}) => {
     // mock api and database
-    Cypress.on('window:before:load', (win) => {
+    // TODO: check why typescript fail on win.
+    Cypress.on('window:before:load', (win: Window) => {
       win.database = {
-        items: [MOCK_ITEM],
-        members: Object.values(members),
+        appData: [],
+        appActions: [],
+        appSettings: [],
+        items: [mockItem],
+        members: mockMembers,
         ...database,
       };
-      win.appContext = appContext;
+      win.appContext = {
+        memberId: currentMember.id,
+        itemId: mockItem.id,
+        apiHost: Cypress.env('REACT_APP_API_HOST') || API_HOST,
+        context: Context.Builder,
+        permission: PermissionLevel.Read,
+        ...appContext,
+      }
     });
   }
 );

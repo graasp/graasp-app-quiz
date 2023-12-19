@@ -18,7 +18,7 @@ import {
   hooks,
   queryClient,
 } from '../config/queryClient';
-import { mockContext as defaultMockContext, mockMembers } from '../data/db';
+import { mockContext as defaultMockContext, mockMembers } from '../data/config';
 import graaspTheme from '../layout/theme';
 import View from './views/View';
 

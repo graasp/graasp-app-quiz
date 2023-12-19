@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "dom", "ES2021.String"],
+    "types": ["cypress", "node"],
+    "strictNullChecks": false,
+    "strict": true,
+    "sourceMap": false
+  },
+  "include": ["**/*.ts", "cypress.d.ts"],
+  "exclude": ["coverage", ".nyc_output"]
+}

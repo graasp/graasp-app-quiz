@@ -14,7 +14,7 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_SETTINGS } from '../../../fixtures/appSettings';
+import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../../fixtures/appSettings';
 import { fillMultipleChoiceQuestion } from './multipleChoices.cy';
 
 const newMultipleChoiceData = {
@@ -31,6 +31,8 @@ const newMultipleChoiceData = {
   ],
   explanation: 'my new explanation',
 };
+
+const WAITING_DELAY_MS = 1000;
 
 describe('Create View', () => {
   beforeEach(() => {
@@ -64,13 +66,15 @@ describe('Create View', () => {
     // Add three questions and make sure they are added to the QuestionTopBar
     cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
     fillMultipleChoiceQuestion(newMultipleChoiceData);
-    cy.wait(1000); // Wait for the new question to appear
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(WAITING_DELAY_MS); // Wait for the new question to appear
     cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
     cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
       .should('be.visible')
       .should('have.value', '');
     fillMultipleChoiceQuestion(newMultipleChoiceData);
-    cy.wait(1000);
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(WAITING_DELAY_MS);
     cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
     cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
       .should('be.visible')
@@ -101,37 +105,37 @@ describe('Create View', () => {
 
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        APP_SETTINGS[0].data.type
+        QUESTION_APP_SETTINGS[0].data.type
       );
 
       // go to next
       cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        APP_SETTINGS[1].data.type
+        QUESTION_APP_SETTINGS[1].data.type
       );
       // go to prev
       cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).click();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        APP_SETTINGS[0].data.type
+        QUESTION_APP_SETTINGS[0].data.type
       );
       // go to next
       cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        APP_SETTINGS[1].data.type
+        QUESTION_APP_SETTINGS[1].data.type
       );
       // go to next
       cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
-        APP_SETTINGS[2].data.type
+        QUESTION_APP_SETTINGS[2].data.type
       );
     });
 
     it('Delete question', () => {
-      const toDelete = APP_SETTINGS[1];
+      const toDelete = QUESTION_APP_SETTINGS[1];
       const id = toDelete.data.questionId;
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
@@ -150,7 +154,7 @@ describe('Create View', () => {
     });
 
     it('Add question from existing quiz', () => {
-      const currentQuestion = APP_SETTINGS[1];
+      const currentQuestion = QUESTION_APP_SETTINGS[1];
       const id = currentQuestion.data.questionId;
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       // click new question and come back

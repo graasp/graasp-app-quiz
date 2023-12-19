@@ -82,6 +82,8 @@ const CorrectResponsePerUser = ({
             0
           );
 
+          console.log(membersById, id,)
+
           return {
             dataCorrect: {
               x: [...acc.dataCorrect.x, nbCorrect],
