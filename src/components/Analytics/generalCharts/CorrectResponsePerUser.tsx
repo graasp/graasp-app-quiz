@@ -59,7 +59,7 @@ const CorrectResponsePerUser = ({
   const membersById = useMemo(() => groupBy(members, (m) => m.id), [members]);
 
   const questionsById = useMemo(() => {
-    return groupBy(questions, (q) => q.id);
+    return groupBy(questions, (q) => q.data.questionId);
   }, [questions]);
 
   const chartData = useMemo(
@@ -68,6 +68,7 @@ const CorrectResponsePerUser = ({
         groupBy(responses, (response) => response.member.id)
       ).reduce(
         (acc, [id, list]) => {
+          console.log(list);
           const nbCorrect = list.reduce(
             (acc, next) =>
               computeCorrectness(

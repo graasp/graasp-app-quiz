@@ -14,7 +14,7 @@ import { CircularProgress, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { AppData, Member } from '@graasp/sdk';
+import { Member } from '@graasp/sdk';
 
 import { hooks } from '../../config/queryClient';
 import { TABLE_BY_QUESTION_CONTAINER_CY } from '../../config/selectors';
@@ -37,7 +37,12 @@ import {
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
 import ResultTablesMenu from '../navigation/ResultTablesMenu';
 import TabPanel from '../navigation/TabPanel';
-import { QuestionData, QuestionDataAppSetting, RefsObject } from '../types/types';
+import {
+  QuestionAppDataData,
+  QuestionData,
+  QuestionDataAppSetting,
+  RefsObject,
+} from '../types/types';
 import TableByQuestion from './TableByQuestion';
 import TableByUser, { Response } from './TableByUser';
 
@@ -301,7 +306,12 @@ const ResultTables = ({ headerElem }: Props) => {
                   <TableByUser
                     user={member}
                     questions={questions}
-                    responses={getAllAppDataByUserId(responses, id)} // TODO: fix this type
+                    responses={getAllAppDataByUserId(responses, id).map(
+                      (appData) => ({
+                        ...appData,
+                        data: appData.data as QuestionAppDataData,
+                      })
+                    )} // TODO: fix this type
                     handleQuestionClicked={handleQuestionClicked}
                   />
                 </Box>
