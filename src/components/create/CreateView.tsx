@@ -59,8 +59,6 @@ const CreateView = () => {
   const saveNewQuestion = () => {
     setIsSubmitted(true);
     try {
-      console.log('Saving new question: ', newData);
-
       validateQuestionData(newData);
       setErrorMessage(null);
       saveQuestion(newData);

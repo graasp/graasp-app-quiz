@@ -5,7 +5,5 @@ export const getFirstOrUndefined = <T,>(dataStructure: Dictionary<T[]> | undefin
         return dataStructure[key][0];
     }
 
-    // TODO: remove me
-    // throw new Error(`The data is not found for key ${key}.`);
     return undefined;
 }

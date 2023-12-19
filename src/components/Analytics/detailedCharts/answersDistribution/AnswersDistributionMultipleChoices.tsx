@@ -48,14 +48,11 @@ const AnswersDistributionMultipleChoices = ({
     return initialCounts;
   }, [questionData]);
 
-  console.log(appDataForQuestion);
-
   const responsesCount = useMemo(
     () =>
       appDataForQuestion.reduce(
         (questionsCountAcc, appData) =>
           appData.choices.reduce((acc, choice) => {
-            console.log(acc, choice);
             acc[choice]++;
             return acc;
           }, questionsCountAcc as Record<string, number>),

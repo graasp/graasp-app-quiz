@@ -22,10 +22,6 @@ const PlaySlider = ({
   setResponse,
   showCorrection,
 }: Props) => {
-  console.log('Play slider values', values);
-  console.log('Play slider response', response);
-  console.log('Show correction', showCorrection)
-
   const min = values?.min;
   const max = values?.max;
   const [marks, setMarks] = useState<{ value: number; label: number; }[]>([]);

@@ -33,9 +33,8 @@ const QuestionTypeSelect = ({ value, onChange }: Props) => {
   const type = useMemo(() => value ?? DEFAULT_QUESTION_TYPE, [value]);
 
   const onTypeChange: SelectProps['onChange'] = (e) => {
-    const t = e.target.value as QuestionType;
-    const defaultQuestionValues = DEFAULT_QUESTION_VALUES[t] as QuestionData;
-    console.log('onTypeChanged:', defaultQuestionValues);
+    const value = e.target.value as QuestionType;
+    const defaultQuestionValues = DEFAULT_QUESTION_VALUES[value] as QuestionData;
     onChange(defaultQuestionValues);
   };
 

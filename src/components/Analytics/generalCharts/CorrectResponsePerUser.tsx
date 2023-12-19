@@ -68,7 +68,6 @@ const CorrectResponsePerUser = ({
         groupBy(responses, (response) => response.member.id)
       ).reduce(
         (acc, [id, list]) => {
-          console.log(list);
           const nbCorrect = list.reduce(
             (acc, next) =>
               computeCorrectness(
