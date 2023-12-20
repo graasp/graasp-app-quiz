@@ -28,7 +28,7 @@ REACT_APP_GRAASP_APP_KEY=<mock-id-you-need-to-generate>
 # Enable mock API (to use the app without the graasp backend)
 REACT_APP_ENABLE_MOCK_API=true
 # Address of the API host (graasp backend)
-REACT_APP_API_HOST=localhost:3000
+REACT_APP_API_HOST=http://localhost:3000
 # Sentry DSN url (uncomment to use)
 # REACT_APP_SENTRY_DSN=
 
