@@ -26,6 +26,7 @@ const PlayMultipleChoices = ({
       const choiceIdx = response.choices?.findIndex(
         (choice) => choice === value
       );
+
       if (choiceIdx >= 0) {
         const choicesWithoutChoiceIdx = [
           ...response.choices.slice(0, choiceIdx),

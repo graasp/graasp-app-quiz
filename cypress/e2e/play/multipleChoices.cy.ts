@@ -1,9 +1,7 @@
+import { Context } from '@graasp/sdk';
+
 import { MultipleChoicesAppSettingData } from '../../../src/components/types/types';
-import {
-  APP_DATA_TYPES,
-  APP_SETTING_NAMES,
-  QuestionType,
-} from '../../../src/config/constants';
+import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
@@ -12,10 +10,10 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import {
-  APP_SETTINGS,
-  QUESTION_APP_SETTINGS,
-} from '../../fixtures/appSettings';
+import { mockAppDataFactory } from '../../../src/data/factories';
+import { mockItem } from '../../../src/data/items';
+import { mockCurrentMember } from '../../../src/data/members';
+import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../fixtures/appSettings';
 
 const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
@@ -35,7 +33,6 @@ const clickSelection = (selection: number[]) => {
     cy.get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, true))).should(
       'be.visible'
     );
-    // throw new Error('oierjf');
   });
 };
 
@@ -81,6 +78,9 @@ describe('Play Multiple Choices', () => {
       cy.setUpApi({
         database: {
           appSettings: APP_SETTINGS,
+        },
+        appContext: {
+          context: Context.Player,
         },
       });
       cy.visit('/');
@@ -142,29 +142,37 @@ describe('Play Multiple Choices', () => {
   });
 
   describe('Display saved settings', () => {
-    const appData = {
+    // The user's choices don't have the same shape than the appSetting choices.
+    const responseChoices = choices.slice(2).map((c) => c.value);
+    const appData = mockAppDataFactory({
       id: 'app-data-1',
-      type: APP_DATA_TYPES.RESPONSE,
+      item: mockItem,
+      member: mockCurrentMember,
       data: {
         questionId: id,
-        choices: choices.slice(2),
+        choices: responseChoices,
       },
-    };
+    });
+
     beforeEach(() => {
       cy.setUpApi({
         database: {
           appSettings: APP_SETTINGS,
           appData: [appData],
         },
+        appContext: {
+          context: Context.Player,
+        },
       });
       cy.visit('/');
     });
 
-    it('Show saved question', () => {
-      // TODO: check the choice is good shape
-      const selection = appData.data.choices.map((choice) =>
-        choices.findIndex(({ value }) => value === choice.value)
+    it.only('Show saved question', () => {
+      const data = appData.data;
+      const selection = data.choices.map((choice) =>
+        choices.findIndex(({ value }) => value === choice)
       );
+
       checkCorrection(selection);
     });
   });

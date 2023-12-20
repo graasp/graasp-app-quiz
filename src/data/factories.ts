@@ -1,6 +1,8 @@
+import { Data } from '@graasp/apps-query-client';
 import {
   AppData,
   AppDataVisibility,
+  AppSetting,
   CompleteMember,
   DiscriminatedItem,
   MemberType,
@@ -8,7 +10,7 @@ import {
 
 import { APP_DATA_TYPES } from '../config/constants';
 
-const datesFactory = () => ({
+export const datesFactory = ({
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 });
@@ -25,16 +27,10 @@ export const mockMemberFactory = ({
   email: `${name}@gmail.com`,
   extra: {},
   type: MemberType.Individual,
-  ...datesFactory(),
+  ...datesFactory,
 });
 
-export const mockItemFactory = (id: string): DiscriminatedItem =>
-  ({
-    id,
-  } as DiscriminatedItem);
-
-// TODO: fix any
-export const mockAppDataFactory = ({
+export const mockAppDataFactory = <T extends Data>({
   item,
   member,
   creator = member,
@@ -44,20 +40,20 @@ export const mockAppDataFactory = ({
   item: DiscriminatedItem;
   member: CompleteMember;
   creator?: CompleteMember;
-  data: any;
+  data: T;
   id: string;
-}): AppData => ({
+}): AppData<T> => ({
   item,
   member,
   creator,
-  ...datesFactory(),
+  ...datesFactory,
   data,
   id,
   visibility: AppDataVisibility.Member,
   type: APP_DATA_TYPES.RESPONSE,
 });
 
-export const mockMultipleAppDataFactory = ({
+export const mockMultipleAppDataFactory = <T extends Data,>({
   item,
   member,
   creator = member,
@@ -67,10 +63,10 @@ export const mockMultipleAppDataFactory = ({
   member: CompleteMember;
   creator?: CompleteMember;
   payloads: {
-    data: any;
+    data: T;
     id: string;
   }[];
-}): AppData[] =>
+}): AppData<T>[] =>
   payloads.map(({ id, data }) =>
     mockAppDataFactory({
       item,
@@ -81,7 +77,7 @@ export const mockMultipleAppDataFactory = ({
     })
   );
 
-export const mockAppSettingFactory = ({
+export const mockAppSettingFactory = <T extends Data,>({
   id,
   name,
   item,
@@ -90,11 +86,11 @@ export const mockAppSettingFactory = ({
   id: string;
   name: string;
   item: DiscriminatedItem;
-  data: any;
-}) => ({
+  data: T;
+}): AppSetting<T> => ({
   id,
   item,
   data,
   name,
-  ...datesFactory(),
+  ...datesFactory,
 });

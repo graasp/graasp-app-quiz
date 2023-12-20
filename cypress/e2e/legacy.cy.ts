@@ -1,3 +1,5 @@
+import { AppSetting } from '@graasp/sdk';
+
 import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -5,12 +7,20 @@ import {
   QUESTION_BAR_NEXT_CY,
   dataCyWrapper,
 } from '../../src/config/selectors';
+import {
+  datesFactory,
+  mockAppDataFactory,
+  mockMemberFactory,
+} from '../../src/data/factories';
+import { mockItem } from '../../src/data/items';
 
 describe('Legacy', () => {
   it('Questions without questionId are compatible', () => {
-    const MULTIPLE_CHOICES_APP_SETTING = {
+    const MULTIPLE_CHOICES_APP_SETTING: AppSetting = {
       id: 'multiple-choice-id',
       name: APP_SETTING_NAMES.QUESTION,
+      item: mockItem,
+      ...datesFactory,
       data: {
         type: QuestionType.MULTIPLE_CHOICES,
         // does not have a question id
@@ -37,9 +47,11 @@ describe('Legacy', () => {
       },
     };
 
-    const TEXT_INPUT_APP_SETTING = {
+    const TEXT_INPUT_APP_SETTING: AppSetting = {
       id: 'text-input-id',
       name: APP_SETTING_NAMES.QUESTION,
+      item: mockItem,
+      ...datesFactory,
       data: {
         type: QuestionType.TEXT_INPUT,
         // does not have a question id
@@ -49,45 +61,43 @@ describe('Legacy', () => {
       },
     };
 
-    const ORDER_LIST = {
+    const ORDER_LIST: AppSetting = {
       id: 'order-list',
       name: APP_SETTING_NAMES.QUESTION_LIST,
+      item: mockItem,
+      ...datesFactory,
       data: {
         // refer to real question id
         list: [MULTIPLE_CHOICES_APP_SETTING.id, TEXT_INPUT_APP_SETTING.id],
       },
     };
 
-    const item = { id: 'mock-item-id' };
     // current user
-    const member = { id: 'mock-member-id', name: 'liam' };
+    const member = mockMemberFactory({ id: 'mock-member-id', name: 'liam' });
+    const textAppData =  mockAppDataFactory({
+      item: mockItem,
+      member,
+      creator: member,
+      data: {
+        // refer to real question id
+        questionId: TEXT_INPUT_APP_SETTING.id,
+        text: '90',
+      },
+      id: '3',
+    });
     const appData = [
-      {
-        item,
+      mockAppDataFactory({
+        item: mockItem,
         member,
         creator: member,
-        createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-        updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
         data: {
           // refer to real question id
           questionId: MULTIPLE_CHOICES_APP_SETTING.id,
           choices: ['Paris'],
         },
         id: '2',
-      },
-      {
-        item,
-        member,
-        creator: member,
-        createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-        updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-        data: {
-          // refer to real question id
-          questionId: TEXT_INPUT_APP_SETTING.id,
-          text: '90',
-        },
-        id: '3',
-      },
+      }),
+      textAppData,
     ];
     cy.setUpApi({
       database: {
@@ -111,9 +121,10 @@ describe('Legacy', () => {
       'contain',
       TEXT_INPUT_APP_SETTING.data.question
     );
+
     cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).should(
       'have.value',
-      appData[1].data.text
+      textAppData.data.text
     );
   });
 });

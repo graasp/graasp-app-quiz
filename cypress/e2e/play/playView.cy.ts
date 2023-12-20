@@ -1,4 +1,4 @@
-import { PermissionLevel } from '@graasp/sdk';
+import { Context, PermissionLevel } from '@graasp/sdk';
 
 import {
   EXPLANATION_PLAY_CY,
@@ -11,10 +11,7 @@ import {
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { LIAM_RESPONSES } from '../../fixtures/appData';
-import {
-  APP_SETTINGS,
-  QUESTION_APP_SETTINGS,
-} from '../../fixtures/appSettings';
+import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../fixtures/appSettings';
 
 describe('Play View', () => {
   it('Empty data', () => {
@@ -22,6 +19,9 @@ describe('Play View', () => {
       database: {
         appSettings: [],
       },
+      appContext: {
+        context: Context.Player,
+      }
     });
     cy.visit('/');
 
@@ -34,6 +34,9 @@ describe('Play View', () => {
         appSettings: APP_SETTINGS,
         appData: LIAM_RESPONSES, // app data but not the current user's
       },
+      appContext: {
+        context: Context.Player,
+      }
     });
     cy.visit('/');
 

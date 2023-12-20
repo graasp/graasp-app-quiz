@@ -1,3 +1,5 @@
+import { Context } from '@graasp/sdk';
+
 import { TextAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
@@ -7,10 +9,10 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import {
-  APP_SETTINGS,
-  QUESTION_APP_SETTINGS,
-} from '../../fixtures/appSettings';
+import { mockAppDataFactory } from '../../../src/data/factories';
+import { mockItem } from '../../../src/data/items';
+import { mockCurrentMember } from '../../../src/data/members';
+import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../fixtures/appSettings';
 
 const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
@@ -37,6 +39,9 @@ describe('Play Text Input', () => {
       cy.setUpApi({
         database: {
           appSettings: APP_SETTINGS,
+        },
+        appContext: {
+          context: Context.Player,
         },
       });
       cy.visit('/');
@@ -130,18 +135,23 @@ describe('Play Text Input', () => {
   });
 
   describe('Display saved settings', () => {
-    const appData = {
+    const appData = mockAppDataFactory({
       id: 'app-data-id',
+      item: mockItem,
+      member: mockCurrentMember,
       data: {
         questionId: id,
         text: 'my answer',
       },
-    };
+    });
     beforeEach(() => {
       cy.setUpApi({
         database: {
           appSettings: APP_SETTINGS,
           appData: [appData],
+        },
+        appContext: {
+          context: Context.Player,
         },
       });
       cy.visit('/');

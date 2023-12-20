@@ -1,3 +1,5 @@
+import { Context } from '@graasp/sdk';
+
 import { SliderAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
@@ -7,7 +9,13 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../fixtures/appSettings';
+import { mockAppDataFactory } from '../../../src/data/factories';
+import { mockItem } from '../../../src/data/items';
+import { mockCurrentMember } from '../../../src/data/members';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../fixtures/appSettings';
 
 const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
@@ -38,6 +46,9 @@ describe('Slider', () => {
       cy.setUpApi({
         database: {
           appSettings: APP_SETTINGS,
+        },
+        appContext: {
+          context: Context.Player,
         },
       });
       cy.visit('/');
@@ -79,7 +90,9 @@ describe('Slider', () => {
 
       // go to another question and comeback, data should have been saved
       cy.get(
-        dataCyWrapper(buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId))
+        dataCyWrapper(
+          buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId)
+        )
       ).click();
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       checkCorrection({ value: 60 });
@@ -89,19 +102,24 @@ describe('Slider', () => {
     });
   });
   describe('Display saved app data', () => {
-    const appData = {
+    const appData = mockAppDataFactory({
       id: 'app-data-id',
+      item: mockItem,
+      member: mockCurrentMember,
       data: {
         questionId: id,
         value: 30,
       },
-    };
+    });
 
     beforeEach(() => {
       cy.setUpApi({
         database: {
           appSettings: APP_SETTINGS,
           appData: [appData],
+        },
+        appContext: {
+          context: Context.Player,
         },
       });
       cy.visit('/');

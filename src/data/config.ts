@@ -2,40 +2,19 @@ import { LocalContext } from '@graasp/apps-query-client';
 import { PermissionLevel } from '@graasp/sdk';
 
 import { API_HOST, APP_SETTING_NAMES, QuestionType } from '../config/constants';
-import { appDataChloe, chloe } from './appDataChloe';
-import { appDataEmily, emily } from './appDataEmily';
-import { appDataJames, james } from './appDataJames';
-import { appDataJessica, jessica } from './appDataJessica';
-import { appDataLuca, luca } from './appDataLuca';
-import { appDataMicheal, micheal } from './appDataMicheal';
-import { appDataOlivia, olivia } from './appDataOlivia';
-import { appDataSarah, sarah } from './appDataSarah';
-import { appDataWilliam, william } from './appDataWilliam';
-import { appDataXavier, xavier } from './appDataXavier';
-import {
-  mockAppSettingFactory,
-  mockMemberFactory,
-} from './factories';
+import { appDataChloe } from './appDataChloe';
+import { appDataEmily } from './appDataEmily';
+import { appDataJames } from './appDataJames';
+import { appDataJessica } from './appDataJessica';
+import { appDataLuca } from './appDataLuca';
+import { appDataMicheal } from './appDataMicheal';
+import { appDataOlivia } from './appDataOlivia';
+import { appDataSarah } from './appDataSarah';
+import { appDataWilliam } from './appDataWilliam';
+import { appDataXavier } from './appDataXavier';
+import { mockAppSettingFactory } from './factories';
 import { mockItem } from './items';
-
-export const mockCurrentMember = mockMemberFactory({
-  id: '0f0a2774-a965-4b97-afb4-bccc3796e060',
-  name: 'anna',
-});
-
-export const mockMembers = [
-  mockCurrentMember,
-  james,
-  sarah,
-  emily,
-  micheal,
-  jessica,
-  william,
-  olivia,
-  chloe,
-  xavier,
-  luca,
-];
+import { mockCurrentMember } from './members';
 
 export const mockContext: LocalContext = {
   apiHost: API_HOST,
@@ -78,6 +57,7 @@ export const mockAppSetting = [
     name: APP_SETTING_NAMES.QUESTION_LIST,
     item: mockItem,
   }),
+
   mockAppSettingFactory({
     id: 'id1',
     data: {
@@ -257,6 +237,7 @@ export const mockAppSetting = [
     name: APP_SETTING_NAMES.QUESTION,
     item: mockItem,
   }),
+
   mockAppSettingFactory({
     id: 'id10',
     data: {

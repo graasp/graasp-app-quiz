@@ -14,10 +14,7 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import {
-  APP_SETTINGS,
-  QUESTION_APP_SETTINGS,
-} from '../../../fixtures/appSettings';
+import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../../fixtures/appSettings';
 
 const newTextInputData = {
   question: 'new question text',

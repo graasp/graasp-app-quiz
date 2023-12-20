@@ -1,9 +1,14 @@
+import { AppSetting } from '@graasp/sdk';
 import { QuestionDataAppSetting } from '../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
-// TODO: add types
-export const MULTIPLE_CHOICES_APP_SETTING = {
+import { mockItem } from '../../src/data/items';
+import { datesFactory } from '../../src/data/factories';
+
+export const MULTIPLE_CHOICES_APP_SETTING: QuestionDataAppSetting = {
   id: 'multiple-choice-id',
   name: APP_SETTING_NAMES.QUESTION,
+  item: mockItem,
+  ...datesFactory,
   data: {
     type: QuestionType.MULTIPLE_CHOICES,
     questionId: 'multiple-choice-id1',
@@ -34,9 +39,11 @@ export const MULTIPLE_CHOICES_APP_SETTING = {
   },
 };
 
-export const TEXT_INPUT_APP_SETTING = {
+export const TEXT_INPUT_APP_SETTING: QuestionDataAppSetting = {
   id: 'text-input-id',
   name: APP_SETTING_NAMES.QUESTION,
+  item: mockItem,
+  ...datesFactory,
   data: {
     type: QuestionType.TEXT_INPUT,
     questionId: 'text-input-id1',
@@ -46,9 +53,11 @@ export const TEXT_INPUT_APP_SETTING = {
   },
 };
 
-export const SLIDER_APP_SETTING = {
+export const SLIDER_APP_SETTING: QuestionDataAppSetting = {
   id: 'slider-id',
   name: APP_SETTING_NAMES.QUESTION,
+  item: mockItem,
+  ...datesFactory,
   data: {
     type: QuestionType.SLIDER,
     questionId: 'slider-id1',
@@ -60,9 +69,11 @@ export const SLIDER_APP_SETTING = {
   },
 };
 
-export const FILL_BLANKS_SETTING = {
+export const FILL_BLANKS_SETTING: QuestionDataAppSetting = {
   id: 'fill-blanks-id',
   name: APP_SETTING_NAMES.QUESTION,
+  item: mockItem,
+  ...datesFactory,
   data: {
     type: QuestionType.FILL_BLANKS,
     questionId: 'fill-blanks-id1',
@@ -72,14 +83,20 @@ export const FILL_BLANKS_SETTING = {
   },
 };
 
-export const APP_SETTINGS = [
+export const QUESTION_APP_SETTINGS = [
   MULTIPLE_CHOICES_APP_SETTING,
   TEXT_INPUT_APP_SETTING,
   SLIDER_APP_SETTING,
   FILL_BLANKS_SETTING,
+];
+
+export const APP_SETTINGS: AppSetting[] = [
+  ...QUESTION_APP_SETTINGS,
   {
     id: 'order-list-id',
     name: APP_SETTING_NAMES.QUESTION_LIST,
+    item: mockItem,
+    ...datesFactory,
     data: {
       list: [
         MULTIPLE_CHOICES_APP_SETTING.data.questionId,
@@ -90,8 +107,6 @@ export const APP_SETTINGS = [
     },
   },
 ];
-
-export const QUESTION_APP_SETTINGS = APP_SETTINGS as QuestionDataAppSetting[];
 
 export const CAPITAL_FRANCE_SETTING = {
   id: 'id4',

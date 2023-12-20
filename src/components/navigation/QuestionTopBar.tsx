@@ -67,9 +67,6 @@ const QuestionTopBar = () => {
       return null;
     }
 
-    console.log('Context:', context.context)
-
-    // TODO: check why it is builder in cypress
     if (context.context === Context.Builder) {
       return (
         <StepButton onClick={() => setCurrentIdx(index)}>
@@ -92,18 +89,13 @@ const QuestionTopBar = () => {
             color: isCorrect ? 'success' : 'error',
           },
         };
-
-        console.log('isCorrect:', isCorrect)
-        console.log('props', props)
-        console.log('response id', response?.id)
-
     return (
       <StepLabel
         sx={{ '&:hover': { cursor: 'pointer' } }}
         onClick={() => setCurrentIdx(index)}
         {...props}
       >
-        {question.data.question}ui
+        {question.data.question}
       </StepLabel>
     );
   };

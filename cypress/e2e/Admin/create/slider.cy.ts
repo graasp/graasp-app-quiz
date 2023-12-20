@@ -19,10 +19,7 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import {
-  APP_SETTINGS,
-  QUESTION_APP_SETTINGS,
-} from '../../../fixtures/appSettings';
+import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../../fixtures/appSettings';
 
 const t = i18n.t;
 
@@ -45,18 +42,12 @@ type SliderValues = {
   max: number;
   value: number;
   explanation: string;
-}
+};
 
 const id = data.questionId;
 
 const fillSliderQuestion = (
-  {
-    min,
-    max,
-    value,
-    question,
-    explanation,
-  }: SliderValues,
+  { min, max, value, question, explanation }: SliderValues,
   originalAppSettingDataValue: number,
   { shouldSave = true } = {}
 ) => {

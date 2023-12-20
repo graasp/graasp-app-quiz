@@ -1,5 +1,12 @@
-import { Context, PermissionLevel } from '@graasp/sdk';
+import {
+  AppData,
+  AppSetting,
+  CompleteMember,
+  Context,
+  PermissionLevel,
+} from '@graasp/sdk';
 
+import { API_HOST } from '../../src/config/constants';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   EXPLANATION_CY,
@@ -11,9 +18,8 @@ import {
   buildQuestionTypeOption,
   dataCyWrapper,
 } from '../../src/config/selectors';
-import { mockCurrentMember, mockMembers } from '../../src/data/config';
-import { API_HOST } from '../../src/config/constants';
 import { mockItem } from '../../src/data/items';
+import { mockCurrentMember, mockMembers } from '../../src/data/members';
 
 Cypress.Commands.add(
   'setUpApi',
@@ -36,7 +42,7 @@ Cypress.Commands.add(
         context: Context.Builder,
         permission: PermissionLevel.Read,
         ...appContext,
-      }
+      };
     });
   }
 );

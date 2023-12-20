@@ -144,7 +144,7 @@ describe('Create View', () => {
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).should('not.exist');
 
       // delete all
-      for (let i = 0; i < APP_SETTINGS.length - 2; i += 1) {
+      for (let i = 0; i < QUESTION_APP_SETTINGS.length - 2; i += 1) {
         cy.get(dataCyWrapper(CREATE_VIEW_DELETE_BUTTON_CY)).click();
       }
 

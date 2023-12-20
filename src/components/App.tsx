@@ -18,9 +18,10 @@ import {
   hooks,
   queryClient,
 } from '../config/queryClient';
-import { mockContext as defaultMockContext, mockMembers } from '../data/config';
+import { mockContext as defaultMockContext } from '../data/config';
 import graaspTheme from '../layout/theme';
 import View from './views/View';
+import { mockMembers } from '../data/members';
 
 export const App = () => {
   const [mockContext, setMockContext] = useObjectState(defaultMockContext);

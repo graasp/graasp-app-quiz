@@ -18,8 +18,7 @@ import {
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import {
-  APP_SETTINGS,
-  QUESTION_APP_SETTINGS,
+  APP_SETTINGS, QUESTION_APP_SETTINGS,
 } from '../../../fixtures/appSettings';
 
 const t = i18n.t;

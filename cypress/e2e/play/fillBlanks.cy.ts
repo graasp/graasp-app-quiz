@@ -1,9 +1,7 @@
+import { Context } from '@graasp/sdk';
+
+import { TextAppDataData } from '../../../src/components/types/types';
 import {
-  FillTheBlanksAppDataData,
-  TextAppDataData,
-} from '../../../src/components/types/types';
-import {
-  APP_DATA_TYPES,
   APP_SETTING_NAMES,
   FILL_BLANKS_TYPE,
   QuestionType,
@@ -17,6 +15,9 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
+import { mockAppDataFactory } from '../../../src/data/factories';
+import { mockItem } from '../../../src/data/items';
+import { mockCurrentMember } from '../../../src/data/members';
 import { Word, splitSentence } from '../../../src/utils/fillInTheBlanks';
 import {
   APP_SETTINGS,
@@ -80,6 +81,9 @@ describe('Play Fill In The Blanks', () => {
         database: {
           appSettings: APP_SETTINGS,
         },
+        appContext: {
+          context: Context.Player,
+        },
       });
       cy.visit('/');
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
@@ -119,15 +123,18 @@ describe('Play Fill In The Blanks', () => {
   });
 
   describe('Display saved settings', () => {
-    const buildAppData = (text: string) => ({
-      id: 'app-data-1',
-      type: APP_DATA_TYPES.RESPONSE,
-      data: {
-        questionId: id,
-        text,
-      },
-    });
-    it.only('Show correct saved question', () => {
+    const buildAppData = (text: string) =>
+      mockAppDataFactory({
+        id: 'app-data-1',
+        item: mockItem,
+        member: mockCurrentMember,
+        data: {
+          questionId: id,
+          text,
+        },
+      });
+
+    it('Show correct saved question', () => {
       const correctAppData = buildAppData(
         'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.'
       );
@@ -136,13 +143,16 @@ describe('Play Fill In The Blanks', () => {
           appSettings: APP_SETTINGS,
           appData: [correctAppData],
         },
+        appContext: {
+          context: Context.Player,
+        },
       });
       cy.visit('/');
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
-      const data = correctAppData.data as FillTheBlanksAppDataData;
+      const data = correctAppData.data;
 
-      console.log('correctData', data)
-      console.log(splitSentence(data.text))
+      console.log('correctData', data);
+      console.log(splitSentence(data.text));
 
       checkCorrection(splitSentence(data.text));
 
@@ -163,11 +173,15 @@ describe('Play Fill In The Blanks', () => {
           appSettings: APP_SETTINGS,
           appData: [partiallyCorrectAppData],
         },
+        appContext: {
+          context: Context.Player,
+        },
       });
       cy.visit('/');
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
-      checkCorrection(splitSentence(partiallyCorrectAppData.data.text));
+      const data = partiallyCorrectAppData.data;
+      checkCorrection(splitSentence(data.text));
 
       // success displayed in question bar
       cy.checkStepStatus(id, false);
@@ -182,11 +196,15 @@ describe('Play Fill In The Blanks', () => {
           appSettings: APP_SETTINGS,
           appData: [shorterAppData],
         },
+        appContext: {
+          context: Context.Player,
+        },
       });
       cy.visit('/');
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
-      checkCorrection(splitSentence(shorterAppData.data.text));
+      const data = shorterAppData.data;
+      checkCorrection(splitSentence(data.text));
 
       // success displayed in question bar
       cy.checkStepStatus(id, false);
@@ -200,6 +218,9 @@ describe('Play Fill In The Blanks', () => {
         database: {
           appSettings: APP_SETTINGS,
           appData: [longerAppData],
+        },
+        appContext: {
+          context: Context.Player,
         },
       });
       cy.visit('/');
