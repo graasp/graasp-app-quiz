@@ -1,4 +1,5 @@
 import { getSettingsByName } from '../../../../src/components/context/utilities';
+import { QuestionDataAppSetting } from '../../../../src/components/types/types';
 import { APP_SETTING_NAMES } from '../../../../src/config/constants';
 import {
   AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
@@ -40,7 +41,7 @@ describe('Table by Question', () => {
   /**
    * Test the table by question view for a few question and some user answers
    */
-  it.only('Table by Question correctly display data', () => {
+  it('Table by Question correctly display data', () => {
     cy.setupResultTablesByQuestionForCheck(
       APP_SETTINGS_FEW_QUESTIONS,
       APP_DATA_FEW_QUESTIONS_FEW_USERS,
@@ -48,8 +49,9 @@ describe('Table by Question', () => {
     );
 
     // Test that each table are correctly displayed
-    APP_SETTINGS_FEW_QUESTIONS.filter(
-      (s) => s.name === APP_SETTING_NAMES.QUESTION
+    getSettingsByName(
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_SETTING_NAMES.QUESTION
     ).forEach((s, idx) => {
       cy.get(dataCyWrapper(buildTableByQuestionCy(s.data.questionId))).should(
         'have.text',
@@ -153,7 +155,7 @@ describe('Table by Question', () => {
     )[0].data.list.map((elem) => {
       const e = APP_SETTINGS_FEW_QUESTIONS.find(
         (el) => el.data.questionId === elem
-      );
+      ) as QuestionDataAppSetting;
       return {
         label: e.data.question,
         id: e.data.questionId,
@@ -181,7 +183,7 @@ describe('Table by Question', () => {
       APP_SETTING_NAMES.QUESTION_LIST
     )[0].data.list[0];
 
-    let users = [
+    const users = [
       ...new Map(
         APP_DATA_FEW_QUESTIONS_LOT_USERS.map(({ member }) => [
           member.id,
@@ -220,7 +222,7 @@ describe('Table by Question', () => {
  * @param {string} id The id of the question for which we currently are displaying data
  * @param {string} ascending Suffix to add to User whether it is sorted ascending or descending
  */
-const testTableHeader = (id, ascending) => {
+const testTableHeader = (id: string, ascending: string) => {
   cy.get(dataCyWrapper(buildTableByQuestionUserHeaderCy(id))).should(
     'have.text',
     `User${ascending}`
@@ -246,7 +248,7 @@ const testTableHeader = (id, ascending) => {
  * @param {string} qTitle The title of the question for which we currently are displaying data
  * @param {boolean} ascending Whether the current sorting order is ascending or descending
  */
-const testTableContent = (qId, qTitle, ascending) => {
+const testTableContent = (qId: string, qTitle: string, ascending: boolean) => {
   /**
    * Helper function to return the index of the user for which to check the response from,
    *
@@ -255,7 +257,7 @@ const testTableContent = (qId, qTitle, ascending) => {
    *
    * @param n the current index when iterating through each child
    */
-  const index = ascending ? (n) => n : (n) => 2 - n;
+  const index = ascending ? (n: number) => n : (n: number) => 2 - n;
   cy.get(dataCyWrapper(buildTableByQuestionTableBodyCy(qId)))
     .children(dataCyWrapper(TABLE_BY_QUESTION_ENTRY_CY))
     .each((entry, idx) => {

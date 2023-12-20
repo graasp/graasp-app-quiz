@@ -29,9 +29,10 @@ describe('Analytics Detailed', () => {
       // Click on every question
       cy.get(
         dataCyWrapper(buildAnalyticsDetailedQuestionTabMenuCy(q.data.question))
-      )
-        .scrollIntoView()
-        .click();
+      ).scrollIntoView();
+      cy.get(
+        dataCyWrapper(buildAnalyticsDetailedQuestionTabMenuCy(q.data.question))
+      ).click();
 
       switch (q.data.type) {
         case QuestionType.FILL_BLANKS:
@@ -46,9 +47,12 @@ describe('Analytics Detailed', () => {
             })
             .forEach((qLabel, idx, labels) => {
               // Goes to chart
-              cy.get(dataCyWrapper(buildAnalyticsDetailedChartCy(qLabel.label)))
-                .scrollIntoView()
-                .should('be.visible');
+              cy.get(
+                dataCyWrapper(buildAnalyticsDetailedChartCy(qLabel.label))
+              ).scrollIntoView();
+              cy.get(
+                dataCyWrapper(buildAnalyticsDetailedChartCy(qLabel.label))
+              ).should('be.visible');
 
               // assert chart title
               cy.get(dataCyWrapper(buildAnalyticsDetailedChartCy(qLabel.label)))
@@ -70,9 +74,12 @@ describe('Analytics Detailed', () => {
             dataCyWrapper(
               buildAnalyticsDetailedChartCy('Question answer frequency')
             )
-          )
-            .scrollIntoView()
-            .should('be.visible');
+          ).scrollIntoView();
+          cy.get(
+            dataCyWrapper(
+              buildAnalyticsDetailedChartCy('Question answer frequency')
+            )
+          ).should('be.visible');
 
           // assert chart title
           cy.get(

@@ -128,7 +128,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'setupAnalyticsForCheck',
-  (app_settings, app_data, members) => {
+  (app_settings, app_data = [], members = []) => {
     cy.setUpApi({
       database: {
         appSettings: app_settings,

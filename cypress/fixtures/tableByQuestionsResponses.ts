@@ -10,7 +10,6 @@ import { HARPER, LIAM, MASON } from './members';
 
 const toDateString = (date: string) => new Date(date).toDateString();
 
-// TODO: add types
 /**
  * Array containing the expected data for each table in the table by question page
  */

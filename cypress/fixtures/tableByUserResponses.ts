@@ -10,8 +10,6 @@ import { HARPER, LIAM, MASON } from './members';
 
 const toDateString = (date: string) => new Date(date).toDateString();
 
-// TODO: add types
-
 export const USER_RESPONSES = {
   [LIAM.id]: [
     {

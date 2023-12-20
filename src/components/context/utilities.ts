@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { AppData, AppSetting, Member } from '@graasp/sdk';
 
 import {
+  APP_SETTING_NAMES,
+  AppSettingName,
   DEFAULT_APP_DATA_VALUES,
   FAILURE_MESSAGES,
   QuestionType,
@@ -14,6 +16,7 @@ import {
   QuestionAppDataData,
   QuestionData,
   QuestionDataAppSetting,
+  QuestionListType,
   SliderAppDataData,
   TextAppDataData,
 } from '../types/types';
@@ -26,8 +29,26 @@ export const getQuestionById = (data: QuestionDataAppSetting[], id: string) => {
   return data.find((d) => d.data.questionId === id);
 };
 
-export const getSettingsByName = (data: AppSetting[] = [], name: string) => {
-  return data?.filter((d) => d.name === name);
+// Define specific setting type depending on the app setting name.
+type SettingReturnTypeMap = {
+  [key in AppSettingName]: key extends typeof APP_SETTING_NAMES.QUESTION
+    ? QuestionDataAppSetting[]
+    : key extends typeof APP_SETTING_NAMES.QUESTION_LIST
+    ? QuestionListType[]
+    : AppSetting[];
+};
+
+// Define the return type a specific if exists, else return generic appSetting.
+export type GettingSettingsReturnType<T extends AppSettingName> =
+  T extends keyof SettingReturnTypeMap ? SettingReturnTypeMap[T] : AppSetting[];
+
+export const getSettingsByName = <T extends AppSettingName>(
+  settings: AppSetting[] = [],
+  name: T
+): GettingSettingsReturnType<T> => {
+  return settings?.filter(
+    (d) => d.name === name
+  ) as GettingSettingsReturnType<T>;
 };
 
 export const isDifferent = (obj1: object, obj2: object): boolean => {

@@ -1,3 +1,5 @@
+import { AppData } from '@graasp/sdk';
+
 import { getSettingsByName } from '../../../../src/components/context/utilities';
 import { APP_SETTING_NAMES } from '../../../../src/config/constants';
 import {
@@ -205,7 +207,7 @@ describe('Table by User', () => {
  * @param {string} uId The user id
  * @param {string} ascending Suffix to add to User whether it is sorted ascending or descending
  */
-const testTableHeader = (uId, ascending) => {
+const testTableHeader = (uId: string, ascending: string) => {
   cy.get(dataCyWrapper(buildTableByUserQuestionHeaderCy(uId))).should(
     'have.text',
     `Question${ascending}`
@@ -229,9 +231,9 @@ const testTableHeader = (uId, ascending) => {
  *
  * @return list of tuple containing the user id along with its name, sorted by name
  */
-const getUserNamesFromAppData = (appData) => {
+const getUserNamesFromAppData = (appData: AppData[]) => {
   return [...new Set(appData.map((data) => data.member))].sort(
-    getComparator({order: Order.ASC, comp: comparatorArrayByElemName})
+    getComparator({ order: Order.ASC, comp: comparatorArrayByElemName })
   );
 };
 
@@ -242,7 +244,7 @@ const getUserNamesFromAppData = (appData) => {
  * @param {string} uId The user id for which we currently are displaying the data
  * @param {boolean} ascending Whether the current sorting order is ascending or descending
  */
-const testTableContent = (uId, ascending) => {
+const testTableContent = (uId: string, ascending: boolean) => {
   /**
    * Helper function to return the index of the user for which to check the response from,
    *
@@ -252,7 +254,9 @@ const testTableContent = (uId, ascending) => {
    * @param n the current index when iterating through each child
    * @param length the length of the array we are indexing
    */
-  const index = ascending ? (n) => n : (n, length) => length - 1 - n;
+  const index = ascending
+    ? (n: number) => n
+    : (n: number, length: number) => length - 1 - n;
 
   cy.get(dataCyWrapper(buildTableByUserTableBodyCy(uId)))
     .children(dataCyWrapper(TABLE_BY_USER_ENTRY_CY))

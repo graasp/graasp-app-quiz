@@ -1,5 +1,6 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
+import { getSettingsByName } from '../../../src/components/context/utilities';
 import { APP_SETTING_NAMES } from '../../../src/config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
@@ -64,8 +65,9 @@ describe('Admin View', () => {
     testAdminViewBaseLayout();
 
     cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
-    APP_SETTINGS_FEW_QUESTIONS.filter(
-      (s) => s.name === APP_SETTING_NAMES.QUESTION
+    getSettingsByName(
+      APP_SETTINGS_FEW_QUESTIONS,
+      APP_SETTING_NAMES.QUESTION
     ).forEach((s, idx) =>
       cy
         .get(dataCyWrapper(buildTableByQuestionCy(s.data.questionId)))

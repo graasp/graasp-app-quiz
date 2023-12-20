@@ -61,14 +61,19 @@ describe('Analytics General', () => {
     );
 
     // The general tab should be present
-    cy.get(dataCyWrapper(ANALYTICS_GENERAL_TAB_MENU_CY))
-      .scrollIntoView()
-      .should('have.text', 'General');
+    cy.get(dataCyWrapper(ANALYTICS_GENERAL_TAB_MENU_CY)).scrollIntoView();
+    cy.get(dataCyWrapper(ANALYTICS_GENERAL_TAB_MENU_CY)).should(
+      'have.text',
+      'General'
+    );
 
     // Check that initially General tab is selected
-    cy.get(dataCyWrapper(ANALYTICS_GENERAL_TAB_MENU_CY))
-      .scrollIntoView()
-      .should('have.attr', 'aria-selected', 'true');
+    cy.get(dataCyWrapper(ANALYTICS_GENERAL_TAB_MENU_CY)).scrollIntoView();
+    cy.get(dataCyWrapper(ANALYTICS_GENERAL_TAB_MENU_CY)).should(
+      'have.attr',
+      'aria-selected',
+      'true'
+    );
 
     // All the question of the quiz should have their own tab, to navigate to detailed questions
     getSettingsByName(
@@ -77,20 +82,24 @@ describe('Analytics General', () => {
     ).forEach((q) => {
       cy.get(
         dataCyWrapper(buildAnalyticsDetailedQuestionTabMenuCy(q.data.question))
-      )
-        .scrollIntoView()
-        .should('have.text', q.data.question);
+      ).scrollIntoView();
+      cy.get(
+        dataCyWrapper(buildAnalyticsDetailedQuestionTabMenuCy(q.data.question))
+      ).should('have.text', q.data.question);
     });
 
     // The charts should correctly have en entry in the menu
     generalCharts.forEach(({ label, id }) => {
-      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id)))
-        .scrollIntoView()
-        .should('have.text', label);
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).scrollIntoView();
+      cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).should(
+        'have.text',
+        label
+      );
     });
 
     generalCharts.forEach(({ selector }) => {
-      cy.get(dataCyWrapper(selector)).scrollIntoView().should('be.visible');
+      cy.get(dataCyWrapper(selector)).scrollIntoView();
+      cy.get(dataCyWrapper(selector)).should('be.visible');
     });
   });
 
@@ -126,7 +135,8 @@ describe('Analytics General', () => {
     );
 
     generalCharts.forEach(({ selector }, index) => {
-      cy.get(dataCyWrapper(selector)).scrollIntoView().should('be.visible');
+      cy.get(dataCyWrapper(selector)).scrollIntoView();
+      cy.get(dataCyWrapper(selector)).should('be.visible');
 
       verifySelectedMenu(index, generalCharts);
     });

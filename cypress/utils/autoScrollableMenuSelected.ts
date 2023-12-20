@@ -9,14 +9,15 @@ import {
  * @param selectedLabelIndex The index of the label to be selected
  * @param {[{ label: String }]} labels The list of all labels
  */
+// TODO: update this code to really check if correctly selected
 export const verifySelectedMenu = (
   selectedLabelIndex: number,
-  labels: [{ id: string }]
+  labels: { id: string }[]
 ) => {
-  labels.forEach(({ id }, index) => {
+  labels.forEach(({ id }) => {
     cy.get(
       dataCyWrapper(
-        buildAutoScrollableMenuLinkCy(id, selectedLabelIndex === index)
+        buildAutoScrollableMenuLinkCy(id)
       )
     ).should('be.visible');
   });

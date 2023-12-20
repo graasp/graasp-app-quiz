@@ -1,9 +1,11 @@
 import { QuestionDataAppSetting } from "../components/types/types";
 
+export type AppSettingName = typeof APP_SETTING_NAMES[keyof typeof APP_SETTING_NAMES];
+
 export const APP_SETTING_NAMES = {
   QUESTION: 'question',
   QUESTION_LIST: 'questionList',
-};
+} as const;
 
 export const APP_DATA_TYPES = {
   RESPONSE: 'response',

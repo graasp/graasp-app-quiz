@@ -23,8 +23,8 @@ declare global {
 
       setupAnalyticsForCheck(
         app_settings: AppSetting[],
-        app_data: AppData[],
-        members: Member[]
+        app_data?: AppData[],
+        members?: Member[]
       ): Chainable;
 
       setupResultTablesByUserForCheck(
