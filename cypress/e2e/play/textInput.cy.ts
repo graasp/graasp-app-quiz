@@ -138,7 +138,7 @@ describe('Play Text Input', () => {
     const appData = mockAppDataFactory({
       id: 'app-data-id',
       item: mockItem,
-      member: mockCurrentMember,
+      creator: mockCurrentMember,
       data: {
         questionId: id,
         text: 'my answer',

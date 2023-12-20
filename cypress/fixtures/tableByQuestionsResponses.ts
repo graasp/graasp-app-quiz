@@ -6,10 +6,11 @@ import {
   FILL_BLANKS_SETTING_2,
   HAPPINESS_LEVEL_SETTING,
 } from './appSettings';
-import { MEMBERS_RESULT_TABLES } from './members';
+import { HARPER, LIAM, MASON } from './members';
+
+const toDateString = (date: string) => new Date(date).toDateString();
 
 // TODO: add types
-
 /**
  * Array containing the expected data for each table in the table by question page
  */
@@ -17,24 +18,24 @@ export const RESPONSES = {
   // Data first question
   [FILL_BLANKS_SETTING_2.data.question]: [
     {
-      userId: MEMBERS_RESULT_TABLES.HARPER.name,
+      userId: HARPER.name,
       fields: {
         answer: 'Not yet answered',
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES.LIAM.name,
+      userId: LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[2].data.text,
-        date: LIAM_RESPONSES[2].updatedAt,
+        date: toDateString(LIAM_RESPONSES[2].updatedAt),
         icon: IconTestText.CORRECT,
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES.MASON.name,
+      userId: MASON.name,
       fields: {
         answer: MASON_RESPONSES[0].data.text,
-        date: MASON_RESPONSES[0].updatedAt,
+        date: toDateString(MASON_RESPONSES[0].updatedAt),
         icon: IconTestText.WRONG,
       },
     },
@@ -42,21 +43,21 @@ export const RESPONSES = {
   // Data second question
   [HAPPINESS_LEVEL_SETTING.data.question]: [
     {
-      userId: MEMBERS_RESULT_TABLES.HARPER.name,
+      userId: HARPER.name,
       fields: {
         answer: HARPER_RESPONSES[0].data.value,
-        date: HARPER_RESPONSES[0].updatedAt,
+        date: toDateString(HARPER_RESPONSES[0].updatedAt),
         icon: IconTestText.WRONG,
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES.LIAM.name,
+      userId: LIAM.name,
       fields: {
         answer: 'Not yet answered',
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES.MASON.name,
+      userId: MASON.name,
       fields: {
         answer: 'Not yet answered',
       },
@@ -65,21 +66,21 @@ export const RESPONSES = {
   // Data third question
   [BABY_CAT_SETTING.data.question]: [
     {
-      userId: MEMBERS_RESULT_TABLES.HARPER.name,
+      userId: HARPER.name,
       fields: {
         answer: 'Not yet answered',
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES.LIAM.name,
+      userId: LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[1].data.text,
-        date: LIAM_RESPONSES[1].updatedAt,
+        date: toDateString(LIAM_RESPONSES[1].updatedAt),
         icon: IconTestText.WRONG,
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES.MASON.name,
+      userId: MASON.name,
       fields: {
         answer: 'Not yet answered',
       },
@@ -88,23 +89,23 @@ export const RESPONSES = {
   // Data fourth question
   [CAPITAL_FRANCE_SETTING.data.question]: [
     {
-      userId: MEMBERS_RESULT_TABLES.HARPER.name,
+      userId: HARPER.name,
       fields: {
         answer: HARPER_RESPONSES[1].data.choices.join(', '),
-        date: HARPER_RESPONSES[1].updatedAt,
+        date: toDateString(HARPER_RESPONSES[1].updatedAt),
         icon: IconTestText.WRONG,
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES.LIAM.name,
+      userId: LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[0].data.choices[0],
-        date: LIAM_RESPONSES[0].updatedAt,
+        date: toDateString(LIAM_RESPONSES[0].updatedAt),
         icon: IconTestText.CORRECT,
       },
     },
     {
-      userId: MEMBERS_RESULT_TABLES.MASON.name,
+      userId: MASON.name,
       fields: {
         answer: 'Not yet answered',
       },

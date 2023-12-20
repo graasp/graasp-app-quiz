@@ -105,7 +105,7 @@ describe('Slider', () => {
     const appData = mockAppDataFactory({
       id: 'app-data-id',
       item: mockItem,
-      member: mockCurrentMember,
+      creator: mockCurrentMember,
       data: {
         questionId: id,
         value: 30,

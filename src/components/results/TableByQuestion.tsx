@@ -148,7 +148,7 @@ const TableByQuestion = ({
                     direction={order}
                     onClick={handleRequestSort}
                     data-cy={buildTableByQuestionUserHeaderCy(
-                      question.id
+                      question.data.questionId
                     )}
                   >
                     {t('User')}
@@ -164,7 +164,7 @@ const TableByQuestion = ({
                 <TableCell
                   align="left"
                   data-cy={buildTableByQuestionAnswerHeaderCy(
-                    question.id
+                    question.data.questionId
                   )}
                 >
                   {t('Answer')}
@@ -172,7 +172,7 @@ const TableByQuestion = ({
                 <TableCell
                   align="left"
                   data-cy={buildTableByQuestionDateHeaderCy(
-                    question.id
+                    question.data.questionId
                   )}
                 >
                   {t('Date')}
@@ -180,7 +180,7 @@ const TableByQuestion = ({
                 <TableCell
                   align="left"
                   data-cy={buildTableByQuestionCorrectHeaderCy(
-                    question.id
+                    question.data.questionId
                   )}
                 >
                   {t('Correct')}
@@ -188,7 +188,7 @@ const TableByQuestion = ({
               </TableRow>
             </TableHead>
             <TableBody
-              data-cy={buildTableByQuestionTableBodyCy(question.id)}
+              data-cy={buildTableByQuestionTableBodyCy(question.data.questionId)}
             >
               {memberList
                 ?.sort(

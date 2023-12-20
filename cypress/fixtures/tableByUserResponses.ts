@@ -6,17 +6,19 @@ import {
   FILL_BLANKS_SETTING_2,
   HAPPINESS_LEVEL_SETTING,
 } from './appSettings';
-import { MEMBERS_RESULT_TABLES } from './members';
+import { HARPER, LIAM, MASON } from './members';
+
+const toDateString = (date: string) => new Date(date).toDateString();
 
 // TODO: add types
 
 export const USER_RESPONSES = {
-  [MEMBERS_RESULT_TABLES.LIAM.id]: [
+  [LIAM.id]: [
     {
       qName: FILL_BLANKS_SETTING_2.data.question,
       fields: {
         answer: LIAM_RESPONSES[2].data.text,
-        date: LIAM_RESPONSES[2].updatedAt,
+        date: toDateString(LIAM_RESPONSES[2].updatedAt),
         icon: IconTestText.CORRECT,
       },
     },
@@ -24,7 +26,7 @@ export const USER_RESPONSES = {
       qName: BABY_CAT_SETTING.data.question,
       fields: {
         answer: LIAM_RESPONSES[1].data.text,
-        date: LIAM_RESPONSES[1].updatedAt,
+        date: toDateString(LIAM_RESPONSES[1].updatedAt),
         icon: IconTestText.WRONG,
       },
     },
@@ -32,17 +34,17 @@ export const USER_RESPONSES = {
       qName: CAPITAL_FRANCE_SETTING.data.question,
       fields: {
         answer: LIAM_RESPONSES[0].data.choices[0],
-        date: LIAM_RESPONSES[0].updatedAt,
+        date: toDateString(LIAM_RESPONSES[0].updatedAt),
         icon: IconTestText.CORRECT,
       },
     },
   ],
-  [MEMBERS_RESULT_TABLES.HARPER.id]: [
+  [HARPER.id]: [
     {
       qName: HAPPINESS_LEVEL_SETTING.data.question,
       fields: {
         answer: HARPER_RESPONSES[0].data.value,
-        date: HARPER_RESPONSES[0].updatedAt,
+        date: toDateString(HARPER_RESPONSES[0].updatedAt),
         icon: IconTestText.WRONG,
       },
     },
@@ -50,17 +52,17 @@ export const USER_RESPONSES = {
       qName: CAPITAL_FRANCE_SETTING.data.question,
       fields: {
         answer: HARPER_RESPONSES[1].data.choices.join(', '),
-        date: HARPER_RESPONSES[1].updatedAt,
+        date: toDateString(HARPER_RESPONSES[1].updatedAt),
         icon: IconTestText.WRONG,
       },
     },
   ],
-  [MEMBERS_RESULT_TABLES.MASON.id]: [
+  [MASON.id]: [
     {
       qName: FILL_BLANKS_SETTING_2.data.question,
       fields: {
         answer: MASON_RESPONSES[0].data.text,
-        date: MASON_RESPONSES[0].updatedAt,
+        date: toDateString(MASON_RESPONSES[0].updatedAt),
         icon: IconTestText.WRONG,
       },
     },

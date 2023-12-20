@@ -23,7 +23,12 @@ import { mockCurrentMember, mockMembers } from '../../src/data/members';
 
 Cypress.Commands.add(
   'setUpApi',
-  ({ currentMember = mockCurrentMember, database, appContext } = {}) => {
+  ({
+    currentMember = mockCurrentMember,
+    members = mockMembers,
+    database,
+    appContext,
+  } = {}) => {
     // mock api and database
     // TODO: check why typescript fail on win.
     Cypress.on('window:before:load', (win: Window) => {
@@ -32,7 +37,7 @@ Cypress.Commands.add(
         appActions: [],
         appSettings: [],
         items: [mockItem],
-        members: mockMembers,
+        members,
         ...database,
       };
       win.appContext = {

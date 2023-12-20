@@ -40,7 +40,7 @@ describe('Table by Question', () => {
   /**
    * Test the table by question view for a few question and some user answers
    */
-  it('Table by Question correctly display data', () => {
+  it.only('Table by Question correctly display data', () => {
     cy.setupResultTablesByQuestionForCheck(
       APP_SETTINGS_FEW_QUESTIONS,
       APP_DATA_FEW_QUESTIONS_FEW_USERS,
@@ -276,6 +276,8 @@ const testTableContent = (qId, qTitle, ascending) => {
       // If the question has been answer test the date
       const date = RESPONSES[qTitle][index(idx)].fields.date;
       if (date !== undefined) {
+        console.log('date', date);
+
         cy.wrap(entry)
           .get(dataCyWrapper(TABLE_BY_QUESTION_DATE_DATA_CY), {
             withinSubject: entry,

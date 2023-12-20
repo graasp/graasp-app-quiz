@@ -77,7 +77,7 @@ const PlayView = () => {
         });
       } else {
         postAppData({
-          data: newResponse.data as AppData, // TODO: check this to ensure it is complete AppData
+          data: newResponse.data, // TODO: check this to ensure it is complete AppData
           type: APP_DATA_TYPES.RESPONSE,
         });
       }

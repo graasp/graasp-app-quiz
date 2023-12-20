@@ -1,4 +1,4 @@
-import { AppSetting } from '@graasp/sdk';
+import { AppSetting, Context } from '@graasp/sdk';
 
 import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
 import {
@@ -10,9 +10,9 @@ import {
 import {
   datesFactory,
   mockAppDataFactory,
-  mockMemberFactory,
 } from '../../src/data/factories';
 import { mockItem } from '../../src/data/items';
+import { mockCurrentMember } from '../../src/data/members';
 
 describe('Legacy', () => {
   it('Questions without questionId are compatible', () => {
@@ -73,11 +73,9 @@ describe('Legacy', () => {
     };
 
     // current user
-    const member = mockMemberFactory({ id: 'mock-member-id', name: 'liam' });
     const textAppData =  mockAppDataFactory({
       item: mockItem,
-      member,
-      creator: member,
+      creator: mockCurrentMember,
       data: {
         // refer to real question id
         questionId: TEXT_INPUT_APP_SETTING.id,
@@ -88,8 +86,7 @@ describe('Legacy', () => {
     const appData = [
       mockAppDataFactory({
         item: mockItem,
-        member,
-        creator: member,
+        creator: mockCurrentMember,
         data: {
           // refer to real question id
           questionId: MULTIPLE_CHOICES_APP_SETTING.id,
@@ -108,6 +105,9 @@ describe('Legacy', () => {
         ],
         appData,
       },
+      appContext: {
+        context: Context.Builder,
+      }
     });
     cy.visit('/');
 

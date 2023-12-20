@@ -127,7 +127,7 @@ describe('Play Fill In The Blanks', () => {
       mockAppDataFactory({
         id: 'app-data-1',
         item: mockItem,
-        member: mockCurrentMember,
+        creator: mockCurrentMember,
         data: {
           questionId: id,
           text,

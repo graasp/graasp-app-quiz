@@ -32,14 +32,14 @@ export const mockMemberFactory = ({
 
 export const mockAppDataFactory = <T extends Data>({
   item,
-  member,
-  creator = member,
+  creator,
+  member = creator,
   data,
   id,
 }: {
   item: DiscriminatedItem;
-  member: CompleteMember;
-  creator?: CompleteMember;
+  creator: CompleteMember;
+  member?: CompleteMember;
   data: T;
   id: string;
 }): AppData<T> => ({
@@ -55,13 +55,13 @@ export const mockAppDataFactory = <T extends Data>({
 
 export const mockMultipleAppDataFactory = <T extends Data,>({
   item,
-  member,
-  creator = member,
+  creator,
+  member = creator,
   payloads,
 }: {
   item: DiscriminatedItem;
-  member: CompleteMember;
-  creator?: CompleteMember;
+  member?: CompleteMember;
+  creator: CompleteMember;
   payloads: {
     data: T;
     id: string;

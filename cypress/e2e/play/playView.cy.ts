@@ -10,8 +10,8 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import { LIAM_RESPONSES } from '../../fixtures/appData';
 import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../fixtures/appSettings';
+import { appDataChloe } from '../../../src/data/appDataChloe';
 
 describe('Play View', () => {
   it('Empty data', () => {
@@ -32,7 +32,7 @@ describe('Play View', () => {
     cy.setUpApi({
       database: {
         appSettings: APP_SETTINGS,
-        appData: LIAM_RESPONSES, // app data but not the current user's
+        appData: appDataChloe, // app data but not the current user's
       },
       appContext: {
         context: Context.Player,
@@ -65,6 +65,7 @@ describe('Play View', () => {
           appSettings: APP_SETTINGS,
         },
         appContext: {
+          context: Context.Player,
           permission: PermissionLevel.Admin,
         },
       });

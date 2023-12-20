@@ -147,7 +147,7 @@ describe('Play Multiple Choices', () => {
     const appData = mockAppDataFactory({
       id: 'app-data-1',
       item: mockItem,
-      member: mockCurrentMember,
+      creator: mockCurrentMember,
       data: {
         questionId: id,
         choices: responseChoices,

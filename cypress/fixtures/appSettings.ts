@@ -1,8 +1,9 @@
 import { AppSetting } from '@graasp/sdk';
+
 import { QuestionDataAppSetting } from '../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
-import { mockItem } from '../../src/data/items';
 import { datesFactory } from '../../src/data/factories';
+import { mockItem } from '../../src/data/items';
 
 export const MULTIPLE_CHOICES_APP_SETTING: QuestionDataAppSetting = {
   id: 'multiple-choice-id',
@@ -110,6 +111,8 @@ export const APP_SETTINGS: AppSetting[] = [
 
 export const CAPITAL_FRANCE_SETTING = {
   id: 'id4',
+  item: mockItem,
+  ...datesFactory,
   data: {
     questionId: 'id41',
     question: 'What is the capital of France?',
@@ -143,6 +146,8 @@ export const CAPITAL_FRANCE_SETTING = {
 
 export const HAPPINESS_LEVEL_SETTING = {
   id: 'id5',
+  item: mockItem,
+  ...datesFactory,
   data: {
     questionId: 'id51',
     question: 'How happy are you?',
@@ -157,6 +162,8 @@ export const HAPPINESS_LEVEL_SETTING = {
 
 export const BABY_CAT_SETTING = {
   id: 'id6',
+  item: mockItem,
+  ...datesFactory,
   data: {
     questionId: 'id61',
     question: 'What is a baby cat called?',
@@ -168,6 +175,8 @@ export const BABY_CAT_SETTING = {
 
 export const FILL_BLANKS_SETTING_2 = {
   id: 'id7',
+  item: mockItem,
+  ...datesFactory,
   data: {
     questionId: 'id71',
     question: 'Fill In The Blanks',
@@ -180,6 +189,8 @@ export const FILL_BLANKS_SETTING_2 = {
 
 export const FILL_BLANKS_SETTINGS_3 = {
   id: 'id9',
+  item: mockItem,
+  ...datesFactory,
   data: {
     questionId: 'id91',
     question: 'Find equation',
@@ -191,6 +202,8 @@ export const FILL_BLANKS_SETTINGS_3 = {
 
 export const NAME_EARTH_SATELLITE = {
   id: 'id10',
+  item: mockItem,
+  ...datesFactory,
   data: {
     questionId: 'id101',
     question: "What is the name of earth's natural satellite",
@@ -206,6 +219,8 @@ export const NAME_EARTH_SATELLITE = {
 
 export const ATOMIC_NUMBER_HE = {
   id: 'id11',
+  item: mockItem,
+  ...datesFactory,
   data: {
     questionId: 'id111',
     question: 'What is the atomic number of Helium',
@@ -220,13 +235,15 @@ export const ATOMIC_NUMBER_HE = {
 /**
  * App settings used to test that question along with the responses are displayed properly in the Result Table By Question
  */
-export const APP_SETTINGS_FEW_QUESTIONS = [
+export const APP_SETTINGS_FEW_QUESTIONS: AppSetting[] = [
   CAPITAL_FRANCE_SETTING,
   HAPPINESS_LEVEL_SETTING,
   BABY_CAT_SETTING,
   FILL_BLANKS_SETTING_2,
   {
     id: 'question-list',
+    item: mockItem,
+    ...datesFactory,
     data: {
       list: ['id71', 'id51', 'id61', 'id41'],
     },
@@ -234,7 +251,7 @@ export const APP_SETTINGS_FEW_QUESTIONS = [
   },
 ];
 
-export const APP_SETTINGS_LOT_QUESTIONS = [
+export const APP_SETTINGS_LOT_QUESTIONS: AppSetting[] = [
   CAPITAL_FRANCE_SETTING,
   HAPPINESS_LEVEL_SETTING,
   BABY_CAT_SETTING,
@@ -242,9 +259,10 @@ export const APP_SETTINGS_LOT_QUESTIONS = [
   FILL_BLANKS_SETTINGS_3,
   NAME_EARTH_SATELLITE,
   ATOMIC_NUMBER_HE,
-
   {
     id: 'question-list',
+    item: mockItem,
+    ...datesFactory,
     data: {
       list: ['id71', 'id51', 'id61', 'id41', 'id91', 'id101', 'id111'],
     },

@@ -1,633 +1,486 @@
 // I tried to fill all the member IDs by using the reference to "MEMBERS_RESULT_TABLES.MEMBER.id
 // But for some reason, MEMBERS_RESULT_TABLES is undefined by the time the MOCK_USER are created
-// TODO: add types
-const item = { id: 'mock-item-id' };
-const member = { id: 'mock-member-id-1', name: 'liam' };
+import {
+  mockMemberFactory,
+  mockMultipleAppDataFactory,
+} from '../../src/data/factories';
+import { mockItem } from '../../src/data/items';
 
-export const LIAM_RESPONSES = [
-  {
-    item,
-    member,
-    creator: member,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id41',
-      choices: ['Paris'],
+// TODO: move members or merge them ?
+const member = mockMemberFactory({ id: 'mock-member-id-1', name: 'liam' });
+
+export const LIAM_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: member,
+  payloads: [
+    {
+      data: {
+        questionId: 'id41',
+        choices: ['Paris'],
+      },
+      id: '2',
     },
-    id: '2',
-  },
-  {
-    item,
-    member,
-    creator: member,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id61',
-      text: '90',
+    {
+      data: {
+        questionId: 'id61',
+        text: '90',
+      },
+      id: '3',
     },
-    id: '3',
-  },
-  {
-    item,
-    member,
-    creator: member,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id71',
-      text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
+    {
+      data: {
+        questionId: 'id71',
+        text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
+      },
+      id: '4',
     },
-    id: '4',
-  },
-];
+  ],
+});
 
 /**
  * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
  * and make things easier to test the scroll behaviour
  */
-export const LIAM_MORE_RESPONSES = [
-  {
-    item,
-    member,
-    creator: member,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id91',
-      text: '<1> + <1> = <2>',
+export const LIAM_MORE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: member,
+  payloads: [
+    {
+      data: {
+        questionId: 'id91',
+        text: '<1> + <1> = <2>',
+      },
+      id: '5',
     },
-    id: '5',
-  },
-  {
-    item,
-    member,
-    creator: member,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id101',
-      choices: ['Moon'],
+    {
+      data: {
+        questionId: 'id101',
+        choices: ['Moon'],
+      },
+      id: '6',
     },
-    id: '6',
-  },
-  {
-    item,
-    member,
-    creator: member,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id111',
-      value: 10,
+    {
+      data: {
+        questionId: 'id111',
+        value: 10,
+      },
+      id: '7',
     },
-    id: '7',
-  },
-];
+  ],
+});
 
-const harper = { id: 'mock-member-id-2', name: 'harper' };
+const harper = mockMemberFactory({ id: 'mock-member-id-2', name: 'harper' });
 
-export const HARPER_RESPONSES = [
-  {
-    item,
-    member: harper,
-    creator: harper,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id51',
-      value: 60,
+export const HARPER_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: harper,
+  payloads: [
+    {
+      data: {
+        questionId: 'id51',
+        value: 60,
+      },
+      id: '8',
     },
-    id: '8',
-  },
-  {
-    item,
-    member: harper,
-    creator: harper,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id41',
-      choices: ['Tokyo', 'London'],
+    {
+      data: {
+        questionId: 'id41',
+        choices: ['Tokyo', 'London'],
+      },
+      id: '9',
     },
-    id: '9',
-  },
-];
+  ],
+});
 
 /**
  * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
  * and make things easier to test the scroll behaviour
  */
-export const HARPER_MORE_RESPONSES = [
-  {
-    item,
-    member: harper,
-    creator: harper,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id91',
-      text: '<1> + <2> = <1>',
+export const HARPER_MORE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: harper,
+  payloads: [
+    {
+      data: {
+        questionId: 'id91',
+        text: '<1> + <2> = <1>',
+      },
+      id: '10',
     },
-    id: '10',
-  },
-  {
-    item,
-    member: harper,
-    creator: harper,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id101',
-      choices: ['Jupiter'],
+    {
+      data: {
+        questionId: 'id101',
+        choices: ['Jupiter'],
+      },
+      id: '11',
     },
-    id: '11',
-  },
-  {
-    item,
-    member: harper,
-    creator: harper,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id111',
-      value: 2,
+    {
+      data: {
+        questionId: 'id111',
+        value: 2,
+      },
+      id: '12',
     },
-    id: '12',
-  },
-];
-const mason = { id: 'mock-member-id-3', name: 'mason' };
-export const MASON_RESPONSES = [
-  {
-    item,
-    member: mason,
-    creator: mason,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id71',
-      text: 'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ipsum> sem.',
+  ],
+});
+
+const mason = mockMemberFactory({ id: 'mock-member-id-3', name: 'mason' });
+export const MASON_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: mason,
+  payloads: [
+    {
+      data: {
+        questionId: 'id71',
+        text: 'Lorem <suscipti> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <ipsum> sem.',
+      },
+      id: '13',
     },
-    id: '13',
-  },
-];
+  ],
+});
 
 /**
  * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
  * and make things easier to test the scroll behaviour
  */
-export const MASON_MORE_RESPONSES = [
-  {
-    item,
-    member: mason,
-    creator: mason,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id91',
-      text: '<1> + <1> = <2>',
+export const MASON_MORE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: mason,
+  payloads: [
+    {
+      data: {
+        questionId: 'id91',
+        text: '<1> + <1> = <2>',
+      },
+      id: '14',
     },
-    id: '14',
-  },
-  {
-    item,
-    member: mason,
-    creator: mason,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id101',
-      choices: ['Moon'],
+    {
+      data: {
+        questionId: 'id101',
+        choices: ['Moon'],
+      },
+      id: '15',
     },
-    id: '15',
-  },
-  {
-    item,
-    member: mason,
-    creator: mason,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id111',
-      value: 10,
+    {
+      data: {
+        questionId: 'id111',
+        value: 10,
+      },
+      id: '16',
     },
-    id: '16',
-  },
-];
+  ],
+});
 
-const isabella = { id: 'mock-member-id-4', name: 'isabella' };
+const isabella = mockMemberFactory({
+  id: 'mock-member-id-4',
+  name: 'isabella',
+});
 
-export const ISABELLA_RESPONSES = [
-  {
-    item,
-    member: isabella,
-    creator: isabella,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id41',
-      choices: ['Paris'],
+export const ISABELLA_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: isabella,
+  payloads: [
+    {
+      data: {
+        questionId: 'id41',
+        choices: ['Paris'],
+      },
+      id: '17',
     },
-    id: '17',
-  },
-  {
-    item,
-    member: isabella,
-    creator: isabella,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id61',
-      text: '90',
+    {
+      data: {
+        questionId: 'id61',
+        text: '90',
+      },
+      id: '18',
     },
-    id: '18',
-  },
-  {
-    item,
-    member: isabella,
-    creator: isabella,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id71',
-      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+    {
+      data: {
+        questionId: 'id71',
+        text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+      },
+      id: '19',
     },
-    id: '19',
-  },
-];
+  ],
+});
 
 /**
  * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
  * and make things easier to test the scroll behaviour
  */
-export const ISABELLA_MORE_RESPONSES = [
-  {
-    item,
-    member: isabella,
-    creator: isabella,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id91',
-      text: '<1> + <1> = <2>',
+export const ISABELLA_MORE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: isabella,
+  payloads: [
+    {
+      data: {
+        questionId: 'id91',
+        text: '<1> + <1> = <2>',
+      },
+      id: '20',
     },
-    id: '20',
-  },
-  {
-    item,
-    member: isabella,
-    creator: isabella,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id101',
-      choices: ['Moon'],
+    {
+      data: {
+        questionId: 'id101',
+        choices: ['Moon'],
+      },
+      id: '21',
     },
-    id: '21',
-  },
-  {
-    item,
-    member: isabella,
-    creator: isabella,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id111',
-      value: 10,
+    {
+      data: {
+        questionId: 'id111',
+        value: 10,
+      },
+      id: '22',
     },
-    id: '22',
-  },
-];
-const ethan = { id: 'mock-member-id-5', name: 'ethan' };
-export const ETHAN_RESPONSES = [
-  {
-    item,
-    member: ethan,
-    creator: ethan,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id41',
-      choices: ['Paris'],
+  ],
+});
+const ethan = mockMemberFactory({ id: 'mock-member-id-5', name: 'ethan' });
+export const ETHAN_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: ethan,
+  payloads: [
+    {
+      data: {
+        questionId: 'id41',
+        choices: ['Paris'],
+      },
+      id: '23',
     },
-    id: '23',
-  },
-  {
-    item,
-    member: ethan,
-    creator: ethan,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id61',
-      text: '90',
+    {
+      data: {
+        questionId: 'id61',
+        text: '90',
+      },
+      id: '24',
     },
-    id: '24',
-  },
-  {
-    item,
-    member: ethan,
-    creator: ethan,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id71',
-      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+    {
+      data: {
+        questionId: 'id71',
+        text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+      },
+      id: '25',
     },
-    id: '25',
-  },
-];
+  ],
+});
 
 /**
  * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
  * and make things easier to test the scroll behaviour
  */
-export const ETHAN_MORE_RESPONSES = [
-  {
-    item,
-    member: ethan,
-    creator: ethan,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id91',
-      text: '<1> + <1> = <2>',
+export const ETHAN_MORE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: ethan,
+  payloads: [
+    {
+      data: {
+        questionId: 'id91',
+        text: '<1> + <1> = <2>',
+      },
+      id: '26',
     },
-    id: '26',
-  },
-  {
-    item,
-    member: ethan,
-    creator: ethan,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id101',
-      choices: ['Moon'],
+    {
+      data: {
+        questionId: 'id101',
+        choices: ['Moon'],
+      },
+      id: '27',
     },
-    id: '27',
-  },
-  {
-    item,
-    member: ethan,
-    creator: ethan,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id111',
-      value: 10,
+    {
+      data: {
+        questionId: 'id111',
+        value: 10,
+      },
+      id: '28',
     },
-    id: '28',
-  },
-];
-const mia = { id: 'mock-member-id-6', name: 'mia' };
-export const MIA_RESPONSES = [
-  {
-    item,
-    member: mia,
-    creator: mia,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id41',
-      choices: ['Paris'],
+  ],
+});
+
+const mia = mockMemberFactory({ id: 'mock-member-id-6', name: 'mia' });
+const MIA_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: mia,
+  payloads: [
+    {
+      data: {
+        questionId: 'id41',
+        choices: ['Paris'],
+      },
+      id: '29',
     },
-    id: '29',
-  },
-  {
-    item,
-    member: mia,
-    creator: mia,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id61',
-      text: '90',
+    {
+      data: {
+        questionId: 'id61',
+        text: '90',
+      },
+      id: '30',
     },
-    id: '30',
-  },
-  {
-    item,
-    member: mia,
-    creator: mia,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id71',
-      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+    {
+      data: {
+        questionId: 'id71',
+        text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+      },
+      id: '31',
     },
-    id: '31',
-  },
-];
+  ],
+});
 
 /**
  * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
  * and make things easier to test the scroll behaviour
  */
-export const MIA_MORE_RESPONSES = [
-  {
-    item,
-    member: mia,
-    creator: mia,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id91',
-      text: '<1> + <1> = <2>',
+const MIA_MORE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: mia,
+  payloads: [
+    {
+      data: {
+        questionId: 'id91',
+        text: '<1> + <1> = <2>',
+      },
+      id: '32',
     },
-    id: '32',
-  },
-  {
-    item,
-    member: mia,
-    creator: mia,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id101',
-      choices: ['Moon'],
+    {
+      data: {
+        questionId: 'id101',
+        choices: ['Moon'],
+      },
+      id: '33',
     },
-    id: '33',
-  },
-  {
-    item,
-    member: mia,
-    creator: mia,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id111',
-      value: 10,
+    {
+      data: {
+        questionId: 'id111',
+        value: 10,
+      },
+      id: '34',
     },
-    id: '34',
-  },
-];
+  ],
+});
 
-const alexander = { id: 'mock-member-id-7', name: 'alexander' };
-export const ALEXANDER_RESPONSES = [
-  {
-    item,
-    member: alexander,
-    creator: alexander,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id41',
-      choices: ['Paris'],
+const alexander = mockMemberFactory({
+  id: 'mock-member-id-7',
+  name: 'alexander',
+});
+const ALEXANDER_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: alexander,
+  payloads: [
+    {
+      data: {
+        questionId: 'id41',
+        choices: ['Paris'],
+      },
+      id: '35',
     },
-    id: '35',
-  },
-  {
-    item,
-    member: alexander,
-    creator: alexander,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id61',
-      text: '90',
+    {
+      data: {
+        questionId: 'id61',
+        text: '90',
+      },
+      id: '36',
     },
-    id: '36',
-  },
-  {
-    item,
-    member: alexander,
-    creator: alexander,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id71',
-      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+    {
+      data: {
+        questionId: 'id71',
+        text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+      },
+      id: '37',
     },
-    id: '37',
-  },
-];
+  ],
+});
 
 /**
  * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
  * and make things easier to test the scroll behaviour
  */
-export const ALEXANDER_MORE_RESPONSES = [
-  {
-    item,
-    member: alexander,
-    creator: alexander,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id91',
-      text: '<1> + <1> = <2>',
+const ALEXANDER_MORE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: alexander,
+  payloads: [
+    {
+      data: {
+        questionId: 'id91',
+        text: '<1> + <1> = <2>',
+      },
+      id: '38',
     },
-    id: '38',
-  },
-  {
-    item,
-    member: alexander,
-    creator: alexander,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id101',
-      choices: ['Moon'],
+    {
+      data: {
+        questionId: 'id101',
+        choices: ['Moon'],
+      },
+      id: '39',
     },
-    id: '39',
-  },
-  {
-    item,
-    member: alexander,
-    creator: alexander,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id111',
-      value: 10,
+    {
+      data: {
+        questionId: 'id111',
+        value: 10,
+      },
+      id: '40',
     },
-    id: '40',
-  },
-];
-const chloe = { id: 'mock-member-id-8', name: 'chloe' };
-export const CHLOE_RESPONSES = [
-  {
-    item,
-    member: chloe,
-    creator: chloe,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id41',
-      choices: ['Paris'],
+  ],
+});
+
+const chloe = mockMemberFactory({ id: 'mock-member-id-8', name: 'chloe' });
+const CHLOE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: chloe,
+  payloads: [
+    {
+      data: {
+        questionId: 'id41',
+        choices: ['Paris'],
+      },
+      id: '41',
     },
-    id: '41',
-  },
-  {
-    item,
-    member: chloe,
-    creator: chloe,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id61',
-      text: '90',
+    {
+      data: {
+        questionId: 'id61',
+        text: '90',
+      },
+      id: '42',
     },
-    id: '42',
-  },
-  {
-    item,
-    member: chloe,
-    creator: chloe,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id71',
-      text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+    {
+      data: {
+        questionId: 'id71',
+        text: 'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <ipsum> ut fermentum nulla, sed <suscipit> sem.',
+      },
+      id: '43',
     },
-    id: '43',
-  },
-];
+  ],
+});
 
 /**
  * Those additional responses are used to enlarge the tables, to ensure that it takes the whole screen,
  * and make things easier to test the scroll behaviour
  */
-export const CHLOE_MORE_RESPONSES = [
-  {
-    item,
-    member: chloe,
-    creator: chloe,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id91',
-      text: '<1> + <1> = <2>',
+const CHLOE_MORE_RESPONSES = mockMultipleAppDataFactory({
+  item: mockItem,
+  creator: chloe,
+  payloads: [
+    {
+      data: {
+        questionId: 'id91',
+        text: '<1> + <1> = <2>',
+      },
+      id: '44',
     },
-    id: '44',
-  },
-  {
-    item,
-    member: chloe,
-    creator: chloe,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id101',
-      choices: ['Moon'],
+    {
+      data: {
+        questionId: 'id101',
+        choices: ['Moon'],
+      },
+      id: '45',
     },
-    id: '45',
-  },
-  {
-    item,
-    member: chloe,
-    creator: chloe,
-    createdAt: new Date('2022-07-22T12:35:50.195Z').toISOString(),
-    updatedAt: new Date('2022-07-22T12:36:51.741Z').toISOString(),
-    data: {
-      questionId: 'id111',
-      value: 10,
+    {
+      data: {
+        questionId: 'id111',
+        value: 10,
+      },
+      id: '46',
     },
-    id: '46',
-  },
-];
+  ],
+});
 
 /**
  * Basic app data(i.e. user responses) used to test that display is good in table by user and by questions
