@@ -96,7 +96,7 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
    * useful to know the type of the question, to correctly get the charts to display for a question type
    */
   const detailedChartTabQuestion = useMemo(
-    () => order.map((qId) => getFirstOrUndefined(questionById, qId)), // TODO: handle null ?
+    () => order.map((qId) => getFirstOrUndefined(questionById, qId)),
     [order, questionById]
   );
 
@@ -216,15 +216,20 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
                 {order?.map((qId) => {
                   const question = getFirstOrUndefined(questionById, qId)?.data
                     ?.question;
-                  return (
-                    <Tab
-                      label={question}
-                      key={question}
-                      data-cy={buildAnalyticsDetailedQuestionTabMenuCy(
-                        question ?? ''
-                      )}
-                    />
-                  );
+
+                  if (question) {
+                    return (
+                      <Tab
+                        label={question}
+                        key={question}
+                        data-cy={buildAnalyticsDetailedQuestionTabMenuCy(
+                          question ?? ''
+                        )}
+                      />
+                    );
+                  }
+
+                  return null;
                 })}
               </Tabs>
             </Box>
@@ -261,9 +266,8 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
                   members={data.members}
                 />
               ) : (
-                <h3>No data found for the general charts.</h3>
+                <p>No data found for the general charts.</p>
               )}
-              {/* TODO: What to display ? */}
             </TabPanel>
             {order?.map((qId, idx) => {
               const question = getFirstOrUndefined(questionById, qId);

@@ -17,7 +17,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { DEFAULT_CHOICE, DEFAULT_QUESTION } from '../../config/constants';
+import { DEFAULT_CHOICE, DEFAULT_MULTIPLE_CHOICES_QUESTION } from '../../config/constants';
 import {
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
@@ -38,7 +38,7 @@ type Props = {
 };
 
 const MultipleChoices = ({
-  choices = DEFAULT_QUESTION.data.choices,
+  choices = DEFAULT_MULTIPLE_CHOICES_QUESTION.data.choices,
   setChoices,
 }: Props): JSX.Element => {
   const { t } = useTranslation();

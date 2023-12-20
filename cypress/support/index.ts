@@ -1,4 +1,4 @@
-import { AppData, AppSetting, Member } from '@graasp/sdk';
+import { AppData, AppSetting, CompleteMember } from '@graasp/sdk';
 
 import { QuestionType } from '../../src/config/constants';
 import { Database, LocalContext } from '@graasp/apps-query-client';
@@ -7,8 +7,6 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
-      // TODO: improve types
-      // setUpApi(args: any): Chainable;
       setUpApi({
         database,
         currentMember,
@@ -16,27 +14,27 @@ declare global {
         members,
       }: {
         database?: Partial<Database>;
-        currentMember?: Member;
+        currentMember?: CompleteMember;
         appContext?: Partial<LocalContext>;
-        members?: Member[];
+        members?: CompleteMember[];
       }): Chainable<Element>;
 
       setupAnalyticsForCheck(
         app_settings: AppSetting[],
         app_data?: AppData[],
-        members?: Member[]
+        members?: CompleteMember[]
       ): Chainable;
 
       setupResultTablesByUserForCheck(
         app_settings: AppSetting[],
         app_data: AppData[], 
-        members: Member[]
+        members: CompleteMember[]
       ): Chainable;
 
       setupResultTablesByQuestionForCheck(
         app_settings: AppSetting[],
         app_data: AppData[], 
-        members: Member[]
+        members: CompleteMember[]
       ): Chainable;
 
       switchQuestionType(type: QuestionType): Chainable;

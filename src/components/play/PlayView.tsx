@@ -76,13 +76,16 @@ const PlayView = () => {
           data: newResponse.data,
         });
       } else {
-        postAppData({
-          data: newResponse.data, // TODO: check this to ensure it is complete AppData
-          type: APP_DATA_TYPES.RESPONSE,
-        });
+        if (newResponse.data) {
+          postAppData({
+            data: newResponse.data,
+            type: APP_DATA_TYPES.RESPONSE,
+          });
+        } else {
+          console.error('The response data is not defined !');
+        }
       }
     } else {
-      // TODO: check what to do if no new response ?
       console.error('The response is not defined !');
     }
   };
@@ -144,9 +147,8 @@ const PlayView = () => {
       </Grid>
       <Grid container>
         {(() => {
-          // TODO: check this 
           if (!newResponse) {
-            return null;
+            return <p>There is no response for now.</p>;
           }
 
           switch (currentQuestion.data.type) {
@@ -154,7 +156,7 @@ const PlayView = () => {
               return (
                 <PlayMultipleChoices
                   choices={currentQuestion.data.choices}
-                  response={newResponse.data as MultipleChoiceAppDataData} // TODO: check if cast is needed
+                  response={newResponse.data as MultipleChoiceAppDataData}
                   setResponse={(choices) => {
                     setNewResponse(setInData(newResponse, 'choices', choices));
                   }}
@@ -166,7 +168,7 @@ const PlayView = () => {
               return (
                 <PlayTextInput
                   values={currentQuestion.data}
-                  response={newResponse.data as TextAppDataData} // TODO: check cast
+                  response={newResponse.data as TextAppDataData}
                   setResponse={(text: string) => {
                     setNewResponse(setInData(newResponse, 'text', text));
                   }}
@@ -178,7 +180,7 @@ const PlayView = () => {
               return (
                 <PlayFillInTheBlanks
                   values={currentQuestion.data}
-                  response={newResponse.data as FillTheBlanksAppDataData} // TODO: check cast
+                  response={newResponse.data as FillTheBlanksAppDataData}
                   setResponse={(text: string) => {
                     setNewResponse(setInData(newResponse, 'text', text));
                   }}
@@ -190,13 +192,9 @@ const PlayView = () => {
               return (
                 <PlaySlider
                   values={currentQuestion.data}
-                  response={newResponse.data as SliderAppDataData} // TODO: check cast
+                  response={newResponse.data as SliderAppDataData}
                   setResponse={(value: number) => {
                     setNewResponse(
-                      // TODO: check this
-                      // newResponse.update('data', (data) =>
-                      //   data.merge({ value })
-                      // )
                       setIn(newResponse, 'data', {
                         value: value,
                       })
@@ -215,7 +213,7 @@ const PlayView = () => {
       </Grid>
       {showCorrection && (
         <PlayExplanation
-          currentQuestionData={currentQuestion.data as QuestionData} // TODO: check if cast is needed
+          currentQuestionData={currentQuestion.data as QuestionData}
         />
       )}
       <Grid item xs={12}>

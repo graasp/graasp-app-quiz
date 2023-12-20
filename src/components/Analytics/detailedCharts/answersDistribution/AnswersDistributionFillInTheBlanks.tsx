@@ -57,7 +57,7 @@ const AnswersDistributionFillInTheBlanks = ({
     () =>
       Object.entries(responsesByFilledWords).reduce(
         (acc, [filledWord, list], idx) => {
-          const placedWords = list[0].data.filledWord; // TODO: this can't works with .placed
+          const placedWords = list[0].data.filledWord;
           return {
             data: {
               x: [

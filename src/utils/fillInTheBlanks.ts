@@ -11,15 +11,6 @@ export type Word = {
   placed?: boolean;
 };
 
-// TODO: remove me
-// export type Word = TextSection & {
-  // displayed?: string;
-// };
-
-// export type Answer = TextSection & {
-//   placed: boolean;
-// };
-
 export type Result = {
   answers: Word[];
   words: Word[];

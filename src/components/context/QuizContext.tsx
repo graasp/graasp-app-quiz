@@ -18,7 +18,7 @@ import { generateId, getSettingsByName } from './utilities';
 type ContextType = {
   order: string[];
   questions: QuestionDataAppSetting[];
-  currentQuestion: QuestionDataAppSetting; // TODO: check if it can be undefined
+  currentQuestion: QuestionDataAppSetting;
   currentIdx: number;
   setCurrentIdx: (idx: number) => void;
   deleteQuestion: (question: QuestionDataAppSetting) => () => void;
@@ -55,7 +55,7 @@ export const QuizProvider = ({ children }: Props) => {
 
   const [orderSetting, setOrderSetting] = useState<AppSetting>();
   const [order, setOrder] = useState<string[]>([]);
-  // TODO: warning, without the DEFAULT_QUESTION, the type is not provided when question type is not changed in the ui !!!
+
   // Here use type of CurrentQuestion because only the id of appSetting is needed...
   const [currentQuestion, setCurrentQuestion] =
     useState<CurrentQuestion>(DEFAULT_QUESTION);
@@ -130,7 +130,6 @@ export const QuizProvider = ({ children }: Props) => {
         } else {
           await patchAppSettingAsync({
             id: orderSetting.id,
-            // TODO: check if we want to alter the array or not
             data: { list: [...order, newQuestionId] },
           });
         }
@@ -217,7 +216,7 @@ export const QuizProvider = ({ children }: Props) => {
             questionId === currentQId
         );
       }
-      setCurrentQuestion(newValue ?? DEFAULT_QUESTION); // TODO: why not just updating with new value ? or set null ?
+      setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
     }
   }, [order, currentIdx, settings]);
 

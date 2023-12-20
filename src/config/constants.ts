@@ -1,6 +1,10 @@
-import { QuestionDataAppSetting } from "../components/types/types";
+import {
+  MultipleChoicesAppSettingData,
+  QuestionDataAppSetting,
+} from '../components/types/types';
 
-export type AppSettingName = typeof APP_SETTING_NAMES[keyof typeof APP_SETTING_NAMES];
+export type AppSettingName =
+  (typeof APP_SETTING_NAMES)[keyof typeof APP_SETTING_NAMES];
 
 export const APP_SETTING_NAMES = {
   QUESTION: 'question',
@@ -36,7 +40,7 @@ export const SLIDER_DEFAULT_MIN_VALUE = 0;
 
 export const DEFAULT_QUESTION_VALUES = {
   [QuestionType.MULTIPLE_CHOICES]: {
-    questionId: '', // TODO: check if it is ok to have empty id
+    questionId: '',
     question: '',
     explanation: '',
     type: QuestionType.MULTIPLE_CHOICES as const,
@@ -44,9 +48,9 @@ export const DEFAULT_QUESTION_VALUES = {
       { value: '', isCorrect: true, explanation: '' },
       { value: '', isCorrect: false, explanation: '' },
     ],
-  },
+  } as MultipleChoicesAppSettingData,
   [QuestionType.SLIDER]: {
-    questionId: '', // TODO: check if it is ok to have empty id
+    questionId: '',
     question: '',
     explanation: '',
     type: QuestionType.SLIDER as const,
@@ -55,14 +59,14 @@ export const DEFAULT_QUESTION_VALUES = {
     value: (SLIDER_DEFAULT_MAX_VALUE - SLIDER_DEFAULT_MIN_VALUE) / 2,
   },
   [QuestionType.TEXT_INPUT]: {
-    questionId: '', // TODO: check if it is ok to have empty id
+    questionId: '',
     question: '',
     explanation: '',
     type: QuestionType.TEXT_INPUT as const,
     text: '',
   },
   [QuestionType.FILL_BLANKS]: {
-    questionId: '', // TODO: check if it is ok to have empty id
+    questionId: '',
     question: '',
     explanation: '',
     type: QuestionType.FILL_BLANKS as const,
@@ -93,6 +97,12 @@ export const DEFAULT_QUESTION = {
   data: DEFAULT_QUESTION_VALUES[DEFAULT_QUESTION_TYPE],
 } as QuestionDataAppSetting;
 
+export const DEFAULT_MULTIPLE_CHOICES_QUESTION = {
+  id: '',
+  name: APP_SETTING_NAMES.QUESTION,
+  data: DEFAULT_QUESTION_VALUES[QuestionType.MULTIPLE_CHOICES],
+};
+
 export const FAILURE_MESSAGES = {
   EMPTY_QUESTION: 'EMPTY_QUESTION',
   SLIDER_MIN_SMALLER_THAN_MAX: 'SLIDER_MIN_SMALLER_THAN_MAX',
@@ -107,12 +117,17 @@ export const FAILURE_MESSAGES = {
 
 export const DEFAULT_LANG = 'en';
 
-export const ENABLE_MOCK_API = process.env.REACT_APP_ENABLE_MOCK_API === 'true';
-export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
-export const REACT_APP_GRAASP_APP_KEY = process.env.REACT_APP_GRAASP_APP_KEY;
-export const API_HOST =
-  process.env.REACT_APP_API_HOST || 'http://localhost:3000';
+const {
+  REACT_APP_ENABLE_MOCK_API,
+  REACT_APP_SENTRY_DSN,
+  REACT_APP_GRAASP_APP_KEY,
+  REACT_APP_API_HOST,
+} = window.Cypress ? Cypress.env() : process.env;
+
+export const ENABLE_MOCK_API = REACT_APP_ENABLE_MOCK_API === 'true';
+export const SENTRY_DSN = REACT_APP_SENTRY_DSN;
 export const GRAASP_APP_KEY = REACT_APP_GRAASP_APP_KEY;
+export const API_HOST = REACT_APP_API_HOST || 'http://localhost:3000';
 
 export const ENV = {
   DEVELOPMENT: 'development',

@@ -55,7 +55,6 @@ const PlayFillInTheBlanks = ({
 
   const onDelete = (e: React.MouseEvent<HTMLSpanElement>) => {
     const datasetId = e.currentTarget.dataset.id;
-    // TODO: check what to do if is null.
     if (datasetId) {
       const clickedId = +datasetId;
       // remove from text

@@ -1,10 +1,6 @@
-import {
-  AppData,
-  AppSetting,
-  CompleteMember,
-  Context,
-  PermissionLevel,
-} from '@graasp/sdk';
+/// <reference types="../../src/window" />
+
+import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { API_HOST } from '../../src/config/constants';
 import {
@@ -29,8 +25,6 @@ Cypress.Commands.add(
     database,
     appContext,
   } = {}) => {
-    // mock api and database
-    // TODO: check why typescript fail on win.
     Cypress.on('window:before:load', (win: Window) => {
       win.database = {
         appData: [],

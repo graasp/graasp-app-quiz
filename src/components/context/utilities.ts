@@ -97,17 +97,12 @@ export const computeCorrectness = (
 };
 
 export const getAppDataByQuestionIdForMemberId = (
-  appData?: AppDataQuestion[],
-  question?: QuestionDataAppSetting, // TODO: question can be null ?
+  appData: AppDataQuestion[],
+  question: QuestionDataAppSetting,
   memberId?: Member['id']
 ): Partial<AppData> | undefined => {
-  if (!question) {
-    return undefined;
-  }
-
   const qId = question.data.questionId;
 
-  // TODO: check for a more elegant way to do that
   // The default value is used to display the question
   // to the user when it hasn't answered yet...
   const defaultValue = {

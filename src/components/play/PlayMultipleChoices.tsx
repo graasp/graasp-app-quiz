@@ -37,7 +37,6 @@ const PlayMultipleChoices = ({
         if (!value) {
           return console.error('choice for value ' + value + ' does not exist');
         }
-        // TODO: check if the response.choices must be immutable or not
         setResponse([...(response.choices ?? []), value]);
       }
     };

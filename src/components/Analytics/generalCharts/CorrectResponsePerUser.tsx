@@ -75,21 +75,24 @@ const CorrectResponsePerUser = ({
                   questionsById,
                   next.data.questionId as string
                 )?.data as QuestionData,
-                next.data as QuestionAppDataData // TODO: avoid cast
+                next.data as QuestionAppDataData
               )
                 ? acc + 1
                 : acc,
             0
           );
 
-          console.log(membersById, id,)
+          const member = membersById[id]?.at(0);
+
+          if (!member) {
+            return acc;
+          }
 
           return {
             dataCorrect: {
               x: [...acc.dataCorrect.x, nbCorrect],
-              y: [...acc.dataCorrect.y, membersById[id][0].name], // TODO: better manage this
+              y: [...acc.dataCorrect.y, member.name],
             },
-            // TODO: check what is the correct type
             percentageCorrect: [
               ...acc.percentageCorrect,
               nbCorrect / list.length,

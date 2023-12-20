@@ -78,7 +78,7 @@ const QuestionTopBar = () => {
     // show correctness in label only if a response exists
     const isCorrect = computeCorrectness(
       question.data as QuestionData,
-      response?.data as QuestionAppDataData // TODO: avoid cast ?
+      response?.data as QuestionAppDataData
     );
 
     const props = !response?.id

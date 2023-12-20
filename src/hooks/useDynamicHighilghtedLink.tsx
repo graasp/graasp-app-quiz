@@ -30,7 +30,6 @@ import { MultipleRefs } from '../components/types/types';
  *  - elem 2 (clickOnLink): This is a function to click on a link (i.e. the link we want to be highlighted next).
  */
 export const useDynamicHighlightedLink = (
-  // TODO: check ref types
   containerRef: MutableRefObject<null | HTMLElement>,
   elemRefs: MultipleRefs<HTMLElement>,
   triggerVal?: number

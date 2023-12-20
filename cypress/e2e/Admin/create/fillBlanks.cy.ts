@@ -43,7 +43,7 @@ const fillBlanksQuestion = (
     question,
     explanation,
   }: { text: string; question: string; explanation: string },
-  originalAppSettingData: any = DEFAULT_QUESTION.data, // TODO: check this type
+  originalAppSettingData: object = DEFAULT_QUESTION.data,
   { shouldSave = true } = {}
 ) => {
   console.debug(originalAppSettingData);

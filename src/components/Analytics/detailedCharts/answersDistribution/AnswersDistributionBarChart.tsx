@@ -44,7 +44,10 @@ const AnswersDistributionBarChart = ({
             type: 'bar',
             ...chartData.data,
             marker: {
-              color: chartData.barColors ?? theme.palette.primary.main, // can be string | string[]
+              color:
+                chartData.barColors.length > 0
+                  ? chartData.barColors
+                  : theme.palette.primary.main,
             },
             ...hoverData({
               hoverText: chartData?.hoverText,
@@ -54,7 +57,8 @@ const AnswersDistributionBarChart = ({
               )}: %{y} <br> - ${t(
                 'Percentage number of time selected'
               )}: %{meta:.1%} <extra></extra>`,
-              borderColor: chartData.barColors.at(0) ?? theme.palette.primary.main, // TODO: check why string[]
+              borderColor:
+                chartData.barColors.at(0) ?? theme.palette.primary.main,
             }),
             texttemplate: '%{y}',
           },

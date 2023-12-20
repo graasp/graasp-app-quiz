@@ -78,7 +78,7 @@ const CorrectResponsesPercentage = ({
         const nbCorrect = responses.reduce(
           (acc, next) =>
             question &&
-            computeCorrectness(question.data, next.data as QuestionAppDataData) // TODO: avoid cast
+            computeCorrectness(question.data, next.data as QuestionAppDataData)
               ? acc + 1
               : acc,
           0

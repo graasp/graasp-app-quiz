@@ -39,12 +39,11 @@ import ResultTablesMenu from '../navigation/ResultTablesMenu';
 import TabPanel from '../navigation/TabPanel';
 import {
   QuestionAppDataData,
-  QuestionData,
   QuestionDataAppSetting,
   RefsObject,
 } from '../types/types';
 import TableByQuestion from './TableByQuestion';
-import TableByUser, { Response } from './TableByUser';
+import TableByUser from './TableByUser';
 
 const TABLE_BY_QUESTION_PANEL_IDX = 0;
 const TABLE_BY_USER_PANEL_IDX = 1;
@@ -104,7 +103,6 @@ const ResultTables = ({ headerElem }: Props) => {
       groupby(questions, (q) => q.data.questionId)
     );
 
-    // TODO: check this
     const innerLinkQuestionsById = questionsById.reduce(
       (acc: GroupedQuestionsById, [qId, questions]) => {
         acc[qId] = questions.map((question) => ({
@@ -138,7 +136,6 @@ const ResultTables = ({ headerElem }: Props) => {
         initiallyClickedQuestion.current = questionsOfId[0].data.innerLink;
         setTab(TABLE_BY_QUESTION_PANEL_IDX);
       } else {
-        // TODO: check what to do
         console.error(`There is no questions for id ${qId}`);
       }
     },
@@ -228,7 +225,6 @@ const ResultTables = ({ headerElem }: Props) => {
                   }
 
                   return accumulator;
-                  // TODO: extract as into a Type ?
                 }, [] as { label: string; link: string; id: string }[])}
                 elemRefs={questionRefs}
                 containerRef={questionContainerRef}
@@ -311,7 +307,7 @@ const ResultTables = ({ headerElem }: Props) => {
                         ...appData,
                         data: appData.data as QuestionAppDataData,
                       })
-                    )} // TODO: fix this type
+                    )}
                     handleQuestionClicked={handleQuestionClicked}
                   />
                 </Box>

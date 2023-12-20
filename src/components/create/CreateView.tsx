@@ -35,7 +35,7 @@ const CreateView = () => {
     useContext(QuizContext);
 
   const [newData, setNewData] = useState<QuestionData>(
-    currentQuestion.data as QuestionData
+    currentQuestion.data
   );
   const [errorMessage, setErrorMessage] = useState<string | null>();
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -92,7 +92,7 @@ const CreateView = () => {
       <Grid container direction="column" spacing={3}>
         <Grid item>
           <QuestionTitle
-            title={newData?.question}
+            title={newData.question}
             onChange={(question: string) => {
               setNewData({
                 ...newData,
@@ -103,24 +103,23 @@ const CreateView = () => {
         </Grid>
         <Grid item>
           <QuestionTypeSelect
-            value={newData?.type}
+            value={newData.type}
             onChange={(changes: QuestionData) => {
               setNewData({
                 ...changes,
-                // TODO: check the nullable values
-                question: newData?.question,
-                explanation: newData?.explanation,
+                question: newData.question,
+                explanation: newData.explanation,
               });
             }}
           />
         </Grid>
         <Grid item>
           {(() => {
-            switch (newData?.type) {
+            switch (newData.type) {
               case QuestionType.TEXT_INPUT: {
                 return (
                   <TextInput
-                    text={newData?.text}
+                    text={newData.text}
                     onChangeData={(text: string) => {
                       setNewData({
                         ...newData,
@@ -135,8 +134,6 @@ const CreateView = () => {
                   <Slider
                     data={newData}
                     onChangeData={(d: SliderAppSettingData) => {
-                      // setNewData(newData.merge(d));
-                      // TODO: check this
                       setNewData({
                         ...newData,
                         ...d,
@@ -148,7 +145,7 @@ const CreateView = () => {
               case QuestionType.FILL_BLANKS: {
                 return (
                   <FillInTheBlanks
-                    text={newData?.text}
+                    text={newData.text}
                     onChangeData={(text: string) =>
                       setNewData({
                         ...newData,
@@ -162,7 +159,7 @@ const CreateView = () => {
               default: {
                 return (
                   <MultipleChoices
-                    choices={newData?.choices}
+                    choices={newData.choices}
                     setChoices={(
                       newChoices: MultipleChoicesAppSettingData['choices']
                     ) =>
@@ -193,7 +190,7 @@ const CreateView = () => {
 
         <Grid item>
           <Explanation
-            value={newData?.explanation}
+            value={newData.explanation}
             onChange={(explanation: string) => {
               setNewData({
                 ...newData,

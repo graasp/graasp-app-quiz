@@ -78,16 +78,15 @@ const QuestionDifficulty = ({
       (acc, qId, idx) => {
         const question = getQuestionById(questions, qId);
 
-        // TODO: check what to do...
         if (!question) {
-          throw new Error(`The question id ${qId} doesn't exist !`);
+          return acc;
         }
 
         const responses = responsesByQId[qId];
         const nbCorrectAndIncorrect = responses.reduce(
           ([correct, incorrect], next) =>
             question &&
-            computeCorrectness(question.data, next.data as QuestionAppDataData) // TODO: cast avoid ?
+            computeCorrectness(question.data, next.data as QuestionAppDataData)
               ? [correct + 1, incorrect]
               : [correct, incorrect + 1],
           [0, 0]

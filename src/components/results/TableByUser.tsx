@@ -51,7 +51,7 @@ export type Response = {
 type Props = {
   user: Member;
   questions: QuestionDataAppSetting[];
-  responses: Response[]; // TODO: check, it was QuestionData[]
+  responses: Response[];
   handleQuestionClicked: (qId: string) => void;
 };
 
@@ -256,10 +256,12 @@ const TableByUser = ({
                       sx={{ cursor: 'pointer' }}
                       onClick={() => {
                         const qId = getFirstOrUndefined(questionByName, qName)
-                          ?.data.questionId; // TODO: check null
+                          ?.data.questionId;
 
                         if (qId) {
                           handleQuestionClicked(qId);
+                        } else {
+                          console.error(`The clicked question ${qName} doesn't exist.`);
                         }
                       }}
                       data-cy={TABLE_BY_USER_QUESTION_NAME_HEADER_CY}
@@ -295,7 +297,7 @@ const TableByUser = ({
                             {computeCorrectness(
                               questionData,
                               getResponseForQuestionName(qName)
-                                ?.data as QuestionAppDataData // TODO: avoid cast ?
+                                ?.data as QuestionAppDataData
                             ) ? (
                               <CheckCircleOutlined color="success" />
                             ) : (

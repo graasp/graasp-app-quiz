@@ -58,7 +58,7 @@ export type FillTheBlanksAppSettingData = AppSettingData & {
   type: QuestionType.FILL_BLANKS;
   text: string;
 };
-// TODO: AppDataDataRecord
+
 export type QuestionData =
   | MultipleChoicesAppSettingData
   | SliderAppSettingData
@@ -75,7 +75,6 @@ export type QuestionDataAppSetting = AppSetting & {
   data: QuestionData;
 };
 
-// TODO: check if it is possible to do without new type
 export type CurrentQuestion = Pick<AppSetting, 'id'> & { data: QuestionData };
 
 export type ChartData = {

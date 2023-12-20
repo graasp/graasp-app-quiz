@@ -112,8 +112,7 @@ const QuestionDetailedCharts = ({
               />
             );
           } else {
-            // TODO: better handle chart type.
-            return <h1>The chart type is not valid</h1>;
+            return <p>The chart type is not valid</p>;
           }
         }
         default:

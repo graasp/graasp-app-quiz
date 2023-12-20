@@ -51,13 +51,12 @@ import {
 } from '../types/types';
 
 type Props = {
-  question: QuestionDataAppSetting; // TODO: check the type is correct, why it was encapsulated to data ?
+  question: QuestionDataAppSetting;
   memberList: Member[];
   responses: AppData[];
   handleUserClicked: (id: string) => void;
 };
 
-// TODO: check the casts
 const TableByQuestion = ({
   question,
   memberList,
@@ -234,7 +233,7 @@ const TableByQuestion = ({
                         >
                           {computeCorrectness(
                             question.data,
-                            getResponseForUserId(id)?.data as QuestionAppDataData // TODO: avoid cast ?
+                            getResponseForUserId(id)?.data as QuestionAppDataData
                           ) ? (
                             <CheckCircleOutlined color="success" />
                           ) : (

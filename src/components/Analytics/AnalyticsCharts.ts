@@ -36,21 +36,21 @@ export const generalCharts = (t: TFunction) =>
       id: 'quiz-performance',
       chartType: GeneralChartType.QUIZ_PERFORMANCE,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink (TODO: check if it is ok)
+      link: '', // Will be replaced in the adaptWithLink 
     },
     {
       label: t('Users performance'),
       id: 'users-performance',
       chartType: GeneralChartType.USER_PERFORMANCE,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink (TODO: check if it is ok)
+      link: '', // Will be replaced in the adaptWithLink 
     },
     {
       label: t('Quiz correct response percentage'),
       id: 'quiz-correctness-percentage',
       chartType: GeneralChartType.QUIZ_CORRECT_PERCENTAGE,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink (TODO: check if it is ok)
+      link: '', // Will be replaced in the adaptWithLink 
     },
   ]);
 
@@ -78,7 +78,7 @@ export const fillInTheBlankCharts = (
           id: `${t('Question answer frequency')} ${t('blank')} ${idx + 1}`,
           chartType: DetailedChartType.ANSWER_FREQUENCY,
           chartIndex: idx,
-          link: '', // Will be replaced in the adaptWithLink (TODO: check if it is ok)
+          link: '', // Will be replaced in the adaptWithLink 
           type: QuestionType.FILL_BLANKS,
         };
       })
@@ -103,7 +103,7 @@ export const multipleChoicesCharts = (t: TFunction) =>
       // todo: use this id for building class and data-cy
       id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
-      link: '', // Will be replaced in the adaptWithLink (TODO: check if it is ok)
+      link: '', // Will be replaced in the adaptWithLink 
       type: 'chart',
     },
   ]);
@@ -124,7 +124,7 @@ export const sliderCharts = (t: TFunction) =>
       id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink (TODO: check if it is ok)
+      link: '', // Will be replaced in the adaptWithLink 
     },
   ]);
 
@@ -144,7 +144,7 @@ export const textInputCharts = (t: TFunction) =>
       id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink (TODO: check if it is ok)
+      link: '', // Will be replaced in the adaptWithLink 
     },
   ]);
 

@@ -52,21 +52,21 @@ type LinkToElement = { id: string; label: string; link: string };
 
 type Props = {
   containerRef: MutableRefObject<null | HTMLElement>;
-  elemRefs: MultipleRefs<HTMLElement>; // TODO: check generic type
-  links?: LinkToElement[]; // TODO: check if it can be null like it is in ResultTables
-  initiallyClickedId?: MutableRefObject<null | string>; // TODO: not used in AnalyticsMenu, so nullable ?
-  triggerVal?: number; // TODO: check if mandatory but ResultTables.tsx use it without triggerVal
+  elemRefs: MultipleRefs<HTMLElement>;
+  links?: LinkToElement[];
+  initiallyClickedId?: MutableRefObject<null | string>;
+  triggerVal?: number;
 };
 
 /**
  * A component that serve as a menu, that is used to easily navigate between different element of a page,
  * And follow the position of the user on the page to let him know where he is.
  *
- * @param {MutableRefObject<null>} containerRef The element to use as parent for the observer pattern
- * @param {MutableRefObject<{}>} elemRefs A list of element stored as an object, those element will be observed
+ * @param {MutableRefObject<null | HTMLElement>} containerRef The element to use as parent for the observer pattern
+ * @param {MutableRefObject<HTMLElement>} elemRefs A list of element stored as an object, those element will be observed
  * for intersection with the parent element
  * @param {{label: string, link: string}[]} links The list of the elements we want to add to this menu
- * @param {MutableRefObject<null>} initiallyClickedId The id of the link to click on when, wrapped in a `MutableRefObject`
+ * @param {MutableRefObject<null | HTMLElement>} initiallyClickedId The id of the link to click on when, wrapped in a `MutableRefObject`
  * so that we can reset its value directly after having click on it (without triggering a re-render),
  * so that it doesn't always go there upon re-render
  * @param triggerVal Value to pass, to manually re-trigger the `DynamicHighlightedLink` hook, if no value passed,
@@ -110,7 +110,7 @@ const AutoScrollableMenu = ({
         // as it is a ref, it won't re-render the component
         initiallyClickedId.current = null;
       } else {
-        console.error('The linked element is not found.'); // TODO: check if keep this
+        console.error('The linked element is not found.');
       }
     }
   }, [initiallyClickedId, clickOnLink]);
