@@ -51,7 +51,7 @@ const PlayTextInput = ({
       onChange={(t) => {
         setResponse(t.target.value);
       }}
-      {...(showCorrection ? { color: computeColor() } : {})}
+      color={showCorrection ? computeColor() : undefined}
       InputProps={{
         endAdornment: showCorrection && isCorrect && (
           <CheckIcon color="success" />

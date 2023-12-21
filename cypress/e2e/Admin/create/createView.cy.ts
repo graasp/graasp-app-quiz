@@ -16,6 +16,7 @@ import {
 } from '../../../../src/config/selectors';
 import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../../fixtures/appSettings';
 import { fillMultipleChoiceQuestion } from './multipleChoices.cy';
+import { WAITING_DELAY_MS } from '../../../utils/time';
 
 const newMultipleChoiceData = {
   question: 'new question text',
@@ -31,8 +32,6 @@ const newMultipleChoiceData = {
   ],
   explanation: 'my new explanation',
 };
-
-const WAITING_DELAY_MS = 1000;
 
 describe('Create View', () => {
   beforeEach(() => {

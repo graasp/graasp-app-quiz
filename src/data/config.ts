@@ -1,5 +1,5 @@
 import { LocalContext } from '@graasp/apps-query-client';
-import { PermissionLevel } from '@graasp/sdk';
+import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { API_HOST, APP_SETTING_NAMES, QuestionType } from '../config/constants';
 import { appDataChloe } from './appDataChloe';
@@ -19,7 +19,7 @@ import { mockCurrentMember } from './members';
 export const mockContext: LocalContext = {
   apiHost: API_HOST,
   permission: PermissionLevel.Admin,
-  context: 'builder',
+  context: Context.Builder,
   itemId: mockItem.id,
   memberId: mockCurrentMember.id,
 };

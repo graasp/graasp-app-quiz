@@ -8,8 +8,6 @@ import {
 } from './appSettings';
 import { HARPER, LIAM, MASON } from './members';
 
-const toDateString = (date: string) => new Date(date).toDateString();
-
 /**
  * Array containing the expected data for each table in the table by question page
  */
@@ -26,7 +24,7 @@ export const RESPONSES = {
       userId: LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[2].data.text,
-        date: toDateString(LIAM_RESPONSES[2].updatedAt),
+        date: LIAM_RESPONSES[2].updatedAt,
         icon: IconTestText.CORRECT,
       },
     },
@@ -34,7 +32,7 @@ export const RESPONSES = {
       userId: MASON.name,
       fields: {
         answer: MASON_RESPONSES[0].data.text,
-        date: toDateString(MASON_RESPONSES[0].updatedAt),
+        date: MASON_RESPONSES[0].updatedAt,
         icon: IconTestText.WRONG,
       },
     },
@@ -45,7 +43,7 @@ export const RESPONSES = {
       userId: HARPER.name,
       fields: {
         answer: HARPER_RESPONSES[0].data.value,
-        date: toDateString(HARPER_RESPONSES[0].updatedAt),
+        date: HARPER_RESPONSES[0].updatedAt,
         icon: IconTestText.WRONG,
       },
     },
@@ -74,7 +72,7 @@ export const RESPONSES = {
       userId: LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[1].data.text,
-        date: toDateString(LIAM_RESPONSES[1].updatedAt),
+        date: LIAM_RESPONSES[1].updatedAt,
         icon: IconTestText.WRONG,
       },
     },
@@ -91,7 +89,7 @@ export const RESPONSES = {
       userId: HARPER.name,
       fields: {
         answer: HARPER_RESPONSES[1].data.choices.join(', '),
-        date: toDateString(HARPER_RESPONSES[1].updatedAt),
+        date: HARPER_RESPONSES[1].updatedAt,
         icon: IconTestText.WRONG,
       },
     },
@@ -99,7 +97,7 @@ export const RESPONSES = {
       userId: LIAM.name,
       fields: {
         answer: LIAM_RESPONSES[0].data.choices[0],
-        date: toDateString(LIAM_RESPONSES[0].updatedAt),
+        date: LIAM_RESPONSES[0].updatedAt,
         icon: IconTestText.CORRECT,
       },
     },

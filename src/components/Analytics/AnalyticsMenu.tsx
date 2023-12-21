@@ -29,6 +29,7 @@ import {
   useMaxAvailableHeightInWindow,
   useMaxAvailableHeightWithParentHeight,
 } from '../../hooks/useMaxAvailableHeight';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { getFirstOrUndefined } from '../../utils/array';
 import { QuizContext } from '../context/QuizContext';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
@@ -79,7 +80,7 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
   );
   const maxHeightScrollableMenu = useMaxAvailableHeightWithParentHeight(
     maxResultViewHeight,
-    chartTabs?.current ?? undefined
+    chartTabs.current ?? undefined
   );
   const [tab, setTab] = useState(0);
 
@@ -223,7 +224,7 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
                         label={question}
                         key={question}
                         data-cy={buildAnalyticsDetailedQuestionTabMenuCy(
-                          question ?? ''
+                          question
                         )}
                       />
                     );
@@ -266,7 +267,9 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
                   members={data.members}
                 />
               ) : (
-                <p>No data found for the general charts.</p>
+                <Typography align="center">
+                  {t(QUIZ_TRANSLATIONS.NO_DATA_FOR_GENERAL_CHARTS)}
+                </Typography>
               )}
             </TabPanel>
             {order?.map((qId, idx) => {

@@ -151,9 +151,6 @@ describe('Play Fill In The Blanks', () => {
       cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       const data = correctAppData.data;
 
-      console.log('correctData', data);
-      console.log(splitSentence(data.text));
-
       checkCorrection(splitSentence(data.text));
 
       // success displayed in question bar

@@ -167,7 +167,7 @@ describe('Play Multiple Choices', () => {
       cy.visit('/');
     });
 
-    it.only('Show saved question', () => {
+    it('Show saved question', () => {
       const data = appData.data;
       const selection = data.choices.map((choice) =>
         choices.findIndex(({ value }) => value === choice)

@@ -77,5 +77,7 @@ export default {
     'Error, question type unknown': 'Erreur, type de question inconnu',
     'Error, chart type unknown': 'Erreur, type de graphique inconnu',
     blank: 'vide',
+    NO_RESPONSE_FOR_NOW: "Il n'y a pas encore de réponse.",
+    NO_DATA_FOR_GENERAL_CHARTS: 'Aucune donnée n\'a été trouvé pour les graphiques.',
   },
 };

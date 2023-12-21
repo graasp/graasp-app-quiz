@@ -173,19 +173,6 @@ const CreateView = () => {
               }
             }
           })()}
-
-          {/* <NumberOfAttempts
-            initAttempts={newData.numberOfAttempts}
-            onChange={(attempts: number) => {
-              // TODO: not working yet, migrate to TS and immutable before to continue here
-              // setNewData(
-              //   (newData as AppSettingDataRecord).set(
-              //     'numberOfAttempts',
-              //     attempts
-              //   ) as QuestionDataRecord
-              // );
-            }}
-          /> */}
         </Grid>
 
         <Grid item>

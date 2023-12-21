@@ -8,7 +8,7 @@ import App from './components/App';
 import { ENABLE_MOCK_API, SENTRY_DSN } from './config/constants';
 import { SENTRY_ENVIRONMENT, SENTRY_TRACE_SAMPLE_RATE } from './config/sentry';
 import { mockContext } from './data/config';
-import buildDatabase from './data/db10Users10Questions';
+import buildDatabase from './data/db';
 
 if (SENTRY_DSN) {
   Sentry.init({

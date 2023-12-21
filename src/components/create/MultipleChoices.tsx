@@ -17,7 +17,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import { DEFAULT_CHOICE, DEFAULT_MULTIPLE_CHOICES_QUESTION } from '../../config/constants';
+import {
+  DEFAULT_CHOICE,
+  DEFAULT_MULTIPLE_CHOICES_QUESTION,
+} from '../../config/constants';
 import {
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
@@ -27,10 +30,8 @@ import {
   buildMultipleChoiceDeleteAnswerButtonCy,
   buildMultipleChoiceDeleteAnswerExplanationButtonCy,
 } from '../../config/selectors';
-import {
-  MultipleChoicesAppSettingData,
-  MultipleChoicesChoice,
-} from '../types/types';
+import { removeFromArrayAtIndex, updateArray } from '../../utils/immutable';
+import { MultipleChoicesAppSettingData } from '../types/types';
 
 type Props = {
   choices: MultipleChoicesAppSettingData['choices'];
@@ -43,28 +44,6 @@ const MultipleChoices = ({
 }: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const updateAtIndex = <T,>(arr: T[], idx: number, newValue?: T) => [
-    ...arr.slice(0, idx),
-    ...(newValue ? [newValue] : []),
-    ...arr.slice(idx + 1),
-  ];
-
-  const removAtIndex = <T,>(arr: T[], idx: number) => updateAtIndex(arr, idx);
-
-  const setIn = <T extends MultipleChoicesChoice>(
-    choices: T[],
-    index: number,
-    key: keyof T,
-    value: T[keyof T]
-  ): T[] => {
-    const newChoice = {
-      ...choices[index],
-      [key]: value,
-    };
-
-    return updateAtIndex(choices, index, newChoice);
-  };
-
   const [explanationList, setExplanationList] = useState<boolean[]>(
     choices.map((choice) => Boolean(choice.explanation))
   );
@@ -72,26 +51,17 @@ const MultipleChoices = ({
   const handleAnswerCorrectnessChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const d = setIn(choices, index, 'isCorrect', e.target.checked);
-    setChoices(d);
-  };
+  ) => setChoices(updateArray(choices, index, 'isCorrect', e.target.checked));
 
   const handleChoiceChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const d = setIn(choices, index, 'value', e.target.value);
-    setChoices(d);
-  };
+  ) => setChoices(updateArray(choices, index, 'value', e.target.value));
 
   const handleExplanationChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const d = setIn(choices, index, 'explanation', e.target.value);
-    setChoices(d);
-  };
+  ) => setChoices(updateArray(choices, index, 'explanation', e.target.value));
 
   const addAnswer = () => {
     setChoices([...choices, DEFAULT_CHOICE]);
@@ -108,8 +78,7 @@ const MultipleChoices = ({
     const newExplanationList = [...explanationList];
     newExplanationList[index] = false;
     setExplanationList(newExplanationList);
-    const newExplanation = setIn(choices, index, 'explanation', '');
-    setChoices(newExplanation);
+    setChoices(updateArray(choices, index, 'explanation', ''));
   };
 
   const onDelete = (index: number) => () => {
@@ -118,7 +87,7 @@ const MultipleChoices = ({
       return;
     }
 
-    setChoices(removAtIndex(choices, index));
+    setChoices(removeFromArrayAtIndex(choices, index));
   };
 
   return (

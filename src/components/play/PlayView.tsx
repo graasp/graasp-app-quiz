@@ -13,6 +13,7 @@ import {
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
 } from '../../config/selectors';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { QuizContext } from '../context/QuizContext';
 import { getAppDataByQuestionIdForMemberId } from '../context/utilities';
 import QuestionTopBar from '../navigation/QuestionTopBar';
@@ -29,6 +30,7 @@ import PlayFillInTheBlanks from './PlayFillInTheBlanks';
 import PlayMultipleChoices from './PlayMultipleChoices';
 import PlaySlider from './PlaySlider';
 import PlayTextInput from './PlayTextInput';
+import { setIn, setInData } from '../../utils/immutable';
 
 const PlayView = () => {
   const { t } = useTranslation();
@@ -90,35 +92,6 @@ const PlayView = () => {
     }
   };
 
-  const setInData = <
-    T extends AppData,
-    K extends keyof T['data'],
-    V extends T['data'][K]
-  >(
-    object: Partial<T>,
-    key: K,
-    value: V
-  ): Partial<T> => {
-    return {
-      ...object,
-      data: {
-        ...object.data,
-        [key]: value,
-      },
-    };
-  };
-
-  const setIn = <T extends AppData, K extends keyof T, V extends T[K]>(
-    object: Partial<T>,
-    key: K,
-    value: V
-  ): Partial<T> => {
-    return {
-      ...object,
-      [key]: value,
-    };
-  };
-
   if (!questions || questions.length === 0) {
     return (
       <Alert severity="info" data-cy={PLAY_VIEW_EMPTY_QUIZ_CY}>
@@ -148,7 +121,11 @@ const PlayView = () => {
       <Grid container>
         {(() => {
           if (!newResponse) {
-            return <p>There is no response for now.</p>;
+            return (
+              <Typography>
+                {t(QUIZ_TRANSLATIONS.NO_RESPONSE_FOR_NOW)}
+              </Typography>
+            );
           }
 
           switch (currentQuestion.data.type) {

@@ -112,7 +112,7 @@ const QuestionDetailedCharts = ({
               />
             );
           } else {
-            return <p>The chart type is not valid</p>;
+            return <Typography>{t('Error, chart type unknown')}</Typography>;
           }
         }
         default:

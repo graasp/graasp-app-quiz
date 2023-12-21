@@ -94,7 +94,7 @@ const PlayMultipleChoices = ({
         >
           {showCorrection &&
           choice.explanation &&
-          response.choices?.find((c) => c === choice.value) ? (
+          response.choices?.some((c) => c === choice.value) ? (
             <>
               <Typography variant="body1">{choice.value}</Typography>
             </>

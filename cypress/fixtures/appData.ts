@@ -12,6 +12,7 @@ const member = mockMemberFactory({ id: 'mock-member-id-1', name: 'liam' });
 export const LIAM_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: member,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -44,6 +45,7 @@ export const LIAM_RESPONSES = mockMultipleAppDataFactory({
 export const LIAM_MORE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: member,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -74,6 +76,7 @@ const harper = mockMemberFactory({ id: 'mock-member-id-2', name: 'harper' });
 export const HARPER_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: harper,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -99,6 +102,7 @@ export const HARPER_RESPONSES = mockMultipleAppDataFactory({
 export const HARPER_MORE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: harper,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -128,6 +132,7 @@ const mason = mockMemberFactory({ id: 'mock-member-id-3', name: 'mason' });
 export const MASON_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: mason,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -146,6 +151,7 @@ export const MASON_RESPONSES = mockMultipleAppDataFactory({
 export const MASON_MORE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: mason,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -179,6 +185,7 @@ const isabella = mockMemberFactory({
 export const ISABELLA_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: isabella,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -211,6 +218,7 @@ export const ISABELLA_RESPONSES = mockMultipleAppDataFactory({
 export const ISABELLA_MORE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: isabella,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -239,6 +247,7 @@ const ethan = mockMemberFactory({ id: 'mock-member-id-5', name: 'ethan' });
 export const ETHAN_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: ethan,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -271,6 +280,7 @@ export const ETHAN_RESPONSES = mockMultipleAppDataFactory({
 export const ETHAN_MORE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: ethan,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -300,6 +310,7 @@ const mia = mockMemberFactory({ id: 'mock-member-id-6', name: 'mia' });
 const MIA_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: mia,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -332,6 +343,7 @@ const MIA_RESPONSES = mockMultipleAppDataFactory({
 const MIA_MORE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: mia,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -364,6 +376,7 @@ const alexander = mockMemberFactory({
 const ALEXANDER_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: alexander,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -396,6 +409,7 @@ const ALEXANDER_RESPONSES = mockMultipleAppDataFactory({
 const ALEXANDER_MORE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: alexander,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -425,6 +439,7 @@ const chloe = mockMemberFactory({ id: 'mock-member-id-8', name: 'chloe' });
 const CHLOE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: chloe,
+  toDateString: true,
   payloads: [
     {
       data: {
@@ -457,6 +472,7 @@ const CHLOE_RESPONSES = mockMultipleAppDataFactory({
 const CHLOE_MORE_RESPONSES = mockMultipleAppDataFactory({
   item: mockItem,
   creator: chloe,
+  toDateString: true,
   payloads: [
     {
       data: {

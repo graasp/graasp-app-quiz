@@ -78,5 +78,7 @@ export default {
     'Error, question type unknown': 'Error, question type unknown',
     'Error, chart type unknown': 'Error, chart type unknown',
     blank: 'blank',
+    NO_RESPONSE_FOR_NOW: 'There is no response for now.',
+    NO_DATA_FOR_GENERAL_CHARTS: 'No data found for the charts.',
   },
 };

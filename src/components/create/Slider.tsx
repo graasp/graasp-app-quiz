@@ -23,9 +23,7 @@ type Props = {
 
 const Slider = ({ data, onChangeData }: Props) => {
   const { t } = useTranslation();
-
   const values = useMemo(() => {
-    // return DEFAULT_QUESTION_VALUES[QuestionType.SLIDER].merge(data);
     return {
       ...DEFAULT_QUESTION_VALUES[QuestionType.SLIDER],
       ...data,
