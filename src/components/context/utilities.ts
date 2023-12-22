@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { Data } from '@graasp/apps-query-client';
 import { AppData, AppSetting, Member } from '@graasp/sdk';
 
 import {
@@ -10,7 +11,6 @@ import {
   QuestionType,
 } from '../../config/constants';
 import {
-  AppDataQuestion,
   FillTheBlanksAppDataData,
   MultipleChoiceAppDataData,
   QuestionAppDataData,
@@ -96,8 +96,8 @@ export const computeCorrectness = (
   }
 };
 
-export const getAppDataByQuestionIdForMemberId = (
-  appData: AppDataQuestion[],
+export const getAppDataByQuestionIdForMemberId = <T extends Data>(
+  appData: AppData<T>[] | undefined,
   question: QuestionDataAppSetting,
   memberId?: Member['id']
 ): Partial<AppData> | undefined => {
@@ -121,6 +121,19 @@ export const getAppDataByQuestionIdForMemberId = (
       ({ data, creator }) =>
         data?.questionId === qId && creator?.id === memberId
     ) ?? defaultValue
+  );
+};
+
+export const getAllAppDataByQuestionIdForMemberId = (
+  appData: AppData[] | undefined,
+  questionId: string,
+  memberId?: Member['id']
+): AppData[] => {
+  return (
+    appData?.filter(
+      ({ creator, data }) =>
+        creator?.id === memberId && data.questionId === questionId
+    ) ?? []
   );
 };
 

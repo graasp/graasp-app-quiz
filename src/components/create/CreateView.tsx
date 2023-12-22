@@ -24,6 +24,7 @@ import CreateQuestionTopBar from './CreateQuestionTopBar';
 import Explanation from './Explanation';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
+import NumberOfAttempts from './NumberOfAttempts';
 import QuestionTitle from './QuestionTitle';
 import QuestionTypeSelect from './QuestionTypeSelect';
 import Slider from './Slider';
@@ -34,9 +35,7 @@ const CreateView = () => {
   const { currentQuestion, deleteQuestion, saveQuestion } =
     useContext(QuizContext);
 
-  const [newData, setNewData] = useState<QuestionData>(
-    currentQuestion.data
-  );
+  const [newData, setNewData] = useState<QuestionData>(currentQuestion.data);
   const [errorMessage, setErrorMessage] = useState<string | null>();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -173,6 +172,16 @@ const CreateView = () => {
               }
             }
           })()}
+
+          <NumberOfAttempts
+            initAttempts={currentQuestion.data.numberOfAttempts}
+            onChange={(attempts: number) => {
+              setNewData({
+                ...newData,
+                numberOfAttempts: attempts,
+              });
+            }}
+          />
         </Grid>
 
         <Grid item>
@@ -214,7 +223,7 @@ const CreateView = () => {
               color="success"
               startIcon={<SaveIcon />}
               disabled={
-                (!isDifferent(newData, currentQuestion.data)) ||
+                !isDifferent(newData, currentQuestion.data) ||
                 Boolean(errorMessage)
               }
             >

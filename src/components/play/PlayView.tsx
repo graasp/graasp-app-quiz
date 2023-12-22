@@ -14,11 +14,16 @@ import {
   PLAY_VIEW_SUBMIT_BUTTON_CY,
 } from '../../config/selectors';
 import { QUIZ_TRANSLATIONS } from '../../langs/constants';
+import { setIn, setInData } from '../../utils/immutable';
+import AttemptsProgress from '../common/AttemptsProgress';
 import { QuizContext } from '../context/QuizContext';
-import { getAppDataByQuestionIdForMemberId } from '../context/utilities';
+import {
+  computeCorrectness,
+  getAllAppDataByQuestionIdForMemberId,
+  getAppDataByQuestionIdForMemberId,
+} from '../context/utilities';
 import QuestionTopBar from '../navigation/QuestionTopBar';
 import {
-  AppDataQuestion,
   FillTheBlanksAppDataData,
   MultipleChoiceAppDataData,
   QuestionData,
@@ -30,7 +35,6 @@ import PlayFillInTheBlanks from './PlayFillInTheBlanks';
 import PlayMultipleChoices from './PlayMultipleChoices';
 import PlaySlider from './PlaySlider';
 import PlayTextInput from './PlayTextInput';
-import { setIn, setInData } from '../../utils/immutable';
 
 const PlayView = () => {
   const { t } = useTranslation();
@@ -41,37 +45,77 @@ const PlayView = () => {
   const { currentQuestion, questions } = useContext(QuizContext);
   const { memberId } = useLocalContext();
 
-  const [showCorrection, setShowCorrection] = React.useState(false);
-
   const [newResponse, setNewResponse] = useState<Partial<AppData> | undefined>(
-    getAppDataByQuestionIdForMemberId(
-      responses as AppDataQuestion[],
-      currentQuestion,
-      memberId
-    )
+    getAppDataByQuestionIdForMemberId(responses, currentQuestion, memberId)
   );
+  // TODO: find a way to update userAnswers when responses are updated without using state
+  const [userAnswers, setUserAnswers] = useState<AppData[]>([]);
+  const [showCorrection, setShowCorrection] = React.useState(false);
+  const [showCorrectness, setShowCorrectness] = React.useState(false);
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [isReadonly, setIsReadonly] = useState<boolean>(false);
+
+  const getLatestUserAnswers = () =>
+    userAnswers.length > 0 ? userAnswers.at(userAnswers.length - 1) : undefined;
+  const maxAttempts = currentQuestion.data.numberOfAttempts
+    ? currentQuestion.data.numberOfAttempts
+    : 1;
+  const maxAttemptsReached = userAnswers.length >= maxAttempts;
 
   useEffect(() => {
     if (responses) {
       // assume there's only one response for a question
       setNewResponse(
-        getAppDataByQuestionIdForMemberId(
-          responses as AppDataQuestion[],
-          currentQuestion,
-          memberId
-        )
+        getAppDataByQuestionIdForMemberId(responses, currentQuestion, memberId)
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, currentQuestion]);
 
   useEffect(() => {
-    setShowCorrection(Boolean(newResponse?.id));
-  }, [newResponse]);
+    const isCorrect = computeCorrectness(
+      currentQuestion.data,
+      newResponse?.data as TextAppDataData
+    );
+    setIsCorrect(isCorrect);
+    setIsReadonly(isCorrect || maxAttemptsReached);
+
+    setShowCorrection(isCorrect || (userAnswers?.length || 0) >= maxAttempts);
+    setShowCorrectness(userAnswers.length > 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxAttempts, userAnswers]);
+
+  // TODO: try to avoid this useEffect
+  useEffect(() => {
+    setUserAnswers(
+      getAllAppDataByQuestionIdForMemberId(
+        responses,
+        currentQuestion.data.questionId,
+        memberId
+      )
+    );
+  }, [currentQuestion, memberId, responses]);
+
+  const onInputChanged = <
+    T extends AppData,
+    K extends keyof T['data'],
+    V extends T['data'][K]
+  >(
+    object: Partial<T>,
+    key: K,
+    value: V,
+    prevValue: V | undefined
+  ) => {
+    setShowCorrectness(value === prevValue);
+    setNewResponse(setInData(object, key, value));
+  };
 
   const onSubmit = () => {
+    if (isReadonly) {
+      return;
+    }
+
     if (newResponse) {
-      setShowCorrection(true);
       if (newResponse.id) {
         patchAppData({
           id: newResponse.id,
@@ -117,6 +161,13 @@ const PlayView = () => {
         >
           {currentQuestion.data.question}
         </Typography>
+        <AttemptsProgress
+          value={userAnswers.length}
+          maxValue={currentQuestion.data.numberOfAttempts ?? 1}
+          sx={{
+            mb: 3,
+          }}
+        />
       </Grid>
       <Grid container>
         {(() => {
@@ -138,6 +189,7 @@ const PlayView = () => {
                     setNewResponse(setInData(newResponse, 'choices', choices));
                   }}
                   showCorrection={showCorrection}
+                  showCorrectness={showCorrectness}
                 />
               );
             }
@@ -147,9 +199,17 @@ const PlayView = () => {
                   values={currentQuestion.data}
                   response={newResponse.data as TextAppDataData}
                   setResponse={(text: string) => {
-                    setNewResponse(setInData(newResponse, 'text', text));
+                    onInputChanged(
+                      newResponse,
+                      'text',
+                      text,
+                      getLatestUserAnswers()?.data?.text
+                    );
                   }}
                   showCorrection={showCorrection}
+                  showCorrectness={showCorrectness}
+                  isCorrect={isCorrect}
+                  isReadonly={isReadonly}
                 />
               );
             }
@@ -198,6 +258,7 @@ const PlayView = () => {
           onClick={onSubmit}
           variant="contained"
           data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
+          disabled={isReadonly}
         >
           {t('Submit')}
         </Button>

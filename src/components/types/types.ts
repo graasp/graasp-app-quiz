@@ -32,6 +32,7 @@ export type AppSettingData = {
   question: string;
   questionId: string;
   explanation?: string;
+  numberOfAttempts?: number;
 };
 
 export type MultipleChoicesChoice = {

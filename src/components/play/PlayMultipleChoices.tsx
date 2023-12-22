@@ -12,6 +12,7 @@ type Props = {
   response: MultipleChoiceAppDataData;
   setResponse: (d: MultipleChoiceAppDataData['choices']) => void;
   showCorrection: boolean;
+  showCorrectness: boolean;
 };
 
 const PlayMultipleChoices = ({
@@ -19,6 +20,7 @@ const PlayMultipleChoices = ({
   response,
   setResponse,
   showCorrection,
+  showCorrectness,
 }: Props): JSX.Element => {
   const onResponseClick =
     (value: string): ButtonProps['onClick'] =>
@@ -53,7 +55,7 @@ const PlayMultipleChoices = ({
     const isSelected = Boolean(response.choices?.includes(value));
     const dataCy = buildMultipleChoicesButtonCy(idx, isSelected);
 
-    if (showCorrection) {
+    if (showCorrection || (isSelected && showCorrectness)) {
       switch (true) {
         case isCorrect && isSelected:
           return {

@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CheckIcon from '@mui/icons-material/Check';
 import { TextField } from '@mui/material';
 
 import { PLAY_VIEW_TEXT_INPUT_CY } from '../../config/selectors';
-import { computeCorrectness } from '../context/utilities';
+import theme from '../../layout/theme';
 import { TextAppDataData, TextAppSettingData } from '../types/types';
 
 type Props = {
   values: TextAppSettingData;
   response: TextAppDataData;
   showCorrection: boolean;
+  showCorrectness: boolean;
+  isCorrect: boolean;
+  isReadonly: boolean;
   setResponse: (text: string) => void;
 };
 
@@ -19,16 +21,19 @@ const PlayTextInput = ({
   values,
   response,
   showCorrection,
+  showCorrectness,
+  isCorrect,
+  isReadonly,
   setResponse,
 }: Props) => {
-  const [isCorrect, setIsCorrect] = useState<boolean | undefined>();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (showCorrection && response) {
-      setIsCorrect(computeCorrectness(values, response));
-    }
-  }, [showCorrection, response, values]);
+  const textInputColor = () =>
+    showCorrectness || showCorrection
+      ? isCorrect
+        ? 'green'
+        : theme.palette.error.main
+      : undefined;
 
   const computeColor = () => {
     return isCorrect ? 'success' : 'error';
@@ -49,20 +54,36 @@ const PlayTextInput = ({
       label={t('Answer')}
       variant="outlined"
       onChange={(t) => {
-        setResponse(t.target.value);
+        if (!isReadonly) {
+          setResponse(t.target.value);
+        }
       }}
-      color={showCorrection ? computeColor() : undefined}
+      color={showCorrectness || showCorrection ? computeColor() : undefined}
       InputProps={{
         endAdornment: showCorrection && isCorrect && (
           <CheckIcon color="success" />
         ),
       }}
       // set error prop only if we show the correction
-      {...(showCorrection
+      {...(showCorrectness || showCorrection
         ? {
             error: !isCorrect,
           }
         : {})}
+      disabled={isReadonly}
+      // TODO: check why the text color is not set for first question
+      sx={{
+        '& .Mui-disabled': {
+          WebkitTextFillColor: textInputColor(),
+        },
+        '& .MuiInputBase-root.Mui-disabled': {
+          color: textInputColor(),
+          WebkitTextFillColor: textInputColor(),
+          '& > fieldset': {
+            borderColor: textInputColor(),
+          },
+        },
+      }}
     />
   );
 };
