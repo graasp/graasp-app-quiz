@@ -64,7 +64,6 @@ const PlayView = () => {
 
   useEffect(() => {
     if (responses) {
-      // assume there's only one response for a question
       setNewResponse(
         getAppDataByQuestionIdForMemberId(responses, currentQuestion, memberId)
       );
