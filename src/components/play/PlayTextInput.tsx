@@ -28,12 +28,31 @@ const PlayTextInput = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const textInputColor = () =>
+  const textInputColor =
     showCorrectness || showCorrection
       ? isCorrect
-        ? 'green'
+        ? theme.palette.success.main
         : theme.palette.error.main
       : undefined;
+
+  const textInputDisabledSx = {
+    // define the color of the label when disabled
+    '& .MuiInputLabel-root.Mui-disabled': {
+      WebkitTextFillColor: textInputColor,
+      color: textInputColor,
+    },
+    // define the border color when disabled
+    '& .MuiInputBase-root.Mui-disabled': {
+      '& > fieldset': {
+        borderColor: textInputColor,
+      },
+    },
+    // define the text color when disabled
+    '& .MuiOutlinedInput-input.Mui-disabled': {
+      WebkitTextFillColor: textInputColor,
+      color: textInputColor,
+    },
+  };
 
   const computeColor = () => {
     return isCorrect ? 'success' : 'error';
@@ -71,19 +90,7 @@ const PlayTextInput = ({
           }
         : {})}
       disabled={isReadonly}
-      // TODO: check why the text color is not set for first question
-      sx={{
-        '& .Mui-disabled': {
-          WebkitTextFillColor: textInputColor(),
-        },
-        '& .MuiInputBase-root.Mui-disabled': {
-          color: textInputColor(),
-          WebkitTextFillColor: textInputColor(),
-          '& > fieldset': {
-            borderColor: textInputColor(),
-          },
-        },
-      }}
+      sx={textInputDisabledSx}
     />
   );
 };
