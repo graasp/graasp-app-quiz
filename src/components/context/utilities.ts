@@ -151,10 +151,16 @@ export const getAllAppDataByQuestionIdForMemberId = (
   memberId?: Member['id']
 ): AppData[] => {
   return (
-    appData?.filter(
-      ({ creator, data }) =>
-        creator?.id === memberId && data.questionId === questionId
-    ) ?? []
+    appData
+      ?.filter(
+        ({ creator, data }) =>
+          creator?.id === memberId && data.questionId === questionId
+      )
+      // ensure to have an ascending sorts of createdAt
+      .sort(
+        (a: AppData, b: AppData) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      ) ?? []
   );
 };
 
