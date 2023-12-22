@@ -137,28 +137,25 @@ export const getAppDataByQuestionIdForMemberId = <T extends Data>(
   return allAppData?.slice(-1)[0] ?? defaultValue;
 };
 
-export const getAllAppDataByQuestionIdForMemberId = <T extends Data>(
-  appData: AppData<T>[] | undefined,
-  questionId: string,
-  memberId?: Member['id']
-): AppData<T>[] => {
-  return (
-    appData
-      ?.filter(
-        ({ creator, data }) =>
-          creator?.id === memberId && data.questionId === questionId
-      )
-      // ensure to have an ascending sorts of createdAt
-      .sort(sortAppDataByDate) ?? []
-  );
-};
-
 export const sortAppDataByDate = (a: AppData, b: AppData, asc = true) => {
   if (asc) {
     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
   }
 
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+};
+
+export const getAllAppDataByQuestionIdForMemberId = (
+  appData: AppData[] | undefined,
+  questionId: string,
+  memberId?: Member['id']
+): AppData[] => {
+  return (
+    appData?.filter(
+      ({ creator, data }) =>
+        creator?.id === memberId && data.questionId === questionId
+    ) ?? []
+  );
 };
 
 export const getQuestionNameFromId = (
