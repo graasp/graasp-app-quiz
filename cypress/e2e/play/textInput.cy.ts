@@ -3,6 +3,8 @@ import { Context } from '@graasp/sdk';
 import { TextAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
+  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY,
+  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
   buildPlayViewTextInputCy,
