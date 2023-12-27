@@ -3,8 +3,6 @@ import { Context } from '@graasp/sdk';
 import { TextAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
-  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY,
-  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
   PLAY_VIEW_TEXT_INPUT_CY,
@@ -59,38 +57,7 @@ const checkAnswerAndHeaderStatus = (isCorrect: boolean) => {
   cy.checkStepStatus(id, isCorrect);
 };
 
-/**
- * Checks that the progression of attempts is displayed correctly.
- * Also checks that the number of attempts are styled correctly 
- * if answer is correct or not.
- * 
- * @param numberOfAttempts the total number of attempts for the question.
- * @param currentAttempts the current number of time the user answered.
- * @param isCorrect is the user's answer correct.
- */
-const checkNumberOfAttemptsProgression = ({
-  numberOfAttempts,
-  currentAttempts,
-  isCorrect,
-}: {
-  numberOfAttempts: number;
-  currentAttempts: number;
-  isCorrect?: boolean;
-}) => {
-  cy.get(
-    `${dataCyWrapper(NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY)}`
-  ).contains(`${currentAttempts}/${numberOfAttempts}`);
 
-  if (currentAttempts > 0) {
-    cy.get(`${dataCyWrapper(NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY)}`).then(
-      ($el) => {
-        expect($el.attr('class').toLowerCase()).to.contain(
-          isCorrect ? 'success' : 'error'
-        );
-      }
-    );
-  }
-};
 
 // go to another question and comeback, data should have been saved
 const goToAnotherQuestionAndComeBack = () => {
@@ -233,7 +200,7 @@ describe('Play Text Input', () => {
 
         checkInputDisabled(true);
 
-        checkNumberOfAttemptsProgression({
+        cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: true,
@@ -248,7 +215,7 @@ describe('Play Text Input', () => {
         goToAnotherQuestionAndComeBack();
         checkAnswerAndHeaderStatus(false);
         checkInputDisabled(false);
-        checkNumberOfAttemptsProgression({
+        cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -266,7 +233,7 @@ describe('Play Text Input', () => {
         submitAnswer('still not correct');
         checkAnswerAndHeaderStatus(false);
         checkInputDisabled(true);
-        checkNumberOfAttemptsProgression({
+        cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 3,
           isCorrect: false,
@@ -281,7 +248,7 @@ describe('Play Text Input', () => {
         goToAnotherQuestionAndComeBack();
         checkAnswerAndHeaderStatus(false);
         checkInputDisabled(false);
-        checkNumberOfAttemptsProgression({
+        cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -291,7 +258,7 @@ describe('Play Text Input', () => {
         submitAnswer(text);
         checkAnswerAndHeaderStatus(true);
         checkInputDisabled(true);
-        checkNumberOfAttemptsProgression({
+        cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 2,
           isCorrect: true,

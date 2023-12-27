@@ -104,6 +104,9 @@ const PlayView = () => {
     value: V,
     prevValue: V | undefined
   ) => {
+    // reset correctness on value changed if not the same
+    // this allow to show prev error and avoid to show success
+    // if the user write or move (slider) to the correct response before submit.
     setShowCorrectness(value === prevValue);
     setNewResponse(setInData(object, key, value));
   };
@@ -219,11 +222,15 @@ const PlayView = () => {
                   values={currentQuestion.data}
                   response={newResponse.data as SliderAppDataData}
                   setResponse={(value: number) => {
-                    setNewResponse(
-                      setInData(newResponse, 'value', value)
+                    onInputChanged(
+                      newResponse,
+                      'value',
+                      value,
+                      getLatestUserAnswers()?.data?.value
                     );
                   }}
                   showCorrection={showCorrection}
+                  showCorrectness={showCorrectness}
                   isReadonly={isReadonly}
                 />
               );

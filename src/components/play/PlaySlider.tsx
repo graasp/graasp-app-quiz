@@ -11,6 +11,7 @@ type Props = {
   values: SliderAppSettingData;
   response: SliderAppDataData;
   showCorrection: boolean;
+  showCorrectness: boolean;
   isReadonly: boolean;
   setResponse: (value: number) => void;
 };
@@ -20,6 +21,7 @@ const PlaySlider = ({
   response,
   setResponse,
   showCorrection,
+  showCorrectness,
   isReadonly,
 }: Props) => {
   const min = values?.min;
@@ -46,10 +48,10 @@ const PlaySlider = ({
       },
     ];
 
-    if (showCorrection) {
+    if (showCorrection || showCorrectness) {
       const isCorrect = computeCorrectness(values, response);
       setIsCorrect(isCorrect);
-      if (!isCorrect) {
+      if (!isCorrect && showCorrection) {
         newMarks = [
           ...newMarks,
           {
@@ -77,13 +79,17 @@ const PlaySlider = ({
           value={response?.value ?? (max - min) / 2 + min}
           valueLabelDisplay="on"
           onChange={(_e, val) => {
-            setResponse(val as number);
+            if (!isReadonly) {
+              setResponse(val as number);
+            }
           }}
           marks={marks}
           min={min}
           max={max}
           // set color only if we show the correction
-          {...(showCorrection ? { color: computeColor() } : {})}
+          {...(showCorrection || showCorrectness
+            ? { color: computeColor() }
+            : {})}
           disabled={isReadonly}
           sx={sliderSx}
         />
