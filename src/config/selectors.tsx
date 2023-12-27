@@ -118,3 +118,6 @@ export const NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY =
   'numberOfAttemptsCircularProgression';
 export const NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY =
   'numberOfAttemptsCircularProgressionText';
+export const NUMBER_OF_ATTEMPTS_DECREASE_BTN_CY = 'numberOfAttemptsDecreaseBtn';
+export const NUMBER_OF_ATTEMPTS_INCREASE_BTN_CY = 'numberOfAttemptsIncreaseBtn';
+export const NUMBER_OF_ATTEMPTS_INPUT_CY = 'numberOfAttemptsInput';

@@ -59,6 +59,15 @@ const checkAnswerAndHeaderStatus = (isCorrect: boolean) => {
   cy.checkStepStatus(id, isCorrect);
 };
 
+/**
+ * Checks that the progression of attempts is displayed correctly.
+ * Also checks that the number of attempts are styled correctly 
+ * if answer is correct or not.
+ * 
+ * @param numberOfAttempts the total number of attempts for the question.
+ * @param currentAttempts the current number of time the user answered.
+ * @param isCorrect is the user's answer correct.
+ */
 const checkNumberOfAttemptsProgression = ({
   numberOfAttempts,
   currentAttempts,
@@ -105,10 +114,12 @@ const checkInputDisabled = (shouldBeDisabled: boolean) => {
   cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).should(status);
 };
 
-const checkTextValueEquals = (expectedValue: string) =>
-  cy
-    .get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`)
-    .should('have.value', expectedValue);
+const checkTextValueEquals = (expectedValue: string) => {
+  cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).should(
+    'have.value',
+    expectedValue
+  );
+};
 
 const explanationShouldNotBeVisible = () => cy.checkExplanationPlay(undefined);
 

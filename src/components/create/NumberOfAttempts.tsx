@@ -10,6 +10,12 @@ import {
   OutlinedInput,
 } from '@mui/material';
 
+import {
+  NUMBER_OF_ATTEMPTS_DECREASE_BTN_CY,
+  NUMBER_OF_ATTEMPTS_INCREASE_BTN_CY,
+  NUMBER_OF_ATTEMPTS_INPUT_CY,
+} from '../../config/selectors';
+
 type Props = {
   initAttempts?: number;
   onChange?: (attempts: number) => void;
@@ -60,26 +66,31 @@ const NumberOfAttempts = ({ initAttempts, onChange }: Props) => {
 
   return (
     <FormControl sx={{ mt: 3, width: '25ch' }} variant="outlined">
-      <InputLabel htmlFor="outlined-adornment-password">
+      <InputLabel htmlFor="outlined-adornment-attempts">
         {attemptsLabel}
       </InputLabel>
       <OutlinedInput
-        id="outlined-adornment-password"
+        data-cy={NUMBER_OF_ATTEMPTS_INPUT_CY}
+        id="outlined-adornment-attempts"
         onChange={handleTextChanged}
         // Allows the user to delete the number of attempts,
         // but check that when it has terminated, the number is valid.
         onBlur={() => setMinIfNotValid()}
-        defaultValue={MIN_ATTEMPTS}
         value={attempts}
         inputProps={{ min: 0, style: { textAlign: 'center' } }}
         startAdornment={
-          <IconButton aria-label="decrease-attempts" onClick={decreaseAttempts}>
+          <IconButton
+            data-cy={NUMBER_OF_ATTEMPTS_DECREASE_BTN_CY}
+            aria-label="decrease-attempts"
+            onClick={decreaseAttempts}
+          >
             <RemoveIcon />
           </IconButton>
         }
         endAdornment={
           <InputAdornment position="end">
             <IconButton
+              data-cy={NUMBER_OF_ATTEMPTS_INCREASE_BTN_CY}
               aria-label="increase-attempts"
               onClick={increaseAttempts}
             >
