@@ -19,14 +19,16 @@ export const MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME =
 export const QUESTION_STEP_CLASSNAME = 'questionStep';
 export const buildMultipleChoiceDeleteAnswerButtonCy = (idx: number) =>
   `multipleChoiceDeleteAnswerButton-${idx}`;
-export const buildMultipleChoiceDeleteAnswerExplanationButtonCy = (idx: number) =>
-  `multipleChoiceDeleteAnswerExplanationButton-${idx}`;
+export const buildMultipleChoiceDeleteAnswerExplanationButtonCy = (
+  idx: number
+) => `multipleChoiceDeleteAnswerExplanationButton-${idx}`;
 export const CREATE_VIEW_SAVE_BUTTON_CY = 'createViewSaveButton';
 export const QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME = 'questionBarAddNewButton';
 export const MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY =
   'multipleChoicesAddAnswerButton';
 export const CREATE_VIEW_ERROR_ALERT_CY = 'createViewErrorAlert';
-export const buildQuestionTypeOption = (id: string) => `buildQuestionTypeOption-${id}`;
+export const buildQuestionTypeOption = (id: string) =>
+  `buildQuestionTypeOption-${id}`;
 export const TEXT_INPUT_FIELD_CY = 'textInputField';
 export const SLIDER_MIN_FIELD_CY = 'sliderMinField';
 export const SLIDER_MAX_FIELD_CY = 'sliderMaxField';
@@ -34,18 +36,23 @@ export const SLIDER_CY = 'slider';
 export const CREATE_VIEW_DELETE_BUTTON_CY = 'createViewDeleteButton';
 export const PLAY_VIEW_EMPTY_QUIZ_CY = 'playViewEmptyquiz';
 export const PLAY_VIEW_QUESTION_TITLE_CY = 'playViewQuestionTitle';
-export const buildMultipleChoicesButtonCy = (idx: number, isSelected: boolean) =>
-  `multipleChoicesButton-${idx}-${isSelected}`;
+export const buildMultipleChoicesButtonCy = (
+  idx: number,
+  isSelected: boolean
+) => `multipleChoicesButton-${idx}-${isSelected}`;
 export const PLAY_VIEW_SUBMIT_BUTTON_CY = 'playViewSubmitButton';
 export const PLAY_VIEW_SLIDER_CY = 'playViewSlider';
 export const PLAY_VIEW_TEXT_INPUT_CY = 'playViewTextInput';
 export const EXPLANATION_CY = 'explanation';
 export const EXPLANATION_PLAY_CY = 'explanationPlay';
 export const buildFillBlanksAnswerId = (id: number) => `fillBlanksAnswer-${id}`;
-export const buildBlankedTextWordCy = (id: number) => `fillBlankedTextWord-${id}`;
+export const buildBlankedTextWordCy = (id: number) =>
+  `fillBlankedTextWord-${id}`;
 export const FILL_BLANKS_CORRECTION_CY = 'fillBlanksCorrection';
-export const buildFillBlanksCorrectionAnswerCy = (id: number, isCorrect: boolean) =>
-  `fillBlanksCorrectionAnswer-${id}-${isCorrect}`;
+export const buildFillBlanksCorrectionAnswerCy = (
+  id: number,
+  isCorrect: boolean
+) => `fillBlanksCorrectionAnswer-${id}-${isCorrect}`;
 export const FILL_BLANKS_TEXT_FIELD_CY = 'fillBlanksTextField';
 export const CREATE_VIEW_CONTAINER_CY = 'createViewContainer';
 export const TABLE_BY_QUESTION_CONTAINER_CY = 'tableByQuestionContainer';
@@ -107,3 +114,7 @@ export const ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE_CY =
   'analyticsGeneralCorrectResponsePercentage';
 export const buildAnalyticsDetailedChartCy = (label: string) =>
   `analyticsDetailedChart-${label}`;
+export const NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY =
+  'numberOfAttemptsCircularProgression';
+export const NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY =
+  'numberOfAttemptsCircularProgressionText';

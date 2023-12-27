@@ -40,7 +40,6 @@ const PlayView = () => {
   const { t } = useTranslation();
   const { data: responses, isSuccess } = hooks.useAppData();
   const { mutate: postAppData } = mutations.usePostAppData();
-  const { mutate: patchAppData } = mutations.usePatchAppData();
 
   const { currentQuestion, questions } = useContext(QuizContext);
   const { memberId } = useLocalContext();
@@ -114,22 +113,11 @@ const PlayView = () => {
       return;
     }
 
-    if (newResponse) {
-      if (newResponse.id) {
-        patchAppData({
-          id: newResponse.id,
-          data: newResponse.data,
-        });
-      } else {
-        if (newResponse.data) {
-          postAppData({
-            data: newResponse.data,
-            type: APP_DATA_TYPES.RESPONSE,
-          });
-        } else {
-          console.error('The response data is not defined !');
-        }
-      }
+    if (newResponse && newResponse.data) {
+      postAppData({
+        data: newResponse.data,
+        type: APP_DATA_TYPES.RESPONSE,
+      });
     } else {
       console.error('The response is not defined !');
     }
@@ -166,6 +154,7 @@ const PlayView = () => {
           sx={{
             mb: 3,
           }}
+          color={isCorrect ? 'success' : 'error'}
         />
       </Grid>
       <Grid container>

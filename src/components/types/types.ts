@@ -127,3 +127,5 @@ export type QuestionAppDataData =
   | MultipleChoiceAppDataData
   | FillTheBlanksAppDataData
   | SliderAppDataData;
+
+export type StatusColor = 'primary' | 'success' | 'warning' | 'error';
