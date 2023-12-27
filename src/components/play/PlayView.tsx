@@ -14,7 +14,7 @@ import {
   PLAY_VIEW_SUBMIT_BUTTON_CY,
 } from '../../config/selectors';
 import { QUIZ_TRANSLATIONS } from '../../langs/constants';
-import { setIn, setInData } from '../../utils/immutable';
+import { setInData } from '../../utils/immutable';
 import AttemptsProgress from '../common/AttemptsProgress';
 import { QuizContext } from '../context/QuizContext';
 import {
@@ -220,12 +220,11 @@ const PlayView = () => {
                   response={newResponse.data as SliderAppDataData}
                   setResponse={(value: number) => {
                     setNewResponse(
-                      setIn(newResponse, 'data', {
-                        value: value,
-                      })
+                      setInData(newResponse, 'value', value)
                     );
                   }}
                   showCorrection={showCorrection}
+                  isReadonly={isReadonly}
                 />
               );
             }
