@@ -4,7 +4,7 @@ import { TextAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
-  PLAY_VIEW_SUBMIT_BUTTON_CY, // PLAY_VIEW_TEXT_INPUT_CY,
+  PLAY_VIEW_SUBMIT_BUTTON_CY,
   buildPlayViewTextInputCy,
   buildQuestionStepCy,
   dataCyWrapper,
