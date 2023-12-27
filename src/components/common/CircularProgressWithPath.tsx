@@ -1,7 +1,10 @@
 import { Box, CircularProgress, Color, Typography } from '@mui/material';
 
+import {
+  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY,
+  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY,
+} from '../../config/selectors';
 import { StatusColor } from '../types/types';
-import { NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY, NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY } from '../../config/selectors';
 
 type Props = {
   value: number;
@@ -18,6 +21,7 @@ const DEFAULT_PATH_COLOR = '#d1d1d1';
 const BORDER_RADIUS = '50%';
 const SHADOW_SCALLING_FACTOR = 44;
 const DEFAULT_COLOR = 'primary';
+const MAX_PERCENT = 100;
 
 export const CircularProgressWithPath = ({
   value,
@@ -34,11 +38,17 @@ export const CircularProgressWithPath = ({
     }px ${pathColor}`,
   };
 
+  const circularValue = maxValue
+    ? value <= maxValue
+      ? (value / maxValue) * MAX_PERCENT
+      : MAX_PERCENT
+    : value;
+
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
       <CircularProgress
         variant="determinate"
-        value={maxValue ? (value / maxValue) * 100 : value}
+        value={circularValue}
         size={size}
         thickness={thickness}
         sx={progressSx}

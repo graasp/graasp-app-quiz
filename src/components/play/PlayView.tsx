@@ -26,6 +26,7 @@ import QuestionTopBar from '../navigation/QuestionTopBar';
 import {
   FillTheBlanksAppDataData,
   MultipleChoiceAppDataData,
+  QuestionAppDataData,
   QuestionData,
   SliderAppDataData,
   TextAppDataData,
@@ -73,8 +74,11 @@ const PlayView = () => {
   useEffect(() => {
     const isCorrect = computeCorrectness(
       currentQuestion.data,
-      newResponse?.data as TextAppDataData
+      newResponse?.data as QuestionAppDataData
     );
+
+    console.log('isCorrect', isCorrect)
+
     setIsCorrect(isCorrect);
     setIsReadonly(isCorrect || maxAttemptsReached);
 
@@ -210,9 +214,15 @@ const PlayView = () => {
                   values={currentQuestion.data}
                   response={newResponse.data as FillTheBlanksAppDataData}
                   setResponse={(text: string) => {
+
+                    console.log('new Response', text)
+
                     setNewResponse(setInData(newResponse, 'text', text));
+                    setShowCorrectness(false);
                   }}
                   showCorrection={showCorrection}
+                  showCorrectness={showCorrectness}
+                  isReadonly={isReadonly}
                 />
               );
             }
@@ -232,6 +242,7 @@ const PlayView = () => {
                   showCorrection={showCorrection}
                   showCorrectness={showCorrectness}
                   isReadonly={isReadonly}
+                  isCorrect={isCorrect}
                 />
               );
             }

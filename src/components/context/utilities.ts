@@ -10,6 +10,7 @@ import {
   FAILURE_MESSAGES,
   QuestionType,
 } from '../../config/constants';
+import { ANSWER_REGEXP } from '../../utils/fillInTheBlanks';
 import {
   FillTheBlanksAppDataData,
   MultipleChoiceAppDataData,
@@ -89,7 +90,16 @@ export const computeCorrectness = (
 
     case QuestionType.FILL_BLANKS: {
       const d = data as FillTheBlanksAppDataData;
-      return d?.text === question.text;
+
+      // comparing the answers instead of text avoid risk to
+      // compare the same text with some spaces.
+      const dataAnswers = d?.text?.match(ANSWER_REGEXP) || [];
+      const questionAnswers = question.text.match(ANSWER_REGEXP) || [];
+
+      return (
+        dataAnswers.length === questionAnswers.length &&
+        dataAnswers.every((value, idx) => value === questionAnswers[idx])
+      );
     }
     default:
       return false;

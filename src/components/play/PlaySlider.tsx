@@ -4,7 +4,6 @@ import { Grid, Slider } from '@mui/material';
 
 import { PLAY_VIEW_SLIDER_CY } from '../../config/selectors';
 import theme from '../../layout/theme';
-import { computeCorrectness } from '../context/utilities';
 import { SliderAppDataData, SliderAppSettingData } from '../types/types';
 
 type Props = {
@@ -12,6 +11,7 @@ type Props = {
   response: SliderAppDataData;
   showCorrection: boolean;
   showCorrectness: boolean;
+  isCorrect: boolean;
   isReadonly: boolean;
   setResponse: (value: number) => void;
 };
@@ -23,11 +23,11 @@ const PlaySlider = ({
   showCorrection,
   showCorrectness,
   isReadonly,
+  isCorrect,
 }: Props) => {
   const min = values?.min;
   const max = values?.max;
   const [marks, setMarks] = useState<{ value: number; label: number }[]>([]);
-  const [isCorrect, setIsCorrect] = useState<null | boolean>();
 
   const sliderSx = {
     '&.MuiSlider-root': {
@@ -48,18 +48,14 @@ const PlaySlider = ({
       },
     ];
 
-    if (showCorrection || showCorrectness) {
-      const isCorrect = computeCorrectness(values, response);
-      setIsCorrect(isCorrect);
-      if (!isCorrect && showCorrection) {
-        newMarks = [
-          ...newMarks,
-          {
-            value: values.value,
-            label: values.value,
-          },
-        ];
-      }
+    if (!isCorrect && showCorrection) {
+      newMarks = [
+        ...newMarks,
+        {
+          value: values.value,
+          label: values.value,
+        },
+      ];
     }
 
     setMarks(newMarks);

@@ -7,11 +7,12 @@ import Answer from './Answer';
 
 type Props = {
   answers: Word[];
+  isReadonly: boolean;
 };
 
-const Answers = ({ answers }: Props) => {
+const Answers = ({ answers, isReadonly }: Props) => {
   const onDragStart = (e: React.DragEvent<HTMLSpanElement>, id: string) => {
-    if (e.dataTransfer) {
+    if (!isReadonly && e.dataTransfer) {
       e.dataTransfer.setData('text/plain', id);
     }
   };
@@ -50,6 +51,7 @@ const Answers = ({ answers }: Props) => {
               key={a.id}
               id={a.id}
               name={a.text}
+              isReadonly={isReadonly}
             />
           );
         })}

@@ -6,21 +6,31 @@ import { styled } from '@mui/material/styles';
 interface WordBoxProps extends TypographyProps {
   backgroundColor?: string;
   showCorrection: boolean;
+  showCorrectness: boolean;
   isCorrect: boolean;
+  isReadonly: boolean;
   filled: string;
 }
 
 export const WordBox = styled(Typography)<WordBoxProps>(
-  ({ theme, backgroundColor, showCorrection, isCorrect, filled }) => {
+  ({
+    theme,
+    backgroundColor,
+    showCorrection,
+    showCorrectness,
+    isCorrect,
+    isReadonly,
+    filled,
+  }) => {
     let bgColor = backgroundColor ?? 'transparent';
-    if (showCorrection) {
+    if (showCorrection || showCorrectness) {
       bgColor = isCorrect
         ? theme.palette.success.main
         : theme.palette.error.main;
     }
 
     return {
-      cursor: 'pointer',
+      cursor: isReadonly ? '' : 'pointer',
       minWidth: '3em',
       padding: theme.spacing(0.5, 1, 0),
       paddingTop: filled ? 0 : theme.spacing(2),
@@ -30,7 +40,7 @@ export const WordBox = styled(Typography)<WordBoxProps>(
       backgroundColor: bgColor,
 
       '&:hover': {
-        textDecoration: 'line-through',
+        textDecoration: isReadonly ? '' : 'line-through',
       },
     };
   }
@@ -41,6 +51,8 @@ type Props = {
   text: string;
   isCorrect: boolean;
   showCorrection: boolean;
+  showCorrectness: boolean;
+  isReadonly: boolean;
   dataCy: string;
   onDrop: (e: React.DragEvent<HTMLSpanElement>, id: number) => void;
   onDelete: (e: React.MouseEvent<HTMLSpanElement>) => void;
@@ -51,6 +63,8 @@ const Blank = ({
   text,
   isCorrect,
   showCorrection,
+  showCorrectness,
+  isReadonly,
   dataCy,
   onDrop,
   onDelete,
@@ -60,26 +74,34 @@ const Blank = ({
   });
 
   const _handleDrop = (e: React.DragEvent<HTMLSpanElement>) => {
-    onDrop(e, id);
-    setState({ backgroundColor: 'transparent' });
+    if (!isReadonly) {
+      onDrop(e, id);
+      setState({ backgroundColor: 'transparent' });
+    }
   };
 
   const _handleDragOver = (e: React.DragEvent<HTMLSpanElement>) => {
     e.preventDefault();
-    setState({ backgroundColor: 'yellow' });
+    if (!isReadonly) {
+      setState({ backgroundColor: 'yellow' });
+    }
   };
 
   const _handleDragLeave = (e: React.DragEvent<HTMLSpanElement>) => {
     e.preventDefault();
-    setState({ backgroundColor: 'transparent' });
+    if (!isReadonly) {
+      setState({ backgroundColor: 'transparent' });
+    }
   };
 
   return (
     <WordBox
       data-cy={dataCy}
       showCorrection={showCorrection}
+      showCorrectness={showCorrectness}
       filled={text}
       isCorrect={isCorrect}
+      isReadonly={isReadonly}
       backgroundColor={state.backgroundColor}
       onDragLeave={_handleDragLeave}
       onDragOver={_handleDragOver}
