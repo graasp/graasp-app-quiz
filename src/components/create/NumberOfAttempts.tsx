@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -15,6 +16,7 @@ import {
   NUMBER_OF_ATTEMPTS_INCREASE_BTN_CY,
   NUMBER_OF_ATTEMPTS_INPUT_CY,
 } from '../../config/selectors';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 
 type Props = {
   initAttempts?: number;
@@ -22,10 +24,11 @@ type Props = {
 };
 
 const NumberOfAttempts = ({ initAttempts, onChange }: Props) => {
+  const { t } = useTranslation();
   const MIN_ATTEMPTS = 1;
   const UNSET_NUMBER = 0;
-  // TODO: translate me
-  const attemptsLabel = 'Number of attempts';
+  
+  const attemptsLabel = t(QUIZ_TRANSLATIONS.CREATE_VIEW_NUMBER_OF_ATTEMPTS);
   const [attempts, setAttempts] = useState<number>(MIN_ATTEMPTS);
 
   useEffect(() => {
