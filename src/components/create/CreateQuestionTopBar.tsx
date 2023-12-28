@@ -17,6 +17,7 @@ import {
   Stepper,
 } from '@mui/material';
 
+import { MAX_QUESTION_LINES_TOP_BAR } from '../../config/constants';
 import {
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
@@ -82,7 +83,7 @@ const CreateQuestionTopBar = () => {
         {...provided.draggableProps}
         {...props}
       >
-        <TypographyMaxLines maxLines={1}>
+        <TypographyMaxLines maxLines={MAX_QUESTION_LINES_TOP_BAR}>
           {question.data.question}
         </TypographyMaxLines>
       </StepLabel>

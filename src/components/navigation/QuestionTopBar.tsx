@@ -16,6 +16,7 @@ import {
 import { useLocalContext } from '@graasp/apps-query-client';
 import { Context } from '@graasp/sdk';
 
+import { MAX_QUESTION_LINES_TOP_BAR } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
 import {
   QUESTION_BAR_CY,
@@ -91,7 +92,7 @@ const QuestionTopBar = () => {
         onClick={() => setCurrentIdx(index)}
         {...props}
       >
-        <TypographyMaxLines maxLines={1}>
+        <TypographyMaxLines maxLines={MAX_QUESTION_LINES_TOP_BAR}>
           {question.data.question}
         </TypographyMaxLines>
       </StepLabel>
