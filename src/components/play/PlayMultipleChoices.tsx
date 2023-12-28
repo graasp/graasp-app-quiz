@@ -2,6 +2,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Button, ButtonProps, Typography } from '@mui/material';
 
 import { buildMultipleChoicesButtonCy } from '../../config/selectors';
+import theme from '../../layout/theme';
 import {
   MultipleChoiceAppDataData,
   MultipleChoicesAppSettingData,
@@ -13,6 +14,7 @@ type Props = {
   setResponse: (d: MultipleChoiceAppDataData['choices']) => void;
   showCorrection: boolean;
   showCorrectness: boolean;
+  isReadonly: boolean;
 };
 
 const PlayMultipleChoices = ({
@@ -21,10 +23,15 @@ const PlayMultipleChoices = ({
   setResponse,
   showCorrection,
   showCorrectness,
+  isReadonly,
 }: Props): JSX.Element => {
   const onResponseClick =
     (value: string): ButtonProps['onClick'] =>
-    (e) => {
+    (_e) => {
+      if (isReadonly) {
+        return;
+      }
+
       const choiceIdx = response.choices?.findIndex(
         (choice) => choice === value
       );
@@ -91,8 +98,20 @@ const PlayMultipleChoices = ({
         <Button
           onClick={onResponseClick(choice.value)}
           fullWidth
-          sx={{ mb: 1 }}
+          sx={{
+            mb: 1,
+            '&.MuiButton-root': {
+              '&.Mui-disabled': {
+                color: 'whitesmoke',
+                backgroundColor:
+                  computeStyles(choice, idx).color === 'success'
+                    ? theme.palette.success.main
+                    : theme.palette.error.main,
+              },
+            },
+          }}
           {...computeStyles(choice, idx)}
+          disabled={isReadonly}
         >
           {showCorrection &&
           choice.explanation &&

@@ -7,13 +7,21 @@ import {
   EXPLANATION_PLAY_CY,
   buildMultipleChoiceExplanationPlayCy,
 } from '../../config/selectors';
-import { QuestionData } from '../types/types';
+import { MultipleChoiceAppDataData, QuestionData } from '../types/types';
+
+type Props = {
+  currentQuestionData: QuestionData;
+  response?: MultipleChoiceAppDataData;
+  showCorrection: boolean;
+  showCorrectness: boolean;
+};
 
 const PlayExplanation = ({
   currentQuestionData,
-}: {
-  currentQuestionData: QuestionData;
-}) => {
+  response,
+  showCorrection,
+  showCorrectness,
+}: Props) => {
   const { t } = useTranslation();
 
   const renderMultipleChoicesExplanations = () => {
@@ -25,7 +33,11 @@ const PlayExplanation = ({
       return (
         <ul>
           {currentQuestionData.choices
-            .filter((c) => Boolean(c.explanation))
+            .filter(
+              (c) =>
+                Boolean(c.explanation) &&
+                (showCorrection || response?.choices.includes(c.value))
+            )
             .map((c, idx) => (
               <li key={idx} data-cy={buildMultipleChoiceExplanationPlayCy(idx)}>
                 {c.explanation}
@@ -37,23 +49,25 @@ const PlayExplanation = ({
   };
 
   const mcExplanations = renderMultipleChoicesExplanations();
+  const displayExplanation =
+    showCorrection || (showCorrectness && mcExplanations);
 
   if (!currentQuestionData.explanation && !mcExplanations) {
     return null;
   }
 
-  return (
+  return displayExplanation ? (
     <Grid item xs={12} width={'100%'}>
       <Typography variant="h6" mb={1}>
         {t('Explanations')}
       </Typography>
       <Typography variant="body1" mb={1} data-cy={EXPLANATION_PLAY_CY}>
-        {currentQuestionData.explanation}
+        {showCorrection && currentQuestionData.explanation}
 
         {mcExplanations}
       </Typography>
     </Grid>
-  );
+  ) : null;
 };
 
 export default PlayExplanation;

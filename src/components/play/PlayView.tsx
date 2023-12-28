@@ -48,7 +48,7 @@ const PlayView = () => {
   const [newResponse, setNewResponse] = useState<Partial<AppData> | undefined>(
     getAppDataByQuestionIdForMemberId(responses, currentQuestion, memberId)
   );
-  // TODO: find a way to update userAnswers when responses are updated without using state
+
   const [userAnswers, setUserAnswers] = useState<AppData[]>([]);
   const [showCorrection, setShowCorrection] = React.useState(false);
   const [showCorrectness, setShowCorrectness] = React.useState(false);
@@ -77,8 +77,6 @@ const PlayView = () => {
       newResponse?.data as QuestionAppDataData
     );
 
-    console.log('isCorrect', isCorrect)
-
     setIsCorrect(isCorrect);
     setIsReadonly(isCorrect || maxAttemptsReached);
 
@@ -87,7 +85,6 @@ const PlayView = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maxAttempts, userAnswers]);
 
-  // TODO: try to avoid this useEffect
   useEffect(() => {
     setUserAnswers(
       getAllAppDataByQuestionIdForMemberId(
@@ -182,9 +179,11 @@ const PlayView = () => {
                   response={newResponse.data as MultipleChoiceAppDataData}
                   setResponse={(choices) => {
                     setNewResponse(setInData(newResponse, 'choices', choices));
+                    setShowCorrectness(false);
                   }}
                   showCorrection={showCorrection}
                   showCorrectness={showCorrectness}
+                  isReadonly={isReadonly}
                 />
               );
             }
@@ -250,11 +249,12 @@ const PlayView = () => {
           }
         })()}
       </Grid>
-      {showCorrection && (
-        <PlayExplanation
-          currentQuestionData={currentQuestion.data as QuestionData}
-        />
-      )}
+      <PlayExplanation
+        showCorrection={showCorrection}
+        showCorrectness={showCorrectness}
+        currentQuestionData={currentQuestion.data as QuestionData}
+        response={newResponse?.data as MultipleChoiceAppDataData}
+      />
       <Grid item xs={12}>
         <Button
           onClick={onSubmit}
