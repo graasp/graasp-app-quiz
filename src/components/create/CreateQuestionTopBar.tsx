@@ -24,6 +24,7 @@ import {
   QUESTION_STEP_CLASSNAME,
   buildQuestionStepCy,
 } from '../../config/selectors';
+import TypographyMaxLines from '../common/TypographyMaxLines';
 import { QuizContext } from '../context/QuizContext';
 import { getQuestionById } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
@@ -81,7 +82,9 @@ const CreateQuestionTopBar = () => {
         {...provided.draggableProps}
         {...props}
       >
-        {question.data.question}
+        <TypographyMaxLines maxLines={1}>
+          {question.data.question}
+        </TypographyMaxLines>
       </StepLabel>
     );
   };
@@ -107,6 +110,7 @@ const CreateQuestionTopBar = () => {
       direction="row"
       alignItems="flex-start"
       justifyContent="center"
+      mb={3}
     >
       <Grid item>
         <Button

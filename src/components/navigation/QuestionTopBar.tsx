@@ -24,6 +24,7 @@ import {
   QUESTION_STEP_CLASSNAME,
   buildQuestionStepCy,
 } from '../../config/selectors';
+import TypographyMaxLines from '../common/TypographyMaxLines';
 import { QuizContext } from '../context/QuizContext';
 import {
   computeCorrectness,
@@ -90,7 +91,9 @@ const QuestionTopBar = () => {
         onClick={() => setCurrentIdx(index)}
         {...props}
       >
-        {question.data.question}
+        <TypographyMaxLines maxLines={1}>
+          {question.data.question}
+        </TypographyMaxLines>
       </StepLabel>
     );
   };
