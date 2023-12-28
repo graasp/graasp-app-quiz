@@ -94,36 +94,43 @@ const PlayMultipleChoices = ({
 
   return (
     <>
-      {choices?.map((choice, idx) => (
-        <Button
-          onClick={onResponseClick(choice.value)}
-          fullWidth
-          sx={{
-            mb: 1,
-            '&.MuiButton-root': {
-              '&.Mui-disabled': {
-                color: 'whitesmoke',
-                backgroundColor:
-                  computeStyles(choice, idx).color === 'success'
-                    ? theme.palette.success.main
-                    : theme.palette.error.main,
+      {choices?.map((choice, idx) => {
+        const styleColor = computeStyles(choice, idx);
+        const disabledColor =
+          styleColor.color === 'success'
+            ? theme.palette.success.main
+            : styleColor.color === 'error'
+            ? theme.palette.error.main
+            : undefined;
+
+        return (
+          <Button
+            onClick={onResponseClick(choice.value)}
+            fullWidth
+            sx={{
+              mb: 1,
+              '&.MuiButton-root': {
+                '&.Mui-disabled': {
+                  color: disabledColor ? 'whitesmoke' : undefined,
+                  backgroundColor: disabledColor,
+                },
               },
-            },
-          }}
-          {...computeStyles(choice, idx)}
-          disabled={isReadonly}
-        >
-          {showCorrection &&
-          choice.explanation &&
-          response.choices?.some((c) => c === choice.value) ? (
-            <>
+            }}
+            {...styleColor}
+            disabled={isReadonly}
+          >
+            {showCorrection &&
+            choice.explanation &&
+            response.choices?.some((c) => c === choice.value) ? (
+              <>
+                <Typography variant="body1">{choice.value}</Typography>
+              </>
+            ) : (
               <Typography variant="body1">{choice.value}</Typography>
-            </>
-          ) : (
-            <Typography variant="body1">{choice.value}</Typography>
-          )}
-        </Button>
-      ))}
+            )}
+          </Button>
+        );
+      })}
     </>
   );
 };

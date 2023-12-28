@@ -36,7 +36,7 @@ const PlayExplanation = ({
             .filter(
               (c) =>
                 Boolean(c.explanation) &&
-                (showCorrection || response?.choices.includes(c.value))
+                (showCorrection || response?.choices?.includes(c.value))
             )
             .map((c, idx) => (
               <li key={idx} data-cy={buildMultipleChoiceExplanationPlayCy(idx)}>
