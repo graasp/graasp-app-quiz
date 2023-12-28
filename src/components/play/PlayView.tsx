@@ -214,9 +214,6 @@ const PlayView = () => {
                   values={currentQuestion.data}
                   response={newResponse.data as FillTheBlanksAppDataData}
                   setResponse={(text: string) => {
-
-                    console.log('new Response', text)
-
                     setNewResponse(setInData(newResponse, 'text', text));
                     setShowCorrectness(false);
                   }}

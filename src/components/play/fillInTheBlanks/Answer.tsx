@@ -37,6 +37,7 @@ const Answer = ({ id, name, isReadonly, onDragStart }: Props) => {
       draggable={!isReadonly}
       onDragStart={_handleDragStart}
       isReadonly={isReadonly}
+      data-disabled={isReadonly}
     >
       {name}
     </Wrapper>

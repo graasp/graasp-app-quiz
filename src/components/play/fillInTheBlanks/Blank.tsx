@@ -110,6 +110,7 @@ const Blank = ({
       data-id={id}
       data-correctness={isCorrect}
       data-text={text}
+      data-disabled={isReadonly}
     >
       {text}
     </WordBox>

@@ -42,7 +42,7 @@ const checkCorrection = (responseData: Pick<SliderAppDataData, 'value'>) => {
 };
 
 /**
- * Checks that the textfield and submit buttons are disabled or not.
+ * Checks that the slider and submit button are disabled or not.
  * It is useful to check that:
  *  - no more answers can be send if maximum of attempts are reached
  *  - no more answers can be send if the answer is correct
