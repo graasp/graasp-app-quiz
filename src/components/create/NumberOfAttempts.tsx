@@ -27,7 +27,6 @@ const NumberOfAttempts = ({ initAttempts, onChange }: Props) => {
   const { t } = useTranslation();
   const MIN_ATTEMPTS = 1;
   const UNSET_NUMBER = 0;
-
   const attemptsLabel = t(QUIZ_TRANSLATIONS.CREATE_VIEW_NUMBER_OF_ATTEMPTS);
   const [attempts, setAttempts] = useState<number>(MIN_ATTEMPTS);
 
