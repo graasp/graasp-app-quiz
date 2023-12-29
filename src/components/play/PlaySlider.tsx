@@ -27,6 +27,7 @@ const PlaySlider = ({
 }: Props) => {
   const min = values?.min;
   const max = values?.max;
+  const defaultValue = (max - min) / 2 + min;
   const [marks, setMarks] = useState<{ value: number; label: number }[]>([]);
 
   const sliderSx = {
@@ -40,6 +41,13 @@ const PlaySlider = ({
   };
 
   useEffect(() => {
+    // Notify with the default value if reponse's value is null.
+    // Without it, if the user click on submit without changing the slider's value,
+    // the response's value will be undefined instead of defaultValue displayed on the screen.
+    if (!isReadonly && !response.value) {
+      setResponse(defaultValue);
+    }
+
     let newMarks = [
       { value: min, label: min },
       {
@@ -72,7 +80,7 @@ const PlaySlider = ({
         <Slider
           data-cy={PLAY_VIEW_SLIDER_CY}
           aria-label="Custom marks"
-          value={response?.value ?? (max - min) / 2 + min}
+          value={response?.value ?? defaultValue}
           valueLabelDisplay="on"
           onChange={(_e, val) => {
             if (!isReadonly) {
