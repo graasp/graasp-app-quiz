@@ -259,3 +259,27 @@ export const validateQuestionData = (data: QuestionData) => {
       return true;
   }
 };
+
+/**
+ * Return the first valid value in three possible name of values or empty if all nullish
+ * @param response The response to get the value.
+ * @returns The first valid value of the data.
+ */
+export const getResponseValue = (response: Data | undefined) => {
+  const text = (response as TextAppDataData)?.text;
+  if (text) {
+    return text;
+  }
+
+  const value = (response as SliderAppDataData)?.value;
+  if (value) {
+    return value;
+  }
+
+  const choices = (response as MultipleChoiceAppDataData)?.choices;
+  if (choices) {
+    return choices.join(', ');
+  }
+
+  return '';
+};
