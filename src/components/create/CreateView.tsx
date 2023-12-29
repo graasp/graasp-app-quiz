@@ -106,6 +106,7 @@ const CreateView = () => {
             onChange={(changes: QuestionData) => {
               setNewData({
                 ...changes,
+                questionId: newData.questionId,
                 question: newData.question,
                 explanation: newData.explanation,
               });

@@ -1,22 +1,31 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
-import { DEFAULT_QUESTION_TYPE } from '../../../../src/config/constants';
+import {
+  DEFAULT_QUESTION_TYPE,
+  QuestionType,
+} from '../../../../src/config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_DELETE_BUTTON_CY,
+  CREATE_VIEW_SAVE_BUTTON_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
   QUESTION_STEP_CLASSNAME,
+  TEXT_INPUT_FIELD_CY,
   buildQuestionStepCy,
+  buildQuestionTypeOption,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../../fixtures/appSettings';
-import { fillMultipleChoiceQuestion } from './multipleChoices.cy';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../../fixtures/appSettings';
 import { WAITING_DELAY_MS } from '../../../utils/time';
+import { fillMultipleChoiceQuestion } from './multipleChoices.cy';
 
 const newMultipleChoiceData = {
   question: 'new question text',
@@ -34,57 +43,61 @@ const newMultipleChoiceData = {
 };
 
 describe('Create View', () => {
-  beforeEach(() => {
-    cy.setUpApi({
-      database: {
-        appSettings: [],
-      },
-      appContext: {
-        permission: PermissionLevel.Admin,
-        context: Context.Builder,
-      },
+  describe('Empty Quizz', () => {
+    beforeEach(() => {
+      cy.setUpApi({
+        database: {
+          appSettings: [],
+        },
+        appContext: {
+          permission: PermissionLevel.Admin,
+          context: Context.Builder,
+        },
+      });
+      cy.visit('/');
     });
-    cy.visit('/');
+
+    it('Empty data', () => {
+      cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
+      cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
+        .should('be.visible')
+        .should('have.value', '');
+      cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
+        'have.value',
+        DEFAULT_QUESTION_TYPE
+      );
+      cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
+      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).should('be.disabled');
+      cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
+    });
+
+    it('Add questions from empty quiz', () => {
+      // Add three questions and make sure they are added to the QuestionTopBar
+      cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
+      fillMultipleChoiceQuestion(newMultipleChoiceData);
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(WAITING_DELAY_MS); // Wait for the new question to appear
+      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+      cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
+        .should('be.visible')
+        .should('have.value', '');
+      fillMultipleChoiceQuestion(newMultipleChoiceData);
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(WAITING_DELAY_MS);
+      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+      cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
+        .should('be.visible')
+        .should('have.value', '');
+      fillMultipleChoiceQuestion(newMultipleChoiceData);
+      // Verify the questions are added to the order list by checking the number of
+      // question nodes in the QuestionTopBar, as we cannot check the app settings directly
+      cy.get('html')
+        .find(`.${QUESTION_STEP_CLASSNAME}`)
+        .should('have.length', 3);
+    });
   });
 
-  it('Empty data', () => {
-    cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
-    cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
-      .should('be.visible')
-      .should('have.value', '');
-    cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
-      'have.value',
-      DEFAULT_QUESTION_TYPE
-    );
-    cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
-    cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).should('be.disabled');
-    cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
-  });
-
-  it('Add questions from empty quiz', () => {
-    // Add three questions and make sure they are added to the QuestionTopBar
-    cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
-    fillMultipleChoiceQuestion(newMultipleChoiceData);
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(WAITING_DELAY_MS); // Wait for the new question to appear
-    cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
-    cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
-      .should('be.visible')
-      .should('have.value', '');
-    fillMultipleChoiceQuestion(newMultipleChoiceData);
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(WAITING_DELAY_MS);
-    cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
-    cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
-      .should('be.visible')
-      .should('have.value', '');
-    fillMultipleChoiceQuestion(newMultipleChoiceData);
-    // Verify the questions are added to the order list by checking the number of
-    // question nodes in the QuestionTopBar, as we cannot check the app settings directly
-    cy.get('html').find(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 3);
-  });
-
-  describe('Create View', () => {
+  describe('Existing Quizz', () => {
     beforeEach(() => {
       cy.setUpApi({
         database: {
@@ -173,6 +186,55 @@ describe('Create View', () => {
       cy.get('html')
         .find(`.${QUESTION_STEP_CLASSNAME}`)
         .should('have.length', 5);
+    });
+
+    it('Update Question type should not create a new question', () => {
+      const numberOfQuestions = 4;
+
+      // Check the current number of questions
+      cy.get('html')
+        .find(`.${QUESTION_STEP_CLASSNAME}`)
+        .should('have.length', numberOfQuestions);
+
+      // update the question type and save
+      const updatedQuestion = {
+        question: 'My new text input question',
+        questionType: QuestionType.TEXT_INPUT,
+        answer: 'new answer',
+      };
+      cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
+      cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).type(
+        updatedQuestion.question
+      );
+      cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)}`).click();
+      cy.get(
+        `${dataCyWrapper(
+          buildQuestionTypeOption(updatedQuestion.questionType)
+        )}`
+      ).click();
+      cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)}`).type(
+        updatedQuestion.answer
+      );
+      cy.get(`${dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)}`).click();
+
+      // Check that the current number of questions is still unchanged
+      cy.get('html')
+        .find(`.${QUESTION_STEP_CLASSNAME}`)
+        .should('have.length', numberOfQuestions);
+
+      // Check the question title, question type and the answer
+      cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).should(
+        'have.value',
+        updatedQuestion.question
+      );
+      cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
+        'have.value',
+        updatedQuestion.questionType
+      );
+      cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).should(
+        'have.value',
+        updatedQuestion.answer
+      );
     });
   });
 });
