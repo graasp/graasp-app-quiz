@@ -109,6 +109,7 @@ const CreateView = () => {
                 questionId: newData.questionId,
                 question: newData.question,
                 explanation: newData.explanation,
+                numberOfAttempts: newData.numberOfAttempts,
               });
             }}
           />

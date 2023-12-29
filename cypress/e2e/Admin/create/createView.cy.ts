@@ -10,6 +10,7 @@ import {
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_DELETE_BUTTON_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
+  NUMBER_OF_ATTEMPTS_INPUT_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
@@ -190,6 +191,15 @@ describe('Create View', () => {
 
     it('Update Question type should not create a new question', () => {
       const numberOfQuestions = 4;
+      const numberOfAttempts = 3;
+
+      // update the number of attempts to ensure that changing question type
+      // keep the good the number of attempts.
+      cy.get(`${dataCyWrapper(NUMBER_OF_ATTEMPTS_INPUT_CY)} input`).clear();
+      cy.get(`${dataCyWrapper(NUMBER_OF_ATTEMPTS_INPUT_CY)} input`).type(
+        `${numberOfAttempts}`
+      );
+      cy.get(`${dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)}`).click();
 
       // Check the current number of questions
       cy.get('html')
@@ -222,7 +232,7 @@ describe('Create View', () => {
         .find(`.${QUESTION_STEP_CLASSNAME}`)
         .should('have.length', numberOfQuestions);
 
-      // Check the question title, question type and the answer
+      // Check the question title, question type, the answer and attempts.
       cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).should(
         'have.value',
         updatedQuestion.question
@@ -234,6 +244,10 @@ describe('Create View', () => {
       cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).should(
         'have.value',
         updatedQuestion.answer
+      );
+      cy.get(`${dataCyWrapper(NUMBER_OF_ATTEMPTS_INPUT_CY)} input`).should(
+        'have.value',
+        numberOfAttempts
       );
     });
   });
