@@ -27,7 +27,7 @@ const NumberOfAttempts = ({ initAttempts, onChange }: Props) => {
   const { t } = useTranslation();
   const MIN_ATTEMPTS = 1;
   const UNSET_NUMBER = 0;
-  
+
   const attemptsLabel = t(QUIZ_TRANSLATIONS.CREATE_VIEW_NUMBER_OF_ATTEMPTS);
   const [attempts, setAttempts] = useState<number>(MIN_ATTEMPTS);
 
@@ -35,16 +35,21 @@ const NumberOfAttempts = ({ initAttempts, onChange }: Props) => {
     setAttempts(initAttempts && initAttempts > 0 ? initAttempts : MIN_ATTEMPTS);
   }, [initAttempts]);
 
-  useEffect(() => {
-    if (onChange && attempts >= MIN_ATTEMPTS) {
-      onChange(attempts);
+  const notifyChanges = (newValue: number) => {
+    if (onChange && newValue >= MIN_ATTEMPTS) {
+      onChange(newValue);
     }
-  }, [attempts, onChange]);
+  };
 
-  const increaseAttempts = () => setAttempts(attempts + 1);
+  const updateAttempts = (newValue: number) => {
+    setAttempts(newValue);
+    notifyChanges(newValue);
+  };
+
+  const increaseAttempts = () => updateAttempts(attempts + 1);
   const decreaseAttempts = () => {
     if (attempts - 1 >= MIN_ATTEMPTS) {
-      setAttempts(attempts - 1);
+      updateAttempts(attempts - 1);
     }
   };
 
@@ -55,15 +60,15 @@ const NumberOfAttempts = ({ initAttempts, onChange }: Props) => {
 
   const handleTextChanged = ({ target }: { target: { value: string } }) => {
     if (!target.value) {
-      setAttempts(UNSET_NUMBER);
+      updateAttempts(UNSET_NUMBER);
     } else if (isValidInteger(target.value)) {
-      setAttempts(Number(target.value));
+      updateAttempts(Number(target.value));
     }
   };
 
   const setMinIfNotValid = () => {
     if (attempts < MIN_ATTEMPTS) {
-      setAttempts(MIN_ATTEMPTS);
+      updateAttempts(MIN_ATTEMPTS);
     }
   };
 
