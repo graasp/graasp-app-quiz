@@ -147,21 +147,24 @@ export const getAllAppDataByQuestionIdForMemberId = (
           creator?.id === memberId && data.questionId === questionId
       )
       // ensure to have an ascending sorts of createdAt
-      .sort(
-        (a: AppData, b: AppData) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      ) ?? []
+      .sort(sortAppDataByDate) ?? []
   );
+};
+
+export const sortAppDataByDate = (a: AppData, b: AppData, asc = true) => {
+  if (asc) {
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  }
+
+  return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 };
 
 export const getQuestionNameFromId = (
   appSettings: QuestionDataAppSetting[],
   qId: string
 ) => {
-  return (
-    appSettings?.find((setting) => setting.data.questionId === qId)?.data
-      .question ?? ''
-  );
+  return appSettings?.find((setting) => setting.data.questionId === qId)?.data
+    .question;
 };
 
 export const getAllAppDataByQuestionId = (

@@ -41,7 +41,7 @@ import {
   comparatorArrayByElemName,
   getComparator,
 } from '../../utils/tableUtils';
-import { computeCorrectness } from '../context/utilities';
+import { computeCorrectness, sortAppDataByDate } from '../context/utilities';
 import {
   MultipleChoiceAppDataData,
   QuestionAppDataData,
@@ -80,7 +80,10 @@ const TableByQuestion = ({
    * @returns A user response (May be undefined if user didn't respond to the current question)
    */
   const getResponseForUserId = (userId: string): AppData | undefined => {
-    const userResponses = responsesByUser[userId];
+    const userResponses = responsesByUser[userId]?.sort((a, b) =>
+      sortAppDataByDate(a, b, false)
+    );
+    // Get only the latest response
     return userResponses?.length > 0 ? userResponses[0] : undefined;
   };
 
@@ -187,7 +190,9 @@ const TableByQuestion = ({
               </TableRow>
             </TableHead>
             <TableBody
-              data-cy={buildTableByQuestionTableBodyCy(question.data.questionId)}
+              data-cy={buildTableByQuestionTableBodyCy(
+                question.data.questionId
+              )}
             >
               {memberList
                 ?.sort(
@@ -233,7 +238,8 @@ const TableByQuestion = ({
                         >
                           {computeCorrectness(
                             question.data,
-                            getResponseForUserId(id)?.data as QuestionAppDataData
+                            getResponseForUserId(id)
+                              ?.data as QuestionAppDataData
                           ) ? (
                             <CheckCircleOutlined color="success" />
                           ) : (

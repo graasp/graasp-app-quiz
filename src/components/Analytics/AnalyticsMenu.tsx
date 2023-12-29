@@ -90,6 +90,17 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
   const stackElemWidth = useElementWidth(stackElem);
   const sideMenuElemWidth = useElementWidth(sideMenuElem);
 
+  // TODO: check if it is possible to delete old answers app data
+  // For now, when a question is removed, the user answers still exists.
+  // It is needed to only display valid answers for existing questions only.
+  const nValidResponses = responses?.reduce((count, r) => {
+    const qId = r.data.questionId as string;
+    if (questionById[qId]) {
+      return count + 1;
+    }
+    return count;
+  }, 0);
+
   /**
    * List of question ordered, so that we can easily get the question represented by the index of a tab
    * useful to know the type of the question, to correctly get the charts to display for a question type
@@ -185,7 +196,7 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
   }
 
   return order.length > 0 ? (
-    responses && responses?.length > 0 ? (
+    responses && nValidResponses && nValidResponses > 0 ? (
       <Box data-cy={ANALYTICS_CONTAINER_CY}>
         <Stack direction="row" ref={(elem) => setStackElem(elem)}>
           <Box
