@@ -10,7 +10,6 @@ import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
-  CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
@@ -24,7 +23,10 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../../fixtures/appSettings';
 
 const t = i18n.t;
 
@@ -129,6 +131,8 @@ export const fillMultipleChoiceQuestion = (
   // save
   if (shouldSave) {
     cy.get(dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)).click();
+  } else {
+    cy.get(dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)).should('be.disabled');
   }
 };
 
@@ -147,11 +151,8 @@ describe('Multiple Choices', () => {
 
     // no question text
     const new1 = { ...newMultipleChoiceData, question: '' };
-    fillMultipleChoiceQuestion(new1);
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.EMPTY_QUESTION)
-    );
+    fillMultipleChoiceQuestion(new1, { shouldSave: false });
+    cy.checkErrorMessage({ errorMessage: t(FAILURE_MESSAGES.EMPTY_QUESTION) });
 
     // empty answer
     const new2 = {
@@ -162,10 +163,9 @@ describe('Multiple Choices', () => {
       ],
     };
     fillMultipleChoiceQuestion(new2, { shouldSave: false });
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE)
-    );
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE),
+    });
 
     // no correct answer
     const new3 = {
@@ -177,13 +177,12 @@ describe('Multiple Choices', () => {
       ],
     };
     fillMultipleChoiceQuestion(new3, { shouldSave: false });
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.MULTIPLE_CHOICES_CORRECT_ANSWER)
-    );
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.MULTIPLE_CHOICES_CORRECT_ANSWER),
+    });
 
     fillMultipleChoiceQuestion(newMultipleChoiceData);
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
+    cy.checkErrorMessage({});
 
     cy.checkExplanationField(newMultipleChoiceData.explanation);
   });

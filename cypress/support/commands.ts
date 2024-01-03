@@ -4,6 +4,7 @@ import { Context, PermissionLevel } from '@graasp/sdk';
 import { API_HOST } from '../../src/config/constants';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
+  CREATE_VIEW_ERROR_ALERT_CY,
   EXPLANATION_CY,
   EXPLANATION_PLAY_CY,
   NAVIGATION_ANALYTICS_BUTTON_CY,
@@ -195,6 +196,39 @@ Cypress.Commands.add(
           isCorrect ? 'success' : 'error'
         );
       });
+    }
+  }
+);
+
+Cypress.Commands.add(
+  'checkErrorMessage',
+  ({
+    errorMessage,
+    severity = 'warning',
+  }: {
+    errorMessage?: string;
+    severity?: 'error' | 'warning';
+  } = {}) => {
+    const MUI_ALERT_WARNING = 'MuiAlert-standardWarning'.toLowerCase();
+    const MUI_ALERT_ERROR = 'MuiAlert-standardError'.toLowerCase();
+
+    if (errorMessage) {
+      cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
+        'contain',
+        errorMessage
+      );
+
+      cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).then(($el) => {
+        if (severity === 'warning') {
+          expect($el.attr('class').toLowerCase()).to.contain(MUI_ALERT_WARNING);
+        } else if (severity === 'error') {
+          expect($el.attr('class').toLowerCase()).to.contain(
+            MUI_ALERT_ERROR
+          );
+        }
+      });
+    } else {
+      cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
     }
   }
 );

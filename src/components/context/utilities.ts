@@ -250,11 +250,11 @@ export const validateQuestionData = (data: QuestionData) => {
 
       break;
     // enable following lines to prevent empty correct answer
-    // case QuestionType.TEXT_INPUT:
-    //   if (!data?.text?.length) {
-    //     throw FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY;
-    //   }
-    //   break;
+    case QuestionType.TEXT_INPUT:
+      if (!data?.text?.length) {
+        throw FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY;
+      }
+      break;
     default:
       return true;
   }
