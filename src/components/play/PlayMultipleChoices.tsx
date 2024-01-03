@@ -76,7 +76,7 @@ const PlayMultipleChoices = ({
     const isSelected = Boolean(response.choices?.includes(value));
     const dataCy = buildMultipleChoicesButtonCy(idx, isSelected);
 
-    if (showCorrection || (isSelected && showCorrectness)) {
+    if (showCorrection) {
       switch (true) {
         case isCorrect && isSelected:
           return {
