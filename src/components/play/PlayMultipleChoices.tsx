@@ -1,7 +1,10 @@
+import { useTranslation } from 'react-i18next';
+
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, ButtonProps, Typography } from '@mui/material';
 
 import { buildMultipleChoicesButtonCy } from '../../config/selectors';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import theme from '../../layout/theme';
 import {
   MultipleChoiceAppDataData,
@@ -25,6 +28,8 @@ const PlayMultipleChoices = ({
   showCorrectness,
   isReadonly,
 }: Props): JSX.Element => {
+  const { t } = useTranslation();
+
   const onResponseClick =
     (value: string): ButtonProps['onClick'] =>
     (_e) => {
@@ -50,6 +55,15 @@ const PlayMultipleChoices = ({
       }
     };
 
+  const hasError =
+    choices.reduce((acc, { value, isCorrect }) => {
+      if (!showCorrectness) {
+        return acc + 1;
+      }
+      const isSelected = Boolean(response.choices?.includes(value));
+      return acc + (isSelected && isCorrect ? 1 : 0);
+    }, 0) !== choices.length;
+
   const computeStyles = (
     { value, isCorrect }: { value: string; isCorrect: boolean },
     idx: number
@@ -62,7 +76,7 @@ const PlayMultipleChoices = ({
     const isSelected = Boolean(response.choices?.includes(value));
     const dataCy = buildMultipleChoicesButtonCy(idx, isSelected);
 
-    if (showCorrection || (isSelected && showCorrectness)) {
+    if (showCorrection) {
       switch (true) {
         case isCorrect && isSelected:
           return {
@@ -131,6 +145,12 @@ const PlayMultipleChoices = ({
           </Button>
         );
       })}
+
+      {hasError && !showCorrection && (
+        <Typography variant="body1" color="error">
+          {t(QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_NOT_CORRECT)}
+        </Typography>
+      )}
     </>
   );
 };

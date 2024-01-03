@@ -14,6 +14,7 @@ type Props = {
   response?: MultipleChoiceAppDataData;
   showCorrection: boolean;
   showCorrectness: boolean;
+  showMultipleExplanationOnCorrectness?: boolean;
 };
 
 const PlayExplanation = ({
@@ -21,6 +22,7 @@ const PlayExplanation = ({
   response,
   showCorrection,
   showCorrectness,
+  showMultipleExplanationOnCorrectness = false,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -36,7 +38,9 @@ const PlayExplanation = ({
             .filter(
               (c) =>
                 Boolean(c.explanation) &&
-                (showCorrection || response?.choices?.includes(c.value))
+                (showCorrection ||
+                  (showMultipleExplanationOnCorrectness &&
+                    response?.choices?.includes(c.value)))
             )
             .map((c, idx) => (
               <li key={idx} data-cy={buildMultipleChoiceExplanationPlayCy(idx)}>
@@ -50,7 +54,8 @@ const PlayExplanation = ({
 
   const mcExplanations = renderMultipleChoicesExplanations();
   const displayExplanation =
-    showCorrection || (showCorrectness && mcExplanations);
+    showCorrection ||
+    (showMultipleExplanationOnCorrectness && showCorrectness && mcExplanations);
 
   if (!currentQuestionData.explanation && !mcExplanations) {
     return null;

@@ -81,5 +81,6 @@ export default {
     NO_DATA_FOR_GENERAL_CHARTS: 'Aucune donnée n\'a été trouvé pour les graphiques.',
     ATTEMPTS_PROGRESS_NUMBER_OF_ATTEMPTS: 'Nombre de tentatives',
     CREATE_VIEW_NUMBER_OF_ATTEMPTS: 'Nombre de tentatives',
+    MULTIPLE_CHOICE_NOT_CORRECT: "La réponse est incorrecte ou n'est pas entièrement correcte.",
   },
 };

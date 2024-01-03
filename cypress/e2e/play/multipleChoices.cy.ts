@@ -57,26 +57,18 @@ const checkCorrection = (selection: number[], showCorrection = true) => {
     })();
     cy.get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, wasSelected))).then(
       ($el) => {
-        if (wasSelected || showCorrection) {
+        if (showCorrection) {
           expect($el.attr('class').toLowerCase()).to.contain(correction);
         } else if (correction) {
           expect($el.attr('class').toLowerCase()).to.not.contain(correction);
         }
       }
     );
-    // Because multiplechoice explanation is displayed for each selection or all when show correction is on,
-    // it is easier to test that the explanation bloc doesn't contains the explanation, instead of
-    // verifying each buildMultipleChoiceExplanationPlayCy individually.
-    // Indeed, checking individually may cause problem of indexes, causing selection of inexisting explanation.
-    if (wasSelected || showCorrection) {
+
+    if (showCorrection) {
       cy.get(dataCyWrapper(EXPLANATION_PLAY_CY)).should('contain', explanation);
     } else {
-      if (explanation) {
-        cy.get(dataCyWrapper(EXPLANATION_PLAY_CY)).should(
-          'not.contain',
-          explanation
-        );
-      }
+      cy.get(dataCyWrapper(EXPLANATION_PLAY_CY)).should('not.exist');
     }
   });
 
