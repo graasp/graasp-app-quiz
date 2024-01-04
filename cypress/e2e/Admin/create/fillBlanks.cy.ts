@@ -26,6 +26,7 @@ const newFillBlanksData = {
   question: 'new question text',
   text: 'My text with <blanks> and more <blanks>',
   explanation: 'new explanation',
+  hints: 'new hints',
 };
 
 const { data } = QUESTION_APP_SETTINGS.find(
@@ -41,7 +42,8 @@ const fillBlanksQuestion = (
     text,
     question,
     explanation,
-  }: { text: string; question: string; explanation: string },
+    hints,
+  }: { text: string; question: string; explanation: string; hints: string },
   { shouldSave = true } = {}
 ) => {
   // fill question
@@ -55,6 +57,7 @@ const fillBlanksQuestion = (
     cy.get(dataCyWrapper(FILL_BLANKS_TEXT_FIELD_CY)).type(text);
   }
 
+  cy.fillHints(hints);
   cy.fillExplanation(explanation);
 
   // save
@@ -133,6 +136,7 @@ describe('Fill in the Blanks', () => {
         'have.value',
         data.text
       );
+      cy.checkHintsField(data.hints);
       cy.checkExplanationField(data.explanation);
     });
 
@@ -152,6 +156,7 @@ describe('Fill in the Blanks', () => {
         'have.value',
         newFillBlanksData.text
       );
+      cy.checkHintsField(newFillBlanksData.hints);
       cy.checkExplanationField(newFillBlanksData.explanation);
     });
   });

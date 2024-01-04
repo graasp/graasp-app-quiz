@@ -12,7 +12,10 @@ import {
   CREATE_VIEW_DELETE_BUTTON_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
+  EXPLANATION_CY,
+  HINTS_CY,
 } from '../../config/selectors';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { QuizContext } from '../context/QuizContext';
 import { isDifferent, validateQuestionData } from '../context/utilities';
 import {
@@ -21,7 +24,6 @@ import {
 } from '../types/types';
 import { QuestionData } from '../types/types';
 import CreateQuestionTopBar from './CreateQuestionTopBar';
-import Explanation from './Explanation';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
 import NumberOfAttempts from './NumberOfAttempts';
@@ -29,6 +31,7 @@ import QuestionTitle from './QuestionTitle';
 import QuestionTypeSelect from './QuestionTypeSelect';
 import Slider from './Slider';
 import TextInput from './TextInput';
+import TitleDescriptionTextField from './TitleDescriptionTextField';
 
 type ValidationSeverity = 'warning' | 'error';
 
@@ -46,7 +49,7 @@ const CreateView = () => {
   const [errorMessage, setErrorMessage] = useState<ValidationMessage | null>();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Reset is submitted when currentIdx changed to 
+  // Reset is submitted when currentIdx changed to
   // display errorMessage with the correct severity.
   useEffect(() => {
     setIsSubmitted(false);
@@ -204,7 +207,28 @@ const CreateView = () => {
         </Grid>
 
         <Grid item>
-          <Explanation
+          <TitleDescriptionTextField
+            title={t(QUIZ_TRANSLATIONS.HINTS_TITLE)}
+            subTitle={t(QUIZ_TRANSLATIONS.HINTS_SUB_TITLE)}
+            label={t(QUIZ_TRANSLATIONS.HINTS_LABEL)}
+            value={newData.hints}
+            onChange={(hints: string) => {
+              setNewData({
+                ...newData,
+                hints,
+              });
+            }}
+            dataCy={HINTS_CY}
+          />
+        </Grid>
+
+        <Grid item>
+          <TitleDescriptionTextField
+            title={t('Explanation')}
+            subTitle={t(
+              'Type here an explanation that will be displayed after an answer is submitted'
+            )}
+            label={t('Explanation')}
             value={newData.explanation}
             onChange={(explanation: string) => {
               setNewData({
@@ -212,6 +236,7 @@ const CreateView = () => {
                 explanation,
               });
             }}
+            dataCy={EXPLANATION_CY}
           />
         </Grid>
         {errorMessage && (

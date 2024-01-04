@@ -33,6 +33,7 @@ import {
 } from '../types/types';
 import PlayExplanation from './PlayExplanation';
 import PlayFillInTheBlanks from './PlayFillInTheBlanks';
+import PlayHints from './PlayHints';
 import PlayMultipleChoices from './PlayMultipleChoices';
 import PlaySlider from './PlaySlider';
 import PlayTextInput from './PlayTextInput';
@@ -255,6 +256,15 @@ const PlayView = () => {
           }
         })()}
       </Grid>
+
+      <PlayHints
+        hints={currentQuestion.data.hints}
+        isCorrect={isCorrect}
+        currentAttempts={userAnswers.length}
+        maxAttempts={maxAttempts}
+        mt={4}
+      />
+
       <PlayExplanation
         showCorrection={showCorrection}
         showCorrectness={showCorrectness}

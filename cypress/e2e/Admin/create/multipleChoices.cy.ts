@@ -63,6 +63,7 @@ const newMultipleChoiceData = {
     },
   ],
   explanation: 'my new explanation',
+  hints: 'my new hints',
 };
 
 export const fillMultipleChoiceQuestion = (
@@ -70,10 +71,12 @@ export const fillMultipleChoiceQuestion = (
     choices,
     question,
     explanation,
+    hints,
   }: {
     choices: MultipleChoicesChoice[];
     question: string;
     explanation: string;
+    hints: string;
   },
   { shouldSave = true } = {}
 ) => {
@@ -126,6 +129,7 @@ export const fillMultipleChoiceQuestion = (
     });
   });
 
+  cy.fillHints(hints);
   cy.fillExplanation(explanation);
 
   // save
@@ -184,6 +188,7 @@ describe('Multiple Choices', () => {
     fillMultipleChoiceQuestion(newMultipleChoiceData);
     cy.checkErrorMessage({});
 
+    cy.checkHintsField(newMultipleChoiceData.hints);
     cy.checkExplanationField(newMultipleChoiceData.explanation);
   });
 
@@ -286,6 +291,7 @@ describe('Multiple Choices', () => {
       });
       cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
 
+      cy.checkHintsField(data.hints);
       cy.checkExplanationField(data.explanation);
     });
 
@@ -312,6 +318,7 @@ describe('Multiple Choices', () => {
         ).should(isCorrect ? 'be.checked' : 'not.be.checked');
       });
 
+      cy.checkHintsField(newMultipleChoiceData.hints);
       cy.checkExplanationField(newMultipleChoiceData.explanation);
     });
 

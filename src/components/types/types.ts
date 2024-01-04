@@ -33,6 +33,7 @@ export type AppSettingData = {
   question: string;
   questionId: string;
   explanation?: string;
+  hints?: string;
   numberOfAttempts?: number;
 };
 

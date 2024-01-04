@@ -1,7 +1,6 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
 import {
-  EXPLANATION_PLAY_CY,
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
   QUESTION_BAR_CY,
@@ -55,7 +54,8 @@ describe('Play View', () => {
       expect($el.attr('class').toLowerCase()).not.to.contain('success');
     });
 
-    cy.get(`${dataCyWrapper(EXPLANATION_PLAY_CY)}`).should('not.exist');
+    cy.checkHintsPlay(null);
+    cy.checkExplanationPlay(null);
   });
 
   describe('Play View', () => {

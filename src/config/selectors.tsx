@@ -46,6 +46,8 @@ export const buildPlayViewTextInputCy = (isCorrect?: boolean) =>
   `playViewTextInput-${isCorrect}`;
 export const EXPLANATION_CY = 'explanation';
 export const EXPLANATION_PLAY_CY = 'explanationPlay';
+export const HINTS_CY = 'hints';
+export const HINTS_PLAY_CY = 'hintsPlay';
 export const buildFillBlanksAnswerId = (id: number) => `fillBlanksAnswer-${id}`;
 export const buildBlankedTextWordCy = (id: number) =>
   `fillBlankedTextWord-${id}`;

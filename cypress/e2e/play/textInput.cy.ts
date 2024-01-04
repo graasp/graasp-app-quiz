@@ -1,6 +1,6 @@
 import { Context } from '@graasp/sdk';
 
-import { TextAppDataData } from '../../../src/components/types/types';
+import { AppSettingData, TextAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -26,6 +26,8 @@ const { data } = QUESTION_APP_SETTINGS.find(
 const id = data.questionId;
 
 const { text } = data as TextAppDataData;
+
+const textAppSettingsData = APP_SETTINGS[1].data as AppSettingData;
 
 const getPlayViewTextInputCy = (isCorrect: boolean) =>
   buildPlayViewTextInputCy(isCorrect);
@@ -122,6 +124,7 @@ describe('Play Text Input', () => {
           'be.empty'
         );
 
+        cy.checkHintsPlay(null);
         cy.checkExplanationPlay(null);
       });
 
@@ -130,6 +133,7 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(true);
 
+        cy.checkHintsPlay(null);
         cy.checkExplanationPlay(data.explanation);
 
         checkInputDisabled(true, true);
@@ -143,6 +147,7 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(false);
 
+        cy.checkHintsPlay(null);
         cy.checkExplanationPlay(data.explanation);
 
         checkInputDisabled(true, false);
@@ -153,6 +158,8 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(true);
 
+        cy.checkHintsPlay(null);
+        
         checkInputDisabled(true, true);
       });
 
@@ -160,6 +167,8 @@ describe('Play Text Input', () => {
         submitAnswer(`${data.text} `);
 
         checkAnswerAndHeaderStatus(true);
+
+        cy.checkHintsPlay(null);
 
         checkInputDisabled(true, true);
       });
@@ -169,6 +178,8 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(true);
 
+        cy.checkHintsPlay(null);
+
         checkInputDisabled(true, true);
       });
 
@@ -176,6 +187,8 @@ describe('Play Text Input', () => {
         submitAnswer(` ${data.text}`);
 
         checkAnswerAndHeaderStatus(true);
+
+        cy.checkHintsPlay(null);
 
         checkInputDisabled(true, true);
       });
@@ -214,6 +227,7 @@ describe('Play Text Input', () => {
           isCorrect: true,
         });
 
+        cy.checkHintsPlay(null);
         cy.checkExplanationPlay(data.explanation);
       });
 
@@ -229,6 +243,7 @@ describe('Play Text Input', () => {
           isCorrect: false,
         });
         explanationShouldNotBeVisible();
+        cy.checkHintsPlay(textAppSettingsData.hints);
 
         const incorrectAnswer = 'still incorrect answer';
         submitAnswer(incorrectAnswer, true);
@@ -237,6 +252,7 @@ describe('Play Text Input', () => {
         checkAnswerAndHeaderStatus(false);
         checkTextValueEquals(incorrectAnswer, false);
         explanationShouldNotBeVisible();
+        cy.checkHintsPlay(textAppSettingsData.hints);
 
         submitAnswer('still not correct', true);
         checkAnswerAndHeaderStatus(false);
@@ -247,6 +263,7 @@ describe('Play Text Input', () => {
           isCorrect: false,
         });
         cy.checkExplanationPlay(data.explanation);
+        cy.checkHintsPlay(null);
       });
 
       it('Incorrect, but then correct app data', () => {
@@ -262,6 +279,7 @@ describe('Play Text Input', () => {
           isCorrect: false,
         });
         explanationShouldNotBeVisible();
+        cy.checkHintsPlay(textAppSettingsData.hints);
 
         submitAnswer(text, true);
         checkAnswerAndHeaderStatus(true);
@@ -272,6 +290,7 @@ describe('Play Text Input', () => {
           isCorrect: true,
         });
         cy.checkExplanationPlay(data.explanation);
+        cy.checkHintsPlay(null);
       });
     });
   });
@@ -317,6 +336,7 @@ describe('Play Text Input', () => {
         checkTextValueEquals(incorrectAppData.data.text, false);
 
         cy.checkExplanationPlay(data.explanation);
+        cy.checkHintsPlay(null);
       });
     });
 
@@ -341,6 +361,7 @@ describe('Play Text Input', () => {
           checkTextValueEquals(incorrectAppData.data.text, false);
 
           explanationShouldNotBeVisible();
+          cy.checkHintsPlay(textAppSettingsData.hints);
           checkInputDisabled(false, false);
           checkAnswerAndHeaderStatus(false);
 
@@ -348,6 +369,7 @@ describe('Play Text Input', () => {
           checkAnswerAndHeaderStatus(true);
           checkInputDisabled(true, true);
           cy.checkExplanationPlay(data.explanation);
+          cy.checkHintsPlay(null);
         });
       });
 
@@ -373,6 +395,7 @@ describe('Play Text Input', () => {
           checkAnswerAndHeaderStatus(true);
           checkInputDisabled(true, true);
           cy.checkExplanationPlay(data.explanation);
+          cy.checkHintsPlay(null);
         });
       });
     });
