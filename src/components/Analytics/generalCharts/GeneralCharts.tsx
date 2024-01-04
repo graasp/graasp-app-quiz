@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import { AppData, Member } from '@graasp/sdk';
 
 import { Chart, MultipleRefs, QuestionDataAppSetting } from '../../types/types';
-import { GeneralChartType } from '../AnalyticsCharts';
+import { GeneralChartType } from '../analyticsChartsUtils';
 import CorrectResponsePerUser from './CorrectResponsePerUser';
 import CorrectResponsesPercentage from './CorrectResponsesPercentage';
 import QuestionDifficulty from './QuestionDifficulty';

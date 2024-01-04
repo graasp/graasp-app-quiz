@@ -44,7 +44,7 @@ const CreateQuestionTopBar = () => {
   } = useContext(QuizContext);
 
   const questionsInOrder = order
-    .map((qId: string, index: number) => {
+    .map((qId: string, _index: number) => {
       const question = getQuestionById(questions, qId);
 
       if (!question) {

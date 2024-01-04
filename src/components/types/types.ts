@@ -1,9 +1,10 @@
+import { PlotDatum } from 'plotly.js-basic-dist-min';
+
 import { MutableRefObject } from 'react';
 
 import { AppData, AppSetting } from '@graasp/sdk';
 
 import { QuestionType } from '../../config/constants';
-import { PlotDatum } from 'plotly.js-basic-dist-min';
 
 export type AppDataData = {
   questionId: string;
@@ -96,12 +97,13 @@ export type DetailedChart = {
   chartIndex: number;
 };
 
-export type Chart = {
+export type BaseChart = {
   label: string;
   id: string;
-  link: string;
   chartType: symbol;
 } & (CommonChart | DetailedChart);
+
+export type Chart<T extends BaseChart = BaseChart> = T & { link: string };
 
 interface ChartPoint<T> extends PlotDatum {
   meta?: T;
@@ -120,4 +122,7 @@ export type QuestionAppData<T extends QuestionData> = Omit<
   T,
   keyof AppSettingData
 >;
-export type QuestionAppDataData = MultipleChoiceAppDataData | FillTheBlanksAppDataData | SliderAppDataData;
+export type QuestionAppDataData =
+  | MultipleChoiceAppDataData
+  | FillTheBlanksAppDataData
+  | SliderAppDataData;

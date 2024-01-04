@@ -2,7 +2,6 @@ import { Context, PermissionLevel } from '@graasp/sdk';
 
 import {
   APP_SETTING_NAMES,
-  DEFAULT_QUESTION,
   FAILURE_MESSAGES,
   QuestionType,
 } from '../../../../src/config/constants';
@@ -18,7 +17,8 @@ import {
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import {
-  APP_SETTINGS, QUESTION_APP_SETTINGS,
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
 } from '../../../fixtures/appSettings';
 
 const t = i18n.t;
@@ -43,11 +43,8 @@ const fillBlanksQuestion = (
     question,
     explanation,
   }: { text: string; question: string; explanation: string },
-  originalAppSettingData: object = DEFAULT_QUESTION.data,
   { shouldSave = true } = {}
 ) => {
-  console.debug(originalAppSettingData);
-
   // fill question
   cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
   if (question.length) {
@@ -84,7 +81,7 @@ describe('Fill in the Blanks', () => {
 
     // empty text
     const new1 = { ...newFillBlanksData, text: '' };
-    fillBlanksQuestion(new1, DEFAULT_QUESTION.data);
+    fillBlanksQuestion(new1);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
       t(FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT)
@@ -95,13 +92,13 @@ describe('Fill in the Blanks', () => {
       ...newFillBlanksData,
       text: 'my <faulty< text with <blanks>',
     };
-    fillBlanksQuestion(new2, new1, { shouldSave: false });
+    fillBlanksQuestion(new2, { shouldSave: false });
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
       'contain',
       t(FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS)
     );
 
-    fillBlanksQuestion(newFillBlanksData, new2);
+    fillBlanksQuestion(newFillBlanksData);
 
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
   });
@@ -142,7 +139,7 @@ describe('Fill in the Blanks', () => {
     });
 
     it('Update question', () => {
-      fillBlanksQuestion(newFillBlanksData, data);
+      fillBlanksQuestion(newFillBlanksData);
 
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();

@@ -1,25 +1,25 @@
 import { TFunction } from 'i18next';
 
+import { QuestionType } from '../../config/constants';
 import { ANSWER_REGEXP } from '../../utils/fillInTheBlanks';
 import { formatInnerLink } from '../../utils/tableUtils';
-import { Chart, FillTheBlanksAppDataData } from '../types/types';
-import { QuestionType } from '../../config/constants';
+import { BaseChart, Chart, FillTheBlanksAppDataData } from '../types/types';
 
 /**
  * Object representing an enum of possible chart type, for the per-question detailed charts
  */
-export const DetailedChartType = Object.freeze({
+export const DetailedChartType = {
   ANSWER_FREQUENCY: Symbol('answerFreq'),
-});
+} as const;
 
 /**
  * Object representing an enum of possible chart type, for the general chart section
  */
-export const GeneralChartType = Object.freeze({
+export const GeneralChartType = {
   QUIZ_PERFORMANCE: Symbol('quizPerf'),
   USER_PERFORMANCE: Symbol('userPerf'),
   QUIZ_CORRECT_PERCENTAGE: Symbol('quizCorrectPercentage'),
-});
+} as const;
 
 /**
  * Function to get the general charts
@@ -36,21 +36,18 @@ export const generalCharts = (t: TFunction) =>
       id: 'quiz-performance',
       chartType: GeneralChartType.QUIZ_PERFORMANCE,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink 
     },
     {
       label: t('Users performance'),
       id: 'users-performance',
       chartType: GeneralChartType.USER_PERFORMANCE,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink 
     },
     {
       label: t('Quiz correct response percentage'),
       id: 'quiz-correctness-percentage',
       chartType: GeneralChartType.QUIZ_CORRECT_PERCENTAGE,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink 
     },
   ]);
 
@@ -78,7 +75,7 @@ export const fillInTheBlankCharts = (
           id: `${t('Question answer frequency')} ${t('blank')} ${idx + 1}`,
           chartType: DetailedChartType.ANSWER_FREQUENCY,
           chartIndex: idx,
-          link: '', // Will be replaced in the adaptWithLink 
+          link: '', // Will be replaced in the adaptWithLink
           type: QuestionType.FILL_BLANKS,
         };
       })
@@ -103,7 +100,7 @@ export const multipleChoicesCharts = (t: TFunction) =>
       // todo: use this id for building class and data-cy
       id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
-      link: '', // Will be replaced in the adaptWithLink 
+      link: '', // Will be replaced in the adaptWithLink
       type: 'chart',
     },
   ]);
@@ -124,7 +121,7 @@ export const sliderCharts = (t: TFunction) =>
       id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink 
+      link: '', // Will be replaced in the adaptWithLink
     },
   ]);
 
@@ -144,7 +141,7 @@ export const textInputCharts = (t: TFunction) =>
       id: t('Question answer frequency'),
       chartType: DetailedChartType.ANSWER_FREQUENCY,
       type: 'chart',
-      link: '', // Will be replaced in the adaptWithLink 
+      link: '', // Will be replaced in the adaptWithLink
     },
   ]);
 
@@ -153,7 +150,7 @@ export const textInputCharts = (t: TFunction) =>
  *
  * @param charts The list of charts to which to add the link property
  */
-const adaptWithLink = <T extends Chart>(charts: T[]) =>
+const adaptWithLink = <T extends BaseChart>(charts: T[]): Chart<T>[] =>
   charts.map((chart) => {
     return {
       ...chart,

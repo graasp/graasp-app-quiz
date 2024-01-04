@@ -74,7 +74,7 @@ const QuestionDifficulty = ({
    */
   const chartData = useMemo(() => {
     const responsesByQId = groupBy(responses, (r) => r.data.questionId);
-    return order.reduce(
+    return order.reduce<Chart>(
       (acc, qId, idx) => {
         const question = getQuestionById(questions, qId);
 
@@ -106,14 +106,14 @@ const QuestionDifficulty = ({
             [
               nbCorrectAndIncorrect[0] / responses.length,
               question.data.questionId,
-            ] as PercentageMetaType,
+            ],
           ],
           percentageIncorrect: [
             ...acc.percentageIncorrect,
             [
               nbCorrectAndIncorrect[1] / responses.length,
               question.data.questionId,
-            ] as PercentageMetaType,
+            ],
           ],
           maxValue: Math.max(acc.maxValue, responses.length),
           hoverText: [...acc.hoverText, question.data.question],
@@ -126,7 +126,7 @@ const QuestionDifficulty = ({
         percentageIncorrect: [],
         maxValue: 0,
         hoverText: [],
-      } as Chart
+      }
     );
   }, [questions, responses, order]);
 

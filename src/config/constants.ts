@@ -1,10 +1,10 @@
+import { UnionOfConst } from '@graasp/sdk';
 import {
   MultipleChoicesAppSettingData,
   QuestionDataAppSetting,
 } from '../components/types/types';
 
-export type AppSettingName =
-  (typeof APP_SETTING_NAMES)[keyof typeof APP_SETTING_NAMES];
+export type AppSettingName = UnionOfConst<typeof APP_SETTING_NAMES>;
 
 export const APP_SETTING_NAMES = {
   QUESTION: 'question',

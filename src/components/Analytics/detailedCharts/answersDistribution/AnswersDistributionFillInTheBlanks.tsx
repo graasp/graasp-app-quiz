@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useTheme } from '@mui/material';
 
-import { AppData } from '@graasp/sdk';
-
 import { splitSentence } from '../../../../utils/fillInTheBlanks';
 import { truncateText } from '../../../../utils/plotUtils';
 import {
@@ -19,7 +17,7 @@ import AnswersDistributionBarChart from './AnswersDistributionBarChart';
 type Props = {
   maxWidth: number;
   questionData: FillTheBlanksAppSettingData;
-  appDataForQuestion: (AppData & { data: FillTheBlanksAppDataData })[];
+  appDataForQuestion: FillTheBlanksAppDataData[];
   chartIndex: number;
 };
 
@@ -41,23 +39,20 @@ const AnswersDistributionFillInTheBlanks = ({
   const { t } = useTranslation();
   const responsesByFilledWords = useMemo(() => {
     const responsesWithFilledWord = appDataForQuestion.map((appData) => {
-      const { answers } = splitSentence(appData.data.text, questionData.text);
+      const { answers } = splitSentence(appData.text, questionData.text);
       return {
         ...appData,
-        data: {
-          ...appData.data,
-          filledWord: answers[chartIndex],
-        },
+        filledWord: answers[chartIndex],
       };
     });
-    return groupBy(responsesWithFilledWord, (r) => r.data.filledWord.text);
+    return groupBy(responsesWithFilledWord, (r) => r.filledWord.text);
   }, [appDataForQuestion, questionData, chartIndex]);
 
   const chartData = useMemo(
     () =>
-      Object.entries(responsesByFilledWords).reduce(
+      Object.entries(responsesByFilledWords).reduce<ChartData>(
         (acc, [filledWord, list], idx) => {
-          const placedWords = list[0].data.filledWord;
+          const placedWords = list[0].filledWord;
           return {
             data: {
               x: [
@@ -86,7 +81,7 @@ const AnswersDistributionFillInTheBlanks = ({
           maxValue: 0,
           hoverText: [],
           barColors: [],
-        } as ChartData
+        }
       ),
     [responsesByFilledWords, appDataForQuestion, theme, questionData]
   );

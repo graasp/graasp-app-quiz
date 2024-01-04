@@ -18,7 +18,7 @@ import {
   SliderAppDataData,
   TextAppDataData,
 } from '../../types/types';
-import { DetailedChartType } from '../AnalyticsCharts';
+import { DetailedChartType } from '../analyticsChartsUtils';
 import AnswersDistributionFillInTheBlanks from './answersDistribution/AnswersDistributionFillInTheBlanks';
 import AnswersDistributionMultipleChoices from './answersDistribution/AnswersDistributionMultipleChoices';
 import AnswersDistributionSlider from './answersDistribution/AnswersDistributionSlider';
@@ -49,11 +49,6 @@ const QuestionDetailedCharts = ({
   responses,
 }: Props) => {
   const { t } = useTranslation();
-
-  const appDataForQuestion = useMemo(
-    () => getAllAppDataByQuestionId(responses, question.data.questionId),
-    [responses, question]
-  );
 
   const appDataDataForQuestion = useMemo(
     () =>
@@ -97,17 +92,14 @@ const QuestionDetailedCharts = ({
             />
           );
         case QuestionType.FILL_BLANKS: {
-          const fillAppData = appDataForQuestion.map((appData) => ({
-            ...appData,
-            data: appData.data as FillTheBlanksAppDataData,
-          }));
-
           if (chart.type === QuestionType.FILL_BLANKS) {
             return (
               <AnswersDistributionFillInTheBlanks
                 maxWidth={maxWidth}
                 questionData={question.data}
-                appDataForQuestion={fillAppData}
+                appDataForQuestion={
+                  appDataDataForQuestion as FillTheBlanksAppDataData[]
+                }
                 chartIndex={chart.chartIndex}
               />
             );
@@ -119,7 +111,7 @@ const QuestionDetailedCharts = ({
           return <Typography> {t('Error, question type unknown')} </Typography>;
       }
     },
-    [question.data, maxWidth, appDataDataForQuestion, t, appDataForQuestion]
+    [question.data, maxWidth, appDataDataForQuestion, t]
   );
 
   /**

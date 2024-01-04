@@ -65,7 +65,7 @@ const CorrectResponsesPercentage = ({
   );
 
   const chartData = useMemo(() => {
-    return order.reduce(
+    return order.reduce<ChartData>(
       (acc, qId, idx) => {
         const question = getQuestionById(questions, qId);
 
@@ -97,7 +97,7 @@ const CorrectResponsesPercentage = ({
         data: { x: [], y: [] },
         hoverText: [],
         qIds: [],
-      } as ChartData
+      }
     );
   }, [questions, responsesByQId, order]);
 

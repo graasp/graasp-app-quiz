@@ -15,8 +15,6 @@ import { CircularProgress, Stack, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { AppSettingData } from '@graasp/apps-query-client';
-
 import { QuestionType } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
 import {
@@ -34,14 +32,14 @@ import { getFirstOrUndefined } from '../../utils/array';
 import { QuizContext } from '../context/QuizContext';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
 import TabPanel from '../navigation/TabPanel';
-import { Chart, FillTheBlanksAppDataData } from '../types/types';
+import { Chart, QuestionData } from '../types/types';
 import {
   fillInTheBlankCharts,
   generalCharts,
   multipleChoicesCharts,
   sliderCharts,
   textInputCharts,
-} from './AnalyticsCharts';
+} from './analyticsChartsUtils';
 import QuestionDetailedCharts from './detailedCharts/QuestionDetailedCharts';
 import GeneralCharts from './generalCharts/GeneralCharts';
 
@@ -76,11 +74,11 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
   const [sideMenuElem, setSideMenuElem] = useState<HTMLElement | null>(null);
   const chartTabs = useRef(null);
   const maxResultViewHeight = useMaxAvailableHeightInWindow(
-    headerElem?.current ?? undefined
+    headerElem?.current
   );
   const maxHeightScrollableMenu = useMaxAvailableHeightWithParentHeight(
     maxResultViewHeight,
-    chartTabs.current ?? undefined
+    chartTabs.current
   );
   const [tab, setTab] = useState(0);
 
@@ -105,10 +103,10 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
    * Callback to get the charts given the type of the question that has been selected
    */
   const getChartsForType = useCallback(
-    (question: AppSettingData) => {
+    (question: QuestionData) => {
       switch (question?.type) {
         case QuestionType.FILL_BLANKS:
-          return fillInTheBlankCharts(t, question as FillTheBlanksAppDataData);
+          return fillInTheBlankCharts(t, question);
         case QuestionType.SLIDER:
           return sliderCharts(t);
         case QuestionType.TEXT_INPUT:
@@ -116,7 +114,10 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
         case QuestionType.MULTIPLE_CHOICES:
           return multipleChoicesCharts(t);
         default: {
-          const errMsg = `The provided question type (${question?.type}) is unknown`;
+          const errMsg = `The provided question type (${
+            // the casting here is necessary because there might be some old data that does not exactly fit into the provided union type.
+            (question as { type?: string })?.type
+          }) is unknown`;
           console.error(errMsg);
           throw new Error(errMsg);
         }

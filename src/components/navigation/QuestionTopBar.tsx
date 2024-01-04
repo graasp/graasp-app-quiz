@@ -30,7 +30,7 @@ import {
   getAppDataByQuestionIdForMemberId,
   getQuestionById,
 } from '../context/utilities';
-import { AppDataQuestion, QuestionAppDataData, QuestionData } from '../types/types';
+import { AppDataQuestion, QuestionAppDataData } from '../types/types';
 
 const QuestionTopBar = () => {
   const { t } = useTranslation();
@@ -51,21 +51,16 @@ const QuestionTopBar = () => {
   }
 
   const renderLabel = (questionId: string, index: number) => {
-    const q = getQuestionById(questions, questionId);
-    if (!q) {
+    const question = getQuestionById(questions, questionId);
+    if (!question) {
       console.error('question does not exist');
       return null;
     }
     const response = getAppDataByQuestionIdForMemberId(
       (appData as AppDataQuestion[]) ?? [],
-      q,
+      question,
       memberId
     );
-    const question = getQuestionById(questions, questionId);
-
-    if (!question) {
-      return null;
-    }
 
     if (context.context === Context.Builder) {
       return (
@@ -77,7 +72,7 @@ const QuestionTopBar = () => {
 
     // show correctness in label only if a response exists
     const isCorrect = computeCorrectness(
-      question.data as QuestionData,
+      question.data,
       response?.data as QuestionAppDataData
     );
 

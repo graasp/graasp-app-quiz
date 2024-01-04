@@ -2,7 +2,6 @@ import { UnionOfConst } from '@graasp/sdk';
 
 import { FILL_BLANKS_TYPE } from '../config/constants';
 
-// Word and Answer seems to be used as the same shape...
 export type Word = {
   id: number;
   text: string;

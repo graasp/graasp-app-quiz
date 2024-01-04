@@ -155,7 +155,7 @@ describe('Table by Question', () => {
     )[0].data.list.map((elem) => {
       const e = APP_SETTINGS_FEW_QUESTIONS.find(
         (el) => el.data.questionId === elem
-      ) as QuestionDataAppSetting;
+      ) as QuestionDataAppSetting | undefined;
       return {
         label: e.data.question,
         id: e.data.questionId,
@@ -278,8 +278,6 @@ const testTableContent = (qId: string, qTitle: string, ascending: boolean) => {
       // If the question has been answer test the date
       const date = RESPONSES[qTitle][index(idx)].fields.date;
       if (date !== undefined) {
-        console.log('date', date);
-
         cy.wrap(entry)
           .get(dataCyWrapper(TABLE_BY_QUESTION_DATE_DATA_CY), {
             withinSubject: entry,
