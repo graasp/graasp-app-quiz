@@ -6,6 +6,8 @@ declare global {
     Cypress: boolean;
     database: Database;
     apiErrors: object;
+
+    scrollEndTimer: Timeout | undefined;
   }
 }
 

@@ -20,11 +20,11 @@ import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   buildQuestionTypeOption,
 } from '../../config/selectors';
-import { QuestionDataRecord } from '../types/types';
+import { QuestionData } from '../types/types';
 
 type Props = {
   value: QuestionType;
-  onChange: (d: QuestionDataRecord) => void;
+  onChange: (d: QuestionData) => void;
 };
 
 const QuestionTypeSelect = ({ value, onChange }: Props) => {
@@ -33,8 +33,9 @@ const QuestionTypeSelect = ({ value, onChange }: Props) => {
   const type = useMemo(() => value ?? DEFAULT_QUESTION_TYPE, [value]);
 
   const onTypeChange: SelectProps['onChange'] = (e) => {
-    const t = e.target.value as QuestionType;
-    onChange(DEFAULT_QUESTION_VALUES[t]);
+    const value = e.target.value as QuestionType;
+    const defaultQuestionValues = DEFAULT_QUESTION_VALUES[value] as QuestionData;
+    onChange(defaultQuestionValues);
   };
 
   return (

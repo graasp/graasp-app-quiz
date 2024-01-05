@@ -16,13 +16,13 @@ const View = (): JSX.Element => {
   const context = useLocalContext();
 
   useEffect(() => {
-    const lang = context.get('lang');
+    const lang = context.lang;
     i18n.changeLanguage(lang ?? DEFAULT_LANG);
   });
   const renderContent = () => {
-    switch (context.get('context')) {
+    switch (context.context) {
       case Context.Builder: {
-        switch (context.get('permission')) {
+        switch (context.permission) {
           case PermissionLevel.Admin:
           case PermissionLevel.Write:
             return <AdminView />;

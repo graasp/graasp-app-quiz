@@ -8,26 +8,26 @@ import {
   Typography,
 } from '@mui/material';
 
-import { convertJs } from '@graasp/sdk';
-
 import { DEFAULT_QUESTION_VALUES, QuestionType } from '../../config/constants';
 import {
   SLIDER_CY,
   SLIDER_MAX_FIELD_CY,
   SLIDER_MIN_FIELD_CY,
 } from '../../config/selectors';
-import { SliderAppSettingDataRecord } from '../types/types';
+import { SliderAppSettingData } from '../types/types';
 
 type Props = {
-  data: SliderAppSettingDataRecord;
-  onChangeData: (d: SliderAppSettingDataRecord) => void;
+  data: SliderAppSettingData;
+  onChangeData: (d: SliderAppSettingData) => void;
 };
 
 const Slider = ({ data, onChangeData }: Props) => {
   const { t } = useTranslation();
-
   const values = useMemo(() => {
-    return DEFAULT_QUESTION_VALUES[QuestionType.SLIDER].merge(data);
+    return {
+      ...DEFAULT_QUESTION_VALUES[QuestionType.SLIDER],
+      ...data,
+    };
   }, [data]);
 
   const middleValue = (values.max - values.min) / 2;
@@ -48,7 +48,8 @@ const Slider = ({ data, onChangeData }: Props) => {
             min={values.min}
             max={values.max}
             onChange={(_, value) => {
-              onChangeData(convertJs({ value }));
+              const valNumber = value as number;
+              onChangeData({ ...data, value: valNumber });
             }}
           />
         </Grid>
@@ -62,7 +63,7 @@ const Slider = ({ data, onChangeData }: Props) => {
                 variant="outlined"
                 type="number"
                 onChange={(t) => {
-                  onChangeData(convertJs({ min: parseInt(t.target.value) }));
+                  onChangeData({ ...data, min: parseInt(t.target.value) });
                 }}
               />
             </Grid>
@@ -75,7 +76,7 @@ const Slider = ({ data, onChangeData }: Props) => {
                 variant="outlined"
                 type="number"
                 onChange={(t) => {
-                  onChangeData(convertJs({ max: parseInt(t.target.value) }));
+                  onChangeData({ ...data, max: parseInt(t.target.value) });
                 }}
               />
             </Grid>

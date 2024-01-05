@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Grid, Typography } from '@mui/material';
@@ -8,12 +7,12 @@ import {
   EXPLANATION_PLAY_CY,
   buildMultipleChoiceExplanationPlayCy,
 } from '../../config/selectors';
-import { QuestionDataRecord } from '../types/types';
+import { QuestionData } from '../types/types';
 
 const PlayExplanation = ({
   currentQuestionData,
 }: {
-  currentQuestionData: QuestionDataRecord;
+  currentQuestionData: QuestionData;
 }) => {
   const { t } = useTranslation();
 

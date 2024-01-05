@@ -1,32 +1,31 @@
-import { List } from 'immutable';
-
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, CircularProgress } from '@mui/material';
 
-import { AppSettingRecord } from '@graasp/sdk/frontend';
+import { AppSetting } from '@graasp/sdk';
 
 import { APP_SETTING_NAMES, DEFAULT_QUESTION } from '../../config/constants';
 import { hooks, mutations } from '../../config/queryClient';
 import {
-  QuestionDataAppSettingRecord,
-  QuestionDataRecord,
-  QuestionListTypeRecord,
+  CurrentQuestion,
+  QuestionData,
+  QuestionDataAppSetting,
+  QuestionListType,
 } from '../types/types';
 import { generateId, getSettingsByName } from './utilities';
 
 type ContextType = {
-  order: List<string>;
-  questions: List<QuestionDataAppSettingRecord>;
-  currentQuestion: QuestionDataAppSettingRecord;
+  order: string[];
+  questions: QuestionDataAppSetting[];
+  currentQuestion: QuestionDataAppSetting;
   currentIdx: number;
   setCurrentIdx: (idx: number) => void;
-  deleteQuestion: (question: QuestionDataAppSettingRecord) => () => void;
+  deleteQuestion: (question: QuestionDataAppSetting) => () => void;
   moveToNextQuestion: () => void;
   moveToPreviousQuestion: () => void;
   addQuestion: () => void;
-  saveQuestion: (newData: QuestionDataRecord) => Promise<void>;
+  saveQuestion: (newData: QuestionData) => Promise<void>;
   isSettingsFetching: boolean;
   saveOrder: (order: string[]) => void;
 };
@@ -54,29 +53,32 @@ export const QuizProvider = ({ children }: Props) => {
   // -1 if we are adding a new question
   const [currentIdx, setCurrentIdx] = useState(0);
 
-  const [orderSetting, setOrderSetting] = useState<AppSettingRecord>();
-  const [order, setOrder] = useState<List<string>>(List());
+  const [orderSetting, setOrderSetting] = useState<AppSetting>();
+  const [order, setOrder] = useState<string[]>([]);
+
+  // Here use type of CurrentQuestion because only the id of appSetting is needed...
   const [currentQuestion, setCurrentQuestion] =
-    useState<QuestionDataAppSettingRecord>(DEFAULT_QUESTION);
+    useState<CurrentQuestion>(DEFAULT_QUESTION);
 
   const setCurrentIdxBounded = useCallback(
     (newIdx: number) => {
-      const computedIdx = Math.min(Math.max(0, newIdx), order.size - 1);
+      const computedIdx = Math.min(Math.max(0, newIdx), order.length - 1);
       setCurrentIdx(computedIdx);
     },
-    [order.size]
+    [order.length]
   );
 
   const deleteQuestion = useCallback(
-    (question?: QuestionDataAppSettingRecord) => async () => {
+    (question?: QuestionDataAppSetting) => async () => {
       if (!question) {
         console.error('Cannot delete a question that does not exist');
         return;
       }
       // update list order
-      const newOrder = order.toJS();
       const idx = order.findIndex((id) => id === question.data.questionId);
-      newOrder.splice(idx, 1);
+      // construct new order without the idx: 
+      // add elements before the idx as well as the end of the list after the idx
+      const newOrder = [...order.slice(0, idx), ...order.slice(idx + 1)];
       if (orderSetting) {
         await patchAppSettingAsync({
           id: orderSetting.id,
@@ -112,9 +114,11 @@ export const QuizProvider = ({ children }: Props) => {
 
   // Saves Data of current question in db and adds its id to order list (at the end)
   const saveQuestion = useCallback(
-    async (newData: QuestionDataRecord) => {
+    async (newData: QuestionData) => {
+      // getcurrentquestionsetting
+      // currentSetting.id
       // add new question
-      if (!currentQuestion?.id) {
+      if (!currentQuestion.id) {
         const newQuestionId = generateId();
         // add question in order if new
         // create order setting if doesn't exist
@@ -126,22 +130,22 @@ export const QuizProvider = ({ children }: Props) => {
         } else {
           await patchAppSettingAsync({
             id: orderSetting.id,
-            data: { list: order.push(newQuestionId).toJS() },
+            data: { list: [...order, newQuestionId] },
           });
         }
 
         await postAppSettingAsync({
-          data: { ...newData.toJS(), questionId: newQuestionId },
+          data: { ...newData, questionId: newQuestionId },
           name: APP_SETTING_NAMES.QUESTION,
         });
-        setCurrentIdx(order.size);
+        setCurrentIdx(order.length);
       }
 
       // update question
       else {
         patchAppSettingAsync({
           id: currentQuestion.id,
-          data: newData.toJS(),
+          data: newData,
         });
       }
     },
@@ -159,7 +163,7 @@ export const QuizProvider = ({ children }: Props) => {
       if (!orderSetting) {
         return console.error('order is not defined');
       }
-      setOrder(List(newOrder));
+      setOrder(newOrder);
       await patchAppSettingAsync({
         id: orderSetting.id,
         data: { list: newOrder },
@@ -184,10 +188,10 @@ export const QuizProvider = ({ children }: Props) => {
         APP_SETTING_NAMES.QUESTION_LIST
       );
 
-      if (newOrderSetting.size) {
-        const value = newOrderSetting?.first() as QuestionListTypeRecord;
+      if (newOrderSetting && newOrderSetting.length > 0) {
+        const value = newOrderSetting[0] as QuestionListType;
         setOrderSetting(value);
-        setOrder(value?.data?.list ?? List());
+        setOrder(value?.data?.list ?? []);
       }
     }
   }, [settings]);
@@ -201,14 +205,15 @@ export const QuizProvider = ({ children }: Props) => {
       // set current question if current idx, questions and order are correctly defined
       if (
         questions &&
-        !questions.isEmpty() &&
-        order?.size &&
+        questions.length > 0 &&
+        order?.length &&
         currentIdx !== -1 &&
-        currentIdx < order.size
+        currentIdx < order.length
       ) {
-        const currentQId = order.get(currentIdx);
-        newValue = questions.find(
-          ({ data: { questionId } }) => questionId === currentQId
+        const currentQId = order[currentIdx];
+        newValue = (questions as QuestionDataAppSetting[]).find(
+          ({ data: { questionId } }: { data: { questionId: string } }) =>
+            questionId === currentQId
         );
       }
       setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
@@ -223,7 +228,7 @@ export const QuizProvider = ({ children }: Props) => {
         if (!q.data.questionId) {
           patchAppSettingAsync({
             id: q.id,
-            data: { ...q.data.toJS(), questionId: q.id },
+            data: { ...q.data, questionId: q.id },
           });
         }
       }
@@ -235,12 +240,13 @@ export const QuizProvider = ({ children }: Props) => {
       ? (getSettingsByName(
           settings,
           APP_SETTING_NAMES.QUESTION
-        ) as List<QuestionDataAppSettingRecord>)
-      : List<QuestionDataAppSettingRecord>();
+        ) as QuestionDataAppSetting[])
+      : [];
+
     return {
       order,
       questions,
-      currentQuestion,
+      currentQuestion: currentQuestion as QuestionDataAppSetting,
       currentIdx,
       setCurrentIdx,
       deleteQuestion,

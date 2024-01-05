@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -19,7 +17,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import { DEFAULT_CHOICE, DEFAULT_QUESTION } from '../../config/constants';
+import {
+  DEFAULT_CHOICE,
+  DEFAULT_MULTIPLE_CHOICES_QUESTION,
+} from '../../config/constants';
 import {
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
@@ -29,73 +30,64 @@ import {
   buildMultipleChoiceDeleteAnswerButtonCy,
   buildMultipleChoiceDeleteAnswerExplanationButtonCy,
 } from '../../config/selectors';
-import { MultipleChoicesAppSettingDataRecord } from '../types/types';
+import { removeFromArrayAtIndex, updateArray } from '../../utils/immutable';
+import { MultipleChoicesAppSettingData } from '../types/types';
 
 type Props = {
-  choices: MultipleChoicesAppSettingDataRecord['choices'];
-  setChoices: (d: MultipleChoicesAppSettingDataRecord['choices']) => void;
+  choices: MultipleChoicesAppSettingData['choices'];
+  setChoices: (d: MultipleChoicesAppSettingData['choices']) => void;
 };
 
 const MultipleChoices = ({
-  choices = DEFAULT_QUESTION.data.choices,
+  choices = DEFAULT_MULTIPLE_CHOICES_QUESTION.data.choices,
   setChoices,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const [explanationList, setExplanationList] = useState<List<boolean>>(
-    List(choices.map((choice) => Boolean(choice.explanation)))
+  const [explanationList, setExplanationList] = useState<boolean[]>(
+    choices.map((choice) => Boolean(choice.explanation))
   );
 
   const handleAnswerCorrectnessChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const d = choices.setIn([index, 'isCorrect'], e.target.checked);
-    setChoices(d);
-  };
+  ) => setChoices(updateArray(choices, index, 'isCorrect', e.target.checked));
 
   const handleChoiceChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const d = choices.setIn([index, 'value'], e.target.value);
-    setChoices(d);
-  };
+  ) => setChoices(updateArray(choices, index, 'value', e.target.value));
 
   const handleExplanationChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const d = choices.setIn([index, 'explanation'], e.target.value);
-    setChoices(d);
-  };
+  ) => setChoices(updateArray(choices, index, 'explanation', e.target.value));
 
   const addAnswer = () => {
-    setChoices(choices.push(DEFAULT_CHOICE));
-    setExplanationList(explanationList.push(false));
+    setChoices([...choices, DEFAULT_CHOICE]);
+    setExplanationList([...explanationList, false]);
   };
 
   const addExplanation = (index: number) => {
     const newExplanationList = [...explanationList];
     newExplanationList[index] = true;
-    setExplanationList(List(newExplanationList));
+    setExplanationList(newExplanationList);
   };
 
   const onDeleteExplanation = (index: number) => () => {
     const newExplanationList = [...explanationList];
     newExplanationList[index] = false;
-    setExplanationList(List(newExplanationList));
-    const newExplanation = choices.setIn([index, 'explanation'], '');
-    setChoices(newExplanation);
+    setExplanationList(newExplanationList);
+    setChoices(updateArray(choices, index, 'explanation', ''));
   };
 
   const onDelete = (index: number) => () => {
     // delete only possible if there's at least three choices
-    if (choices.size <= 2) {
+    if (choices.length <= 2) {
       return;
     }
 
-    setChoices(choices.delete(index));
+    setChoices(removeFromArrayAtIndex(choices, index));
   };
 
   return (
@@ -148,14 +140,14 @@ const MultipleChoices = ({
                 <IconButton
                   data-cy={buildMultipleChoiceDeleteAnswerButtonCy(index)}
                   type="button"
-                  disabled={choices.size <= 2}
+                  disabled={choices.length <= 2}
                   onClick={onDelete(index)}
                 >
                   <CloseIcon />
                 </IconButton>
               </Stack>
               <Stack>
-                {explanationList.get(index) || explanation ? (
+                {explanationList[index] || explanation ? (
                   <Stack
                     direction="row"
                     key={index}

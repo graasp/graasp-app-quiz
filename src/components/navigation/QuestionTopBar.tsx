@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -32,11 +30,7 @@ import {
   getAppDataByQuestionIdForMemberId,
   getQuestionById,
 } from '../context/utilities';
-import {
-  AppDataDataRecord,
-  AppDataQuestionRecord,
-  QuestionDataRecord,
-} from '../types/types';
+import { AppDataQuestion, QuestionAppDataData } from '../types/types';
 
 const QuestionTopBar = () => {
   const { t } = useTranslation();
@@ -57,23 +51,18 @@ const QuestionTopBar = () => {
   }
 
   const renderLabel = (questionId: string, index: number) => {
-    const q = getQuestionById(questions, questionId);
-    if (!q) {
+    const question = getQuestionById(questions, questionId);
+    if (!question) {
       console.error('question does not exist');
       return null;
     }
     const response = getAppDataByQuestionIdForMemberId(
-      (appData as List<AppDataQuestionRecord>) ?? List(),
-      q,
+      (appData as AppDataQuestion[]) ?? [],
+      question,
       memberId
     );
-    const question = getQuestionById(questions, questionId);
 
-    if (!question) {
-      return null;
-    }
-
-    if (context.get('context') === Context.Builder) {
+    if (context.context === Context.Builder) {
       return (
         <StepButton onClick={() => setCurrentIdx(index)}>
           {question.data.question}
@@ -83,10 +72,11 @@ const QuestionTopBar = () => {
 
     // show correctness in label only if a response exists
     const isCorrect = computeCorrectness(
-      question.data as QuestionDataRecord,
-      response?.data as AppDataDataRecord
+      question.data,
+      response?.data as QuestionAppDataData
     );
-    const props = !response.id
+
+    const props = !response?.id
       ? {}
       : {
           StepIconComponent: isCorrect ? CheckIcon : CloseIcon,
@@ -94,7 +84,6 @@ const QuestionTopBar = () => {
             color: isCorrect ? 'success' : 'error',
           },
         };
-
     return (
       <StepLabel
         sx={{ '&:hover': { cursor: 'pointer' } }}
@@ -148,7 +137,7 @@ const QuestionTopBar = () => {
           sx={{ p: 0 }}
           color="primary"
           onClick={moveToNextQuestion}
-          disabled={currentIdx >= order.size - 1}
+          disabled={currentIdx >= order.length - 1}
         >
           {t('Next')}
         </Button>
