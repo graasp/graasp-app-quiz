@@ -54,6 +54,8 @@ declare global {
 
       checkQuizNavigationStatus(questionStatus: QuestionStatus): Chainable;
 
+      checkQuizNavigationStatus(questionStatus: QuestionStatus): Chainable;
+
       /**
        * Command to check that the progression of attempts is displayed correctly.
        * Also checks that the number of attempts are styled correctly
