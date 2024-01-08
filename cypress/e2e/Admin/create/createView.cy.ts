@@ -17,7 +17,7 @@ import {
   QUESTION_BAR_PREV_CY,
   QUESTION_STEP_CLASSNAME,
   TEXT_INPUT_FIELD_CY,
-  buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   buildQuestionTypeOption,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
@@ -151,11 +151,11 @@ describe('Create View', () => {
     it('Delete question', () => {
       const toDelete = QUESTION_APP_SETTINGS[1];
       const id = toDelete.data.questionId;
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
       // delete one
       cy.get(dataCyWrapper(CREATE_VIEW_DELETE_BUTTON_CY)).click();
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).should('not.exist');
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).should('not.exist');
 
       // delete all
       for (let i = 0; i < QUESTION_APP_SETTINGS.length - 2; i += 1) {
@@ -170,7 +170,7 @@ describe('Create View', () => {
     it('Add question from existing quiz', () => {
       const currentQuestion = QUESTION_APP_SETTINGS[1];
       const id = currentQuestion.data.questionId;
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
 

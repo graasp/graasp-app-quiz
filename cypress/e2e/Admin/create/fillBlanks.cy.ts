@@ -12,7 +12,7 @@ import {
   CREATE_VIEW_SAVE_BUTTON_CY,
   FILL_BLANKS_TEXT_FIELD_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
-  buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import {
@@ -117,7 +117,7 @@ describe('Fill in the Blanks', () => {
       });
       cy.visit('/');
 
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
     });
 
     it('Show saved question', () => {
@@ -128,7 +128,7 @@ describe('Fill in the Blanks', () => {
         'have.value',
         QuestionType.FILL_BLANKS
       );
-      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id)))
         .should('be.visible')
         .should('contain', data.question);
 
@@ -145,10 +145,10 @@ describe('Fill in the Blanks', () => {
 
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
       // question bar should be updated
-      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id)))
         .should('be.visible')
         .should('contain', newFillBlanksData.question);
 

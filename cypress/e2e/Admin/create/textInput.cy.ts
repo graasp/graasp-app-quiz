@@ -12,7 +12,7 @@ import {
   CREATE_VIEW_SAVE_BUTTON_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   TEXT_INPUT_FIELD_CY,
-  buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import {
@@ -126,7 +126,7 @@ describe('Text Input', () => {
       });
       cy.visit('/');
 
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
     });
 
     it('Show saved question', () => {
@@ -137,7 +137,7 @@ describe('Text Input', () => {
         'have.value',
         QuestionType.TEXT_INPUT
       );
-      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id)))
         .should('be.visible')
         .should('contain', data.question);
 
@@ -155,10 +155,10 @@ describe('Text Input', () => {
 
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
       // question bar should be updated
-      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id)))
         .should('be.visible')
         .should('contain', newTextInputData.question);
 

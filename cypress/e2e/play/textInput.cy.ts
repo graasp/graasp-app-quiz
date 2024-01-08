@@ -1,5 +1,9 @@
 import { Context } from '@graasp/sdk';
 
+import {
+  QuestionStatus,
+  QuestionStepStyleKeys,
+} from '../../../src/components/navigation/questionNavigation/QuestionStep';
 import { AppSettingData, TextAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
@@ -7,6 +11,7 @@ import {
   PLAY_VIEW_SUBMIT_BUTTON_CY,
   buildPlayViewTextInputCy,
   buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { mockAppDataFactory } from '../../../src/data/factories';
@@ -33,6 +38,9 @@ const getPlayViewTextInputCy = (isCorrect: boolean) =>
   buildPlayViewTextInputCy(isCorrect);
 
 const submitAnswer = (answer: string, hasPreviousAnswer?: boolean) => {
+  // Without this wait, the clear seems to be executed during typing the answer.
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(200);
   cy.get(
     `${dataCyWrapper(
       buildPlayViewTextInputCy(hasPreviousAnswer ? false : undefined)
@@ -58,18 +66,20 @@ const checkAnswer = (isCorrect: boolean) => {
  * Checks that the textfield and header's status use correct css class.
  * @param isCorrect Indicates if the user's answer correct.
  */
-const checkAnswerAndHeaderStatus = (isCorrect: boolean) => {
-  checkAnswer(isCorrect);
+const checkAnswerAndHeaderStatus = (status: QuestionStatus) => {
+  checkAnswer(status === QuestionStepStyleKeys.CORRECT);
   // success or error displayed in question bar
-  cy.checkStepStatus(id, isCorrect);
+  cy.checkQuizNavigationStatus(status);
 };
 
 // go to another question and comeback, data should have been saved
-const goToAnotherQuestionAndComeBack = () => {
+const goToAnotherQuestionAndComeBack = (status: QuestionStatus) => {
   cy.get(
-    dataCyWrapper(buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId))
+    dataCyWrapper(
+      buildQuestionStepDefaultCy(QUESTION_APP_SETTINGS[0].data.questionId)
+    )
   ).click();
-  cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+  cy.get(dataCyWrapper(buildQuestionStepCy(id, status))).click();
 };
 
 /**
@@ -111,7 +121,7 @@ describe('Play Text Input', () => {
         });
         cy.visit('/');
 
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
       });
       it('Start with empty data', () => {
         cy.get(dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)).should(
@@ -131,7 +141,7 @@ describe('Play Text Input', () => {
       it('Correct app data', () => {
         submitAnswer(text);
 
-        checkAnswerAndHeaderStatus(true);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
 
         cy.checkHintsPlay(null);
         cy.checkExplanationPlay(data.explanation);
@@ -141,11 +151,11 @@ describe('Play Text Input', () => {
 
       it('Incorrect app data', () => {
         submitAnswer('incorrect answer');
-        checkAnswerAndHeaderStatus(false);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.INCORRECT);
 
-        goToAnotherQuestionAndComeBack();
+        goToAnotherQuestionAndComeBack(QuestionStepStyleKeys.INCORRECT);
 
-        checkAnswerAndHeaderStatus(false);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.INCORRECT);
 
         cy.checkHintsPlay(null);
         cy.checkExplanationPlay(data.explanation);
@@ -156,7 +166,7 @@ describe('Play Text Input', () => {
       it('Correct response but with unmatched case', () => {
         submitAnswer(text.toUpperCase());
 
-        checkAnswerAndHeaderStatus(true);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
 
         cy.checkHintsPlay(null);
         
@@ -166,7 +176,7 @@ describe('Play Text Input', () => {
       it('Correct response but with trailing space', () => {
         submitAnswer(`${data.text} `);
 
-        checkAnswerAndHeaderStatus(true);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
 
         cy.checkHintsPlay(null);
 
@@ -176,7 +186,7 @@ describe('Play Text Input', () => {
       it('Correct response but with trailing newline', () => {
         submitAnswer(`${data.text}\n`);
 
-        checkAnswerAndHeaderStatus(true);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
 
         cy.checkHintsPlay(null);
 
@@ -186,7 +196,7 @@ describe('Play Text Input', () => {
       it('Correct response but with starting space', () => {
         submitAnswer(` ${data.text}`);
 
-        checkAnswerAndHeaderStatus(true);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
 
         cy.checkHintsPlay(null);
 
@@ -211,17 +221,18 @@ describe('Play Text Input', () => {
         });
         cy.visit('/');
 
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
       });
 
       it('Correct app data', () => {
         submitAnswer(text);
 
-        checkAnswerAndHeaderStatus(true);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
 
         checkInputDisabled(true, true);
 
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: true,
@@ -233,11 +244,12 @@ describe('Play Text Input', () => {
 
       it('Incorrect app data', () => {
         submitAnswer('incorrect answer');
-        checkAnswerAndHeaderStatus(false);
-        goToAnotherQuestionAndComeBack();
-        checkAnswerAndHeaderStatus(false);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
+        goToAnotherQuestionAndComeBack(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
         checkInputDisabled(false, false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -247,17 +259,18 @@ describe('Play Text Input', () => {
 
         const incorrectAnswer = 'still incorrect answer';
         submitAnswer(incorrectAnswer, true);
-        checkAnswerAndHeaderStatus(false);
-        goToAnotherQuestionAndComeBack();
-        checkAnswerAndHeaderStatus(false);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
+        goToAnotherQuestionAndComeBack(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
         checkTextValueEquals(incorrectAnswer, false);
         explanationShouldNotBeVisible();
         cy.checkHintsPlay(textAppSettingsData.hints);
 
         submitAnswer('still not correct', true);
-        checkAnswerAndHeaderStatus(false);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.INCORRECT);
         checkInputDisabled(true, false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 3,
           isCorrect: false,
@@ -268,12 +281,12 @@ describe('Play Text Input', () => {
 
       it('Incorrect, but then correct app data', () => {
         submitAnswer('incorrect answer');
-        checkAnswerAndHeaderStatus(false);
-        cy.checkStepStatus(id, false);
-        goToAnotherQuestionAndComeBack();
-        checkAnswerAndHeaderStatus(false);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
+        goToAnotherQuestionAndComeBack(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
         checkInputDisabled(false, false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -282,9 +295,10 @@ describe('Play Text Input', () => {
         cy.checkHintsPlay(textAppSettingsData.hints);
 
         submitAnswer(text, true);
-        checkAnswerAndHeaderStatus(true);
+        checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
         checkInputDisabled(true, true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 2,
           isCorrect: true,
@@ -329,7 +343,7 @@ describe('Play Text Input', () => {
         });
         cy.visit('/');
 
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
       });
 
       it('Show saved question', () => {
@@ -354,19 +368,18 @@ describe('Play Text Input', () => {
           });
           cy.visit('/');
 
-          cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+          cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
         });
 
         it('Show saved question, user can retry', () => {
           checkTextValueEquals(incorrectAppData.data.text, false);
 
           explanationShouldNotBeVisible();
-          cy.checkHintsPlay(textAppSettingsData.hints);
           checkInputDisabled(false, false);
-          checkAnswerAndHeaderStatus(false);
+          checkAnswerAndHeaderStatus(QuestionStepStyleKeys.REMAIN_ATTEMPTS);
 
           submitAnswer(text, true);
-          checkAnswerAndHeaderStatus(true);
+          checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
           checkInputDisabled(true, true);
           cy.checkExplanationPlay(data.explanation);
           cy.checkHintsPlay(null);
@@ -386,13 +399,13 @@ describe('Play Text Input', () => {
           });
           cy.visit('/');
 
-          cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+          cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
         });
 
         it('Show saved question', () => {
           checkTextValueEquals(correctAppData.data.text, true);
 
-          checkAnswerAndHeaderStatus(true);
+          checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
           checkInputDisabled(true, true);
           cy.checkExplanationPlay(data.explanation);
           cy.checkHintsPlay(null);

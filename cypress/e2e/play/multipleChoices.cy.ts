@@ -1,9 +1,7 @@
 import { Context } from '@graasp/sdk';
 
-import {
-  AppSettingData,
-  MultipleChoicesAppSettingData,
-} from '../../../src/components/types/types';
+import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/QuestionStep';
+import { AppSettingData, MultipleChoicesAppSettingData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   EXPLANATION_PLAY_CY,
@@ -11,6 +9,7 @@ import {
   PLAY_VIEW_SUBMIT_BUTTON_CY,
   buildMultipleChoicesButtonCy,
   buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { mockAppDataFactory } from '../../../src/data/factories';
@@ -132,7 +131,8 @@ describe('Play Multiple Choices', () => {
         cy.checkHintsPlay(null);
         cy.checkExplanationPlay(null);
         checkInputDisabled([], false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 0,
         });
@@ -150,10 +150,9 @@ describe('Play Multiple Choices', () => {
         // hints should be hidden
         cy.checkHintsPlay(null);
 
-        // error displayed in question bar
-        cy.checkStepStatus(id, false);
         checkInputDisabled(selection, true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -176,20 +175,22 @@ describe('Play Multiple Choices', () => {
         // hints should be hidden
         cy.checkHintsPlay(null);
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, true);
         checkInputDisabled(selection, true);
 
         // go to another question and comeback, data should have been saved
         cy.get(
           dataCyWrapper(
-            buildQuestionStepCy(QUESTION_APP_SETTINGS[1].data.questionId)
+            buildQuestionStepDefaultCy(QUESTION_APP_SETTINGS[1].data.questionId)
           )
         ).click();
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(
+          dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.CORRECT))
+        ).click();
         checkCorrection(selection);
         checkInputDisabled(selection, true);
-        cy.checkNumberOfAttemptsProgression({
+
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: true,
@@ -233,7 +234,8 @@ describe('Play Multiple Choices', () => {
         // hints should be hidden
         cy.checkHintsPlay(null);
         checkInputDisabled(selection, true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -272,10 +274,9 @@ describe('Play Multiple Choices', () => {
 
         cy.checkHintsPlay(multipleChoiceAppSettingsData.hints);
 
-        // error displayed in question bar
-        cy.checkStepStatus(id, false);
         checkInputDisabled(selection, false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -296,20 +297,21 @@ describe('Play Multiple Choices', () => {
         checkCorrection(selection);
         cy.checkHintsPlay(null);
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, true);
         checkInputDisabled(selection, true);
 
         // go to another question and comeback, data should have been saved
         cy.get(
           dataCyWrapper(
-            buildQuestionStepCy(QUESTION_APP_SETTINGS[1].data.questionId)
+            buildQuestionStepDefaultCy(QUESTION_APP_SETTINGS[1].data.questionId)
           )
         ).click();
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(
+          dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.CORRECT))
+        ).click();
         checkCorrection(selection);
         checkInputDisabled(selection, true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: true,
@@ -355,7 +357,8 @@ describe('Play Multiple Choices', () => {
         checkCorrection(selection, false);
         cy.checkHintsPlay(multipleChoiceAppSettingsData.hints);
         checkInputDisabled(selection, false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,

@@ -1,3 +1,5 @@
+import { QuestionStatus, QuestionStepStyleKeys } from '../components/navigation/questionNavigation/QuestionStep';
+
 export const dataCyWrapper = (selector: string) => `[data-cy="${selector}"]`;
 export const ADD_NEW_QUESTION_TITLE_CY = 'addNewQuestionTitle';
 export const CREATE_QUESTION_TITLE_CY = 'createQuestionTitle';
@@ -5,7 +7,10 @@ export const CREATE_QUESTION_SELECT_TYPE_CY = 'createQuestionSelectType';
 export const QUESTION_BAR_CY = 'questionBar';
 export const QUESTION_BAR_NEXT_CY = 'questionBarNext';
 export const QUESTION_BAR_PREV_CY = 'questionBarPrev';
-export const buildQuestionStepCy = (id: string) => `questionStep-${id}`;
+export const buildQuestionStepCy = (id: string, status: QuestionStatus) =>
+  `questionStep-${id}-${status}`;
+  export const buildQuestionStepDefaultCy = (id: string) =>
+  `questionStep-${id}-${QuestionStepStyleKeys.DEFAULT}`;
 export const buildMultipleChoiceAnswerCy = (idx: number) =>
   `multipleChoiceAnswer-${idx}`;
 export const buildMultipleChoiceAnswerExplanationCy = (idx: number) =>
@@ -117,10 +122,8 @@ export const ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE_CY =
   'analyticsGeneralCorrectResponsePercentage';
 export const buildAnalyticsDetailedChartCy = (label: string) =>
   `analyticsDetailedChart-${label}`;
-export const NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY =
-  'numberOfAttemptsCircularProgression';
-export const NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY =
-  'numberOfAttemptsCircularProgressionText';
+export const NUMBER_OF_ATTEMPTS_TEXT_CY = 'numberOfAttemptsText';
+export const buildNavigationQuestionStatus = (status: QuestionStatus) => `navigationQuestionStatus-${status}`;
 export const NUMBER_OF_ATTEMPTS_DECREASE_BTN_CY = 'numberOfAttemptsDecreaseBtn';
 export const NUMBER_OF_ATTEMPTS_INCREASE_BTN_CY = 'numberOfAttemptsIncreaseBtn';
 export const NUMBER_OF_ATTEMPTS_INPUT_CY = 'numberOfAttemptsInput';

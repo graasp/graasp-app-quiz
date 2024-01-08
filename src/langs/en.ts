@@ -82,10 +82,17 @@ export default {
     NO_DATA_FOR_GENERAL_CHARTS: 'No data found for the charts.',
     ATTEMPTS_PROGRESS_NUMBER_OF_ATTEMPTS: 'Number of attempts',
     CREATE_VIEW_NUMBER_OF_ATTEMPTS: 'Number of attempts',
-    MULTIPLE_CHOICE_NOT_CORRECT: 'The answer is incorrect or not completely correct.',
+    MULTIPLE_CHOICE_NOT_CORRECT:
+      'The answer is incorrect or not completely correct.',
     HINTS_TITLE: 'Hints',
-    HINTS_SUB_TITLE: 'Enter here the hints that will be displayed if the answer is incorrect, to help the student',
+    HINTS_SUB_TITLE:
+      'Enter here the hints that will be displayed if the answer is incorrect, to help the student',
     HINTS_LABEL: 'Hints',
-    HINTS_ALERT_TITLE: 'Do you need some hints ?'
+    HINTS_ALERT_TITLE: 'Do you need some hints ?',
+    PREV_QUESTION_BTN: 'Previous',
+    NEXT_QUESTION_BTN: 'Next',
+    QUESTION_STEPPER_TITLE_NO_MORE_ATTEMPTS: 'No more attempts',
+    QUESTION_STEPPER_TITLE_ATTEMPTS:
+      '{{current_attempts}} of {{max_attempts}} attempts',
   },
 };
