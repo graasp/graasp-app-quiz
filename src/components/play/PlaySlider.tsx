@@ -27,7 +27,7 @@ const PlaySlider = ({
 }: Props) => {
   const min = values?.min;
   const max = values?.max;
-  const defaultValue = (max - min) / 2 + min;
+  const defaultValue = Math.round((max - min) / 2 + min);
   const [marks, setMarks] = useState<{ value: number; label: number }[]>([]);
 
   const sliderSx = {
