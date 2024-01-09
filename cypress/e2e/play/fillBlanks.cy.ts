@@ -23,7 +23,7 @@ import { Word, splitSentence } from '../../../src/utils/fillInTheBlanks';
 import {
   APP_SETTINGS,
   QUESTION_APP_SETTINGS,
-  getAppSetting,
+  setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
 
 const { data } = QUESTION_APP_SETTINGS.find(
@@ -97,9 +97,9 @@ const checkCorrection = (
 /**
  * Checks that the answers, blanks and submit button are disabled or not.
  * It is useful to check that:
- *  - no more answers can be send if maximum of attempts are reached
- *  - no more answers can be send if the answer is correct
- *  - the user can send answers when the max number of attempts are reached
+ *  - no more answers can be sent if maximum of attempts are reached
+ *  - no more answers can be sent if the answer is correct
+ *  - the user can send answers when the max number of attempts is not reached yet
  * @param shouldBeDisabled Indicates if the inputs should be disabled or not.
  */
 const checkInputDisabled = (shouldBeDisabled: boolean) => {
@@ -350,7 +350,10 @@ describe('Play Fill In The Blanks', () => {
       beforeEach(() => {
         cy.setUpApi({
           database: {
-            appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
           },
           appContext: {
             context: Context.Player,
@@ -381,7 +384,10 @@ describe('Play Fill In The Blanks', () => {
         );
         cy.setUpApi({
           database: {
-            appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
             appData: [correctAppData],
           },
           appContext: {
@@ -413,7 +419,10 @@ describe('Play Fill In The Blanks', () => {
         );
         cy.setUpApi({
           database: {
-            appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
             appData: [partiallyCorrectAppData],
           },
           appContext: {
@@ -444,7 +453,10 @@ describe('Play Fill In The Blanks', () => {
         );
         cy.setUpApi({
           database: {
-            appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
             appData: [shorterAppData],
           },
           appContext: {
@@ -475,7 +487,10 @@ describe('Play Fill In The Blanks', () => {
         );
         cy.setUpApi({
           database: {
-            appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
             appData: [longerAppData],
           },
           appContext: {

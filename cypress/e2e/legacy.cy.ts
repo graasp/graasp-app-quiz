@@ -3,7 +3,7 @@ import { AppSetting, Context } from '@graasp/sdk';
 import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
-  PLAY_VIEW_TEXT_INPUT_CY,
+  buildPlayViewTextInputCy,
   QUESTION_BAR_NEXT_CY,
   dataCyWrapper,
 } from '../../src/config/selectors';
@@ -122,7 +122,7 @@ describe('Legacy', () => {
       TEXT_INPUT_APP_SETTING.data.question
     );
 
-    cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).should(
+    cy.get(`${dataCyWrapper(buildPlayViewTextInputCy(false))} input`).should(
       'have.value',
       textAppData.data.text
     );

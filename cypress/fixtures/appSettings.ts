@@ -5,7 +5,7 @@ import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
 import { datesFactory } from '../../src/data/factories';
 import { mockItem } from '../../src/data/items';
 
-export const getAppSetting = (
+export const setAttemptsOnAppSettings = (
   appSettings: AppSetting[],
   numberOfAttempts = 1
 ) =>

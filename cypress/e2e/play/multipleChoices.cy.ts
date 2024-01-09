@@ -16,7 +16,7 @@ import { mockCurrentMember } from '../../../src/data/members';
 import {
   APP_SETTINGS,
   QUESTION_APP_SETTINGS,
-  getAppSetting,
+  setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
 
 const { data } = QUESTION_APP_SETTINGS.find(
@@ -235,7 +235,10 @@ describe('Play Multiple Choices', () => {
       beforeEach(() => {
         cy.setUpApi({
           database: {
-            appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
           },
           appContext: {
             context: Context.Player,
@@ -313,7 +316,10 @@ describe('Play Multiple Choices', () => {
       beforeEach(() => {
         cy.setUpApi({
           database: {
-            appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
             appData: [appData],
           },
           appContext: {

@@ -6,7 +6,10 @@ import {
   NUMBER_OF_ATTEMPTS_INPUT_CY,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_SETTINGS, getAppSetting } from '../../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  setAttemptsOnAppSettings,
+} from '../../../fixtures/appSettings';
 
 const DEFAULT_NUMBER_ATTEMPTS = 1;
 
@@ -67,6 +70,7 @@ describe('Number of attempts', () => {
     });
 
     it("Can't decrement if value = 1", () => {
+      // the default number of attempts = 1
       checkInputValueEquals(`${DEFAULT_NUMBER_ATTEMPTS}`);
       decrementNumberOfAttempts();
       checkInputValueEquals(`${DEFAULT_NUMBER_ATTEMPTS}`);
@@ -103,13 +107,16 @@ describe('Number of attempts', () => {
     });
   });
 
-  describe.only('Has AppSettings', () => {
+  describe('Has AppSettings', () => {
     const NUMBER_OF_ATTEMPTS = 3;
 
     beforeEach(() => {
       cy.setUpApi({
         database: {
-          appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+          appSettings: setAttemptsOnAppSettings(
+            APP_SETTINGS,
+            NUMBER_OF_ATTEMPTS
+          ),
         },
         appContext: {
           permission: PermissionLevel.Admin,

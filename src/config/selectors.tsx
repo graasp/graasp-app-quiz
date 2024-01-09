@@ -42,7 +42,10 @@ export const buildMultipleChoicesButtonCy = (
 ) => `multipleChoicesButton-${idx}-${isSelected}`;
 export const PLAY_VIEW_SUBMIT_BUTTON_CY = 'playViewSubmitButton';
 export const PLAY_VIEW_SLIDER_CY = 'playViewSlider';
-export const PLAY_VIEW_TEXT_INPUT_CY = 'playViewTextInput';
+export const buildPlayViewTextInputCy = (isCorrect?: boolean) =>
+  `playViewTextInput-${
+    isCorrect === undefined ? 'undefined' : isCorrect ? 'true' : 'false'
+  }`;
 export const EXPLANATION_CY = 'explanation';
 export const EXPLANATION_PLAY_CY = 'explanationPlay';
 export const buildFillBlanksAnswerId = (id: number) => `fillBlanksAnswer-${id}`;

@@ -12,6 +12,7 @@ import {
 } from '../../config/constants';
 import { ANSWER_REGEXP } from '../../utils/fillInTheBlanks';
 import {
+  AppDataWithDataId,
   FillTheBlanksAppDataData,
   MultipleChoiceAppDataData,
   QuestionAppDataData,
@@ -19,6 +20,7 @@ import {
   QuestionDataAppSetting,
   QuestionListType,
   SliderAppDataData,
+  TableByUserResponse,
   TextAppDataData,
 } from '../types/types';
 
@@ -110,7 +112,7 @@ export const getAppDataByQuestionIdForMemberId = <T extends Data>(
   appData: AppData<T>[] | undefined,
   question: QuestionDataAppSetting,
   memberId?: Member['id']
-): Partial<AppData> | undefined => {
+): AppDataWithDataId<T> | AppDataWithDataId<QuestionAppDataData> => {
   const qId = question.data.questionId;
 
   // The default value is used to display the question
@@ -119,7 +121,7 @@ export const getAppDataByQuestionIdForMemberId = <T extends Data>(
     data: {
       questionId: qId,
       ...DEFAULT_APP_DATA_VALUES[question.data.type],
-    },
+    } as QuestionAppDataData,
   };
 
   if (!memberId) {
@@ -135,11 +137,11 @@ export const getAppDataByQuestionIdForMemberId = <T extends Data>(
   return allAppData?.slice(-1)[0] ?? defaultValue;
 };
 
-export const getAllAppDataByQuestionIdForMemberId = (
-  appData: AppData[] | undefined,
+export const getAllAppDataByQuestionIdForMemberId = <T extends Data>(
+  appData: AppData<T>[] | undefined,
   questionId: string,
   memberId?: Member['id']
-): AppData[] => {
+): AppData<T>[] => {
   return (
     appData
       ?.filter(
@@ -166,6 +168,19 @@ export const getQuestionNameFromId = (
   return appSettings?.find((setting) => setting.data.questionId === qId)?.data
     .question;
 };
+
+export const getQuestionNames = (
+  responses: TableByUserResponse[],
+  questions: QuestionDataAppSetting[]
+) =>
+  responses
+    .map((res) => getQuestionNameFromId(questions, res.data.questionId))
+    .filter((r): r is string => Boolean(r))
+    .reduce((result, question) => {
+      const index = result.filter((entry) => entry[0] === question).length;
+      result.push([question, index]);
+      return result;
+    }, [] as [string, number][]);
 
 export const getAllAppDataByQuestionId = (
   appData: AppData[] | undefined,

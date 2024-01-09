@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Alert, Button, Grid, Typography } from '@mui/material';
 
-import { useLocalContext } from '@graasp/apps-query-client';
+import { Data, useLocalContext } from '@graasp/apps-query-client';
 import { AppData } from '@graasp/sdk';
 
 import { APP_DATA_TYPES, QuestionType } from '../../config/constants';
@@ -45,27 +45,25 @@ const PlayView = () => {
   const { currentQuestion, questions } = useContext(QuizContext);
   const { memberId } = useLocalContext();
 
-  const [newResponse, setNewResponse] = useState<Partial<AppData> | undefined>(
-    getAppDataByQuestionIdForMemberId(responses, currentQuestion, memberId)
+  const [newResponse, setNewResponse] = useState<Data>(
+    getAppDataByQuestionIdForMemberId(responses, currentQuestion, memberId).data
   );
-
   const [userAnswers, setUserAnswers] = useState<AppData[]>([]);
-  const [showCorrection, setShowCorrection] = React.useState(false);
   const [showCorrectness, setShowCorrectness] = React.useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  const [isReadonly, setIsReadonly] = useState<boolean>(false);
 
-  const getLatestUserAnswers = () =>
-    userAnswers.length > 0 ? userAnswers.at(userAnswers.length - 1) : undefined;
-  const maxAttempts = currentQuestion.data.numberOfAttempts
-    ? currentQuestion.data.numberOfAttempts
-    : 1;
-  const maxAttemptsReached = userAnswers.length >= maxAttempts;
+  const numberOfAnswers = userAnswers.length;
+  const latestAnswer = userAnswers.at(numberOfAnswers - 1);
+  const maxAttempts = currentQuestion.data.numberOfAttempts ?? 1;
+  const maxAttemptsReached = numberOfAnswers >= maxAttempts;
+  const isReadonly = isCorrect || maxAttemptsReached;
+  const showCorrection = isCorrect || numberOfAnswers >= maxAttempts;
 
   useEffect(() => {
     if (responses) {
       setNewResponse(
         getAppDataByQuestionIdForMemberId(responses, currentQuestion, memberId)
+          .data
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,14 +72,11 @@ const PlayView = () => {
   useEffect(() => {
     const isCorrect = computeCorrectness(
       currentQuestion.data,
-      newResponse?.data as QuestionAppDataData
+      newResponse as QuestionAppDataData
     );
 
     setIsCorrect(isCorrect);
-    setIsReadonly(isCorrect || maxAttemptsReached);
-
-    setShowCorrection(isCorrect || (userAnswers?.length || 0) >= maxAttempts);
-    setShowCorrectness(userAnswers.length > 0);
+    setShowCorrectness(numberOfAnswers > 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maxAttempts, userAnswers]);
 
@@ -95,11 +90,7 @@ const PlayView = () => {
     );
   }, [currentQuestion, memberId, responses]);
 
-  const onInputChanged = <
-    T extends AppData,
-    K extends keyof T['data'],
-    V extends T['data'][K]
-  >(
+  const onInputChanged = <T extends Data, K extends keyof T, V extends T[K]>(
     object: Partial<T>,
     key: K,
     value: V,
@@ -117,9 +108,9 @@ const PlayView = () => {
       return;
     }
 
-    if (newResponse && newResponse.data) {
+    if (newResponse) {
       postAppData({
-        data: newResponse.data,
+        data: newResponse,
         type: APP_DATA_TYPES.RESPONSE,
       });
     } else {
@@ -153,7 +144,7 @@ const PlayView = () => {
           {currentQuestion.data.question}
         </Typography>
         <AttemptsProgress
-          value={userAnswers.length}
+          value={numberOfAnswers}
           maxValue={currentQuestion.data.numberOfAttempts ?? 1}
           sx={{
             mb: 3,
@@ -176,7 +167,7 @@ const PlayView = () => {
               return (
                 <PlayMultipleChoices
                   choices={currentQuestion.data.choices}
-                  response={newResponse.data as MultipleChoiceAppDataData}
+                  response={newResponse as MultipleChoiceAppDataData}
                   setResponse={(choices) => {
                     setNewResponse(setInData(newResponse, 'choices', choices));
                     setShowCorrectness(false);
@@ -191,13 +182,13 @@ const PlayView = () => {
               return (
                 <PlayTextInput
                   values={currentQuestion.data}
-                  response={newResponse.data as TextAppDataData}
+                  response={newResponse as TextAppDataData}
                   setResponse={(text: string) => {
                     onInputChanged(
                       newResponse,
                       'text',
                       text,
-                      getLatestUserAnswers()?.data?.text
+                      latestAnswer?.data?.text
                     );
                   }}
                   showCorrection={showCorrection}
@@ -211,7 +202,7 @@ const PlayView = () => {
               return (
                 <PlayFillInTheBlanks
                   values={currentQuestion.data}
-                  response={newResponse.data as FillTheBlanksAppDataData}
+                  response={newResponse as FillTheBlanksAppDataData}
                   setResponse={(text: string) => {
                     setNewResponse(setInData(newResponse, 'text', text));
                     setShowCorrectness(false);
@@ -226,13 +217,13 @@ const PlayView = () => {
               return (
                 <PlaySlider
                   values={currentQuestion.data}
-                  response={newResponse.data as SliderAppDataData}
+                  response={newResponse as SliderAppDataData}
                   setResponse={(value: number) => {
                     onInputChanged(
                       newResponse,
                       'value',
                       value,
-                      getLatestUserAnswers()?.data?.value
+                      latestAnswer?.data?.value
                     );
                   }}
                   showCorrection={showCorrection}
@@ -253,7 +244,7 @@ const PlayView = () => {
         showCorrection={showCorrection}
         showCorrectness={showCorrectness}
         currentQuestionData={currentQuestion.data as QuestionData}
-        response={newResponse?.data as MultipleChoiceAppDataData}
+        response={newResponse as MultipleChoiceAppDataData}
       />
       <Grid item xs={12}>
         <Button

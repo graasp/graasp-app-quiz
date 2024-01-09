@@ -5,6 +5,7 @@ import { MutableRefObject } from 'react';
 import { AppData, AppSetting } from '@graasp/sdk';
 
 import { QuestionType } from '../../config/constants';
+import { Data } from '@graasp/apps-query-client';
 
 export type AppDataData = {
   questionId: string;
@@ -129,3 +130,13 @@ export type QuestionAppDataData =
   | SliderAppDataData;
 
 export type StatusColor = 'primary' | 'success' | 'warning' | 'error';
+
+export type TableByUserResponse = {
+  data: QuestionAppDataData;
+  updatedAt: string;
+};
+
+export type AppDataWithDataId<T extends Data = Data> = Partial<
+  Pick<AppData<T>, 'id'>
+> &
+  Pick<AppData<T>, 'data'>;

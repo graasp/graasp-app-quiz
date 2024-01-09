@@ -4,8 +4,8 @@ import { TextAppDataData } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
-  PLAY_VIEW_SUBMIT_BUTTON_CY,
-  PLAY_VIEW_TEXT_INPUT_CY,
+  PLAY_VIEW_SUBMIT_BUTTON_CY, // PLAY_VIEW_TEXT_INPUT_CY,
+  buildPlayViewTextInputCy,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
@@ -15,7 +15,7 @@ import { mockCurrentMember } from '../../../src/data/members';
 import {
   APP_SETTINGS,
   QUESTION_APP_SETTINGS,
-  getAppSetting,
+  setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
 
 const { data } = QUESTION_APP_SETTINGS.find(
@@ -27,9 +27,16 @@ const id = data.questionId;
 
 const { text } = data as TextAppDataData;
 
-const submitAnswer = (answer: string) => {
-  cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).clear();
-  cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).type(answer);
+const getPlayViewTextInputCy = (isCorrect: boolean) =>
+  buildPlayViewTextInputCy(isCorrect);
+
+const submitAnswer = (answer: string, hasPreviousAnswer?: boolean) => {
+  cy.get(
+    `${dataCyWrapper(
+      buildPlayViewTextInputCy(hasPreviousAnswer ? false : undefined)
+    )} input`
+  ).clear();
+  cy.get(`${dataCyWrapper(buildPlayViewTextInputCy())} input`).type(answer);
   cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
 };
 
@@ -38,9 +45,7 @@ const submitAnswer = (answer: string) => {
  * @param isCorrect Indicates if the user's answer correct.
  */
 const checkAnswer = (isCorrect: boolean) => {
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(500);
-  cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} div`).then(($el) => {
+  cy.get(`${dataCyWrapper(getPlayViewTextInputCy(isCorrect))} div`).then(($el) => {
     expect($el.attr('class').toLowerCase()).to.contain(
       isCorrect ? 'success' : 'error'
     );
@@ -56,8 +61,6 @@ const checkAnswerAndHeaderStatus = (isCorrect: boolean) => {
   // success or error displayed in question bar
   cy.checkStepStatus(id, isCorrect);
 };
-
-
 
 // go to another question and comeback, data should have been saved
 const goToAnotherQuestionAndComeBack = () => {
@@ -75,14 +78,16 @@ const goToAnotherQuestionAndComeBack = () => {
  *  - the user can send answers when the max number of attempts are reached
  * @param shouldBeDisabled Indicates if the inputs should be disabled or not.
  */
-const checkInputDisabled = (shouldBeDisabled: boolean) => {
+const checkInputDisabled = (shouldBeDisabled: boolean, isCorrect: boolean) => {
   const status = `${shouldBeDisabled ? '' : 'not.'}be.disabled`;
-  cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).should(status);
+  cy.get(`${dataCyWrapper(getPlayViewTextInputCy(isCorrect))} input`).should(
+    status
+  );
   cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).should(status);
 };
 
-const checkTextValueEquals = (expectedValue: string) => {
-  cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).should(
+const checkTextValueEquals = (expectedValue: string, isCorrect: boolean) => {
+  cy.get(`${dataCyWrapper(getPlayViewTextInputCy(isCorrect))} input`).should(
     'have.value',
     expectedValue
   );
@@ -113,7 +118,7 @@ describe('Play Text Input', () => {
         );
 
         // empty answer
-        cy.get(`${dataCyWrapper(PLAY_VIEW_TEXT_INPUT_CY)} input`).should(
+        cy.get(`${dataCyWrapper(buildPlayViewTextInputCy())} input`).should(
           'be.empty'
         );
 
@@ -127,7 +132,7 @@ describe('Play Text Input', () => {
 
         cy.checkExplanationPlay(data.explanation);
 
-        checkInputDisabled(true);
+        checkInputDisabled(true, true);
       });
 
       it('Incorrect app data', () => {
@@ -140,7 +145,7 @@ describe('Play Text Input', () => {
 
         cy.checkExplanationPlay(data.explanation);
 
-        checkInputDisabled(true);
+        checkInputDisabled(true, false);
       });
 
       it('Correct response but with unmatched case', () => {
@@ -148,7 +153,7 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(true);
 
-        checkInputDisabled(true);
+        checkInputDisabled(true, true);
       });
 
       it('Correct response but with trailing space', () => {
@@ -156,7 +161,7 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(true);
 
-        checkInputDisabled(true);
+        checkInputDisabled(true, true);
       });
 
       it('Correct response but with trailing newline', () => {
@@ -164,7 +169,7 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(true);
 
-        checkInputDisabled(true);
+        checkInputDisabled(true, true);
       });
 
       it('Correct response but with starting space', () => {
@@ -172,7 +177,7 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(true);
 
-        checkInputDisabled(true);
+        checkInputDisabled(true, true);
       });
     });
 
@@ -182,7 +187,10 @@ describe('Play Text Input', () => {
       beforeEach(() => {
         cy.setUpApi({
           database: {
-            appSettings: getAppSetting(APP_SETTINGS, NUMBER_OF_ATTEMPTS),
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
           },
           appContext: {
             context: Context.Player,
@@ -198,7 +206,7 @@ describe('Play Text Input', () => {
 
         checkAnswerAndHeaderStatus(true);
 
-        checkInputDisabled(true);
+        checkInputDisabled(true, true);
 
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
@@ -214,7 +222,7 @@ describe('Play Text Input', () => {
         checkAnswerAndHeaderStatus(false);
         goToAnotherQuestionAndComeBack();
         checkAnswerAndHeaderStatus(false);
-        checkInputDisabled(false);
+        checkInputDisabled(false, false);
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
@@ -223,16 +231,16 @@ describe('Play Text Input', () => {
         explanationShouldNotBeVisible();
 
         const incorrectAnswer = 'still incorrect answer';
-        submitAnswer(incorrectAnswer);
+        submitAnswer(incorrectAnswer, true);
         checkAnswerAndHeaderStatus(false);
         goToAnotherQuestionAndComeBack();
         checkAnswerAndHeaderStatus(false);
-        checkTextValueEquals(incorrectAnswer);
+        checkTextValueEquals(incorrectAnswer, false);
         explanationShouldNotBeVisible();
 
-        submitAnswer('still not correct');
+        submitAnswer('still not correct', true);
         checkAnswerAndHeaderStatus(false);
-        checkInputDisabled(true);
+        checkInputDisabled(true, false);
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 3,
@@ -247,7 +255,7 @@ describe('Play Text Input', () => {
         cy.checkStepStatus(id, false);
         goToAnotherQuestionAndComeBack();
         checkAnswerAndHeaderStatus(false);
-        checkInputDisabled(false);
+        checkInputDisabled(false, false);
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
@@ -255,9 +263,9 @@ describe('Play Text Input', () => {
         });
         explanationShouldNotBeVisible();
 
-        submitAnswer(text);
+        submitAnswer(text, true);
         checkAnswerAndHeaderStatus(true);
-        checkInputDisabled(true);
+        checkInputDisabled(true, true);
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 2,
@@ -306,7 +314,7 @@ describe('Play Text Input', () => {
       });
 
       it('Show saved question', () => {
-        checkTextValueEquals(incorrectAppData.data.text);
+        checkTextValueEquals(incorrectAppData.data.text, false);
 
         cy.checkExplanationPlay(data.explanation);
       });
@@ -317,7 +325,7 @@ describe('Play Text Input', () => {
         beforeEach(() => {
           cy.setUpApi({
             database: {
-              appSettings: getAppSetting(APP_SETTINGS, 3),
+              appSettings: setAttemptsOnAppSettings(APP_SETTINGS, 3),
               appData: [incorrectAppData],
             },
             appContext: {
@@ -330,15 +338,15 @@ describe('Play Text Input', () => {
         });
 
         it('Show saved question, user can retry', () => {
-          checkTextValueEquals(incorrectAppData.data.text);
+          checkTextValueEquals(incorrectAppData.data.text, false);
 
           explanationShouldNotBeVisible();
-          checkInputDisabled(false);
+          checkInputDisabled(false, false);
           checkAnswerAndHeaderStatus(false);
 
-          submitAnswer(text);
+          submitAnswer(text, true);
           checkAnswerAndHeaderStatus(true);
-          checkInputDisabled(true);
+          checkInputDisabled(true, true);
           cy.checkExplanationPlay(data.explanation);
         });
       });
@@ -347,7 +355,7 @@ describe('Play Text Input', () => {
         beforeEach(() => {
           cy.setUpApi({
             database: {
-              appSettings: getAppSetting(APP_SETTINGS, 3),
+              appSettings: setAttemptsOnAppSettings(APP_SETTINGS, 3),
               appData: [correctAppData],
             },
             appContext: {
@@ -360,10 +368,10 @@ describe('Play Text Input', () => {
         });
 
         it('Show saved question', () => {
-          checkTextValueEquals(correctAppData.data.text);
+          checkTextValueEquals(correctAppData.data.text, true);
 
           checkAnswerAndHeaderStatus(true);
-          checkInputDisabled(true);
+          checkInputDisabled(true, true);
           cy.checkExplanationPlay(data.explanation);
         });
       });

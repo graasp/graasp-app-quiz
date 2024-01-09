@@ -40,24 +40,21 @@ import { Order, getComparator, stringComparator } from '../../utils/tableUtils';
 import {
   computeCorrectness,
   getQuestionNameFromId,
+  getQuestionNames,
 } from '../context/utilities';
 import {
   MultipleChoiceAppDataData,
   QuestionAppDataData,
   QuestionDataAppSetting,
   SliderAppDataData,
+  TableByUserResponse,
   TextAppDataData,
 } from '../types/types';
-
-export type Response = {
-  data: QuestionAppDataData;
-  updatedAt: string;
-};
 
 type Props = {
   user: Member;
   questions: QuestionDataAppSetting[];
-  responses: Response[];
+  responses: TableByUserResponse[];
   handleQuestionClicked: (qId: string) => void;
 };
 
@@ -84,14 +81,7 @@ const TableByUser = ({
    * List of question names that the user answered
    */
   const [questionNames, setQuestionNames] = useState(
-    responses
-      .map((res) => getQuestionNameFromId(questions, res.data.questionId))
-      .filter((r): r is string => Boolean(r))
-      .reduce((result, question) => {
-        const index = result.filter((entry) => entry[0] === question).length;
-        result.push([question, index]);
-        return result;
-      }, [] as [string, number][])
+    getQuestionNames(responses, questions)
   );
 
   /**
@@ -121,19 +111,7 @@ const TableByUser = ({
   );
 
   useEffect(
-    () =>
-      setQuestionNames(
-        responses
-          .map((res) => getQuestionNameFromId(questions, res.data.questionId))
-          .filter((r): r is string => Boolean(r))
-          .reduce((result, question) => {
-            const index = result.filter(
-              (entry) => entry[0] === question
-            ).length;
-            result.push([question, index]);
-            return result;
-          }, [] as [string, number][])
-      ),
+    () => setQuestionNames(getQuestionNames(responses, questions)),
     [responses, questions]
   );
 
@@ -344,9 +322,7 @@ const TableByUser = ({
             </Table>
           </TableContainer>
         ) : (
-          <Typography align="center">
-            {t('Not yet answered')}
-          </Typography>
+          <Typography align="center">{t('Not yet answered')}</Typography>
         )}
       </Stack>
     </Box>

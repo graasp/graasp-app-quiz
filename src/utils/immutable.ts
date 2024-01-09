@@ -1,4 +1,4 @@
-import { AppData } from "@graasp/sdk";
+import { Data } from '@graasp/apps-query-client';
 
 const updateArrayAtIndex = <T extends object>(
   arr: T[],
@@ -29,20 +29,13 @@ export const updateArray = <T extends object>(
   return updateArrayAtIndex(choices, index, newChoice);
 };
 
-export const setInData = <
-  T extends AppData,
-  K extends keyof T['data'],
-  V extends T['data'][K]
->(
+export const setInData = <T extends Data, K extends keyof T, V extends T[K]>(
   object: Partial<T>,
   key: K,
   value: V
 ): Partial<T> => {
   return {
     ...object,
-    data: {
-      ...object.data,
-      [key]: value,
-    },
+    [key]: value,
   };
 };
