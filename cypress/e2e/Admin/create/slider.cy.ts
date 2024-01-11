@@ -12,7 +12,7 @@ import {
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
-  QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
+  NAVIGATION_ADD_QUESTION_BUTTON_CY,
   SLIDER_CY,
   SLIDER_MAX_FIELD_CY,
   SLIDER_MIN_FIELD_CY,
@@ -180,7 +180,7 @@ describe('Slider', () => {
       fillSliderQuestion(newSliderData, dataValue);
 
       // click new question and come back
-      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+      cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
       // question bar should be updated

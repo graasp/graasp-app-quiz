@@ -10,7 +10,7 @@ import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
-  QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
+  NAVIGATION_ADD_QUESTION_BUTTON_CY,
   TEXT_INPUT_FIELD_CY,
   buildQuestionStepDefaultCy,
   dataCyWrapper,
@@ -154,7 +154,7 @@ describe('Text Input', () => {
       fillTextInputQuestion(newTextInputData);
 
       // click new question and come back
-      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+      cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
       // question bar should be updated
