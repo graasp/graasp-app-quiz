@@ -11,7 +11,7 @@ type Props = {
   values: TextAppSettingData;
   response: TextAppDataData;
   showCorrection: boolean;
-  showCorrectness: boolean;
+  lastUserAnswer?: TextAppDataData;
   isCorrect: boolean;
   isReadonly: boolean;
   setResponse: (text: string) => void;
@@ -21,15 +21,17 @@ const PlayTextInput = ({
   values,
   response,
   showCorrection,
-  showCorrectness,
+  lastUserAnswer,
   isCorrect,
   isReadonly,
   setResponse,
 }: Props) => {
   const { t } = useTranslation();
 
+  const showCorrectness = response.text === lastUserAnswer?.text;
+
   const textInputColor =
-    showCorrectness || showCorrection
+  showCorrectness || showCorrection
       ? isCorrect
         ? theme.palette.success.main
         : theme.palette.error.main

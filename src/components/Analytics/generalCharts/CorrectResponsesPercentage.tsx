@@ -16,7 +16,11 @@ import {
   defaultSettings,
   hoverData,
 } from '../../../utils/plotUtils';
-import { computeCorrectness, getQuestionById } from '../../context/utilities';
+import {
+  computeCorrectness,
+  getLastUsersAttemptByQuestion,
+  getQuestionById,
+} from '../../context/utilities';
 import {
   ChartEvent,
   QuestionAppDataData,
@@ -31,6 +35,7 @@ type Props = {
   responses: AppData[];
   order: string[];
   questions: QuestionDataAppSetting[];
+  considerLastAttemptsOnly: boolean;
 };
 
 type ChartData = {
@@ -48,6 +53,7 @@ type ChartData = {
  * @param responses The responses provided by the user to the quiz
  * @param order The order in which the questions appear in the quiz
  * @param questions The question for which to display detailed information
+ * @param considerLastAttemptsOnly If true, the analytics are computed with the lastest users' answers
  */
 const CorrectResponsesPercentage = ({
   maxWidth,
@@ -55,14 +61,20 @@ const CorrectResponsesPercentage = ({
   responses,
   order,
   questions,
+  considerLastAttemptsOnly,
 }: Props) => {
   const { t } = useTranslation();
   const theme = useTheme();
 
-  const responsesByQId = useMemo(
-    () => groupBy(responses, (r) => r.data.questionId),
-    [responses]
-  );
+  const responsesByQId = useMemo(() => {
+    let groupedByQuestion = groupBy(responses, (r) => r.data.questionId);
+
+    if (considerLastAttemptsOnly) {
+      groupedByQuestion = getLastUsersAttemptByQuestion(groupedByQuestion);
+    }
+
+    return groupedByQuestion;
+  }, [considerLastAttemptsOnly, responses]);
 
   const chartData = useMemo(() => {
     return order.reduce<ChartData>(

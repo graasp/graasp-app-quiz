@@ -49,6 +49,7 @@ export const buildMultipleChoicesButtonCy = (
   isSelected: boolean
 ) => `multipleChoicesButton-${idx}-${isSelected}`;
 export const PLAY_VIEW_SUBMIT_BUTTON_CY = 'playViewSubmitButton';
+export const PLAY_VIEW_RETRY_BUTTON_CY = 'playViewRetryButton';
 export const PLAY_VIEW_SLIDER_CY = 'playViewSlider';
 export const buildPlayViewTextInputCy = (isCorrect?: boolean) =>
   `playViewTextInput-${isCorrect}`;

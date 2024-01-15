@@ -141,7 +141,10 @@ export const QuestionStep = ({
       <Tooltip title={renderTooltipTitle()} arrow>
         <Box sx={sx} onClick={() => onClick(questionIdx - 1)}>
           {isSelected ? (
-            <Typography color={QuestionStepStyle[status].borderColor}>
+            <Typography
+              sx={{ fontWeight: 500 }}
+              color={QuestionStepStyle[status].borderColor}
+            >
               {questionIdx}
             </Typography>
           ) : (

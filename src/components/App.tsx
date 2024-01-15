@@ -1,6 +1,6 @@
 import { I18nextProvider } from 'react-i18next';
 
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 
 import {
@@ -28,6 +28,7 @@ export const App = () => {
 
   const app = (
     <ThemeProvider theme={graaspTheme}>
+      <CssBaseline />
       <I18nextProvider i18n={i18nConfig}>
         <QueryClientProvider client={queryClient}>
           <WithLocalContext

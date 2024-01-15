@@ -3,9 +3,18 @@ import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
-import { Alert, Box, Button, Grid, Stack, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Stack,
+  Typography,
+} from '@mui/material';
 
-import { QuestionType } from '../../config/constants';
+import {
+  QuestionType,
+} from '../../config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   CREATE_VIEW_CONTAINER_CY,
@@ -30,6 +39,7 @@ import MultipleChoices from './MultipleChoices';
 import NumberOfAttempts from './NumberOfAttempts';
 import QuestionTitle from './QuestionTitle';
 import QuestionTypeSelect from './QuestionTypeSelect';
+import Section from './Section';
 import Slider from './Slider';
 import TextInput from './TextInput';
 import TitleDescriptionTextField from './TitleDescriptionTextField';
@@ -216,16 +226,22 @@ const CreateView = () => {
                   }
                 }
               })()}
-
-              <NumberOfAttempts
-                initAttempts={currentQuestion.data.numberOfAttempts}
-                onChange={(attempts: number) => {
-                  setNewData({
-                    ...newData,
-                    numberOfAttempts: attempts,
-                  });
-                }}
-              />
+              {/* TODO: migrate other custom sections to use the new Section component */}
+              <Section
+                sx={{ mt: 2 }}
+                title={t(QUIZ_TRANSLATIONS.MULTIPLE_ATTEMPTS_SECTION_TITLE)}
+                explanation={t(QUIZ_TRANSLATIONS.MULTIPLE_ATTEMPTS_EXPLANATION)}
+              >
+                <NumberOfAttempts
+                  initAttempts={currentQuestion.data.numberOfAttempts}
+                  onChange={(attempts: number) => {
+                    setNewData({
+                      ...newData,
+                      numberOfAttempts: attempts,
+                    });
+                  }}
+                />
+              </Section>
             </Grid>
 
             <Grid item>

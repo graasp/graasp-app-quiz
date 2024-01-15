@@ -1,16 +1,17 @@
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Alert, Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
 import { Data, useLocalContext } from '@graasp/apps-query-client';
 import { AppData } from '@graasp/sdk';
 
-import { APP_DATA_TYPES } from '../../config/constants';
+import { APP_DATA_TYPES, QuestionType } from '../../config/constants';
 import { hooks, mutations } from '../../config/queryClient';
 import {
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
+  PLAY_VIEW_RETRY_BUTTON_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
@@ -23,11 +24,7 @@ import {
   getAppDataByQuestionIdForMemberId,
 } from '../context/utilities';
 import QuestionStepper from '../navigation/questionNavigation/QuestionStepper';
-import {
-  MultipleChoiceAppDataData,
-  QuestionAppDataData,
-  QuestionData,
-} from '../types/types';
+import { QuestionAppDataData, QuestionData } from '../types/types';
 import PlayExplanation from './PlayExplanation';
 import PlayHints from './PlayHints';
 import PlayViewQuestionType from './PlayViewQuestionType';
@@ -51,6 +48,8 @@ const PlayView = () => {
   const [userAnswers, setUserAnswers] = useState<AppData[]>([]);
   const [showCorrectness, setShowCorrectness] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  // this state is used to determine if the animations should to be activated or not.
+  const [numberOfSubmit, setNumberOfSubmit] = useState(0);
 
   const numberOfAnswers = userAnswers.length;
   const latestAnswer = userAnswers.at(numberOfAnswers - 1);
@@ -58,6 +57,11 @@ const PlayView = () => {
   const maxAttemptsReached = numberOfAnswers >= maxAttempts;
   const isReadonly = isCorrect || maxAttemptsReached;
   const showCorrection = isCorrect || numberOfAnswers >= maxAttempts;
+  const displaySubmitBtn = !(
+    currentQuestion.data.type === QuestionType.MULTIPLE_CHOICES &&
+    showCorrectness &&
+    !showCorrection
+  );
 
   // This use effect is used to reset the show correction when question changed.
   // It ensures that the answers are not leaked when changing to next question.
@@ -65,6 +69,8 @@ const PlayView = () => {
   useEffect(() => {
     setUserAnswers([]);
     setShowCorrectness(false);
+    setNumberOfSubmit(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIdx]);
 
   useEffect(() => {
@@ -114,7 +120,7 @@ const PlayView = () => {
   };
 
   const renderNavigationButtons = () => (
-    <Stack mt={4} direction="row" justifyContent="space-between" width="100%">
+    <Stack direction="row" justifyContent="space-between" width="100%">
       <Button
         onClick={moveToPreviousQuestion}
         variant="outlined"
@@ -150,16 +156,15 @@ const PlayView = () => {
   return (
     <Stack
       direction={{ xs: 'column', md: 'row-reverse' }}
-      alignItems="start"
       justifyContent="space-between"
       alignContent="center"
+      height="700px"
     >
       <Box width={{ xs: '100%', md: '20%' }}>
         <QuestionStepper />
       </Box>
 
-      <Grid
-        container
+      <Stack
         direction="column"
         alignItems="center"
         justifyContent="center"
@@ -167,32 +172,36 @@ const PlayView = () => {
         width={{ xs: '100%', md: '60%' }}
         ml={{ sm: 0 }}
       >
-        <Grid item>
-          <Typography
-            component="h1"
-            variant="h5"
-            sx={{
-              pb: 2,
-            }}
-            data-cy={PLAY_VIEW_QUESTION_TITLE_CY}
-            textAlign="center"
-          >
-            {currentQuestion.data.question}
-          </Typography>
-        </Grid>
-        <Grid container>
-          <PlayViewQuestionType
-            newResponse={newResponse}
-            currentQuestion={currentQuestion}
-            showCorrection={showCorrection}
-            showCorrectness={showCorrectness}
-            isReadonly={isReadonly}
-            isCorrect={isCorrect}
-            latestAnswer={latestAnswer}
-            setShowCorrectness={setShowCorrectness}
-            setNewResponse={setNewResponse}
-          />
-        </Grid>
+        {/* TODO: check if the box is needed needed */}
+        <Box mb={4} width="100%">
+          {renderNavigationButtons()}
+        </Box>
+        <Typography
+          component="h1"
+          variant="h5"
+          sx={{
+            pb: 2,
+          }}
+          data-cy={PLAY_VIEW_QUESTION_TITLE_CY}
+          textAlign="center"
+        >
+          {currentQuestion.data.question}
+        </Typography>
+        <PlayViewQuestionType
+          newResponse={newResponse}
+          currentQuestion={currentQuestion}
+          showCorrection={showCorrection}
+          showCorrectness={showCorrectness}
+          isReadonly={isReadonly}
+          isCorrect={isCorrect}
+          latestAnswer={latestAnswer}
+          setShowCorrectness={setShowCorrectness}
+          setNewResponse={setNewResponse}
+          numberOfSubmit={numberOfSubmit}
+          currentNumberOfAttempts={numberOfAnswers}
+          maxNumberOfAttempts={maxAttempts}
+          resetNumberOfSubmit={() => setNumberOfSubmit(0)}
+        />
         <PlayHints
           hints={currentQuestion.data.hints}
           isCorrect={isCorrect}
@@ -203,20 +212,37 @@ const PlayView = () => {
           showCorrection={showCorrection}
           showCorrectness={showCorrectness}
           currentQuestionData={currentQuestion.data as QuestionData}
-          response={newResponse as MultipleChoiceAppDataData}
+          mt={4}
         />
         <Box mt={4}>
-          <Button
-            onClick={onSubmit}
-            variant="contained"
-            data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
-            disabled={isReadonly}
-          >
-            {t('Submit')}
-          </Button>
+          {displaySubmitBtn && (
+            <Button
+              onClick={() => {
+                setNumberOfSubmit(numberOfSubmit + 1);
+                onSubmit();
+              }}
+              variant="contained"
+              data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
+              disabled={isReadonly}
+            >
+              {t('Submit')}
+            </Button>
+          )}
+
+          {!displaySubmitBtn && (
+            <Button
+              onClick={() => {
+                setNumberOfSubmit(numberOfSubmit + 1);
+                setShowCorrectness(false);
+              }}
+              variant="contained"
+              data-cy={PLAY_VIEW_RETRY_BUTTON_CY}
+            >
+              {t(QUIZ_TRANSLATIONS.PLAY_VIEW_RETRY_BTN)}
+            </Button>
+          )}
         </Box>
-        {renderNavigationButtons()}
-      </Grid>
+      </Stack>
     </Stack>
   );
 };

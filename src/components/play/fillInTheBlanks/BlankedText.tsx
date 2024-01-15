@@ -21,6 +21,7 @@ type Props = {
   showCorrectness: boolean;
   isReadonly: boolean;
   words: Word[];
+  prevWords?: string[];
   onDrop: (e: React.DragEvent<HTMLSpanElement>, id: number) => void;
   onDelete: (e: React.MouseEvent<HTMLSpanElement>) => void;
 };
@@ -30,10 +31,13 @@ const BlankedText = ({
   showCorrectness,
   isReadonly,
   words,
+  prevWords,
   onDrop,
   onDelete,
 }: Props) => {
   const renderWords = () => {
+    let idx = 0;
+
     return words.map((word, i) => {
       if (word.type === FILL_BLANKS_TYPE.WORD) {
         return (
@@ -43,19 +47,25 @@ const BlankedText = ({
         );
       }
 
+      const prevWord = prevWords?.at(idx++) ?? '';
+      const hasChanged = !prevWords || prevWord !== word.displayed;
+
       return (
-        <Blank
-          dataCy={buildBlankedTextWordCy(word.id)}
-          showCorrection={showCorrection}
-          showCorrectness={showCorrectness}
-          isCorrect={word.displayed === word.text}
-          isReadonly={isReadonly}
-          key={i}
-          id={word.id}
-          onDrop={onDrop}
-          onDelete={onDelete}
-          text={word.displayed ?? ' '}
-        />
+        <>
+          <Blank
+            dataCy={buildBlankedTextWordCy(word.id)}
+            showCorrection={showCorrection}
+            showCorrectness={showCorrectness}
+            isCorrect={word.displayed === word.text}
+            isReadonly={isReadonly}
+            key={i}
+            id={word.id}
+            onDrop={onDrop}
+            onDelete={onDelete}
+            text={word.displayed ?? ' '}
+            hasChanged={hasChanged}
+          />
+        </>
       );
     });
   };

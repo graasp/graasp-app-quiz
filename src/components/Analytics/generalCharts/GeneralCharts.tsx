@@ -21,6 +21,7 @@ type Props = {
   order: string[];
   responses: AppData[];
   members: Member[];
+  considerLastAttemptsOnly: boolean;
 };
 
 type GeneralChartTypeKeys = keyof typeof GeneralChartType;
@@ -41,6 +42,7 @@ type GeneralChartTypeValues = (typeof GeneralChartType)[GeneralChartTypeKeys];
  * @param order The order in which the questions appear in the quiz
  * @param responses The responses provided by the user to the quiz
  * @param members The members that responded to the quiz
+ * @param considerLastAttemptsOnly If true, the analytics are computed with the lastest users' answers
  */
 const GeneralCharts = ({
   maxWidth,
@@ -51,6 +53,7 @@ const GeneralCharts = ({
   order,
   responses,
   members,
+  considerLastAttemptsOnly,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -68,6 +71,7 @@ const GeneralCharts = ({
               responses={responses}
               order={order}
               questions={questions}
+              considerLastAttemptsOnly={considerLastAttemptsOnly}
             />
           );
         case GeneralChartType.USER_PERFORMANCE:
@@ -77,6 +81,7 @@ const GeneralCharts = ({
               responses={responses}
               questions={questions}
               members={members}
+              considerLastAttemptsOnly={considerLastAttemptsOnly}
             />
           );
         case GeneralChartType.QUIZ_CORRECT_PERCENTAGE:
@@ -87,13 +92,14 @@ const GeneralCharts = ({
               responses={responses}
               order={order}
               questions={questions}
+              considerLastAttemptsOnly={considerLastAttemptsOnly}
             />
           );
         default:
           return <Typography> {t('Error, chart type unknown')} </Typography>;
       }
     },
-    [maxWidth, goToDetailedQuestion, t, members, order, responses, questions]
+    [maxWidth, goToDetailedQuestion, responses, order, questions, considerLastAttemptsOnly, members, t]
   );
 
   return generalCharts.map((chart) => {

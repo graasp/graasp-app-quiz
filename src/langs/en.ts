@@ -101,5 +101,17 @@ export default {
       'You can define a new position for this question. Changes are applied directly.',
     QUESTION_POSITION_LABEL: 'Position of the question in the quiz',
     BUILDER_QUIZ_NAVIGATION_TITLE: 'Quiz Navigation',
+    MULTIPLE_ATTEMPTS_SECTION_TITLE: 'Multiple attempts',
+    MULTIPLE_ATTEMPTS_EXPLANATION:
+      'If the value is greater than 1, you allow your users to retry multiple time when the given answer is incorrect.',
+    MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_CHECKBOX:
+      'Display response errors after each attempt',
+    MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_TOOLTIP:
+      'If the option is enabled, the user will see the corrections for each reply sent. If not, the user will only be informed that his answer is not entirely correct.',
+    MULTIPLE_CHOICE_SECTION_TITLE_CORRECT: 'Your correct answers',
+    MULTIPLE_CHOICE_SECTION_TITLE_INCORRECT: 'Incorrect answers you selected',
+    MULTIPLE_CHOICE_SECTION_TITLE_MISSING: 'Correct answers you forgot',
+    MULTIPLE_CHOICE_SECTION_TITLE_UNSELECTED: "Answers you haven't selected",
+    PLAY_VIEW_RETRY_BTN: 'Retry',
   },
 };

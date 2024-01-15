@@ -67,6 +67,7 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
   const {
     questions,
     currentQuestion,
+    currentIdx,
     setCurrentIdx,
     order,
     saveOrder,
@@ -205,7 +206,7 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
         {renderMenu()}
         <Button
           data-cy={NAVIGATION_ADD_QUESTION_BUTTON_CY}
-          variant="outlined"
+          variant={currentIdx === -1 ? "contained" : "outlined"}
           startIcon={<AddIcon />}
           onClick={addQuestion}
         >

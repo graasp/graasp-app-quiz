@@ -1,3 +1,4 @@
+import { Dictionary, groupBy, mapValues } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Data } from '@graasp/apps-query-client';
@@ -159,6 +160,32 @@ export const sortAppDataByDate = (a: AppData, b: AppData, asc = true) => {
   }
 
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+};
+
+export const getLastDataByGroup = <T extends { createdAt: string }>(
+  groupedResponses: Dictionary<T[]>
+) =>
+  mapValues(groupedResponses, (group) => {
+    // Returning the most recent data from the group
+    return group.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )[0];
+  });
+
+export const getLastUsersAttemptByQuestion = (
+  responsesGroupedByQId: Dictionary<AppData[]>
+) => {
+  return Object.fromEntries(
+    Object.entries(responsesGroupedByQId).map(([questionId, responses]) => {
+      const attemptsByUser = groupBy(responses, (r) => r.creator?.id);
+      const lastAttemptByUser = getLastDataByGroup(attemptsByUser);
+      const questionLastAttempts = Object.values(lastAttemptByUser).map(
+        (v) => v
+      );
+      return [questionId, questionLastAttempts];
+    })
+  );
 };
 
 export const getQuestionNameFromId = (

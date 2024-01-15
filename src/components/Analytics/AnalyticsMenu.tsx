@@ -11,7 +11,15 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CircularProgress, Stack, Tab, Tabs } from '@mui/material';
+import {
+  CircularProgress,
+  FormControlLabel,
+  FormGroup,
+  Stack,
+  Switch,
+  Tab,
+  Tabs,
+} from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
@@ -68,6 +76,7 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
   // The charts to display, must contain 'link' and 'label' properties so that they can easily be passed
   // to AutoScrollableMenu component
   const [charts, setCharts] = useState<Chart[]>(generalCharts(t));
+  const [considerLastAttemptsOnly, setConsiderLastAttempts] = useState(true);
   const chartRefs = useRef({});
   const chartContainerRef = useRef(null);
   const [stackElem, setStackElem] = useState<HTMLElement | null>(null);
@@ -191,6 +200,32 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
     [order, getChartsForType, getDetailedChartTabQuestion, t]
   );
 
+  const renderAllAttemptsToggleBtn = () => {
+    return (
+      <Box
+        width="100%"
+        display="flex"
+        flexDirection="row"
+        justifyContent={{ xs: 'start', sm: 'end' }}
+      >
+        <FormGroup>
+          {/* TODO: translate  */}
+          <FormControlLabel
+            control={
+              <Switch
+                checked={considerLastAttemptsOnly}
+                onChange={(_, checked: boolean) =>
+                  setConsiderLastAttempts(checked)
+                }
+              />
+            }
+            label="Consider last users attempts only"
+          />
+        </FormGroup>
+      </Box>
+    );
+  };
+
   if (isLoading || isContextLoading) {
     return <CircularProgress />;
   }
@@ -266,18 +301,22 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
           >
             <TabPanel tab={tab} index={0}>
               {data ? (
-                <GeneralCharts
-                  maxWidth={
-                    stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH
-                  }
-                  generalCharts={generalCharts(t)}
-                  chartRefs={chartRefs}
-                  goToDetailedQuestion={handleQuestionRedirection}
-                  questions={questions}
-                  order={order}
-                  responses={responses}
-                  members={data.members}
-                />
+                <>
+                  {renderAllAttemptsToggleBtn()}
+                  <GeneralCharts
+                    maxWidth={
+                      stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH
+                    }
+                    generalCharts={generalCharts(t)}
+                    chartRefs={chartRefs}
+                    goToDetailedQuestion={handleQuestionRedirection}
+                    questions={questions}
+                    order={order}
+                    responses={responses}
+                    members={data.members}
+                    considerLastAttemptsOnly={considerLastAttemptsOnly}
+                  />
+                </>
               ) : (
                 <Typography align="center">
                   {t(QUIZ_TRANSLATIONS.NO_DATA_FOR_GENERAL_CHARTS)}

@@ -31,6 +31,7 @@ type Props = {
   responses: AppData[];
   questions: QuestionDataAppSetting[];
   members: Member[];
+  considerLastAttemptsOnly: boolean;
 };
 
 type ChartData = {
@@ -46,12 +47,14 @@ type ChartData = {
  * @param responses The responses provided by the user to the quiz
  * @param questions The question for which to display detailed information
  * @param members The members who answered to the quiz
+ * @param considerLastAttemptsOnly If true, the analytics are computed with the lastest users' answers
  */
 const CorrectResponsePerUser = ({
   maxWidth,
   responses,
   questions,
   members,
+  considerLastAttemptsOnly,
 }: Props) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -62,52 +65,58 @@ const CorrectResponsePerUser = ({
     return groupBy(questions, (q) => q.data.questionId);
   }, [questions]);
 
-  const chartData = useMemo(
-    () =>
-      Object.entries(
-        groupBy(responses, (response) => response.member.id)
-      ).reduce(
-        (acc, [id, list]) => {
-          const nbCorrect = list.reduce(
-            (acc, next) =>
-              computeCorrectness(
-                getFirstOrUndefined(
-                  questionsById,
-                  next.data.questionId as string
-                )?.data as QuestionData,
-                next.data as QuestionAppDataData
-              )
-                ? acc + 1
-                : acc,
-            0
-          );
+  const chartData = useMemo(() => {
+    const responsesByUser = groupBy(
+      responses,
+      (response) => response.member.id
+    );
 
-          const member = membersById[id]?.at(0);
+    return Object.entries(responsesByUser).reduce(
+      (acc, [id, list]) => {
+        const nbCorrect = list.reduce(
+          (acc, next) =>
+            computeCorrectness(
+              getFirstOrUndefined(questionsById, next.data.questionId as string)
+                ?.data as QuestionData,
+              next.data as QuestionAppDataData
+            )
+              ? acc + 1
+              : acc,
+          0
+        );
 
-          if (!member) {
-            return acc;
-          }
+        const percent = considerLastAttemptsOnly
+          ? nbCorrect / questions.length
+          : nbCorrect / list.length;
 
-          return {
-            dataCorrect: {
-              x: [...acc.dataCorrect.x, nbCorrect],
-              y: [...acc.dataCorrect.y, member.name],
-            },
-            percentageCorrect: [
-              ...acc.percentageCorrect,
-              nbCorrect / list.length,
-            ],
-            maxValue: Math.max(acc.maxValue, list.length),
-          };
-        },
-        {
-          dataCorrect: { x: [], y: [] },
-          percentageCorrect: [],
-          maxValue: 0,
-        } as ChartData
-      ),
-    [membersById, questionsById, responses]
-  );
+        const member = membersById[id]?.at(0);
+
+        if (!member) {
+          return acc;
+        }
+
+        return {
+          dataCorrect: {
+            x: [...acc.dataCorrect.x, nbCorrect],
+            y: [...acc.dataCorrect.y, member.name],
+          },
+          percentageCorrect: [...acc.percentageCorrect, percent],
+          maxValue: Math.max(acc.maxValue, questions.length),
+        };
+      },
+      {
+        dataCorrect: { x: [], y: [] },
+        percentageCorrect: [],
+        maxValue: 0,
+      } as ChartData
+    );
+  }, [
+    considerLastAttemptsOnly,
+    membersById,
+    questions.length,
+    questionsById,
+    responses,
+  ]);
 
   return (
     <Box

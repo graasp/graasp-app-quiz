@@ -8,6 +8,7 @@ import { AppData } from '@graasp/sdk';
 import { QuestionType } from '../../config/constants';
 import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { setInData } from '../../utils/immutable';
+import VibrationAnimation from '../common/animations/VibrationAnimation';
 import {
   FillTheBlanksAppDataData,
   MultipleChoiceAppDataData,
@@ -16,9 +17,9 @@ import {
   TextAppDataData,
 } from '../types/types';
 import PlayFillInTheBlanks from './PlayFillInTheBlanks';
-import PlayMultipleChoices from './PlayMultipleChoices';
 import PlaySlider from './PlaySlider';
 import PlayTextInput from './PlayTextInput';
+import PlayMultipleChoices from './multipleChoices/PlayMultipleChoices';
 
 type Props = {
   newResponse: Data;
@@ -28,7 +29,11 @@ type Props = {
   isReadonly: boolean;
   isCorrect: boolean;
   latestAnswer?: AppData;
+  numberOfSubmit: number;
+  currentNumberOfAttempts: number;
+  maxNumberOfAttempts: number;
 
+  resetNumberOfSubmit: () => void;
   setShowCorrectness: (showCorrectness: boolean) => void;
   setNewResponse: (newData: Data) => void;
 };
@@ -41,6 +46,10 @@ export const PlayViewQuestionType = ({
   isReadonly,
   isCorrect,
   latestAnswer,
+  numberOfSubmit,
+  currentNumberOfAttempts,
+  maxNumberOfAttempts,
+  resetNumberOfSubmit,
   setShowCorrectness,
   setNewResponse,
 }: Props) => {
@@ -63,46 +72,57 @@ export const PlayViewQuestionType = ({
     setNewResponse(setInData(object, key, value));
   };
 
+  const vibrationWrapper = (element: JSX.Element | JSX.Element[]) => (
+    <VibrationAnimation
+      animate={
+        numberOfSubmit > 0 && currentNumberOfAttempts + 1 < maxNumberOfAttempts
+      }
+      onAnimationEnd={resetNumberOfSubmit}
+    >
+      {element}
+    </VibrationAnimation>
+  );
+
   switch (currentQuestion.data.type) {
     case QuestionType.MULTIPLE_CHOICES: {
       return (
         <PlayMultipleChoices
           choices={currentQuestion.data.choices}
           response={newResponse as MultipleChoiceAppDataData}
-          setResponse={(choices) => {
-            setNewResponse(setInData(newResponse, 'choices', choices));
-            setShowCorrectness(false);
-          }}
+          lastUserAnswer={latestAnswer?.data as MultipleChoiceAppDataData}
+          setResponse={(choices) =>
+            setNewResponse(setInData(newResponse, 'choices', choices))
+          }
           showCorrection={showCorrection}
           showCorrectness={showCorrectness}
-          isReadonly={isReadonly}
+          lastSubmit={numberOfSubmit}
         />
       );
     }
     case QuestionType.TEXT_INPUT: {
-      return (
+      return vibrationWrapper(
         <PlayTextInput
           values={currentQuestion.data}
           response={newResponse as TextAppDataData}
-          setResponse={(text: string) => {
-            onInputChanged(newResponse, 'text', text, latestAnswer?.data?.text);
-          }}
+          lastUserAnswer={latestAnswer?.data as TextAppDataData}
+          setResponse={(text: string) =>
+            onInputChanged(newResponse, 'text', text, latestAnswer?.data?.text)
+          }
           showCorrection={showCorrection}
-          showCorrectness={showCorrectness}
           isCorrect={isCorrect}
           isReadonly={isReadonly}
         />
       );
     }
     case QuestionType.FILL_BLANKS: {
-      return (
+      return vibrationWrapper(
         <PlayFillInTheBlanks
           values={currentQuestion.data}
           response={newResponse as FillTheBlanksAppDataData}
-          setResponse={(text: string) => {
-            setNewResponse(setInData(newResponse, 'text', text));
-            setShowCorrectness(false);
-          }}
+          lastUserAnswer={latestAnswer?.data as FillTheBlanksAppDataData}
+          setResponse={(text: string) =>
+            setNewResponse(setInData(newResponse, 'text', text))
+          }
           showCorrection={showCorrection}
           showCorrectness={showCorrectness}
           isReadonly={isReadonly}
@@ -114,6 +134,7 @@ export const PlayViewQuestionType = ({
         <PlaySlider
           values={currentQuestion.data}
           response={newResponse as SliderAppDataData}
+          lastUserAnswer={latestAnswer?.data as SliderAppDataData}
           setResponse={(value: number) => {
             onInputChanged(
               newResponse,
@@ -123,7 +144,6 @@ export const PlayViewQuestionType = ({
             );
           }}
           showCorrection={showCorrection}
-          showCorrectness={showCorrectness}
           isReadonly={isReadonly}
           isCorrect={isCorrect}
         />
