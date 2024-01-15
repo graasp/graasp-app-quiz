@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { Data } from '@graasp/apps-query-client';
 import { AppData, AppSetting, Member } from '@graasp/sdk';
 
 import {
@@ -9,8 +10,9 @@ import {
   FAILURE_MESSAGES,
   QuestionType,
 } from '../../config/constants';
+import { ANSWER_REGEXP } from '../../utils/fillInTheBlanks';
 import {
-  AppDataQuestion,
+  AppDataWithDataId,
   FillTheBlanksAppDataData,
   MultipleChoiceAppDataData,
   QuestionAppDataData,
@@ -18,6 +20,7 @@ import {
   QuestionDataAppSetting,
   QuestionListType,
   SliderAppDataData,
+  TableByUserResponse,
   TextAppDataData,
 } from '../types/types';
 
@@ -89,18 +92,27 @@ export const computeCorrectness = (
 
     case QuestionType.FILL_BLANKS: {
       const d = data as FillTheBlanksAppDataData;
-      return d?.text === question.text;
+
+      // comparing the answers instead of text avoid risk to
+      // compare the same text with some spaces.
+      const dataAnswers = d?.text?.match(ANSWER_REGEXP) || [];
+      const questionAnswers = question.text.match(ANSWER_REGEXP) || [];
+
+      return (
+        dataAnswers.length === questionAnswers.length &&
+        dataAnswers.every((value, idx) => value === questionAnswers[idx])
+      );
     }
     default:
       return false;
   }
 };
 
-export const getAppDataByQuestionIdForMemberId = (
-  appData: AppDataQuestion[],
+export const getAppDataByQuestionIdForMemberId = <T extends Data>(
+  appData: AppData<T>[] | undefined,
   question: QuestionDataAppSetting,
   memberId?: Member['id']
-): Partial<AppData> | undefined => {
+): AppDataWithDataId<T> | AppDataWithDataId<QuestionAppDataData> => {
   const qId = question.data.questionId;
 
   // The default value is used to display the question
@@ -109,30 +121,66 @@ export const getAppDataByQuestionIdForMemberId = (
     data: {
       questionId: qId,
       ...DEFAULT_APP_DATA_VALUES[question.data.type],
-    },
+    } as QuestionAppDataData,
   };
 
   if (!memberId) {
     return defaultValue;
   }
 
-  return (
-    appData?.find(
-      ({ data, creator }) =>
-        data?.questionId === qId && creator?.id === memberId
-    ) ?? defaultValue
+  const allAppData = getAllAppDataByQuestionIdForMemberId(
+    appData,
+    question.data.questionId,
+    memberId
   );
+
+  return allAppData?.slice(-1)[0] ?? defaultValue;
+};
+
+export const getAllAppDataByQuestionIdForMemberId = <T extends Data>(
+  appData: AppData<T>[] | undefined,
+  questionId: string,
+  memberId?: Member['id']
+): AppData<T>[] => {
+  return (
+    appData
+      ?.filter(
+        ({ creator, data }) =>
+          creator?.id === memberId && data.questionId === questionId
+      )
+      // ensure to have an ascending sorts of createdAt
+      .sort(sortAppDataByDate) ?? []
+  );
+};
+
+export const sortAppDataByDate = (a: AppData, b: AppData, asc = true) => {
+  if (asc) {
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  }
+
+  return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 };
 
 export const getQuestionNameFromId = (
   appSettings: QuestionDataAppSetting[],
   qId: string
 ) => {
-  return (
-    appSettings?.find((setting) => setting.data.questionId === qId)?.data
-      .question ?? ''
-  );
+  return appSettings?.find((setting) => setting.data.questionId === qId)?.data
+    .question;
 };
+
+export const getQuestionNames = (
+  responses: TableByUserResponse[],
+  questions: QuestionDataAppSetting[]
+) =>
+  responses
+    .map((res) => getQuestionNameFromId(questions, res.data.questionId))
+    .filter((r): r is string => Boolean(r))
+    .reduce<[string, number][]>((result, question) => {
+      const index = result.filter((entry) => entry[0] === question).length;
+      result.push([question, index]);
+      return result;
+    }, []);
 
 export const getAllAppDataByQuestionId = (
   appData: AppData[] | undefined,

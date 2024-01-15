@@ -1,5 +1,4 @@
 /// <reference types="../../src/window" />
-
 import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { API_HOST } from '../../src/config/constants';
@@ -9,6 +8,8 @@ import {
   EXPLANATION_PLAY_CY,
   NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
+  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY,
+  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY,
   RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
   buildQuestionStepCy,
   buildQuestionTypeOption,
@@ -159,5 +160,41 @@ Cypress.Commands.add(
     cy.wait(2000);
     // navigate to the table by user
     cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_USER_BUTTON_CY)).click();
+  }
+);
+
+/**
+ * Command to check that the progression of attempts is displayed correctly.
+ * Also checks that the number of attempts are styled correctly
+ * if answer is correct or not.
+ *
+ * @param numberOfAttempts the total number of attempts for the question.
+ * @param currentAttempts the current number of time the user answered.
+ * @param isCorrect is the user's answer correct.
+ */
+Cypress.Commands.add(
+  'checkNumberOfAttemptsProgression',
+  ({
+    numberOfAttempts,
+    currentAttempts,
+    isCorrect,
+  }: {
+    numberOfAttempts: number;
+    currentAttempts: number;
+    isCorrect?: boolean;
+  }) => {
+    cy.get(
+      `${dataCyWrapper(NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY)}`
+    ).contains(`${currentAttempts}/${numberOfAttempts}`);
+
+    if (currentAttempts > 0) {
+      cy.get(
+        `${dataCyWrapper(NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY)}`
+      ).then(($el) => {
+        expect($el.attr('class').toLowerCase()).to.contain(
+          isCorrect ? 'success' : 'error'
+        );
+      });
+    }
   }
 );

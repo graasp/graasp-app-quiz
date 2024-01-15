@@ -40,18 +40,21 @@ import { Order, getComparator, stringComparator } from '../../utils/tableUtils';
 import {
   computeCorrectness,
   getQuestionNameFromId,
+  getQuestionNames,
 } from '../context/utilities';
-import { MultipleChoiceAppDataData, QuestionAppDataData, QuestionDataAppSetting, SliderAppDataData, TextAppDataData } from '../types/types';
-
-export type Response = {
-  data: QuestionAppDataData;
-  updatedAt: string;
-};
+import {
+  MultipleChoiceAppDataData,
+  QuestionAppDataData,
+  QuestionDataAppSetting,
+  SliderAppDataData,
+  TableByUserResponse,
+  TextAppDataData,
+} from '../types/types';
 
 type Props = {
   user: Member;
   questions: QuestionDataAppSetting[];
-  responses: Response[];
+  responses: TableByUserResponse[];
   handleQuestionClicked: (qId: string) => void;
 };
 
@@ -78,9 +81,7 @@ const TableByUser = ({
    * List of question names that the user answered
    */
   const [questionNames, setQuestionNames] = useState(
-    responses.map((res) =>
-      getQuestionNameFromId(questions, res.data.questionId)
-    )
+    getQuestionNames(responses, questions)
   );
 
   /**
@@ -110,12 +111,7 @@ const TableByUser = ({
   );
 
   useEffect(
-    () =>
-      setQuestionNames(
-        responses.map((res) =>
-          getQuestionNameFromId(questions, res.data.questionId)
-        )
-      ),
+    () => setQuestionNames(getQuestionNames(responses, questions)),
     [responses, questions]
   );
 
@@ -139,20 +135,22 @@ const TableByUser = ({
    * Helper function to extract the response from a question name
    *
    * @param {string} qName The name of the question
+   * @param {number} qIdx The index of the question when multiple answers
    * @returns A user response
    */
-  const getResponseForQuestionName = (qName: string) => {
-    return responsesByQuestionName[qName]?.at(0);
+  const getResponseForQuestionName = (qName: string, qIdx: number) => {
+    return responsesByQuestionName[qName]?.at(qIdx);
   };
 
   /**
    * Helper function to extract the data of one question given its name for the current user.
    *
    * @param {string} qName The name of the question
+   * @param {number} qIdx The index of the question when multiple answers
    * @returns {string} Response for given user.
    */
-  const getResponseDataForQuestionName = (qName: string) => {
-    const data = getResponseForQuestionName(qName)?.data;
+  const getResponseDataForQuestionName = (qName: string, qIdx: number) => {
+    const data = getResponseForQuestionName(qName, qIdx)?.data;
 
     if (!data) {
       return '';
@@ -181,10 +179,11 @@ const TableByUser = ({
    * Helper function to extract the date at which the user answered the question
    *
    * @param {string} qName The name of the question
+   * @param {number} qIdx The index of the question when multiple answers
    * @returns {string} return the date of answer's last modification
    */
-  const getResponseDateForQuestionName = (qName: string) => {
-    const updatedAt = getResponseForQuestionName(qName)?.updatedAt;
+  const getResponseDateForQuestionName = (qName: string, qIdx: number) => {
+    const updatedAt = getResponseForQuestionName(qName, qIdx)?.updatedAt;
 
     return updatedAt ? new Date(updatedAt).toDateString() : '';
   };
@@ -199,119 +198,132 @@ const TableByUser = ({
         >
           {user.name}
         </Typography>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="left">
-                  <TableSortLabel
-                    active={true}
-                    direction={order}
-                    onClick={handleRequestSort}
-                    data-cy={buildTableByUserQuestionHeaderCy(user.id)}
-                  >
-                    {t('Question')}
-                    {
-                      <Box component="span" sx={visuallyHidden}>
-                        {order === Order.DESC
-                          ? t('sorted descending')
-                          : t('sorted ascending')}
-                      </Box>
-                    }
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell
-                  align="left"
-                  data-cy={buildTableByUserAnswerHeaderCy(user.id)}
-                >
-                  {t('Answer')}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  data-cy={buildTableByUserDateHeaderCy(user.id)}
-                >
-                  {t('Date')}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  data-cy={buildTableByUserCorrectHeaderCy(user.id)}
-                >
-                  {t('Correct')}
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody data-cy={buildTableByUserTableBodyCy(user.id)}>
-              {questionNames
-                ?.sort(getComparator({ order, comp: stringComparator }))
-                .map((qName) => (
-                  <TableRow
-                    key={qName}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    data-cy={TABLE_BY_USER_ENTRY_CY}
-                  >
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      align="left"
-                      sx={{ cursor: 'pointer' }}
-                      onClick={() => {
-                        const qId = getFirstOrUndefined(questionByName, qName)
-                          ?.data.questionId;
-
-                        if (qId) {
-                          handleQuestionClicked(qId);
-                        } else {
-                          console.error(`The clicked question ${qName} doesn't exist.`);
-                        }
-                      }}
-                      data-cy={TABLE_BY_USER_QUESTION_NAME_HEADER_CY}
+        {questionNames.length > 0 ? (
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">
+                    <TableSortLabel
+                      active={true}
+                      direction={order}
+                      onClick={handleRequestSort}
+                      data-cy={buildTableByUserQuestionHeaderCy(user.id)}
                     >
-                      {qName}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ maxWidth: 350 }}
-                      data-cy={TABLE_BY_USER_ANSWER_DATA_CY}
-                    >
-                      {getResponseDataForQuestionName(qName)}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      data-cy={TABLE_BY_USER_DATE_DATA_CY}
-                    >
-                      {getResponseDateForQuestionName(qName)}
-                    </TableCell>
-                    {(() => {
-                      const questionData = getFirstOrUndefined(
-                        questionByName,
-                        qName
-                      )?.data;
-
-                      // Only render TableCell if questionData is not undefined
-                      if (questionData) {
-                        return (
-                          <TableCell
-                            align="left"
-                            data-cy={TABLE_BY_USER_CORRECT_ICON_CY}
-                          >
-                            {computeCorrectness(
-                              questionData,
-                              getResponseForQuestionName(qName)
-                                ?.data as QuestionAppDataData
-                            ) ? (
-                              <CheckCircleOutlined color="success" />
-                            ) : (
-                              <CancelOutlined color="error" />
-                            )}
-                          </TableCell>
-                        );
+                      {t('Question')}
+                      {
+                        <Box component="span" sx={visuallyHidden}>
+                          {order === Order.DESC
+                            ? t('sorted descending')
+                            : t('sorted ascending')}
+                        </Box>
                       }
-                    })()}
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    data-cy={buildTableByUserAnswerHeaderCy(user.id)}
+                  >
+                    {t('Answer')}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    data-cy={buildTableByUserDateHeaderCy(user.id)}
+                  >
+                    {t('Date')}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    data-cy={buildTableByUserCorrectHeaderCy(user.id)}
+                  >
+                    {t('Correct')}
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody data-cy={buildTableByUserTableBodyCy(user.id)}>
+                {questionNames
+                  ?.sort((a, b) => {
+                    const stringA = a[0];
+                    const stringB = b[0];
+                    return getComparator({ order, comp: stringComparator })(
+                      stringA,
+                      stringB
+                    );
+                  })
+                  .map(([qName, qIdx]) => (
+                    <TableRow
+                      key={`${qName}-${qIdx}`}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      data-cy={TABLE_BY_USER_ENTRY_CY}
+                    >
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        align="left"
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          const qId = getFirstOrUndefined(questionByName, qName)
+                            ?.data.questionId;
+
+                          if (qId) {
+                            handleQuestionClicked(qId);
+                          } else {
+                            console.error(
+                              `The clicked question ${qName} doesn't exist.`
+                            );
+                          }
+                        }}
+                        data-cy={TABLE_BY_USER_QUESTION_NAME_HEADER_CY}
+                      >
+                        {qName}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ maxWidth: 350 }}
+                        data-cy={TABLE_BY_USER_ANSWER_DATA_CY}
+                      >
+                        {getResponseDataForQuestionName(qName, qIdx)}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        data-cy={TABLE_BY_USER_DATE_DATA_CY}
+                      >
+                        {getResponseDateForQuestionName(qName, qIdx)}
+                      </TableCell>
+                      {(() => {
+                        const questionData = getFirstOrUndefined(
+                          questionByName,
+                          qName
+                        )?.data;
+
+                        // Only render TableCell if questionData is not undefined
+                        if (questionData) {
+                          return (
+                            <TableCell
+                              align="left"
+                              data-cy={TABLE_BY_USER_CORRECT_ICON_CY}
+                            >
+                              {computeCorrectness(
+                                questionData,
+                                getResponseForQuestionName(qName, qIdx)
+                                  ?.data as QuestionAppDataData
+                              ) ? (
+                                <CheckCircleOutlined color="success" />
+                              ) : (
+                                <CancelOutlined color="error" />
+                              )}
+                            </TableCell>
+                          );
+                        }
+                      })()}
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Typography align="center">{t('Not yet answered')}</Typography>
+        )}
       </Stack>
     </Box>
   );

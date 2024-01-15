@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react';
 import { Grid, Slider } from '@mui/material';
 
 import { PLAY_VIEW_SLIDER_CY } from '../../config/selectors';
-import { computeCorrectness } from '../context/utilities';
-import {
-  SliderAppDataData,
-  SliderAppSettingData,
-} from '../types/types';
+import theme from '../../layout/theme';
+import { SliderAppDataData, SliderAppSettingData } from '../types/types';
 
 type Props = {
   values: SliderAppSettingData;
   response: SliderAppDataData;
   showCorrection: boolean;
+  showCorrectness: boolean;
+  isCorrect: boolean;
+  isReadonly: boolean;
   setResponse: (value: number) => void;
 };
 
@@ -21,11 +21,23 @@ const PlaySlider = ({
   response,
   setResponse,
   showCorrection,
+  showCorrectness,
+  isReadonly,
+  isCorrect,
 }: Props) => {
   const min = values?.min;
   const max = values?.max;
-  const [marks, setMarks] = useState<{ value: number; label: number; }[]>([]);
-  const [isCorrect, setIsCorrect] = useState<null | boolean>();
+  const [marks, setMarks] = useState<{ value: number; label: number }[]>([]);
+
+  const sliderSx = {
+    '&.MuiSlider-root': {
+      '&.Mui-disabled': {
+        color: isCorrect
+          ? theme.palette.success.main
+          : theme.palette.error.main,
+      },
+    },
+  };
 
   useEffect(() => {
     let newMarks = [
@@ -36,18 +48,14 @@ const PlaySlider = ({
       },
     ];
 
-    if (showCorrection) {
-      const isCorrect = computeCorrectness(values, response);
-      setIsCorrect(isCorrect);
-      if (!isCorrect) {
-        newMarks = [
-          ...newMarks,
-          {
-            value: values.value,
-            label: values.value,
-          },
-        ];
-      }
+    if (!isCorrect && showCorrection) {
+      newMarks = [
+        ...newMarks,
+        {
+          value: values.value,
+          label: values.value,
+        },
+      ];
     }
 
     setMarks(newMarks);
@@ -67,13 +75,19 @@ const PlaySlider = ({
           value={response?.value ?? (max - min) / 2 + min}
           valueLabelDisplay="on"
           onChange={(_e, val) => {
-            setResponse(val as number);
+            if (!isReadonly) {
+              setResponse(val as number);
+            }
           }}
           marks={marks}
           min={min}
           max={max}
           // set color only if we show the correction
-          {...(showCorrection ? { color: computeColor() } : {})}
+          {...(showCorrection || showCorrectness
+            ? { color: computeColor() }
+            : {})}
+          disabled={isReadonly}
+          sx={sliderSx}
         />
       </Grid>
     </Grid>

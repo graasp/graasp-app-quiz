@@ -19,6 +19,8 @@ import Correction from './fillInTheBlanks/Correction';
 
 type Props = {
   showCorrection: boolean;
+  showCorrectness: boolean;
+  isReadonly: boolean;
   values: FillTheBlanksAppSettingData;
   response: FillTheBlanksAppDataData;
   setResponse: (text: string) => void;
@@ -26,6 +28,8 @@ type Props = {
 
 const PlayFillInTheBlanks = ({
   showCorrection,
+  showCorrectness,
+  isReadonly,
   values,
   response,
   setResponse,
@@ -54,6 +58,10 @@ const PlayFillInTheBlanks = ({
   };
 
   const onDelete = (e: React.MouseEvent<HTMLSpanElement>) => {
+    if (isReadonly) {
+      return;
+    }
+
     const datasetId = e.currentTarget.dataset.id;
     if (datasetId) {
       const clickedId = +datasetId;
@@ -70,6 +78,10 @@ const PlayFillInTheBlanks = ({
   };
 
   const onDrop = (e: React.DragEvent<HTMLSpanElement>, dropId: number) => {
+    if (isReadonly) {
+      return;
+    }
+
     const text = e.dataTransfer.getData('text/plain');
     const previousAnswer = null;
 
@@ -103,9 +115,11 @@ const PlayFillInTheBlanks = ({
 
   return (
     <Box width="100%">
-      <Answers answers={state.answers} />
+      <Answers answers={state.answers} isReadonly={isReadonly} />
       <BlankedText
         showCorrection={showCorrection}
+        showCorrectness={showCorrectness}
+        isReadonly={isReadonly}
         words={state.words}
         onDrop={onDrop}
         onDelete={onDelete}

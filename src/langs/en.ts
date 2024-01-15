@@ -80,5 +80,8 @@ export default {
     blank: 'blank',
     NO_RESPONSE_FOR_NOW: 'There is no response for now.',
     NO_DATA_FOR_GENERAL_CHARTS: 'No data found for the charts.',
+    ATTEMPTS_PROGRESS_NUMBER_OF_ATTEMPTS: 'Number of attempts',
+    CREATE_VIEW_NUMBER_OF_ATTEMPTS: 'Number of attempts',
+    MULTIPLE_CHOICE_NOT_CORRECT: 'The answer is incorrect or not completely correct.',
   },
 };

@@ -68,13 +68,13 @@ const CorrectResponsesPercentage = ({
     return order.reduce<ChartData>(
       (acc, qId, idx) => {
         const question = getQuestionById(questions, qId);
+        const responses = responsesByQId[qId];
 
-        // Ignore undefined questions
-        if (!question) {
+        // Ignore deleted questions and responses for deleted question
+        if (!question || !responses) {
           return acc;
         }
 
-        const responses = responsesByQId[qId];
         const nbCorrect = responses.reduce(
           (acc, next) =>
             question &&

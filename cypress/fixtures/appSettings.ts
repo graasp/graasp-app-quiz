@@ -5,6 +5,18 @@ import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
 import { datesFactory } from '../../src/data/factories';
 import { mockItem } from '../../src/data/items';
 
+export const setAttemptsOnAppSettings = (
+  appSettings: AppSetting[],
+  numberOfAttempts = 1
+) =>
+  appSettings.map((s) => ({
+    ...s,
+    data: {
+      ...s.data,
+      numberOfAttempts,
+    },
+  }));
+
 export const MULTIPLE_CHOICES_APP_SETTING: QuestionDataAppSetting = {
   id: 'multiple-choice-id',
   name: APP_SETTING_NAMES.QUESTION,

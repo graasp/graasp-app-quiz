@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CheckIcon from '@mui/icons-material/Check';
 import { TextField } from '@mui/material';
 
-import { PLAY_VIEW_TEXT_INPUT_CY } from '../../config/selectors';
-import { computeCorrectness } from '../context/utilities';
+import { buildPlayViewTextInputCy } from '../../config/selectors';
+import theme from '../../layout/theme';
 import { TextAppDataData, TextAppSettingData } from '../types/types';
 
 type Props = {
   values: TextAppSettingData;
   response: TextAppDataData;
   showCorrection: boolean;
+  showCorrectness: boolean;
+  isCorrect: boolean;
+  isReadonly: boolean;
   setResponse: (text: string) => void;
 };
 
@@ -19,24 +21,48 @@ const PlayTextInput = ({
   values,
   response,
   showCorrection,
+  showCorrectness,
+  isCorrect,
+  isReadonly,
   setResponse,
 }: Props) => {
-  const [isCorrect, setIsCorrect] = useState<boolean | undefined>();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (showCorrection && response) {
-      setIsCorrect(computeCorrectness(values, response));
-    }
-  }, [showCorrection, response, values]);
+  const textInputColor =
+    showCorrectness || showCorrection
+      ? isCorrect
+        ? theme.palette.success.main
+        : theme.palette.error.main
+      : undefined;
 
-  const computeColor = () => {
-    return isCorrect ? 'success' : 'error';
+  const textInputDisabledSx = {
+    // define the color of the label when disabled
+    '& .MuiInputLabel-root.Mui-disabled': {
+      WebkitTextFillColor: textInputColor,
+      color: textInputColor,
+    },
+    // define the border color when disabled
+    '& .MuiInputBase-root.Mui-disabled': {
+      '& > fieldset': {
+        borderColor: textInputColor,
+      },
+    },
+    // define the text color when disabled
+    '& .MuiOutlinedInput-input.Mui-disabled': {
+      WebkitTextFillColor: textInputColor,
+      color: textInputColor,
+    },
+  };
+
+  const computeColor = (showColors: boolean) => {
+    return showColors ? (isCorrect ? 'success' : 'error') : undefined;
   };
 
   return (
     <TextField
-      data-cy={PLAY_VIEW_TEXT_INPUT_CY}
+      data-cy={buildPlayViewTextInputCy(
+        showCorrectness || showCorrection ? isCorrect : undefined
+      )}
       fullWidth
       value={response.text ?? ''}
       placeholder={t('Type your answer')}
@@ -49,20 +75,24 @@ const PlayTextInput = ({
       label={t('Answer')}
       variant="outlined"
       onChange={(t) => {
-        setResponse(t.target.value);
+        if (!isReadonly) {
+          setResponse(t.target.value);
+        }
       }}
-      color={showCorrection ? computeColor() : undefined}
+      color={computeColor(showCorrectness || showCorrection)}
       InputProps={{
         endAdornment: showCorrection && isCorrect && (
           <CheckIcon color="success" />
         ),
       }}
       // set error prop only if we show the correction
-      {...(showCorrection
+      {...(showCorrectness || showCorrection
         ? {
             error: !isCorrect,
           }
         : {})}
+      disabled={isReadonly}
+      sx={textInputDisabledSx}
     />
   );
 };

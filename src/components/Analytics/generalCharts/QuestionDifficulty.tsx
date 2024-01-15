@@ -77,12 +77,13 @@ const QuestionDifficulty = ({
     return order.reduce<Chart>(
       (acc, qId, idx) => {
         const question = getQuestionById(questions, qId);
+        const responses = responsesByQId[qId];
 
-        if (!question) {
+        // Ignore deleted questions and responses for deleted question
+        if (!question || !responses) {
           return acc;
         }
 
-        const responses = responsesByQId[qId];
         const nbCorrectAndIncorrect = responses.reduce(
           ([correct, incorrect], next) =>
             question &&

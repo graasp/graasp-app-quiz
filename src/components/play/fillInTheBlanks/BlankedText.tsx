@@ -18,12 +18,21 @@ export const WordWrapper = styled('div')(({ theme }) => ({
 
 type Props = {
   showCorrection: boolean;
+  showCorrectness: boolean;
+  isReadonly: boolean;
   words: Word[];
   onDrop: (e: React.DragEvent<HTMLSpanElement>, id: number) => void;
   onDelete: (e: React.MouseEvent<HTMLSpanElement>) => void;
 };
 
-const BlankedText = ({ showCorrection = false, words, onDrop, onDelete }: Props) => {
+const BlankedText = ({
+  showCorrection = false,
+  showCorrectness,
+  isReadonly,
+  words,
+  onDrop,
+  onDelete,
+}: Props) => {
   const renderWords = () => {
     return words.map((word, i) => {
       if (word.type === FILL_BLANKS_TYPE.WORD) {
@@ -38,7 +47,9 @@ const BlankedText = ({ showCorrection = false, words, onDrop, onDelete }: Props)
         <Blank
           dataCy={buildBlankedTextWordCy(word.id)}
           showCorrection={showCorrection}
+          showCorrectness={showCorrectness}
           isCorrect={word.displayed === word.text}
+          isReadonly={isReadonly}
           key={i}
           id={word.id}
           onDrop={onDrop}
