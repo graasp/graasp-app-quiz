@@ -1,7 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, ButtonProps, Typography } from '@mui/material';
 
 import { buildMultipleChoicesButtonCy } from '../../config/selectors';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
+import theme from '../../layout/theme';
 import {
   MultipleChoiceAppDataData,
   MultipleChoicesAppSettingData,
@@ -12,6 +16,8 @@ type Props = {
   response: MultipleChoiceAppDataData;
   setResponse: (d: MultipleChoiceAppDataData['choices']) => void;
   showCorrection: boolean;
+  showCorrectness: boolean;
+  isReadonly: boolean;
 };
 
 const PlayMultipleChoices = ({
@@ -19,10 +25,18 @@ const PlayMultipleChoices = ({
   response,
   setResponse,
   showCorrection,
+  showCorrectness,
+  isReadonly,
 }: Props): JSX.Element => {
+  const { t } = useTranslation();
+
   const onResponseClick =
     (value: string): ButtonProps['onClick'] =>
-    (e) => {
+    (_e) => {
+      if (isReadonly) {
+        return;
+      }
+
       const choiceIdx = response.choices?.findIndex(
         (choice) => choice === value
       );
@@ -40,6 +54,15 @@ const PlayMultipleChoices = ({
         setResponse([...(response.choices ?? []), value]);
       }
     };
+
+  const hasError =
+    choices.reduce((acc, { value, isCorrect }) => {
+      if (!showCorrectness) {
+        return acc + 1;
+      }
+      const isSelected = Boolean(response.choices?.includes(value));
+      return acc + (isSelected && isCorrect ? 1 : 0);
+    }, 0) !== choices.length;
 
   const computeStyles = (
     { value, isCorrect }: { value: string; isCorrect: boolean },
@@ -85,24 +108,49 @@ const PlayMultipleChoices = ({
 
   return (
     <>
-      {choices?.map((choice, idx) => (
-        <Button
-          onClick={onResponseClick(choice.value)}
-          fullWidth
-          sx={{ mb: 1 }}
-          {...computeStyles(choice, idx)}
-        >
-          {showCorrection &&
-          choice.explanation &&
-          response.choices?.some((c) => c === choice.value) ? (
-            <>
+      {choices?.map((choice, idx) => {
+        const styleColor = computeStyles(choice, idx);
+        const disabledColor =
+          styleColor.color === 'success'
+            ? theme.palette.success.main
+            : styleColor.color === 'error'
+            ? theme.palette.error.main
+            : undefined;
+
+        return (
+          <Button
+            onClick={onResponseClick(choice.value)}
+            fullWidth
+            sx={{
+              mb: 1,
+              '&.MuiButton-root': {
+                '&.Mui-disabled': {
+                  color: disabledColor ? 'whitesmoke' : undefined,
+                  backgroundColor: disabledColor,
+                },
+              },
+            }}
+            {...styleColor}
+            disabled={isReadonly}
+          >
+            {showCorrection &&
+            choice.explanation &&
+            response.choices?.some((c) => c === choice.value) ? (
+              <>
+                <Typography variant="body1">{choice.value}</Typography>
+              </>
+            ) : (
               <Typography variant="body1">{choice.value}</Typography>
-            </>
-          ) : (
-            <Typography variant="body1">{choice.value}</Typography>
-          )}
-        </Button>
-      ))}
+            )}
+          </Button>
+        );
+      })}
+
+      {hasError && !showCorrection && (
+        <Typography variant="body1" color="error">
+          {t(QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_NOT_CORRECT)}
+        </Typography>
+      )}
     </>
   );
 };

@@ -9,6 +9,7 @@ import {
 import {
   FILL_BLANKS_CORRECTION_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
+  PLAY_VIEW_SUBMIT_BUTTON_CY,
   buildBlankedTextWordCy,
   buildFillBlanksAnswerId,
   buildFillBlanksCorrectionAnswerCy,
@@ -22,6 +23,7 @@ import { Word, splitSentence } from '../../../src/utils/fillInTheBlanks';
 import {
   APP_SETTINGS,
   QUESTION_APP_SETTINGS,
+  setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
 
 const { data } = QUESTION_APP_SETTINGS.find(
@@ -35,13 +37,27 @@ const id = data.questionId;
 const { text } = data as TextAppDataData;
 const { answers, words } = splitSentence(text);
 
+const explanationShouldNotBeVisible = () => cy.checkExplanationPlay(undefined);
+
 // verify all answers styles
-const checkCorrection = ({ answers: responseAnswers }: { answers: Word[] }) => {
+const checkCorrection = (
+  {
+    answers: responseAnswers,
+  }: {
+    answers: Word[];
+  },
+  shouldBeVisible = true
+) => {
+  const status = `${shouldBeVisible ? 'be.visible' : 'not.exist'}`;
+
   answers.forEach((answer, idx) => {
-    cy.get(dataCyWrapper(FILL_BLANKS_CORRECTION_CY), { timeout: 5500 }).should(
-      'contain',
-      answer.text
-    );
+    if (shouldBeVisible) {
+      cy.get(dataCyWrapper(FILL_BLANKS_CORRECTION_CY), {
+        timeout: 5500,
+      }).should('contain', answer.text);
+    } else {
+      cy.get(dataCyWrapper(FILL_BLANKS_CORRECTION_CY)).should('not.exist');
+    }
 
     if (responseAnswers.length > idx) {
       const isCorrect = answer.text === responseAnswers[idx].text;
@@ -49,7 +65,7 @@ const checkCorrection = ({ answers: responseAnswers }: { answers: Word[] }) => {
       // correction list
       cy.get(
         dataCyWrapper(buildFillBlanksCorrectionAnswerCy(answer.id, isCorrect))
-      ).should('be.visible');
+      ).should(status);
 
       // blank
       cy.get(`[data-id="${answer.id}"]`)
@@ -60,7 +76,7 @@ const checkCorrection = ({ answers: responseAnswers }: { answers: Word[] }) => {
       // so it's false by default
       cy.get(
         dataCyWrapper(buildFillBlanksCorrectionAnswerCy(answer.id, false))
-      ).should('be.visible');
+      ).should(status);
 
       // blank
       cy.get(`[data-id="${answer.id}"]`).should(
@@ -70,164 +86,434 @@ const checkCorrection = ({ answers: responseAnswers }: { answers: Word[] }) => {
       );
     }
 
-    cy.checkExplanationPlay(data.explanation);
+    if (shouldBeVisible) {
+      cy.checkExplanationPlay(data.explanation);
+    } else {
+      explanationShouldNotBeVisible();
+    }
   });
 };
 
+/**
+ * Checks that the answers, blanks and submit button are disabled or not.
+ * It is useful to check that:
+ *  - no more answers can be sent if maximum of attempts are reached
+ *  - no more answers can be sent if the answer is correct
+ *  - the user can send answers when the max number of attempts is not reached yet
+ * @param shouldBeDisabled Indicates if the inputs should be disabled or not.
+ */
+const checkInputDisabled = (shouldBeDisabled: boolean) => {
+  const status = `${shouldBeDisabled ? '' : 'not.'}be.disabled`;
+  cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).should(status);
+
+  const checkElementStatus = (el: JQuery<HTMLElement>) => {
+    if (el.length) {
+      cy.wrap(el).should('have.attr', 'data-disabled', `${shouldBeDisabled}`);
+    }
+  };
+
+  // ignore if the element not exist.
+  const ignoreNotExist = 'have.length.gte';
+
+  answers.forEach((answer) => {
+    // check the answers on top
+    cy.get(dataCyWrapper(buildFillBlanksAnswerId(answer.id)))
+      .should(ignoreNotExist, 0)
+      .then(checkElementStatus);
+
+    // check the blanks
+    cy.get(`[data-id="${answer.id}"]`)
+      .should(ignoreNotExist, 0)
+      .then(checkElementStatus);
+  });
+};
+
+/**
+ * Test if it is possible to remove an answer or not.
+ * This is useful to test if the quizz is readonly.
+ *
+ * @param answer The answer to remove.
+ * @param shouldFail Indicates if it should be possible or not.
+ */
+const removeAnswer = (answer: Word, shouldFail: boolean) => {
+  // start by checking that the answer contains the correct text
+  cy.get(`[data-id="${answer.id}"]`).should('not.be.empty');
+  cy.get(`[data-id="${answer.id}"]`).click();
+
+  if (shouldFail) {
+    cy.get(`[data-id="${answer.id}"]`).should('not.be.empty');
+  } else {
+    // testing should contain '' seems not to work, so check is empty.
+    cy.get(`[data-id="${answer.id}"]`).should('be.empty');
+  }
+};
+
 describe('Play Fill In The Blanks', () => {
-  describe('Empty data', () => {
-    beforeEach(() => {
-      cy.setUpApi({
-        database: {
-          appSettings: APP_SETTINGS,
-        },
-        appContext: {
-          context: Context.Player,
-        },
+  describe('Only 1 attempt', () => {
+    const NUMBER_OF_ATTEMPTS = 1;
+
+    describe('Empty data', () => {
+      beforeEach(() => {
+        cy.setUpApi({
+          database: {
+            appSettings: APP_SETTINGS,
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       });
-      cy.visit('/');
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
-    });
 
-    it('Start with empty app data', () => {
-      cy.get(dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)).should(
-        'contain',
-        data.question
-      );
-
-      // all answers are displayed
-      answers.forEach((answer) => {
-        cy.get(dataCyWrapper(buildFillBlanksAnswerId(answer.id))).should(
+      it('Start with empty app data', () => {
+        cy.get(dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)).should(
           'contain',
-          answer.text
+          data.question
         );
+
+        // all answers are displayed
+        answers.forEach((answer) => {
+          cy.get(dataCyWrapper(buildFillBlanksAnswerId(answer.id))).should(
+            'contain',
+            answer.text
+          );
+        });
+
+        // text and blanks are displayed
+        words.forEach((w) => {
+          if (w.type === FILL_BLANKS_TYPE.WORD) {
+            cy.get(dataCyWrapper(buildBlankedTextWordCy(w.id))).should(
+              'contain',
+              w.text
+            );
+          } else {
+            cy.get(dataCyWrapper(buildBlankedTextWordCy(w.id))).should(
+              'be.empty'
+            );
+          }
+        });
+        cy.checkExplanationPlay(null);
+        checkInputDisabled(false);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 0,
+        });
       });
 
-      // text and blanks are displayed
-      words.forEach((w) => {
-        if (w.type === FILL_BLANKS_TYPE.WORD) {
-          cy.get(dataCyWrapper(buildBlankedTextWordCy(w.id))).should(
-            'contain',
-            w.text
-          );
-        } else {
-          cy.get(dataCyWrapper(buildBlankedTextWordCy(w.id))).should(
-            'be.empty'
-          );
-        }
-      });
-      cy.checkExplanationPlay(null);
+      // todo: difficult to test drag and drop
     });
 
-    // todo: difficult to test drag and drop
+    describe('Display saved settings', () => {
+      const buildAppData = (text: string) =>
+        mockAppDataFactory({
+          id: 'app-data-1',
+          item: mockItem,
+          creator: mockCurrentMember,
+          data: {
+            questionId: id,
+            text,
+          },
+        });
+
+      it('Show correct saved question', () => {
+        const correctAppData = buildAppData(
+          'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: APP_SETTINGS,
+            appData: [correctAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        const data = correctAppData.data;
+
+        checkCorrection(splitSentence(data.text));
+
+        // success displayed in question bar
+        cy.checkStepStatus(id, true);
+
+        // delete one answer
+        removeAnswer(answers[0], true);
+        checkInputDisabled(true);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 1,
+          isCorrect: true,
+        });
+      });
+
+      it('Show partially correct saved question', () => {
+        const partiallyCorrectAppData = buildAppData(
+          'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <wefwe> ut fermentum nulla, sed <suscipit> sem.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: APP_SETTINGS,
+            appData: [partiallyCorrectAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+
+        const data = partiallyCorrectAppData.data;
+        checkCorrection(splitSentence(data.text));
+
+        // success displayed in question bar
+        cy.checkStepStatus(id, false);
+
+        removeAnswer(answers[0], true);
+        checkInputDisabled(true);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 1,
+          isCorrect: false,
+        });
+      });
+
+      it('Show unmatching and shorter saved question', () => {
+        const shorterAppData = buildAppData(
+          'Lorem <ergerg> dolor sit amet, consectetur adipiscing elit.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: APP_SETTINGS,
+            appData: [shorterAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+
+        const data = shorterAppData.data;
+        checkCorrection(splitSentence(data.text));
+
+        // success displayed in question bar
+        cy.checkStepStatus(id, false);
+
+        removeAnswer(answers[0], true);
+        checkInputDisabled(true);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 1,
+          isCorrect: false,
+        });
+      });
+
+      it('Show unmatching and longer saved question', () => {
+        const longerAppData = buildAppData(
+          'Lorem <ergerg> dolor <sit> amet, <consectetur> <adipiscing> elit.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: APP_SETTINGS,
+            appData: [longerAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+
+        // we do not check correction: nothing matches
+        // but we want to know that the app didn't crash
+
+        // success displayed in question bar
+        cy.checkStepStatus(id, false);
+
+        removeAnswer(answers[0], true);
+        checkInputDisabled(true);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 1,
+          isCorrect: false,
+        });
+      });
+    });
   });
 
-  describe('Display saved settings', () => {
-    const buildAppData = (text: string) =>
-      mockAppDataFactory({
-        id: 'app-data-1',
-        item: mockItem,
-        creator: mockCurrentMember,
-        data: {
-          questionId: id,
-          text,
-        },
+  describe('3 attempts', () => {
+    const NUMBER_OF_ATTEMPTS = 3;
+
+    describe('Empty data', () => {
+      beforeEach(() => {
+        cy.setUpApi({
+          database: {
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       });
 
-    it('Show correct saved question', () => {
-      const correctAppData = buildAppData(
-        'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.'
-      );
-      cy.setUpApi({
-        database: {
-          appSettings: APP_SETTINGS,
-          appData: [correctAppData],
-        },
-        appContext: {
-          context: Context.Player,
-        },
-      });
-      cy.visit('/');
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
-      const data = correctAppData.data;
-
-      checkCorrection(splitSentence(data.text));
-
-      // success displayed in question bar
-      cy.checkStepStatus(id, true);
-
-      // delete one answer
-      cy.get(`[data-id="${answers[0].id}"]`).click();
-      cy.get(`[data-id="${answers[0].id}"]`).should('contain', '');
+      // todo: difficult to test drag and drop
     });
 
-    it('Show partially correct saved question', () => {
-      const partiallyCorrectAppData = buildAppData(
-        'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <wefwe> ut fermentum nulla, sed <suscipit> sem.'
-      );
-      cy.setUpApi({
-        database: {
-          appSettings: APP_SETTINGS,
-          appData: [partiallyCorrectAppData],
-        },
-        appContext: {
-          context: Context.Player,
-        },
+    describe('Display saved settings', () => {
+      const buildAppData = (text: string) =>
+        mockAppDataFactory({
+          id: 'app-data-1',
+          item: mockItem,
+          creator: mockCurrentMember,
+          data: {
+            questionId: id,
+            text,
+          },
+        });
+
+      it('Show correct saved question', () => {
+        const correctAppData = buildAppData(
+          'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
+            appData: [correctAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        const data = correctAppData.data;
+
+        checkCorrection(splitSentence(data.text));
+
+        // success displayed in question bar
+        cy.checkStepStatus(id, true);
+
+        // delete one answer
+        removeAnswer(answers[0], true);
+        checkInputDisabled(true);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 1,
+          isCorrect: true,
+        });
       });
-      cy.visit('/');
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
-      const data = partiallyCorrectAppData.data;
-      checkCorrection(splitSentence(data.text));
+      it('Show partially correct saved question', () => {
+        const partiallyCorrectAppData = buildAppData(
+          'Lorem <Praesent> dolor sit amet, consectetur adipiscing elit. <wefwe> ut fermentum nulla, sed <suscipit> sem.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
+            appData: [partiallyCorrectAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
-      // success displayed in question bar
-      cy.checkStepStatus(id, false);
-    });
+        const data = partiallyCorrectAppData.data;
+        checkCorrection(splitSentence(data.text), false);
 
-    it('Show unmatching and shorter saved question', () => {
-      const shorterAppData = buildAppData(
-        'Lorem <ergerg> dolor sit amet, consectetur adipiscing elit.'
-      );
-      cy.setUpApi({
-        database: {
-          appSettings: APP_SETTINGS,
-          appData: [shorterAppData],
-        },
-        appContext: {
-          context: Context.Player,
-        },
+        // success displayed in question bar
+        cy.checkStepStatus(id, false);
+
+        removeAnswer(answers[0], false);
+        checkInputDisabled(false);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 1,
+          isCorrect: false,
+        });
       });
-      cy.visit('/');
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
-      const data = shorterAppData.data;
-      checkCorrection(splitSentence(data.text));
+      it('Show unmatching and shorter saved question', () => {
+        const shorterAppData = buildAppData(
+          'Lorem <ergerg> dolor sit amet, consectetur adipiscing elit.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
+            appData: [shorterAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
-      // success displayed in question bar
-      cy.checkStepStatus(id, false);
-    });
+        const data = shorterAppData.data;
+        checkCorrection(splitSentence(data.text), false);
 
-    it('Show unmatching and longer saved question', () => {
-      const longerAppData = buildAppData(
-        'Lorem <ergerg> dolor <sit> amet, <consectetur> <adipiscing> elit.'
-      );
-      cy.setUpApi({
-        database: {
-          appSettings: APP_SETTINGS,
-          appData: [longerAppData],
-        },
-        appContext: {
-          context: Context.Player,
-        },
+        // success displayed in question bar
+        cy.checkStepStatus(id, false);
+
+        removeAnswer(answers[0], false);
+        checkInputDisabled(false);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 1,
+          isCorrect: false,
+        });
       });
-      cy.visit('/');
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
-      // we do not check correction: nothing matches
-      // but we want to know that the app didn't crash
+      it('Show unmatching and longer saved question', () => {
+        const longerAppData = buildAppData(
+          'Lorem <ergerg> dolor <sit> amet, <consectetur> <adipiscing> elit.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: setAttemptsOnAppSettings(
+              APP_SETTINGS,
+              NUMBER_OF_ATTEMPTS
+            ),
+            appData: [longerAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
 
-      // success displayed in question bar
-      cy.checkStepStatus(id, false);
+        // we do not check correction: nothing matches
+        // but we want to know that the app didn't crash
+
+        // success displayed in question bar
+        cy.checkStepStatus(id, false);
+
+        removeAnswer(answers[0], false);
+        checkInputDisabled(false);
+        cy.checkNumberOfAttemptsProgression({
+          numberOfAttempts: NUMBER_OF_ATTEMPTS,
+          currentAttempts: 1,
+          isCorrect: false,
+        });
+      });
     });
   });
 });
