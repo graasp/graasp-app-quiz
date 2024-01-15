@@ -43,9 +43,7 @@ export const buildMultipleChoicesButtonCy = (
 export const PLAY_VIEW_SUBMIT_BUTTON_CY = 'playViewSubmitButton';
 export const PLAY_VIEW_SLIDER_CY = 'playViewSlider';
 export const buildPlayViewTextInputCy = (isCorrect?: boolean) =>
-  `playViewTextInput-${
-    isCorrect === undefined ? 'undefined' : isCorrect ? 'true' : 'false'
-  }`;
+  `playViewTextInput-${isCorrect}`;
 export const EXPLANATION_CY = 'explanation';
 export const EXPLANATION_PLAY_CY = 'explanationPlay';
 export const buildFillBlanksAnswerId = (id: number) => `fillBlanksAnswer-${id}`;

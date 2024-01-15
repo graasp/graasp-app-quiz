@@ -176,11 +176,11 @@ export const getQuestionNames = (
   responses
     .map((res) => getQuestionNameFromId(questions, res.data.questionId))
     .filter((r): r is string => Boolean(r))
-    .reduce((result, question) => {
+    .reduce<[string, number][]>((result, question) => {
       const index = result.filter((entry) => entry[0] === question).length;
       result.push([question, index]);
       return result;
-    }, [] as [string, number][]);
+    }, []);
 
 export const getAllAppDataByQuestionId = (
   appData: AppData[] | undefined,
