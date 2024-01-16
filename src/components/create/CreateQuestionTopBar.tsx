@@ -17,6 +17,7 @@ import {
   Stepper,
 } from '@mui/material';
 
+import { MAX_QUESTION_LINES_TOP_BAR } from '../../config/constants';
 import {
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
@@ -24,6 +25,7 @@ import {
   QUESTION_STEP_CLASSNAME,
   buildQuestionStepCy,
 } from '../../config/selectors';
+import TypographyMaxLines from '../common/TypographyMaxLines';
 import { QuizContext } from '../context/QuizContext';
 import { getQuestionById } from '../context/utilities';
 import PlusStep from '../navigation/PlusStep';
@@ -81,7 +83,9 @@ const CreateQuestionTopBar = () => {
         {...provided.draggableProps}
         {...props}
       >
-        {question.data.question}
+        <TypographyMaxLines maxLines={MAX_QUESTION_LINES_TOP_BAR}>
+          {question.data.question}
+        </TypographyMaxLines>
       </StepLabel>
     );
   };
@@ -107,6 +111,7 @@ const CreateQuestionTopBar = () => {
       direction="row"
       alignItems="flex-start"
       justifyContent="center"
+      mb={3}
     >
       <Grid item>
         <Button

@@ -137,9 +137,13 @@ const PlayView = () => {
       </Grid>
       <Grid item>
         <Typography
-          variant="h4"
-          sx={{ pb: 2 }}
+          component="h1"
+          variant="h5"
+          sx={{
+            pb: 2,
+          }}
           data-cy={PLAY_VIEW_QUESTION_TITLE_CY}
+          textAlign="center"
         >
           {currentQuestion.data.question}
         </Typography>
