@@ -94,7 +94,7 @@ const PlayView = () => {
     object: Partial<T>,
     key: K,
     value: V,
-    prevValue: V | undefined
+    prevValue: V | undefined,
   ) => {
     // reset correctness on value changed if not the same
     // this allow to show prev error and avoid to show success
@@ -173,7 +173,9 @@ const PlayView = () => {
                   choices={currentQuestion.data.choices}
                   response={newResponse as MultipleChoiceAppDataData}
                   setResponse={(choices) => {
-                    setNewResponse(setInData(newResponse, 'choices', choices));
+                    setNewResponse(
+                      setInData(newResponse, 'choices', choices)
+                    );
                     setShowCorrectness(false);
                   }}
                   showCorrection={showCorrection}
@@ -208,7 +210,9 @@ const PlayView = () => {
                   values={currentQuestion.data}
                   response={newResponse as FillTheBlanksAppDataData}
                   setResponse={(text: string) => {
-                    setNewResponse(setInData(newResponse, 'text', text));
+                    setNewResponse(
+                      setInData(newResponse, 'text', text)
+                    );
                     setShowCorrectness(false);
                   }}
                   showCorrection={showCorrection}

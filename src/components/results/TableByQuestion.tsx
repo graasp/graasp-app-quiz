@@ -21,7 +21,6 @@ import { visuallyHidden } from '@mui/utils';
 
 import { AppData, Member } from '@graasp/sdk';
 
-import { QuestionType } from '../../config/constants';
 import {
   TABLE_BY_QUESTION_ANSWER_DATA_CY,
   TABLE_BY_QUESTION_CONTAINER_CY,
@@ -41,13 +40,10 @@ import {
   comparatorArrayByElemName,
   getComparator,
 } from '../../utils/tableUtils';
-import { computeCorrectness, sortAppDataByDate } from '../context/utilities';
+import { computeCorrectness, getResponseValue, sortAppDataByDate } from '../context/utilities';
 import {
-  MultipleChoiceAppDataData,
   QuestionAppDataData,
   QuestionDataAppSetting,
-  SliderAppDataData,
-  TextAppDataData,
 } from '../types/types';
 
 type Props = {
@@ -94,21 +90,8 @@ const TableByQuestion = ({
    * @returns {string} Response for given user.
    */
   const getResponseDataForUserId = (userId: string) => {
-    const response = getResponseForUserId(userId)?.data;
-
-    switch (question.data.type) {
-      case QuestionType.TEXT_INPUT:
-      case QuestionType.FILL_BLANKS:
-        return (response as TextAppDataData)?.text ?? '';
-      case QuestionType.SLIDER:
-        return (response as SliderAppDataData)?.value ?? '';
-      case QuestionType.MULTIPLE_CHOICES:
-        return (
-          (response as MultipleChoiceAppDataData)?.choices?.join(', ') ?? ''
-        );
-      default:
-        return '';
-    }
+    // using this instead of switch allow to display answer after question type changed
+    return getResponseValue(getResponseForUserId(userId)?.data);
   };
 
   /**

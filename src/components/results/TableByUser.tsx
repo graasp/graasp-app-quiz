@@ -41,14 +41,12 @@ import {
   computeCorrectness,
   getQuestionNameFromId,
   getQuestionNames,
+  getResponseValue,
 } from '../context/utilities';
 import {
-  MultipleChoiceAppDataData,
   QuestionAppDataData,
   QuestionDataAppSetting,
-  SliderAppDataData,
   TableByUserResponse,
-  TextAppDataData,
 } from '../types/types';
 
 type Props = {
@@ -150,29 +148,7 @@ const TableByUser = ({
    * @returns {string} Response for given user.
    */
   const getResponseDataForQuestionName = (qName: string, qIdx: number) => {
-    const data = getResponseForQuestionName(qName, qIdx)?.data;
-
-    if (!data) {
-      return '';
-    }
-
-    // return the first valid value in three possible name of values or empty if all nullish
-    const text = (data as TextAppDataData)?.text;
-    if (text) {
-      return text;
-    }
-
-    const value = (data as SliderAppDataData)?.value;
-    if (value) {
-      return value;
-    }
-
-    const choices = (data as MultipleChoiceAppDataData)?.choices;
-    if (choices) {
-      return choices.join(', ');
-    }
-
-    return '';
+    return getResponseValue(getResponseForQuestionName(qName, qIdx)?.data);
   };
 
   /**
