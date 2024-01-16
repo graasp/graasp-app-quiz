@@ -41,7 +41,7 @@ const PlaySlider = ({
   };
 
   useEffect(() => {
-    // Notify with the default value if reponse's value is null.
+    // Notify with the default value if response's value is null.
     // Without it, if the user click on submit without changing the slider's value,
     // the response's value will be undefined instead of defaultValue displayed on the screen.
     if (!isReadonly && !response.value) {
