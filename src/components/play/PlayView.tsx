@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, Button, Grid, Typography } from '@mui/material';
@@ -41,15 +41,14 @@ const PlayView = () => {
   const { t } = useTranslation();
   const { data: responses, isSuccess } = hooks.useAppData();
   const { mutate: postAppData } = mutations.usePostAppData();
-
-  const { currentQuestion, questions } = useContext(QuizContext);
+  const { currentQuestion, questions, currentIdx } = useContext(QuizContext);
   const { memberId } = useLocalContext();
 
   const [newResponse, setNewResponse] = useState<Data>(
     getAppDataByQuestionIdForMemberId(responses, currentQuestion, memberId).data
   );
   const [userAnswers, setUserAnswers] = useState<AppData[]>([]);
-  const [showCorrectness, setShowCorrectness] = React.useState(false);
+  const [showCorrectness, setShowCorrectness] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
 
   const numberOfAnswers = userAnswers.length;
@@ -58,6 +57,14 @@ const PlayView = () => {
   const maxAttemptsReached = numberOfAnswers >= maxAttempts;
   const isReadonly = isCorrect || maxAttemptsReached;
   const showCorrection = isCorrect || numberOfAnswers >= maxAttempts;
+
+  // This use effect is used to reset the show correction when question changed.
+  // It ensures that the answers are not leaked when changing to next question.
+  // See https://github.com/graasp/graasp-app-quiz/issues/111 for more information.
+  useEffect(() => {
+    setUserAnswers([]);
+    setShowCorrectness(false);
+  }, [currentIdx]);
 
   useEffect(() => {
     if (responses) {
