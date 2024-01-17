@@ -19,7 +19,10 @@ import {
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../../fixtures/appSettings';
 
 const t = i18n.t;
 
@@ -80,6 +83,8 @@ const fillSliderQuestion = (
   // save
   if (shouldSave) {
     cy.get(dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)).click();
+  } else {
+    cy.get(dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)).should('be.disabled');
   }
 };
 
@@ -101,25 +106,23 @@ describe('Slider', () => {
     // empty min
     const new1 = { ...newSliderData, min: null } as SliderValues;
     const dataValue = (data as SliderAppDataData).value;
-    fillSliderQuestion(new1, dataValue);
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX)
-    );
+    fillSliderQuestion(new1, dataValue, { shouldSave: false });
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX),
+    });
+
     // empty max
     const new2 = { ...newSliderData, max: null } as SliderValues;
     fillSliderQuestion(new2, new1.value, { shouldSave: false });
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX)
-    );
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.SLIDER_UNDEFINED_MIN_MAX),
+    });
     // // min higher than max
     const new3 = { ...newSliderData, min: 100, max: 30 };
     fillSliderQuestion(new3, new2.value, { shouldSave: false });
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.SLIDER_MIN_SMALLER_THAN_MAX)
-    );
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.SLIDER_MIN_SMALLER_THAN_MAX),
+    });
 
     fillSliderQuestion(newSliderData, new3.value);
     cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');

@@ -65,6 +65,14 @@ declare global {
         currentAttempts: number;
         isCorrect?: boolean;
       }): Chainable;
+
+      checkErrorMessage({
+        errorMessage,
+        severity,
+      }: {
+        errorMessage?: string;
+        severity?: 'error' | 'warning';
+      }): Chainable;
     }
   }
 }

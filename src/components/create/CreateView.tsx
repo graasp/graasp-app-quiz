@@ -30,14 +30,27 @@ import QuestionTypeSelect from './QuestionTypeSelect';
 import Slider from './Slider';
 import TextInput from './TextInput';
 
+type ValidationSeverity = 'warning' | 'error';
+
+type ValidationMessage = {
+  msg: string;
+  severity: ValidationSeverity;
+};
+
 const CreateView = () => {
   const { t } = useTranslation();
-  const { currentQuestion, deleteQuestion, saveQuestion } =
+  const { currentQuestion, deleteQuestion, saveQuestion, currentIdx } =
     useContext(QuizContext);
 
   const [newData, setNewData] = useState<QuestionData>(currentQuestion.data);
-  const [errorMessage, setErrorMessage] = useState<string | null>();
+  const [errorMessage, setErrorMessage] = useState<ValidationMessage | null>();
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Reset is submitted when currentIdx changed to 
+  // display errorMessage with the correct severity.
+  useEffect(() => {
+    setIsSubmitted(false);
+  }, [currentIdx]);
 
   useEffect(() => {
     setNewData(currentQuestion.data as QuestionData);
@@ -45,13 +58,14 @@ const CreateView = () => {
 
   // validate data to enable save
   useEffect(() => {
-    if (isSubmitted) {
-      try {
-        validateQuestionData(newData);
-        setErrorMessage(null);
-      } catch (e) {
-        setErrorMessage(e as string);
-      }
+    try {
+      validateQuestionData(newData);
+      setErrorMessage(null);
+    } catch (e) {
+      setErrorMessage({
+        msg: e as string,
+        severity: isSubmitted ? 'error' : 'warning',
+      });
     }
   }, [newData, isSubmitted]);
 
@@ -62,7 +76,10 @@ const CreateView = () => {
       setErrorMessage(null);
       saveQuestion(newData);
     } catch (e) {
-      setErrorMessage(e as string);
+      setErrorMessage({
+        msg: e as string,
+        severity: 'error',
+      });
     }
   };
 
@@ -199,8 +216,11 @@ const CreateView = () => {
         </Grid>
         {errorMessage && (
           <Grid item>
-            <Alert severity="error" data-cy={CREATE_VIEW_ERROR_ALERT_CY}>
-              {t(errorMessage)}
+            <Alert
+              severity={errorMessage.severity}
+              data-cy={CREATE_VIEW_ERROR_ALERT_CY}
+            >
+              {t(errorMessage.msg)}
             </Alert>
           </Grid>
         )}

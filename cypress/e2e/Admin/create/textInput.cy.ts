@@ -2,19 +2,25 @@ import { Context, PermissionLevel } from '@graasp/sdk';
 
 import {
   APP_SETTING_NAMES,
+  FAILURE_MESSAGES,
   QuestionType,
 } from '../../../../src/config/constants';
+import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
-  CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   TEXT_INPUT_FIELD_CY,
   buildQuestionStepCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
-import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../../fixtures/appSettings';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../../fixtures/appSettings';
+
+const t = i18n.t;
 
 const newTextInputData = {
   question: 'new question text',
@@ -55,6 +61,8 @@ const fillTextInputQuestion = (
   // save
   if (shouldSave) {
     cy.get(dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)).click();
+  } else {
+    cy.get(dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)).should('be.disabled');
   }
 };
 
@@ -78,9 +86,10 @@ describe('Text Input', () => {
       ...newTextInputData,
       text: '',
     };
-    fillTextInputQuestion(new1);
-
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
+    fillTextInputQuestion(new1, { shouldSave: false });
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.TEXT_INPUT_NOT_EMPTY),
+    });
   });
 
   it('Start with empty data and save question with non-empty response', () => {
@@ -98,7 +107,7 @@ describe('Text Input', () => {
     cy.switchQuestionType(QuestionType.TEXT_INPUT);
 
     fillTextInputQuestion(newTextInputData);
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
+    cy.checkErrorMessage({});
   });
 
   describe('Display saved settings', () => {

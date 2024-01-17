@@ -9,7 +9,6 @@ import i18n from '../../../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_QUESTION_TITLE_CY,
-  CREATE_VIEW_ERROR_ALERT_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
   FILL_BLANKS_TEXT_FIELD_CY,
   QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
@@ -61,6 +60,8 @@ const fillBlanksQuestion = (
   // save
   if (shouldSave) {
     cy.get(dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)).click();
+  } else {
+    cy.get(dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)).should('be.disabled');
   }
 };
 
@@ -81,11 +82,10 @@ describe('Fill in the Blanks', () => {
 
     // empty text
     const new1 = { ...newFillBlanksData, text: '' };
-    fillBlanksQuestion(new1);
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT)
-    );
+    fillBlanksQuestion(new1, { shouldSave: false });
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.FILL_BLANKS_EMPTY_TEXT),
+    });
 
     // faulty text
     const new2 = {
@@ -93,14 +93,12 @@ describe('Fill in the Blanks', () => {
       text: 'my <faulty< text with <blanks>',
     };
     fillBlanksQuestion(new2, { shouldSave: false });
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should(
-      'contain',
-      t(FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS)
-    );
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.FILL_BLANKS_UNMATCHING_TAGS),
+    });
 
     fillBlanksQuestion(newFillBlanksData);
-
-    cy.get(dataCyWrapper(CREATE_VIEW_ERROR_ALERT_CY)).should('not.exist');
+    cy.checkErrorMessage({});
   });
 
   describe('Display saved settings', () => {
