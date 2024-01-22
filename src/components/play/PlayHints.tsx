@@ -10,7 +10,6 @@ type Props = {
   maxAttempts: number;
   currentAttempts: number;
   isCorrect: boolean;
-  mt?: number;
 };
 
 export const PlayHints = ({
@@ -18,25 +17,28 @@ export const PlayHints = ({
   maxAttempts,
   currentAttempts,
   isCorrect,
-  mt,
 }: Props) => {
   const { t } = useTranslation();
 
-  return (
+  if (
     hints &&
     !isCorrect &&
     currentAttempts > 0 &&
-    currentAttempts < maxAttempts && (
+    currentAttempts < maxAttempts
+  ) {
+    return (
       <Alert
         severity="info"
-        sx={{ mt: mt, width: '100%' }}
+        sx={{ mt: 4, width: '100%' }}
         data-cy={HINTS_PLAY_CY}
       >
         <AlertTitle>{t(QUIZ_TRANSLATIONS.HINTS_ALERT_TITLE)}</AlertTitle>
         {hints}
       </Alert>
-    )
-  );
+    );
+  }
+
+  return null;
 };
 
 export default PlayHints;

@@ -262,7 +262,6 @@ const PlayView = () => {
         isCorrect={isCorrect}
         currentAttempts={userAnswers.length}
         maxAttempts={maxAttempts}
-        mt={4}
       />
 
       <PlayExplanation
