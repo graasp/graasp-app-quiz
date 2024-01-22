@@ -26,6 +26,7 @@ const newTextInputData = {
   question: 'new question text',
   text: 'new text',
   explanation: 'my explanation',
+  hints: 'my hints',
 };
 
 const { data } = QUESTION_APP_SETTINGS.find(
@@ -40,7 +41,8 @@ const fillTextInputQuestion = (
     text,
     question,
     explanation,
-  }: { text: string; question: string; explanation: string },
+    hints,
+  }: { text: string; question: string; explanation: string; hints: string },
   { shouldSave = true } = {}
 ) => {
   // fill question if not empty
@@ -55,7 +57,8 @@ const fillTextInputQuestion = (
     cy.get(`${dataCyWrapper(TEXT_INPUT_FIELD_CY)} input`).type(text);
   }
 
-  // fill explanation
+  // fill hints and explanation
+  cy.fillHints(hints);
   cy.fillExplanation(explanation);
 
   // save
@@ -143,6 +146,7 @@ describe('Text Input', () => {
         data.text
       );
 
+      cy.checkHintsField(data.hints);
       cy.checkExplanationField(data.explanation);
     });
 
@@ -163,6 +167,7 @@ describe('Text Input', () => {
         newTextInputData.text
       );
 
+      cy.checkHintsField(newTextInputData.hints);
       cy.checkExplanationField(newTextInputData.explanation);
     });
   });

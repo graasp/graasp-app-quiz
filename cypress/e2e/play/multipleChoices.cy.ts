@@ -1,6 +1,9 @@
 import { Context } from '@graasp/sdk';
 
-import { MultipleChoicesAppSettingData } from '../../../src/components/types/types';
+import {
+  AppSettingData,
+  MultipleChoicesAppSettingData,
+} from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   EXPLANATION_PLAY_CY,
@@ -27,6 +30,8 @@ const { data } = QUESTION_APP_SETTINGS.find(
 
 const id = data.questionId;
 const { choices } = data as MultipleChoicesAppSettingData;
+
+const multipleChoiceAppSettingsData = APP_SETTINGS[0].data as AppSettingData;
 
 // click on choices -> become selected
 const clickSelection = (selection: number[]) => {
@@ -124,6 +129,7 @@ describe('Play Multiple Choices', () => {
             dataCyWrapper(buildMultipleChoicesButtonCy(idx, false))
           ).should('be.visible');
         });
+        cy.checkHintsPlay(null);
         cy.checkExplanationPlay(null);
         checkInputDisabled([], false);
         cy.checkNumberOfAttemptsProgression({
@@ -140,6 +146,9 @@ describe('Play Multiple Choices', () => {
 
         // verify all choices styles
         checkCorrection(selection);
+
+        // hints should be hidden
+        cy.checkHintsPlay(null);
 
         // error displayed in question bar
         cy.checkStepStatus(id, false);
@@ -163,6 +172,9 @@ describe('Play Multiple Choices', () => {
         cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
 
         checkCorrection(selection);
+
+        // hints should be hidden
+        cy.checkHintsPlay(null);
 
         // success displayed in question bar
         cy.checkStepStatus(id, true);
@@ -218,6 +230,8 @@ describe('Play Multiple Choices', () => {
         );
 
         checkCorrection(selection);
+        // hints should be hidden
+        cy.checkHintsPlay(null);
         checkInputDisabled(selection, true);
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
@@ -256,6 +270,8 @@ describe('Play Multiple Choices', () => {
         // verify all choices styles
         checkCorrection(selection, false);
 
+        cy.checkHintsPlay(multipleChoiceAppSettingsData.hints);
+
         // error displayed in question bar
         cy.checkStepStatus(id, false);
         checkInputDisabled(selection, false);
@@ -278,6 +294,7 @@ describe('Play Multiple Choices', () => {
         cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
 
         checkCorrection(selection);
+        cy.checkHintsPlay(null);
 
         // success displayed in question bar
         cy.checkStepStatus(id, true);
@@ -336,6 +353,7 @@ describe('Play Multiple Choices', () => {
         );
 
         checkCorrection(selection, false);
+        cy.checkHintsPlay(multipleChoiceAppSettingsData.hints);
         checkInputDisabled(selection, false);
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,

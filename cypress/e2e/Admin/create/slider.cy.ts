@@ -32,6 +32,7 @@ const newSliderData = {
   max: 90,
   value: 40,
   explanation: 'new explanation',
+  hints: 'new hints',
 };
 
 const { data } = QUESTION_APP_SETTINGS.find(
@@ -45,12 +46,13 @@ type SliderValues = {
   max: number;
   value: number;
   explanation: string;
+  hints: string;
 };
 
 const id = data.questionId;
 
 const fillSliderQuestion = (
-  { min, max, value, question, explanation }: SliderValues,
+  { min, max, value, question, explanation, hints }: SliderValues,
   originalAppSettingDataValue: number,
   { shouldSave = true } = {}
 ) => {
@@ -78,6 +80,7 @@ const fillSliderQuestion = (
     cy.get(`${dataCyWrapper(SLIDER_CY)}`).type(stepsString);
   }
 
+  cy.fillHints(hints);
   cy.fillExplanation(explanation);
 
   // save
@@ -168,6 +171,7 @@ describe('Slider', () => {
         'have.value',
         data.value
       );
+      cy.checkHintsField(data.hints);
       cy.checkExplanationField(data.explanation);
     });
 
@@ -196,6 +200,7 @@ describe('Slider', () => {
         'not.have.value',
         data.value
       );
+      cy.checkHintsField(newSliderData.hints);
       cy.checkExplanationField(newSliderData.explanation);
     });
   });

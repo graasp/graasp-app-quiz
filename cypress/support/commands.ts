@@ -7,6 +7,8 @@ import {
   CREATE_VIEW_ERROR_ALERT_CY,
   EXPLANATION_CY,
   EXPLANATION_PLAY_CY,
+  HINTS_CY,
+  HINTS_PLAY_CY,
   NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
   NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY,
@@ -65,29 +67,47 @@ Cypress.Commands.add('checkStepStatus', (id, isCorrect) => {
   });
 });
 
-Cypress.Commands.add('checkExplanationPlay', (explanation) => {
-  if (explanation) {
-    cy.get(`${dataCyWrapper(EXPLANATION_PLAY_CY)}`).should(
-      'contain',
-      explanation
-    );
+const checkTextFieldPlay = (value: string, dataCy: string) => {
+  if (value) {
+    cy.get(`${dataCyWrapper(dataCy)}`).should('contain', value);
   } else {
-    cy.get(`${dataCyWrapper(EXPLANATION_PLAY_CY)}`).should('not.exist');
+    cy.get(`${dataCyWrapper(dataCy)}`).should('not.exist');
   }
+};
+
+const checkField = (value: string, dataCy: string) => {
+  cy.get(`${dataCyWrapper(dataCy)} textarea:first`).should('have.value', value);
+};
+
+const fillTextArea = (value: string, dataCy: string) => {
+  cy.get(`${dataCyWrapper(dataCy)} textarea:first`).clear();
+  if (value.length) {
+    cy.get(`${dataCyWrapper(dataCy)} textarea:first`).type(value);
+  }
+};
+
+Cypress.Commands.add('checkExplanationPlay', (explanation) => {
+  checkTextFieldPlay(explanation, EXPLANATION_PLAY_CY);
 });
 
 Cypress.Commands.add('checkExplanationField', (explanation) => {
-  cy.get(`${dataCyWrapper(EXPLANATION_CY)} textarea:first`).should(
-    'have.value',
-    explanation
-  );
+  checkField(explanation, EXPLANATION_CY);
 });
 
 Cypress.Commands.add('fillExplanation', (explanation) => {
-  cy.get(`${dataCyWrapper(EXPLANATION_CY)} textarea:first`).clear();
-  if (explanation.length) {
-    cy.get(`${dataCyWrapper(EXPLANATION_CY)} textarea:first`).type(explanation);
-  }
+  fillTextArea(explanation, EXPLANATION_CY);
+});
+
+Cypress.Commands.add('checkHintsPlay', (hints) => {
+  checkTextFieldPlay(hints, HINTS_PLAY_CY);
+});
+
+Cypress.Commands.add('checkHintsField', (hints) => {
+  checkField(hints, HINTS_CY);
+});
+
+Cypress.Commands.add('fillHints', (hints) => {
+  fillTextArea(hints, HINTS_CY);
 });
 
 /**
@@ -222,9 +242,7 @@ Cypress.Commands.add(
         if (severity === 'warning') {
           expect($el.attr('class').toLowerCase()).to.contain(MUI_ALERT_WARNING);
         } else if (severity === 'error') {
-          expect($el.attr('class').toLowerCase()).to.contain(
-            MUI_ALERT_ERROR
-          );
+          expect($el.attr('class').toLowerCase()).to.contain(MUI_ALERT_ERROR);
         }
       });
     } else {

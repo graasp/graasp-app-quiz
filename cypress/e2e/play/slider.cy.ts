@@ -1,6 +1,9 @@
 import { Context } from '@graasp/sdk';
 
-import { SliderAppDataData } from '../../../src/components/types/types';
+import {
+  AppSettingData,
+  SliderAppDataData,
+} from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -24,6 +27,8 @@ const { data } = QUESTION_APP_SETTINGS.find(
 );
 
 const id = data.questionId;
+
+const sliderAppSettingsData = APP_SETTINGS[2].data as AppSettingData;
 
 const checkCorrection = (responseData: Pick<SliderAppDataData, 'value'>) => {
   // cannot check slider value because we cannot move it
@@ -93,6 +98,7 @@ describe('Slider', () => {
           'not.have.value',
           data.value
         );
+        cy.checkHintsPlay(null);
         cy.checkExplanationPlay(null);
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: 1,
@@ -108,6 +114,7 @@ describe('Slider', () => {
 
         // verify all choices styles
         checkCorrection({ value: 60 });
+        cy.checkHintsPlay(null);
 
         // error display in question bar
         // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -124,6 +131,7 @@ describe('Slider', () => {
         ).click();
         cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
         checkCorrection({ value: 60 });
+        cy.checkHintsPlay(null);
 
         // error displayed in question bar
         cy.checkStepStatus(id, false);
@@ -165,6 +173,7 @@ describe('Slider', () => {
 
       it('Show saved question', () => {
         checkCorrection(appData.data);
+        cy.checkHintsPlay(null);
 
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: 1,
@@ -198,10 +207,12 @@ describe('Slider', () => {
         cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
       });
 
-      it('Incorrect app data', () => {
+      it.only('Incorrect app data', () => {
         // difficult to move slider, so we don't do it
 
+        cy.checkHintsPlay(null);
         cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
+        cy.checkHintsPlay(sliderAppSettingsData.hints);
 
         // error displayed in question bar
         cy.checkStepStatus(id, false);
@@ -215,7 +226,9 @@ describe('Slider', () => {
         checkInputDisabled(false);
 
         cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
+        cy.checkHintsPlay(sliderAppSettingsData.hints);
         cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
+        cy.checkHintsPlay(null);
 
         // verify all choices styles
         checkCorrection({ value: 60 });
@@ -280,6 +293,7 @@ describe('Slider', () => {
 
       it('Show saved question', () => {
         checkCorrection(appData.data);
+        cy.checkHintsPlay(null);
 
         cy.checkNumberOfAttemptsProgression({
           numberOfAttempts: NUMBER_OF_ATTEMPTS,

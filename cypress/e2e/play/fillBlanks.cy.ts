@@ -1,6 +1,9 @@
 import { Context } from '@graasp/sdk';
 
-import { TextAppDataData } from '../../../src/components/types/types';
+import {
+  AppSettingData,
+  TextAppDataData,
+} from '../../../src/components/types/types';
 import {
   APP_SETTING_NAMES,
   FILL_BLANKS_TYPE,
@@ -37,7 +40,7 @@ const id = data.questionId;
 const { text } = data as TextAppDataData;
 const { answers, words } = splitSentence(text);
 
-const explanationShouldNotBeVisible = () => cy.checkExplanationPlay(undefined);
+const fillBlanksAppSettingsData = APP_SETTINGS[3].data as AppSettingData;
 
 // verify all answers styles
 const checkCorrection = (
@@ -89,7 +92,7 @@ const checkCorrection = (
     if (shouldBeVisible) {
       cy.checkExplanationPlay(data.explanation);
     } else {
-      explanationShouldNotBeVisible();
+      cy.checkExplanationPlay(null);
     }
   });
 };
@@ -193,6 +196,7 @@ describe('Play Fill In The Blanks', () => {
             );
           }
         });
+        cy.checkHintsPlay(null);
         cy.checkExplanationPlay(null);
         checkInputDisabled(false);
         cy.checkNumberOfAttemptsProgression({
@@ -235,6 +239,9 @@ describe('Play Fill In The Blanks', () => {
 
         checkCorrection(splitSentence(data.text));
 
+        // hints should be hidden
+        cy.checkHintsPlay(null);
+
         // success displayed in question bar
         cy.checkStepStatus(id, true);
 
@@ -267,6 +274,9 @@ describe('Play Fill In The Blanks', () => {
         const data = partiallyCorrectAppData.data;
         checkCorrection(splitSentence(data.text));
 
+        // hints should be hidden
+        cy.checkHintsPlay(null);
+
         // success displayed in question bar
         cy.checkStepStatus(id, false);
 
@@ -298,6 +308,9 @@ describe('Play Fill In The Blanks', () => {
         const data = shorterAppData.data;
         checkCorrection(splitSentence(data.text));
 
+        // hints should be hidden
+        cy.checkHintsPlay(null);
+
         // success displayed in question bar
         cy.checkStepStatus(id, false);
 
@@ -325,6 +338,9 @@ describe('Play Fill In The Blanks', () => {
         });
         cy.visit('/');
         cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+
+        // hints should be hidden
+        cy.checkHintsPlay(null);
 
         // we do not check correction: nothing matches
         // but we want to know that the app didn't crash
@@ -400,6 +416,9 @@ describe('Play Fill In The Blanks', () => {
 
         checkCorrection(splitSentence(data.text));
 
+        // hints should be hidden
+        cy.checkHintsPlay(null);
+
         // success displayed in question bar
         cy.checkStepStatus(id, true);
 
@@ -435,6 +454,9 @@ describe('Play Fill In The Blanks', () => {
         const data = partiallyCorrectAppData.data;
         checkCorrection(splitSentence(data.text), false);
 
+        // hints should be displayed
+        cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
+
         // success displayed in question bar
         cy.checkStepStatus(id, false);
 
@@ -469,6 +491,9 @@ describe('Play Fill In The Blanks', () => {
         const data = shorterAppData.data;
         checkCorrection(splitSentence(data.text), false);
 
+        // hints should be displayed
+        cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
+
         // success displayed in question bar
         cy.checkStepStatus(id, false);
 
@@ -499,6 +524,9 @@ describe('Play Fill In The Blanks', () => {
         });
         cy.visit('/');
         cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+
+        // hints should be displayed
+        cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
 
         // we do not check correction: nothing matches
         // but we want to know that the app didn't crash

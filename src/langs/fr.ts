@@ -78,9 +78,16 @@ export default {
     'Error, chart type unknown': 'Erreur, type de graphique inconnu',
     blank: 'vide',
     NO_RESPONSE_FOR_NOW: "Il n'y a pas encore de réponse.",
-    NO_DATA_FOR_GENERAL_CHARTS: 'Aucune donnée n\'a été trouvé pour les graphiques.',
+    NO_DATA_FOR_GENERAL_CHARTS:
+      "Aucune donnée n'a été trouvé pour les graphiques.",
     ATTEMPTS_PROGRESS_NUMBER_OF_ATTEMPTS: 'Nombre de tentatives',
     CREATE_VIEW_NUMBER_OF_ATTEMPTS: 'Nombre de tentatives',
-    MULTIPLE_CHOICE_NOT_CORRECT: "La réponse est incorrecte ou n'est pas entièrement correcte.",
+    MULTIPLE_CHOICE_NOT_CORRECT:
+      "La réponse est incorrecte ou n'est pas entièrement correcte.",
+    HINTS_TITLE: 'Indices',
+    HINTS_SUB_TITLE:
+      "Saisissez ici les indices qui s'afficheront si la réponse est incorrecte, afin d'aider l'étudiant",
+    HINTS_LABEL: 'Indices',
+    HINTS_ALERT_TITLE: "Avez-vous besoins d'indices ?"
   },
 };

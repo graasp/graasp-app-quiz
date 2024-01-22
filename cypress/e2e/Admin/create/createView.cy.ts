@@ -41,6 +41,7 @@ const newMultipleChoiceData = {
     },
   ],
   explanation: 'my new explanation',
+  hints: 'my new hints'
 };
 
 describe('Create View', () => {

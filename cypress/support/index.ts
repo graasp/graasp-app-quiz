@@ -47,6 +47,12 @@ declare global {
 
       fillExplanation(explanation: string): Chainable;
 
+      checkHintsPlay(hints: string): Chainable;
+
+      checkHintsField(hints: string): Chainable;
+
+      fillHints(hints: string): Chainable;
+
       /**
        * Command to check that the progression of attempts is displayed correctly.
        * Also checks that the number of attempts are styled correctly

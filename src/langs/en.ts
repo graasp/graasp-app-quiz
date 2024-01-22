@@ -83,5 +83,9 @@ export default {
     ATTEMPTS_PROGRESS_NUMBER_OF_ATTEMPTS: 'Number of attempts',
     CREATE_VIEW_NUMBER_OF_ATTEMPTS: 'Number of attempts',
     MULTIPLE_CHOICE_NOT_CORRECT: 'The answer is incorrect or not completely correct.',
+    HINTS_TITLE: 'Hints',
+    HINTS_SUB_TITLE: 'Enter here the hints that will be displayed if the answer is incorrect, to help the student',
+    HINTS_LABEL: 'Hints',
+    HINTS_ALERT_TITLE: 'Do you need some hints ?'
   },
 };

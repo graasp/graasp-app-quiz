@@ -49,6 +49,7 @@ export const MULTIPLE_CHOICES_APP_SETTING: QuestionDataAppSetting = {
       },
     ],
     explanation: 'my explanation for multiple choice',
+    hints: 'my hints for multiple choice',
   },
 };
 
@@ -63,6 +64,7 @@ export const TEXT_INPUT_APP_SETTING: QuestionDataAppSetting = {
     question: 'My text input question',
     text: 'my text input',
     explanation: 'my explanation for text input',
+    hints: 'my hints for text input',
   },
 };
 
@@ -79,6 +81,7 @@ export const SLIDER_APP_SETTING: QuestionDataAppSetting = {
     max: 110,
     value: 30,
     explanation: 'my explanation for slider',
+    hints: 'my hints for slider',
   },
 };
 
@@ -93,6 +96,7 @@ export const FILL_BLANKS_SETTING: QuestionDataAppSetting = {
     question: 'My fill in the blanks question',
     text: 'Lorem <ipsum> dolor sit amet, consectetur adipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
     explanation: 'my explanation for fill in the blanks',
+    hints: 'my hints for fill in the blanks',
   },
 };
 
@@ -152,6 +156,7 @@ export const CAPITAL_FRANCE_SETTING = {
       },
     ],
     explanation: 'Paris is the capital of France.',
+    hints: 'Think about the iconic Eiffel Tower.'
   },
   name: APP_SETTING_NAMES.QUESTION,
 };
@@ -179,6 +184,7 @@ export const BABY_CAT_SETTING = {
   data: {
     questionId: 'id61',
     question: 'What is a baby cat called?',
+    hints: 'It is like "kitchen"',
     type: QuestionType.TEXT_INPUT,
     text: 'kitten',
   },
