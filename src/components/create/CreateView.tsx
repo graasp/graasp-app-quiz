@@ -9,12 +9,11 @@ import {
   Button,
   Grid,
   Stack,
+  TextField,
   Typography,
 } from '@mui/material';
 
-import {
-  QuestionType,
-} from '../../config/constants';
+import { QuestionType } from '../../config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
   CREATE_VIEW_CONTAINER_CY,
@@ -42,7 +41,6 @@ import QuestionTypeSelect from './QuestionTypeSelect';
 import Section from './Section';
 import Slider from './Slider';
 import TextInput from './TextInput';
-import TitleDescriptionTextField from './TitleDescriptionTextField';
 
 type ValidationSeverity = 'warning' | 'error';
 
@@ -226,7 +224,6 @@ const CreateView = () => {
                   }
                 }
               })()}
-              {/* TODO: migrate other custom sections to use the new Section component */}
               <Section
                 sx={{ mt: 2 }}
                 title={t(QUIZ_TRANSLATIONS.MULTIPLE_ATTEMPTS_SECTION_TITLE)}
@@ -243,39 +240,51 @@ const CreateView = () => {
                 />
               </Section>
             </Grid>
-
             <Grid item>
-              <TitleDescriptionTextField
+              <Section
+                sx={{ mt: 2 }}
                 title={t(QUIZ_TRANSLATIONS.HINTS_TITLE)}
-                subTitle={t(QUIZ_TRANSLATIONS.HINTS_SUB_TITLE)}
-                label={t(QUIZ_TRANSLATIONS.HINTS_LABEL)}
-                value={newData.hints}
-                onChange={(hints: string) => {
-                  setNewData({
-                    ...newData,
-                    hints,
-                  });
-                }}
-                dataCy={HINTS_CY}
-              />
+                explanation={t(QUIZ_TRANSLATIONS.HINTS_SUB_TITLE)}
+              >
+                <TextField
+                  data-cy={HINTS_CY}
+                  fullWidth
+                  value={newData.hints}
+                  label={t(QUIZ_TRANSLATIONS.HINTS_LABEL)}
+                  variant="outlined"
+                  onChange={(e) => {
+                    setNewData({
+                      ...newData,
+                      hints: e.target.value,
+                    });
+                  }}
+                  multiline
+                />
+              </Section>
             </Grid>
-
             <Grid item>
-              <TitleDescriptionTextField
+              <Section
+                sx={{ mt: 2 }}
                 title={t('Explanation')}
-                subTitle={t(
+                explanation={t(
                   'Type here an explanation that will be displayed after an answer is submitted'
                 )}
-                label={t('Explanation')}
-                value={newData.explanation}
-                onChange={(explanation: string) => {
-                  setNewData({
-                    ...newData,
-                    explanation,
-                  });
-                }}
-                dataCy={EXPLANATION_CY}
-              />
+              >
+                <TextField
+                  data-cy={EXPLANATION_CY}
+                  fullWidth
+                  label={t('Explanation')}
+                  value={newData.explanation}
+                  variant="outlined"
+                  onChange={(e) => {
+                    setNewData({
+                      ...newData,
+                      explanation: e.target.value,
+                    });
+                  }}
+                  multiline
+                />
+              </Section>
             </Grid>
             {currentQuestion.id && (
               <Grid item>

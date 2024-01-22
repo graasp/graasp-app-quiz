@@ -209,7 +209,6 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
         justifyContent={{ xs: 'start', sm: 'end' }}
       >
         <FormGroup>
-          {/* TODO: translate  */}
           <FormControlLabel
             control={
               <Switch
@@ -219,7 +218,7 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
                 }
               />
             }
-            label="Consider last users attempts only"
+            label={t(QUIZ_TRANSLATIONS.ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE)}
           />
         </FormGroup>
       </Box>

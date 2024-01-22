@@ -113,5 +113,7 @@ export default {
     MULTIPLE_CHOICE_SECTION_TITLE_MISSING: 'Correct answers you forgot',
     MULTIPLE_CHOICE_SECTION_TITLE_UNSELECTED: "Answers you haven't selected",
     PLAY_VIEW_RETRY_BTN: 'Retry',
+    ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE:
+      "Consider the last attempts by users only",
   },
 };

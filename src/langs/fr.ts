@@ -116,5 +116,7 @@ export default {
     MULTIPLE_CHOICE_SECTION_TITLE_UNSELECTED:
       "Les réponses que vous n'avez pas sélectionnées",
     PLAY_VIEW_RETRY_BTN: 'Réessayer',
+    ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE:
+      'Tenir compte uniquement des dernières tentatives des utilisateurs',
   },
 };

@@ -210,9 +210,7 @@ const PlayView = () => {
         />
         <PlayExplanation
           showCorrection={showCorrection}
-          showCorrectness={showCorrectness}
           currentQuestionData={currentQuestion.data as QuestionData}
-          mt={4}
         />
         <Box mt={4}>
           {displaySubmitBtn && (
