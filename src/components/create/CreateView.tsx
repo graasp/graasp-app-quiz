@@ -242,7 +242,6 @@ const CreateView = () => {
             </Grid>
             <Grid item>
               <Section
-                sx={{ mt: 2 }}
                 title={t(QUIZ_TRANSLATIONS.HINTS_TITLE)}
                 explanation={t(QUIZ_TRANSLATIONS.HINTS_SUB_TITLE)}
               >
@@ -264,7 +263,6 @@ const CreateView = () => {
             </Grid>
             <Grid item>
               <Section
-                sx={{ mt: 2 }}
                 title={t('Explanation')}
                 explanation={t(
                   'Type here an explanation that will be displayed after an answer is submitted'

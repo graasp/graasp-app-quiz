@@ -16,21 +16,21 @@ export const buildQuestionStepDefaultCy = (id: string) =>
   `questionStep-${id}-${QuestionStepStyleKeys.DEFAULT}`;
 export const buildMultipleChoiceAnswerCy = (idx: number) =>
   `multipleChoiceAnswer-${idx}`;
-export const buildMultipleChoiceAnswerExplanationCy = (idx: number) =>
-  `multipleChoiceAnswerExplanation-${idx}`;
-export const buildMultipleChoiceExplanationPlayCy = (idx: number) =>
+export const buildMultipleChoiceAnswerHintCy = (idx: number) =>
+  `multipleChoiceAnswerHint-${idx}`;
+export const buildMultipleChoiceHintPlayCy = (idx: number) =>
   `multipleChoiceExplanationPlay-${idx}`;
-export const buildMultipleChoiceAddAnswerExplanationButtonCy = (idx: number) =>
-  `multipleChoiceAddAnswerExplanationButton-${idx}`;
+export const buildMultipleChoiceAddAnswerHintButtonCy = (idx: number) =>
+  `multipleChoiceAddAnswerHintButton-${idx}`;
 export const MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME =
   'multipleChoicesAnswerCorrectness';
 export const QUESTION_STEP_CLASSNAME = 'questionStep';
-export const buildQuestionStepTitle = (idx: number) => `questionStepTitle-${idx}`;
+export const buildQuestionStepTitle = (idx: number) =>
+  `questionStepTitle-${idx}`;
 export const buildMultipleChoiceDeleteAnswerButtonCy = (idx: number) =>
   `multipleChoiceDeleteAnswerButton-${idx}`;
-export const buildMultipleChoiceDeleteAnswerExplanationButtonCy = (
-  idx: number
-) => `multipleChoiceDeleteAnswerExplanationButton-${idx}`;
+export const buildMultipleChoiceDeleteAnswerHintButtonCy = (idx: number) =>
+  `multipleChoiceDeleteAnswerHintButton-${idx}`;
 export const CREATE_VIEW_SAVE_BUTTON_CY = 'createViewSaveButton';
 export const MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY =
   'multipleChoicesAddAnswerButton';

@@ -1,6 +1,6 @@
 import { Alert } from '@mui/material';
 
-import { buildMultipleChoiceExplanationPlayCy } from '../../../config/selectors';
+import { buildMultipleChoiceHintPlayCy } from '../../../config/selectors';
 
 type Props = {
   showCorrectness: boolean;
@@ -22,7 +22,7 @@ export const ChoiceHint = ({
     (showCorrectness && isSelected && explanation && (
       <Alert
         severity="info"
-        data-cy={buildMultipleChoiceExplanationPlayCy(idx)}
+        data-cy={buildMultipleChoiceHintPlayCy(idx)}
       >
         {explanation}
       </Alert>

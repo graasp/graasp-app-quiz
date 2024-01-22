@@ -114,6 +114,10 @@ export default {
     MULTIPLE_CHOICE_SECTION_TITLE_UNSELECTED: "Answers you haven't selected",
     PLAY_VIEW_RETRY_BTN: 'Retry',
     ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE:
-      "Consider the last attempts by users only",
+      'Consider the last attempts by users only',
+    MULTIPLE_CHOICE_ADD_HINT_BTN: 'add hint',
+    MULTIPLE_CHOICE_HINT_INPUT_LABEL: 'Hint',
+    MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION:
+      'Type here a hint to help the user to find the answer or to understand it',
   },
 };

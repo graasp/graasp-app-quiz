@@ -24,12 +24,13 @@ import {
 import {
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
-  buildMultipleChoiceAddAnswerExplanationButtonCy,
+  buildMultipleChoiceAddAnswerHintButtonCy,
   buildMultipleChoiceAnswerCy,
-  buildMultipleChoiceAnswerExplanationCy,
+  buildMultipleChoiceAnswerHintCy,
   buildMultipleChoiceDeleteAnswerButtonCy,
-  buildMultipleChoiceDeleteAnswerExplanationButtonCy,
+  buildMultipleChoiceDeleteAnswerHintButtonCy,
 } from '../../config/selectors';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { removeFromArrayAtIndex, updateArray } from '../../utils/immutable';
 import { MultipleChoicesAppSettingData } from '../types/types';
 
@@ -44,7 +45,8 @@ const MultipleChoices = ({
 }: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const [explanationList, setExplanationList] = useState<boolean[]>(
+  // the explanation per choice is now a hint. To avoid legacy issues, the setting is still an explanation.
+  const [hintList, setHintList] = useState<boolean[]>(
     choices.map((choice) => Boolean(choice.explanation))
   );
 
@@ -58,26 +60,26 @@ const MultipleChoices = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setChoices(updateArray(choices, index, 'value', e.target.value));
 
-  const handleExplanationChange = (
+  const handleHintChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setChoices(updateArray(choices, index, 'explanation', e.target.value));
 
   const addAnswer = () => {
     setChoices([...choices, DEFAULT_CHOICE]);
-    setExplanationList([...explanationList, false]);
+    setHintList([...hintList, false]);
   };
 
-  const addExplanation = (index: number) => {
-    const newExplanationList = [...explanationList];
-    newExplanationList[index] = true;
-    setExplanationList(newExplanationList);
+  const addHint = (index: number) => {
+    const newHintList = [...hintList];
+    newHintList[index] = true;
+    setHintList(newHintList);
   };
 
-  const onDeleteExplanation = (index: number) => () => {
-    const newExplanationList = [...explanationList];
-    newExplanationList[index] = false;
-    setExplanationList(newExplanationList);
+  const onDeleteHint = (index: number) => () => {
+    const newHintList = [...hintList];
+    newHintList[index] = false;
+    setHintList(newHintList);
     setChoices(updateArray(choices, index, 'explanation', ''));
   };
 
@@ -147,7 +149,7 @@ const MultipleChoices = ({
                 </IconButton>
               </Stack>
               <Stack>
-                {explanationList[index] || explanation ? (
+                {hintList[index] || explanation ? (
                   <Stack
                     direction="row"
                     key={index}
@@ -157,26 +159,28 @@ const MultipleChoices = ({
                     <Stack spacing={2} width="100%">
                       <TextField
                         variant="standard"
-                        data-cy={buildMultipleChoiceAnswerExplanationCy(index)}
+                        data-cy={buildMultipleChoiceAnswerHintCy(index)}
                         type="text"
-                        label={`Explanation`}
+                        label={t(
+                          QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_HINT_INPUT_LABEL
+                        )}
                         value={explanation}
                         fullWidth
                         multiline
                         placeholder={t(
-                          'Type here an explanation on the correctness of this answer'
+                          QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION
                         )}
-                        onChange={(e) => handleExplanationChange(index, e)}
+                        onChange={(e) => handleHintChange(index, e)}
                       />
                     </Stack>
                     <Stack>
                       {
                         <IconButton
-                          data-cy={buildMultipleChoiceDeleteAnswerExplanationButtonCy(
+                          data-cy={buildMultipleChoiceDeleteAnswerHintButtonCy(
                             index
                           )}
                           type="button"
-                          onClick={onDeleteExplanation(index)}
+                          onClick={onDeleteHint(index)}
                         >
                           <CloseIcon />
                         </IconButton>
@@ -186,11 +190,9 @@ const MultipleChoices = ({
                 ) : (
                   <Stack alignItems="flex-start">
                     <Button
-                      data-cy={buildMultipleChoiceAddAnswerExplanationButtonCy(
-                        index
-                      )}
+                      data-cy={buildMultipleChoiceAddAnswerHintButtonCy(index)}
                       variant="text"
-                      onClick={() => addExplanation(index)}
+                      onClick={() => addHint(index)}
                       style={{ fontSize: 20 }}
                     >
                       <AddIcon fontSize="small" />
@@ -198,7 +200,7 @@ const MultipleChoices = ({
                         align="center"
                         sx={{ textTransform: 'lowercase' }}
                       >
-                        {t('Add Explanation')}
+                        {t(QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_ADD_HINT_BTN)}
                       </Typography>
                     </Button>
                   </Stack>

@@ -118,5 +118,9 @@ export default {
     PLAY_VIEW_RETRY_BTN: 'Réessayer',
     ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE:
       'Tenir compte uniquement des dernières tentatives des utilisateurs',
+    MULTIPLE_CHOICE_ADD_HINT_BTN: 'ajouter un indice',
+    MULTIPLE_CHOICE_HINT_INPUT_LABEL: 'Indice',
+    CHOIX_MULTIPLES_HINT_INPUT_DESCRIPTION:
+      "Tapez ici un indice pour aider l'utilisateur à trouver la réponse ou à la comprendre",
   },
 };
