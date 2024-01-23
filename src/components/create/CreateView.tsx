@@ -248,8 +248,8 @@ const CreateView = () => {
                 <TextField
                   data-cy={HINTS_CY}
                   fullWidth
-                  value={newData.hints}
                   label={t(QUIZ_TRANSLATIONS.HINTS_LABEL)}
+                  value={newData.hints ?? ''}
                   variant="outlined"
                   onChange={(e) => {
                     setNewData({

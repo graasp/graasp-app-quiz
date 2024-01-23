@@ -158,7 +158,6 @@ const PlayView = () => {
       direction={{ xs: 'column', md: 'row-reverse' }}
       justifyContent="space-between"
       alignContent="center"
-      height="700px"
     >
       <Box width={{ xs: '100%', md: '20%' }}>
         <QuestionStepper />

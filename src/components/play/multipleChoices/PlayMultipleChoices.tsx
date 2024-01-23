@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Stack, Typography } from '@mui/material';
 
 import { QUIZ_TRANSLATIONS } from '../../../langs/constants';
+import HeightObserver from '../../common/HeightObserver';
 import ReorderAnimation, {
   TransitionData,
 } from '../../common/animations/ReorderAnimation';
@@ -15,10 +16,8 @@ import {
 } from '../../types/types';
 import ChoiceButton from './ChoiceButton';
 
-const TITLE_HEIGHT = 20;
-const BTN_HEIGHT = 26;
-const DEFAULT_BTN_HEIGHT = 50;
-const DEFAULT_TITLE_HEIGHT = 38;
+const DEFAULT_MARGIN = 10;
+const HINT_MARGIN = 10;
 
 const computeChoiceState = (
   { value, isCorrect }: MultipleChoicesChoice,
@@ -66,6 +65,7 @@ const sectionTitles = [
 enum ElementType {
   Answer,
   SectionTitle,
+  Hint,
 }
 
 type AnswerDataType = {
@@ -74,28 +74,47 @@ type AnswerDataType = {
   elementType: ElementType.Answer;
 };
 type TitleDataType = { title: string; elementType: ElementType.SectionTitle };
+type HintDataType = { hint: string; elementType: ElementType.Hint };
+type DataType = AnswerDataType | TitleDataType | HintDataType;
 
 const choiceToAnswer = (
   choice: MultipleChoicesChoice,
-  idx: number
+  idx: number,
+  marginBottom: number
 ): TransitionData<AnswerDataType> => ({
   key: choice.value,
-  height: BTN_HEIGHT,
-  defaultHeight: DEFAULT_BTN_HEIGHT,
-  y: 0,
+  marginBottom,
   data: { idx, choice, elementType: ElementType.Answer },
 });
 
 const choiceToTitle = (title: string): TransitionData<TitleDataType> => ({
   key: title,
-  height: TITLE_HEIGHT,
-  defaultHeight: DEFAULT_TITLE_HEIGHT,
-  y: 0,
+  marginBottom: DEFAULT_MARGIN,
   data: {
     title,
     elementType: ElementType.SectionTitle,
   },
 });
+
+const choiceToHint = (hint: string): TransitionData<HintDataType> => ({
+  key: hint,
+  marginBottom: HINT_MARGIN,
+  data: {
+    hint,
+    elementType: ElementType.Hint,
+  },
+});
+
+const isChoiceSelected = (
+  choices: string[] | undefined,
+  choice: MultipleChoicesChoice
+) => Boolean(choices?.includes(choice.value));
+
+export const showHint = (
+  isSelected: boolean,
+  showCorrectness: boolean,
+  showCorrection: boolean
+) => showCorrection || (showCorrectness && isSelected);
 
 type Props = {
   choices: MultipleChoicesAppSettingData['choices'];
@@ -118,9 +137,7 @@ const PlayMultipleChoices = ({
 }: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const [elements, setElements] = useState<
-    TransitionData<AnswerDataType | TitleDataType>[]
-  >([]);
+  const [elements, setElements] = useState<TransitionData<DataType>[]>([]);
   const isReadonly = showCorrection || showCorrectness;
   const choiceStates = choices.map((choice) =>
     computeChoiceState(choice, lastUserAnswer?.choices, showCorrection)
@@ -137,7 +154,9 @@ const PlayMultipleChoices = ({
   useEffect(() => {
     // set the "gaming" view
     if (!showCorrection && !showCorrectness) {
-      setElements(choices.map(choiceToAnswer));
+      setElements(
+        choices.map((c, idx) => choiceToAnswer(c, idx, DEFAULT_MARGIN))
+      );
     } else {
       // set the "correctness" or "correction" view
       setElements(
@@ -146,14 +165,31 @@ const PlayMultipleChoices = ({
             (state) => sectionTitle.state === state
           );
 
-          return sectionAnswers
-            ? [
-                choiceToTitle(t(sectionTitles[i].title)),
-                ...choices
-                  .map((c, idx) => choiceToAnswer(c, idx))
-                  .filter((_, idx) => sectionTitle.state === choiceStates[idx]),
-              ]
-            : [];
+          if (!sectionAnswers) {
+            return [];
+          }
+
+          const answers = choices
+            .map((c, idx) => choiceToAnswer(c, idx, DEFAULT_MARGIN))
+            .filter((_, idx) => sectionTitle.state === choiceStates[idx]);
+
+          return [
+            choiceToTitle(t(sectionTitles[i].title)),
+            ...answers
+              .map((answer) => {
+                const hint = answer.data.choice.explanation;
+                const displayHint = showHint(
+                  isChoiceSelected(response.choices, answer.data.choice),
+                  showCorrectness,
+                  showCorrection
+                );
+
+                return displayHint && hint
+                  ? [{ ...answer, marginBottom: 0 }, choiceToHint(hint)]
+                  : answer;
+              })
+              .flat(),
+          ];
         })
       );
     }
@@ -175,31 +211,54 @@ const PlayMultipleChoices = ({
   };
 
   const renderElement = (
-    item: TransitionData<AnswerDataType | TitleDataType>
+    item: TransitionData<DataType>,
+    onHeightChange: (key: string, height: number) => void
   ) => {
-    if (item.data.elementType === ElementType.Answer) {
-      const isSelected = Boolean(
-        response.choices?.includes(item.data.choice.value)
-      );
+    let element: JSX.Element | undefined;
 
-      return (
-        <ChoiceButton
-          idx={item.data.idx}
-          choice={item.data.choice}
-          choiceState={choiceStates[item.data.idx]}
-          isReadonly={isReadonly}
-          isSelected={isSelected}
-          showState={showCorrection || showCorrectness}
-          onClick={onResponseClick}
-        />
-      );
-    } else {
-      return (
-        <Typography component="h2" variant="subtitle1" sx={{ fontWeight: 500 }}>
-          {item.data.title}
-        </Typography>
-      );
+    switch (item.data.elementType) {
+      case ElementType.Answer: {
+        const isSelected = isChoiceSelected(response.choices, item.data.choice);
+        element = (
+          <ChoiceButton
+            idx={item.data.idx}
+            choice={item.data.choice}
+            choiceState={choiceStates[item.data.idx]}
+            isReadonly={isReadonly}
+            isSelected={isSelected}
+            showState={showCorrection || showCorrectness}
+            onClick={onResponseClick}
+          />
+        );
+        break;
+      }
+      case ElementType.SectionTitle:
+        element = (
+          <Typography
+            component="h2"
+            variant="subtitle1"
+            sx={{ fontWeight: 500 }}
+          >
+            {item.data.title}
+          </Typography>
+        );
+        break;
+      case ElementType.Hint:
+        element = (
+          <Typography style={{ paddingLeft: '25px' }}>
+            {item.data.hint}
+          </Typography>
+        );
+        break;
     }
+
+    return (
+      <HeightObserver
+        onHeightChange={(height: number) => onHeightChange(item.key, height)}
+      >
+        {element}
+      </HeightObserver>
+    );
   };
 
   return (
