@@ -19,7 +19,7 @@ export const buildMultipleChoiceAnswerCy = (idx: number) =>
 export const buildMultipleChoiceAnswerHintCy = (idx: number) =>
   `multipleChoiceAnswerHint-${idx}`;
 export const buildMultipleChoiceHintPlayCy = (idx: number) =>
-  `multipleChoiceExplanationPlay-${idx}`;
+  `multipleChoiceHintPlay-${idx}`;
 export const buildMultipleChoiceAddAnswerHintButtonCy = (idx: number) =>
   `multipleChoiceAddAnswerHintButton-${idx}`;
 export const MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME =

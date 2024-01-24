@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Stack, Typography } from '@mui/material';
 
+import { buildMultipleChoiceHintPlayCy } from '../../../config/selectors';
 import { QUIZ_TRANSLATIONS } from '../../../langs/constants';
 import HeightObserver from '../../common/HeightObserver';
 import ReorderAnimation, {
@@ -74,7 +75,11 @@ type AnswerDataType = {
   elementType: ElementType.Answer;
 };
 type TitleDataType = { title: string; elementType: ElementType.SectionTitle };
-type HintDataType = { hint: string; elementType: ElementType.Hint };
+type HintDataType = {
+  idx: number;
+  hint: string;
+  elementType: ElementType.Hint;
+};
 type DataType = AnswerDataType | TitleDataType | HintDataType;
 
 const choiceToAnswer = (
@@ -96,11 +101,15 @@ const choiceToTitle = (title: string): TransitionData<TitleDataType> => ({
   },
 });
 
-const choiceToHint = (hint: string): TransitionData<HintDataType> => ({
+const choiceToHint = (
+  choiceIdx: number,
+  hint: string
+): TransitionData<HintDataType> => ({
   key: hint,
   marginBottom: HINT_MARGIN,
   data: {
     hint,
+    idx: choiceIdx,
     elementType: ElementType.Hint,
   },
 });
@@ -185,7 +194,10 @@ const PlayMultipleChoices = ({
                 );
 
                 return displayHint && hint
-                  ? [{ ...answer, marginBottom: 0 }, choiceToHint(hint)]
+                  ? [
+                      { ...answer, marginBottom: 0 },
+                      choiceToHint(answer.data.idx, hint),
+                    ]
                   : answer;
               })
               .flat(),
@@ -245,7 +257,10 @@ const PlayMultipleChoices = ({
         break;
       case ElementType.Hint:
         element = (
-          <Typography style={{ paddingLeft: '25px' }}>
+          <Typography
+            data-cy={buildMultipleChoiceHintPlayCy(item.data.idx)}
+            style={{ paddingLeft: '25px' }}
+          >
             {item.data.hint}
           </Typography>
         );

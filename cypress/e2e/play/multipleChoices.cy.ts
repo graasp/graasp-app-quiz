@@ -7,9 +7,10 @@ import {
 } from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
-  EXPLANATION_PLAY_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
+  PLAY_VIEW_RETRY_BUTTON_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
+  buildMultipleChoiceHintPlayCy,
   buildMultipleChoicesButtonCy,
   buildQuestionStepCy,
   buildQuestionStepDefaultCy,
@@ -54,28 +55,33 @@ const checkCorrection = (selection: number[], showCorrection = true) => {
   choices.forEach(({ isCorrect, explanation }, idx) => {
     const wasSelected = selection.includes(idx);
     const correction = (() => {
-      if (wasSelected && isCorrect) {
-        return 'success';
-      }
-      if (!wasSelected && isCorrect) {
-        return 'error';
+      switch (true) {
+        case wasSelected && isCorrect:
+          return 'success';
+        // if the user forgot to select, it is an error.
+        // But, because it is the correction view, the item is displayed in green.
+        case !wasSelected && isCorrect:
+          return showCorrection ? 'success' : '';
+        case wasSelected && !isCorrect:
+          return 'error';
       }
       return '';
     })();
     cy.get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, wasSelected))).then(
       ($el) => {
-        if (showCorrection) {
-          expect($el.attr('class').toLowerCase()).to.contain(correction);
-        } else if (correction) {
-          expect($el.attr('class').toLowerCase()).to.not.contain(correction);
-        }
+        expect($el.attr('class').toLowerCase()).to.contain(correction);
       }
     );
 
-    if (showCorrection) {
-      cy.get(dataCyWrapper(EXPLANATION_PLAY_CY)).should('contain', explanation);
+    if (showCorrection || wasSelected) {
+      cy.get(dataCyWrapper(buildMultipleChoiceHintPlayCy(idx))).should(
+        'contain',
+        explanation
+      );
     } else {
-      cy.get(dataCyWrapper(EXPLANATION_PLAY_CY)).should('not.exist');
+      cy.get(dataCyWrapper(buildMultipleChoiceHintPlayCy(idx))).should(
+        'not.exist'
+      );
     }
   });
 
@@ -91,15 +97,29 @@ const checkCorrection = (selection: number[], showCorrection = true) => {
  *  - no more answers can be send if the answer is correct
  *  - the user can send answers when the max number of attempts are reached
  * @param shouldBeDisabled Indicates if the inputs should be disabled or not.
+ * @param shouldRetry Indicates if the retry button should be display or not.
  */
-const checkInputDisabled = (selection: number[], shouldBeDisabled: boolean) => {
-  const status = `${shouldBeDisabled ? '' : 'not.'}be.disabled`;
+const checkInputDisabled = (
+  selection: number[],
+  shouldBeDisabled: boolean,
+  shouldRetry = false
+) => {
+  const status = `${shouldBeDisabled || shouldRetry ? '' : 'not.'}be.disabled`;
   choices.forEach((_data, idx) => {
+    // The choices buttons should be disabled between two attempts
     cy.get(
       dataCyWrapper(buildMultipleChoicesButtonCy(idx, selection.includes(idx)))
     ).should(status);
   });
-  cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).should(status);
+  // If it is between two attempts, the retry button should be enabled.
+  // Otherwise, submit button should be disabled.
+  if (!shouldRetry) {
+    cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).should(status);
+    cy.get(dataCyWrapper(PLAY_VIEW_RETRY_BUTTON_CY)).should('not.exist');
+  } else {
+    cy.get(dataCyWrapper(PLAY_VIEW_RETRY_BUTTON_CY)).should('not.be.disabled');
+    cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).should('not.exist');
+  }
 };
 
 describe('Play Multiple Choices', () => {
@@ -277,7 +297,7 @@ describe('Play Multiple Choices', () => {
 
         cy.checkHintsPlay(multipleChoiceAppSettingsData.hints);
 
-        checkInputDisabled(selection, false);
+        checkInputDisabled(selection, false, true);
         cy.checkQuizNavigation({
           questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
@@ -300,7 +320,7 @@ describe('Play Multiple Choices', () => {
         checkCorrection(selection);
         cy.checkHintsPlay(null);
 
-        checkInputDisabled(selection, true);
+        checkInputDisabled(selection, true, false);
 
         // go to another question and comeback, data should have been saved
         cy.get(
@@ -312,7 +332,7 @@ describe('Play Multiple Choices', () => {
           dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.CORRECT))
         ).click();
         checkCorrection(selection);
-        checkInputDisabled(selection, true);
+        checkInputDisabled(selection, true, false);
         cy.checkQuizNavigation({
           questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
@@ -359,7 +379,7 @@ describe('Play Multiple Choices', () => {
 
         checkCorrection(selection, false);
         cy.checkHintsPlay(multipleChoiceAppSettingsData.hints);
-        checkInputDisabled(selection, false);
+        checkInputDisabled(selection, false, true);
         cy.checkQuizNavigation({
           questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
