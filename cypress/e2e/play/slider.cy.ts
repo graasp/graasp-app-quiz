@@ -218,7 +218,7 @@ describe('Slider', () => {
         cy.wait(500);
       });
 
-      it.only('Incorrect app data', () => {
+      it('Incorrect app data', () => {
         // difficult to move slider, so we don't do it
 
         cy.checkHintsPlay(null);

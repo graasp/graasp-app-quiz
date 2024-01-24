@@ -95,7 +95,7 @@ export const PlayViewQuestionType = ({
           }
           showCorrection={showCorrection}
           showCorrectness={showCorrectness}
-          lastSubmit={numberOfSubmit}
+          numberOfSubmit={numberOfSubmit}
         />
       );
     }
@@ -130,7 +130,7 @@ export const PlayViewQuestionType = ({
       );
     }
     case QuestionType.SLIDER: {
-      return (
+      return vibrationWrapper(
         <PlaySlider
           values={currentQuestion.data}
           response={newResponse as SliderAppDataData}

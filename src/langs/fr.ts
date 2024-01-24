@@ -122,5 +122,7 @@ export default {
     MULTIPLE_CHOICE_HINT_INPUT_LABEL: 'Indice',
     CHOIX_MULTIPLES_HINT_INPUT_DESCRIPTION:
       "Tapez ici un indice pour aider l'utilisateur à trouver la réponse ou à la comprendre",
+    CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING:
+      "Attention : Les utilisateurs ayant des compétences en informatique peuvent récupérer les réponses du quiz ; pensez à ne pas l'utiliser comme méthode d'examen",
   },
 };

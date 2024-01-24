@@ -119,5 +119,7 @@ export default {
     MULTIPLE_CHOICE_HINT_INPUT_LABEL: 'Hint',
     MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION:
       'Type here a hint to help the user to find the answer or to understand it',
+    CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING:
+      'Caution: Users with some informatics skills can retrieve quiz answers; consider to not use it as an exam method.',
   },
 };

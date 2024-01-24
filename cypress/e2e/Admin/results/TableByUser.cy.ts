@@ -42,7 +42,7 @@ describe('Table by User', () => {
   /**
    * Test the table by user view for a few question and some user answers
    */
-  it.only('Table by User correctly display data', () => {
+  it('Table by User correctly display data', () => {
     cy.setupResultTablesByUserForCheck(
       APP_SETTINGS_FEW_QUESTIONS,
       APP_DATA_FEW_QUESTIONS_FEW_USERS,

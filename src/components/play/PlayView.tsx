@@ -49,6 +49,7 @@ const PlayView = () => {
   const [showCorrectness, setShowCorrectness] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   // this state is used to determine if the animations should to be activated or not.
+  // for multiple choice, it must be a counter to avoid animating once only.
   const [numberOfSubmit, setNumberOfSubmit] = useState(0);
 
   const numberOfAnswers = userAnswers.length;
@@ -103,6 +104,25 @@ const PlayView = () => {
       )
     );
   }, [currentQuestion, memberId, responses]);
+
+  const handleSubmit = () => {
+    const isCorrect = computeCorrectness(
+      currentQuestion.data,
+      newResponse as QuestionAppDataData
+    );
+    if (
+      currentQuestion.data.type === QuestionType.MULTIPLE_CHOICES ||
+      !isCorrect
+    ) {
+      setNumberOfSubmit(numberOfSubmit + 1);
+    }
+    onSubmit();
+  };
+
+  const handleRetry = () => {
+    setNumberOfSubmit(numberOfSubmit + 1);
+    setShowCorrectness(false);
+  };
 
   const onSubmit = () => {
     if (isReadonly) {
@@ -214,10 +234,7 @@ const PlayView = () => {
         <Box mt={4}>
           {displaySubmitBtn && (
             <Button
-              onClick={() => {
-                setNumberOfSubmit(numberOfSubmit + 1);
-                onSubmit();
-              }}
+              onClick={handleSubmit}
               variant="contained"
               data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
               disabled={isReadonly}
@@ -228,10 +245,7 @@ const PlayView = () => {
 
           {!displaySubmitBtn && (
             <Button
-              onClick={() => {
-                setNumberOfSubmit(numberOfSubmit + 1);
-                setShowCorrectness(false);
-              }}
+              onClick={handleRetry}
               variant="contained"
               data-cy={PLAY_VIEW_RETRY_BUTTON_CY}
             >
