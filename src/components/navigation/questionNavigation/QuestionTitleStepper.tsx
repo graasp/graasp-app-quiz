@@ -1,7 +1,5 @@
 import { useTranslation } from 'react-i18next';
 
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import { Stack, Typography } from '@mui/material';
 
 import {
@@ -9,9 +7,8 @@ import {
   buildNavigationQuestionStatus,
 } from '../../../config/selectors';
 import { QUIZ_TRANSLATIONS } from '../../../langs/constants';
-import theme from '../../../layout/theme';
-import CircularProgressWithPath from '../../common/CircularProgressWithPath';
 import { computeQuestionStatus } from './QuestionStep';
+import { QuestionTitleStepperIcon } from './QuestionTitleStepperIcon';
 
 type Props = {
   isCorrect: boolean;
@@ -29,39 +26,6 @@ export const QuestionTitleStepper = ({
   darkIconColor = true,
 }: Props) => {
   const { t } = useTranslation();
-
-  const renderIcon = () => {
-    if (currentNumberOfAttempts === 0) {
-      return null;
-    }
-
-    const successColor = darkIconColor
-      ? theme.palette.success.dark
-      : theme.palette.success.light;
-
-    if (isCorrect) {
-      return <CheckIcon htmlColor={successColor} className="success" />;
-    }
-
-    const errorColor = darkIconColor
-      ? theme.palette.error.dark
-      : theme.palette.error.light;
-
-    if (currentNumberOfAttempts < numberOfAttempts) {
-      return (
-        <CircularProgressWithPath
-          value={currentNumberOfAttempts}
-          maxValue={numberOfAttempts}
-          htmlColor={errorColor}
-          className="error"
-          // margin is to align with other icons
-          marginLeft={0.5}
-        />
-      );
-    }
-
-    return <CloseIcon htmlColor={errorColor} className="error" />;
-  };
 
   const renderText = () => {
     const hasTried = currentNumberOfAttempts > 0;
@@ -83,7 +47,9 @@ export const QuestionTitleStepper = ({
       <Stack direction="row" alignItems="center" spacing={1}>
         <Typography variant="h6">Question {questionIndex}</Typography>
         {currentNumberOfAttempts > 0 && (
-          <span
+          // The stack is needed to attach a data-cy on the question icon.
+          // The stack allow to keep the alignement with the text.
+          <Stack
             data-cy={buildNavigationQuestionStatus(
               computeQuestionStatus({
                 currentNumberOfAttempts,
@@ -91,10 +57,14 @@ export const QuestionTitleStepper = ({
                 isCorrect,
               })
             )}
-            style={{ display: 'flex' }}
           >
-            {renderIcon()}
-          </span>
+            <QuestionTitleStepperIcon
+              currentNumberOfAttempts={currentNumberOfAttempts}
+              totalNumberOfAttempts={numberOfAttempts}
+              darkIconColor={darkIconColor}
+              isCorrect={isCorrect}
+            />
+          </Stack>
         )}
       </Stack>
 

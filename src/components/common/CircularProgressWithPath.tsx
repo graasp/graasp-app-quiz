@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Color, Typography } from '@mui/material';
+import { Box, CircularProgress, Color } from '@mui/material';
 
 import { StatusColor } from '../types/types';
 
@@ -12,7 +12,6 @@ type Props = {
   color?: StatusColor;
   htmlColor?: string;
   showText?: boolean;
-  className?: string;
   marginLeft?: number;
 };
 
@@ -34,8 +33,6 @@ export const CircularProgressWithPath = ({
   pathColor = DEFAULT_PATH_COLOR,
   color = DEFAULT_COLOR,
   htmlColor,
-  showText = false,
-  className,
   marginLeft,
 }: Props) => {
   const progressSx = {
@@ -62,26 +59,7 @@ export const CircularProgressWithPath = ({
         thickness={thickness}
         sx={progressSx}
         color={color}
-        className={className}
       />
-      {showText && (
-        <Box
-          sx={{
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            position: 'absolute',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant="caption" component="div" color="text.secondary">
-            {maxValue ? `${value}/${maxValue}` : value}
-          </Typography>
-        </Box>
-      )}
     </Box>
   );
 };

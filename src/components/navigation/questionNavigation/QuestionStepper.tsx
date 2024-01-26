@@ -6,6 +6,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Divider,
   Grid,
   Stack,
   Typography,
@@ -29,18 +30,7 @@ import QuestionTitleStepper from './QuestionTitleStepper';
 
 const BG_COLOR = '#FCFCFC';
 const BORDER_COLOR = '#CDCDCD';
-const BORDER_RADIUS = '10px';
 const BORDER_WIDTH = 1;
-
-const QuestionStepDivider = () => (
-  <div
-    style={{
-      width: '100%',
-      height: `${BORDER_WIDTH / 2}px`,
-      background: BORDER_COLOR,
-    }}
-  ></div>
-);
 
 export const QuestionStepper = () => {
   const enableAccordion = useMediaQuery(theme.breakpoints.down('md'));
@@ -112,13 +102,8 @@ export const QuestionStepper = () => {
     );
   };
 
-  const handleAccordionChange = () => {
-    if (enableAccordion) {
-      setIsExpanded(!isExpanded);
-    } else {
-      setIsExpanded(true);
-    }
-  };
+  const handleAccordionChange = () =>
+    setIsExpanded(!enableAccordion || !isExpanded);
 
   return (
     <Box
@@ -133,7 +118,6 @@ export const QuestionStepper = () => {
         sx={{
           bgcolor: BG_COLOR,
           border: `${BORDER_WIDTH}px solid ${BORDER_COLOR}`,
-          borderRadius: BORDER_RADIUS,
           boxShadow: 'none',
           width: '100%',
         }}
@@ -149,7 +133,7 @@ export const QuestionStepper = () => {
             questionIndex={currentIdx + 1}
           />
         </AccordionSummary>
-        <QuestionStepDivider />
+        <Divider />
         <AccordionDetails>
           <Stack mt={1}>
             <Typography variant="h6">Quiz Navigation</Typography>
@@ -158,10 +142,11 @@ export const QuestionStepper = () => {
               alignItems="center"
               justifyContent="start"
               rowSpacing={1}
+              spacing={1}
               data-cy={QUESTION_BAR_CY}
             >
               {order.map((questionId, idx) => (
-                <Grid item xs={1.4} sm={1.4} md={2.4} key={idx}>
+                <Grid item key={idx}>
                   {renderQuestionStep(questionId, idx)}
                 </Grid>
               ))}

@@ -1,10 +1,8 @@
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import { Box, SxProps, Tooltip, Typography } from '@mui/material';
 
 import { buildQuestionStepCy } from '../../../config/selectors';
 import theme from '../../../layout/theme';
-import CircularProgressWithPath from '../../common/CircularProgressWithPath';
+import QuestionStepIcon from './QuestionStepIcon';
 import QuestionTitleStepper from './QuestionTitleStepper';
 
 const DEFAULT_SIZE = 10;
@@ -14,9 +12,9 @@ const DEFAULT_SHADOW = '0px 1px 1px rgb(0, 0, 0, 0.25)';
 const DEFAULT_BORDER_WIDTH = '2px';
 const DEFAULT_BORDER_STYLE = 'solid';
 const BORDER_RADIUS = '50%';
-const INCORRECT_BORDER_COLOR = theme.palette.error.dark;
-const ATTEMPTS_BORDER_COLOR = theme.palette.error.dark;
-const CORRECT_BORDER_COLOR = theme.palette.success.dark;
+export const INCORRECT_BORDER_COLOR = theme.palette.error.dark;
+export const ATTEMPTS_BORDER_COLOR = theme.palette.error.dark;
+export const CORRECT_BORDER_COLOR = theme.palette.success.dark;
 
 const DEFAULT_SX = {
   borderWidth: DEFAULT_BORDER_WIDTH,
@@ -142,27 +140,6 @@ export const QuestionStep = ({
     );
   };
 
-  const renderIcon = () => {
-    switch (status) {
-      case QuestionStepStyleKeys.DEFAULT:
-        return null;
-      case QuestionStepStyleKeys.CORRECT:
-        return <CheckIcon htmlColor={CORRECT_BORDER_COLOR} />;
-      case QuestionStepStyleKeys.INCORRECT:
-        return <CloseIcon htmlColor={INCORRECT_BORDER_COLOR} />;
-      case QuestionStepStyleKeys.REMAIN_ATTEMPTS:
-        return (
-          <CircularProgressWithPath
-            value={currentNumberOfAttempts}
-            maxValue={numberOfAttempts}
-            htmlColor={ATTEMPTS_BORDER_COLOR}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <Box
       data-cy={buildQuestionStepCy(qId, status)}
@@ -178,7 +155,11 @@ export const QuestionStep = ({
               {questionIdx}
             </Typography>
           ) : (
-            renderIcon()
+            <QuestionStepIcon
+              questionStatus={status}
+              currentNumberOfAttempts={currentNumberOfAttempts}
+              totalNumberOfAttempts={numberOfAttempts}
+            />
           )}
         </Box>
       </Tooltip>

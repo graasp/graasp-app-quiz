@@ -38,7 +38,6 @@ const View = (): JSX.Element => {
   };
 
   return (
-    // TODO: check why maxWidth='md'
     <Container maxWidth='xl'>
       <PublicAlert />
       <QuizProvider>{renderContent()}</QuizProvider>

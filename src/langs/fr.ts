@@ -91,7 +91,7 @@ export default {
     HINTS_ALERT_TITLE: "Avez-vous besoins d'indices ?",
     PREV_QUESTION_BTN: 'Précédent',
     NEXT_QUESTION_BTN: 'Suivant',
-    QUESTION_STEPPER_TITLE_NO_MORE_ATTEMPTS: 'Plus aucune tentative',
+    QUESTION_STEPPER_TITLE_NO_MORE_ATTEMPTS: 'Aucune tentative restante',
     QUESTION_STEPPER_TITLE_ATTEMPTS:
       '{{current_attempts}} sur {{max_attempts}} tentatives',
   },
