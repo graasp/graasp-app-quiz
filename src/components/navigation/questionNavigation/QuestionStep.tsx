@@ -4,6 +4,7 @@ import { buildQuestionStepCy } from '../../../config/selectors';
 import theme from '../../../layout/theme';
 import QuestionStepIcon from './QuestionStepIcon';
 import QuestionTitleStepper from './QuestionTitleStepper';
+import { QuestionStepStyleKeys } from './types';
 
 const DEFAULT_SIZE = 10;
 const CONTAINER_SIZE = 27;
@@ -34,13 +35,6 @@ const DEFAULT_SX = {
   },
 };
 
-export enum QuestionStepStyleKeys {
-  DEFAULT = 'default',
-  CORRECT = 'correct',
-  INCORRECT = 'incorrect',
-  REMAIN_ATTEMPTS = 'remain_attempts',
-}
-
 const QuestionStepStyle = {
   [QuestionStepStyleKeys.DEFAULT]: {
     borderStyle: DEFAULT_BORDER_STYLE,
@@ -67,8 +61,6 @@ const isSelectedStyle = {
   borderStyle: DEFAULT_BORDER_STYLE,
   background: 'none',
 };
-
-export type QuestionStatus = `${QuestionStepStyleKeys}`;
 
 type Props = {
   qId: string;
@@ -127,9 +119,7 @@ export const QuestionStep = ({
   };
 
   const renderTooltipTitle = () => {
-    return isSelected ? (
-      ''
-    ) : (
+    return isSelected ? null : (
       <QuestionTitleStepper
         isCorrect={isCorrect}
         currentNumberOfAttempts={currentNumberOfAttempts}

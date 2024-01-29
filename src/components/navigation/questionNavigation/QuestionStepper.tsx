@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ExpandMore } from '@mui/icons-material';
 import {
@@ -17,6 +18,7 @@ import { useLocalContext } from '@graasp/apps-query-client';
 
 import { hooks } from '../../../config/queryClient';
 import { QUESTION_BAR_CY } from '../../../config/selectors';
+import { QUIZ_TRANSLATIONS } from '../../../langs/constants';
 import theme from '../../../layout/theme';
 import { QuizContext } from '../../context/QuizContext';
 import {
@@ -33,6 +35,7 @@ const BORDER_COLOR = '#CDCDCD';
 const BORDER_WIDTH = 1;
 
 export const QuestionStepper = () => {
+  const { t } = useTranslation();
   const enableAccordion = useMediaQuery(theme.breakpoints.down('md'));
 
   const { questions, currentIdx, currentQuestion, setCurrentIdx, order } =
@@ -136,7 +139,9 @@ export const QuestionStepper = () => {
         <Divider />
         <AccordionDetails>
           <Stack mt={1}>
-            <Typography variant="h6">Quiz Navigation</Typography>
+            <Typography variant="h6">
+              {t(QUIZ_TRANSLATIONS.QUESTION_STEPPER_NAV_TITLE)}
+            </Typography>
             <Grid
               container
               alignItems="center"

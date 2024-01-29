@@ -1,7 +1,10 @@
 import { Context } from '@graasp/sdk';
 
-import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/QuestionStep';
-import { AppSettingData, MultipleChoicesAppSettingData } from '../../../src/components/types/types';
+import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/types';
+import {
+  AppSettingData,
+  MultipleChoicesAppSettingData,
+} from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   EXPLANATION_PLAY_CY,

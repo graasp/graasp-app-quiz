@@ -1,5 +1,6 @@
 import { Context } from '@graasp/sdk';
 
+import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/types';
 import {
   AppSettingData,
   SliderAppDataData,
@@ -21,7 +22,6 @@ import {
   QUESTION_APP_SETTINGS,
   setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
-import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/QuestionStep';
 
 const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
@@ -133,7 +133,11 @@ describe('Slider', () => {
             buildQuestionStepDefaultCy(QUESTION_APP_SETTINGS[0].data.questionId)
           )
         ).click();
-        cy.get(dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT))).click();
+        cy.get(
+          dataCyWrapper(
+            buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT)
+          )
+        ).click();
         checkCorrection({ value: 60 });
         cy.checkHintsPlay(null);
 
@@ -246,7 +250,11 @@ describe('Slider', () => {
             buildQuestionStepDefaultCy(QUESTION_APP_SETTINGS[0].data.questionId)
           )
         ).click();
-        cy.get(dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT))).click();
+        cy.get(
+          dataCyWrapper(
+            buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT)
+          )
+        ).click();
         checkCorrection({ value: 60 });
 
         cy.checkQuizNavigation({

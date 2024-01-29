@@ -1,8 +1,8 @@
 import { Database, LocalContext } from '@graasp/apps-query-client';
 import { AppData, AppSetting, CompleteMember } from '@graasp/sdk';
 
+import { QuestionStatus } from '../../src/components/navigation/questionNavigation/types';
 import { QuestionType } from '../../src/config/constants';
-import { QuestionStatus } from '../../src/components/navigation/questionNavigation/QuestionStep';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -51,7 +51,7 @@ declare global {
       checkHintsField(hints: string): Chainable;
 
       fillHints(hints: string): Chainable;
-      
+
       checkQuizNavigationStatus(questionStatus: QuestionStatus): Chainable;
 
       /**
@@ -70,7 +70,7 @@ declare global {
         currentAttempts,
         isCorrect,
       }: {
-        questionId: string,
+        questionId: string;
         numberOfAttempts: number;
         currentAttempts: number;
         isCorrect?: boolean;

@@ -3,8 +3,11 @@ import { Context } from '@graasp/sdk';
 import {
   QuestionStatus,
   QuestionStepStyleKeys,
-} from '../../../src/components/navigation/questionNavigation/QuestionStep';
-import { AppSettingData, TextAppDataData } from '../../../src/components/types/types';
+} from '../../../src/components/navigation/questionNavigation/types';
+import {
+  AppSettingData,
+  TextAppDataData,
+} from '../../../src/components/types/types';
 import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
@@ -55,11 +58,13 @@ const submitAnswer = (answer: string, hasPreviousAnswer?: boolean) => {
  * @param isCorrect Indicates if the user's answer correct.
  */
 const checkAnswer = (isCorrect: boolean) => {
-  cy.get(`${dataCyWrapper(getPlayViewTextInputCy(isCorrect))} div`).then(($el) => {
-    expect($el.attr('class').toLowerCase()).to.contain(
-      isCorrect ? 'success' : 'error'
-    );
-  });
+  cy.get(`${dataCyWrapper(getPlayViewTextInputCy(isCorrect))} div`).then(
+    ($el) => {
+      expect($el.attr('class').toLowerCase()).to.contain(
+        isCorrect ? 'success' : 'error'
+      );
+    }
+  );
 };
 
 /**
@@ -169,7 +174,7 @@ describe('Play Text Input', () => {
         checkAnswerAndHeaderStatus(QuestionStepStyleKeys.CORRECT);
 
         cy.checkHintsPlay(null);
-        
+
         checkInputDisabled(true, true);
       });
 

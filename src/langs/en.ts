@@ -91,6 +91,7 @@ export default {
     HINTS_ALERT_TITLE: 'Do you need some hints?',
     PREV_QUESTION_BTN: 'Previous',
     NEXT_QUESTION_BTN: 'Next',
+    QUESTION_STEPPER_NAV_TITLE: 'Quiz Navigation',
     QUESTION_STEPPER_TITLE_NO_MORE_ATTEMPTS: 'No more attempts remaining',
     QUESTION_STEPPER_TITLE_ATTEMPTS:
       '{{current_attempts}} of {{max_attempts}} attempts',

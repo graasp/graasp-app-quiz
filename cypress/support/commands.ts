@@ -1,11 +1,11 @@
 /// <reference types="../../src/window" />
 import { Context, PermissionLevel } from '@graasp/sdk';
 
+import { computeQuestionStatus } from '../../src/components/navigation/questionNavigation/QuestionStep';
 import {
   QuestionStatus,
   QuestionStepStyleKeys,
-  computeQuestionStatus,
-} from '../../src/components/navigation/questionNavigation/QuestionStep';
+} from '../../src/components/navigation/questionNavigation/types';
 import { API_HOST } from '../../src/config/constants';
 import i18n from '../../src/config/i18n';
 import {
@@ -16,10 +16,10 @@ import {
   HINTS_CY,
   HINTS_PLAY_CY,
   NAVIGATION_ANALYTICS_BUTTON_CY,
-  buildNavigationQuestionStatus,
   NAVIGATION_RESULT_BUTTON_CY,
   NUMBER_OF_ATTEMPTS_TEXT_CY,
   RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
+  buildNavigationQuestionStatus,
   buildQuestionStepCy,
   buildQuestionTypeOption,
   dataCyWrapper,
@@ -216,9 +216,9 @@ Cypress.Commands.add(
     if (questionStatus !== QuestionStepStyleKeys.DEFAULT) {
       cy.checkQuizNavigationStatus(questionStatus);
     } else {
-      cy.get(`${dataCyWrapper(buildNavigationQuestionStatus(questionStatus))}`).should(
-        'not.exist'
-      );
+      cy.get(
+        `${dataCyWrapper(buildNavigationQuestionStatus(questionStatus))}`
+      ).should('not.exist');
     }
 
     if (

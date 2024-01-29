@@ -54,7 +54,7 @@ export const CircularProgressWithPath = ({
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
       <CircularProgress
         variant="determinate"
-        value={circularValue >= minPercent ? circularValue : minPercent}
+        value={Math.max(circularValue, minPercent)}
         size={size}
         thickness={thickness}
         sx={progressSx}

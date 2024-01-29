@@ -6,8 +6,8 @@ import {
   ATTEMPTS_BORDER_COLOR,
   CORRECT_BORDER_COLOR,
   INCORRECT_BORDER_COLOR,
-  QuestionStepStyleKeys,
 } from './QuestionStep';
+import { QuestionStepStyleKeys } from './types';
 
 type Props = {
   questionStatus: QuestionStepStyleKeys;

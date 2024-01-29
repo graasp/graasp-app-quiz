@@ -1,5 +1,6 @@
 import { Context } from '@graasp/sdk';
 
+import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/types';
 import {
   AppSettingData,
   TextAppDataData,
@@ -29,7 +30,6 @@ import {
   QUESTION_APP_SETTINGS,
   setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
-import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/QuestionStep';
 
 const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
@@ -237,7 +237,9 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.CORRECT))).click();
+        cy.get(
+          dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.CORRECT))
+        ).click();
         const data = correctAppData.data;
 
         checkCorrection(splitSentence(data.text));
@@ -270,7 +272,11 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT))).click();
+        cy.get(
+          dataCyWrapper(
+            buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT)
+          )
+        ).click();
 
         const data = partiallyCorrectAppData.data;
         checkCorrection(splitSentence(data.text));
@@ -302,7 +308,11 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT))).click();
+        cy.get(
+          dataCyWrapper(
+            buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT)
+          )
+        ).click();
 
         const data = shorterAppData.data;
         checkCorrection(splitSentence(data.text));
