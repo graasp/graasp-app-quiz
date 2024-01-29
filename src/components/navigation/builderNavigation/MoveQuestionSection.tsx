@@ -48,11 +48,9 @@ export const MoveQuestionSection = ({ qId }: Props) => {
       <Typography variant="h6">
         {t(QUIZ_TRANSLATIONS.QUESTION_POSITION_TITLE)}
       </Typography>
-      {
-        <Typography variant="body1" mb={1}>
-          {t(QUIZ_TRANSLATIONS.QUESTION_POSITION_EXPLANATION)}
-        </Typography>
-      }
+      <Typography variant="body1" mb={1}>
+        {t(QUIZ_TRANSLATIONS.QUESTION_POSITION_EXPLANATION)}
+      </Typography>
       <InputLabel id="question-position-helper-label">
         {t(QUIZ_TRANSLATIONS.QUESTION_POSITION_LABEL)}
       </InputLabel>
@@ -62,13 +60,11 @@ export const MoveQuestionSection = ({ qId }: Props) => {
         onChange={updateOrder}
         data-cy={CREATE_VIEW_SELECT_POSITION_QUESTION_CY}
       >
-        {order.map((_, idx) => {
-          return (
-            <MenuItem value={idx} data-cy={buildQuestionPositionOption(idx)}>
-              {idx + 1}
-            </MenuItem>
-          );
-        })}
+        {order.map((_, idx) => (
+          <MenuItem value={idx} data-cy={buildQuestionPositionOption(idx)}>
+            {idx + 1}
+          </MenuItem>
+        ))}
       </Select>
     </>
   );

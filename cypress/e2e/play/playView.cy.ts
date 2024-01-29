@@ -79,7 +79,7 @@ describe('Play View', () => {
 
     it('Navigation', () => {
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
-      quizNavigator.prevBtnShouldDisabled();
+      quizNavigator.prevBtnShouldBeDisabled();
 
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',

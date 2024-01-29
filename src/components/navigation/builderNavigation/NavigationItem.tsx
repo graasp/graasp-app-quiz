@@ -25,21 +25,8 @@ const ACTIVE_BG_COLOR = PRIMARY_PALETTE.main;
 const DRAGGING_BORDER_COLOR = theme.palette.secondary.light;
 const QUESTION_IDX_SIZE = '25px';
 const QUESTION_ITEM_MIN_HEIGHT = '50px';
-
-type Props = {
-  qId: string;
-  questionIdx: number;
-  questionTitle: string;
-  isActive?: boolean;
-  isSwapping?: boolean;
-  draggableProvided: DraggableProvided;
-  marginBottom?: number;
-  marginTop?: number;
-
-  onClick: (questionIdx: number) => void;
-};
-
 const CONTAINER_PADDING = 2;
+const QUESTION_LINE_HEIGHT = 1.2;
 
 const SX_CONTAINER: SxProps = {
   border: `1px solid`,
@@ -68,7 +55,18 @@ const SX_QUESTION_IDX: SxProps = {
   color: 'white',
 };
 
-const QUESTION_LINE_HEIGHT = 1.2;
+type Props = {
+  qId: string;
+  questionIdx: number;
+  questionTitle: string;
+  isActive?: boolean;
+  isSwapping?: boolean;
+  draggableProvided: DraggableProvided;
+  marginBottom?: number;
+  marginTop?: number;
+
+  onClick: (questionIdx: number) => void;
+};
 
 export const NavigationItem = ({
   qId,

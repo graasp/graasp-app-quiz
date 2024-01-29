@@ -50,7 +50,7 @@ const SWAPPED_BORDER_ANIMATION_MS = 500;
 const SX_QUESTIONS_CONTAINER: SxProps = {
   display: 'flex',
   flexDirection: 'column',
-} as const;
+};
 
 const SX_CONTAINER: SxProps = {
   // border-box take in consideration the padding when using width = 100%

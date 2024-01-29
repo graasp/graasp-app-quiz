@@ -62,7 +62,7 @@ export class QuizNavigator {
     }
   }
 
-  public prevBtnShouldDisabled() {
+  public prevBtnShouldBeDisabled() {
     if (this.context !== Context.Player) {
       throw new Error(
         `The context ${this.context} doesn't have any previous button.`
