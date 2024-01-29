@@ -6,7 +6,7 @@ import {
   QUESTION_BAR_CY,
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
-  buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../fixtures/appSettings';
@@ -47,12 +47,9 @@ describe('Play View', () => {
     // should not display app data
     cy.get(
       `${dataCyWrapper(
-        buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId)
+        buildQuestionStepDefaultCy(QUESTION_APP_SETTINGS[0].data.questionId)
       )} svg`
-    ).then(($el) => {
-      expect($el.attr('class').toLowerCase()).not.to.contain('error');
-      expect($el.attr('class').toLowerCase()).not.to.contain('success');
-    });
+    ).should('not.exist');
 
     cy.checkHintsPlay(null);
     cy.checkExplanationPlay(null);

@@ -20,7 +20,7 @@ import {
   buildMultipleChoiceAnswerExplanationCy,
   buildMultipleChoiceDeleteAnswerButtonCy,
   buildMultipleChoiceDeleteAnswerExplanationButtonCy,
-  buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import {
@@ -266,7 +266,7 @@ describe('Multiple Choices', () => {
         'have.value',
         QuestionType.MULTIPLE_CHOICES
       );
-      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id)))
         .should('be.visible')
         .should('contain', data.question);
 
@@ -300,10 +300,10 @@ describe('Multiple Choices', () => {
 
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
       // question bar should be updated
-      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id)))
         .should('be.visible')
         .should('contain', newMultipleChoiceData.question);
 

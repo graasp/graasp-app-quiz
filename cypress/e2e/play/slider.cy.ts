@@ -1,5 +1,6 @@
 import { Context } from '@graasp/sdk';
 
+import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/types';
 import {
   AppSettingData,
   SliderAppDataData,
@@ -10,6 +11,7 @@ import {
   PLAY_VIEW_SLIDER_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
   buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { mockAppDataFactory } from '../../../src/data/factories';
@@ -81,7 +83,11 @@ describe('Slider', () => {
         });
         cy.visit('/');
 
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
+
+        // Without this wait, the submit button is not clicked on correctly...
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(500);
       });
 
       it('Start with empty data', () => {
@@ -100,7 +106,8 @@ describe('Slider', () => {
         );
         cy.checkHintsPlay(null);
         cy.checkExplanationPlay(null);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: 1,
           currentAttempts: 0,
         });
@@ -118,25 +125,24 @@ describe('Slider', () => {
 
         // error display in question bar
         // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(1000);
-        cy.get(`${dataCyWrapper(buildQuestionStepCy(id))} svg`).then(($el) => {
-          expect($el.attr('class').toLowerCase()).to.contain('error');
-        });
+        cy.checkQuizNavigationStatus(QuestionStepStyleKeys.INCORRECT);
 
         // go to another question and comeback, data should have been saved
         cy.get(
           dataCyWrapper(
-            buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId)
+            buildQuestionStepDefaultCy(QUESTION_APP_SETTINGS[0].data.questionId)
           )
         ).click();
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(
+          dataCyWrapper(
+            buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT)
+          )
+        ).click();
         checkCorrection({ value: 60 });
         cy.checkHintsPlay(null);
 
-        // error displayed in question bar
-        cy.checkStepStatus(id, false);
-
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: 1,
           currentAttempts: 1,
           isCorrect: false,
@@ -168,14 +174,15 @@ describe('Slider', () => {
         });
         cy.visit('/');
 
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
       });
 
       it('Show saved question', () => {
         checkCorrection(appData.data);
         cy.checkHintsPlay(null);
 
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: 1,
           currentAttempts: 1,
           isCorrect: true,
@@ -204,7 +211,11 @@ describe('Slider', () => {
         });
         cy.visit('/');
 
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
+
+        // Without this wait, the submit button is not clicked on correctly...
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(500);
       });
 
       it.only('Incorrect app data', () => {
@@ -214,10 +225,8 @@ describe('Slider', () => {
         cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
         cy.checkHintsPlay(sliderAppSettingsData.hints);
 
-        // error displayed in question bar
-        cy.checkStepStatus(id, false);
-
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -233,26 +242,23 @@ describe('Slider', () => {
         // verify all choices styles
         checkCorrection({ value: 60 });
 
-        // error display in question bar
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(1000);
-        cy.get(`${dataCyWrapper(buildQuestionStepCy(id))} svg`).then(($el) => {
-          expect($el.attr('class').toLowerCase()).to.contain('error');
-        });
+        cy.checkQuizNavigationStatus(QuestionStepStyleKeys.INCORRECT);
 
         // go to another question and comeback, data should have been saved
         cy.get(
           dataCyWrapper(
-            buildQuestionStepCy(QUESTION_APP_SETTINGS[0].data.questionId)
+            buildQuestionStepDefaultCy(QUESTION_APP_SETTINGS[0].data.questionId)
           )
         ).click();
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(
+          dataCyWrapper(
+            buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT)
+          )
+        ).click();
         checkCorrection({ value: 60 });
 
-        // error displayed in question bar
-        cy.checkStepStatus(id, false);
-
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: NUMBER_OF_ATTEMPTS,
           isCorrect: false,
@@ -288,14 +294,15 @@ describe('Slider', () => {
         });
         cy.visit('/');
 
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
       });
 
       it('Show saved question', () => {
         checkCorrection(appData.data);
         cy.checkHintsPlay(null);
 
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: true,

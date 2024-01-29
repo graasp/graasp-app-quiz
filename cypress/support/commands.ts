@@ -1,7 +1,13 @@
 /// <reference types="../../src/window" />
 import { Context, PermissionLevel } from '@graasp/sdk';
 
+import { computeQuestionStatus } from '../../src/components/navigation/questionNavigation/QuestionStep';
+import {
+  QuestionStatus,
+  QuestionStepStyleKeys,
+} from '../../src/components/navigation/questionNavigation/types';
 import { API_HOST } from '../../src/config/constants';
+import i18n from '../../src/config/i18n';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
   CREATE_VIEW_ERROR_ALERT_CY,
@@ -11,15 +17,18 @@ import {
   HINTS_PLAY_CY,
   NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
-  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY,
-  NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY,
+  NUMBER_OF_ATTEMPTS_TEXT_CY,
   RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
+  buildNavigationQuestionStatus,
   buildQuestionStepCy,
   buildQuestionTypeOption,
   dataCyWrapper,
 } from '../../src/config/selectors';
 import { mockItem } from '../../src/data/items';
 import { mockCurrentMember, mockMembers } from '../../src/data/members';
+import { QUIZ_TRANSLATIONS } from '../../src/langs/constants';
+
+const t = i18n.t;
 
 Cypress.Commands.add(
   'setUpApi',
@@ -55,16 +64,6 @@ Cypress.Commands.add('switchQuestionType', (type) => {
 
   cy.get(dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)).click();
   cy.get(dataCyWrapper(buildQuestionTypeOption(type))).click();
-});
-
-Cypress.Commands.add('checkStepStatus', (id, isCorrect) => {
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(1000);
-  cy.get(`${dataCyWrapper(buildQuestionStepCy(id))} svg`).then(($el) => {
-    expect($el.attr('class').toLowerCase()).to.contain(
-      isCorrect ? 'success' : 'error'
-    );
-  });
 });
 
 const checkTextFieldPlay = (value: string, dataCy: string) => {
@@ -184,38 +183,58 @@ Cypress.Commands.add(
   }
 );
 
-/**
- * Command to check that the progression of attempts is displayed correctly.
- * Also checks that the number of attempts are styled correctly
- * if answer is correct or not.
- *
- * @param numberOfAttempts the total number of attempts for the question.
- * @param currentAttempts the current number of time the user answered.
- * @param isCorrect is the user's answer correct.
- */
+Cypress.Commands.add('checkQuizNavigationStatus', (status: QuestionStatus) => {
+  cy.get(`${dataCyWrapper(buildNavigationQuestionStatus(status))}`).should(
+    'be.visible'
+  );
+});
+
 Cypress.Commands.add(
-  'checkNumberOfAttemptsProgression',
+  'checkQuizNavigation',
   ({
+    questionId,
     numberOfAttempts,
     currentAttempts,
     isCorrect,
   }: {
+    questionId: string;
     numberOfAttempts: number;
     currentAttempts: number;
     isCorrect?: boolean;
   }) => {
-    cy.get(
-      `${dataCyWrapper(NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_TEXT_CY)}`
-    ).contains(`${currentAttempts}/${numberOfAttempts}`);
+    const questionStatus = computeQuestionStatus({
+      isCorrect,
+      numberOfAttempts,
+      currentNumberOfAttempts: currentAttempts,
+    });
 
-    if (currentAttempts > 0) {
+    // check that the question step with given status exists and is visible
+    cy.get(
+      `${dataCyWrapper(buildQuestionStepCy(questionId, questionStatus))} div`
+    ).should('be.visible');
+
+    if (questionStatus !== QuestionStepStyleKeys.DEFAULT) {
+      cy.checkQuizNavigationStatus(questionStatus);
+    } else {
       cy.get(
-        `${dataCyWrapper(NUMBER_OF_ATTEMPTS_CIRCULAR_PROGRESSION_CY)}`
-      ).then(($el) => {
-        expect($el.attr('class').toLowerCase()).to.contain(
-          isCorrect ? 'success' : 'error'
-        );
-      });
+        `${dataCyWrapper(buildNavigationQuestionStatus(questionStatus))}`
+      ).should('not.exist');
+    }
+
+    if (
+      questionStatus === QuestionStepStyleKeys.DEFAULT ||
+      questionStatus === QuestionStepStyleKeys.REMAIN_ATTEMPTS
+    ) {
+      cy.get(`${dataCyWrapper(NUMBER_OF_ATTEMPTS_TEXT_CY)}`).contains(
+        t(QUIZ_TRANSLATIONS.QUESTION_STEPPER_TITLE_ATTEMPTS, {
+          current_attempts: currentAttempts,
+          max_attempts: numberOfAttempts,
+        })
+      );
+    } else {
+      cy.get(`${dataCyWrapper(NUMBER_OF_ATTEMPTS_TEXT_CY)}`).contains(
+        t(QUIZ_TRANSLATIONS.QUESTION_STEPPER_TITLE_NO_MORE_ATTEMPTS)
+      );
     }
   }
 );

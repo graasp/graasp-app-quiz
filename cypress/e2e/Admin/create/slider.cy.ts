@@ -16,7 +16,7 @@ import {
   SLIDER_CY,
   SLIDER_MAX_FIELD_CY,
   SLIDER_MIN_FIELD_CY,
-  buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
 import {
@@ -144,7 +144,7 @@ describe('Slider', () => {
       });
       cy.visit('/');
 
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
     });
 
     it('Show saved question', () => {
@@ -155,7 +155,7 @@ describe('Slider', () => {
         'have.value',
         QuestionType.SLIDER
       );
-      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id)))
         .should('be.visible')
         .should('contain', data.question);
 
@@ -181,10 +181,10 @@ describe('Slider', () => {
 
       // click new question and come back
       cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
-      cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
       // question bar should be updated
-      cy.get(dataCyWrapper(buildQuestionStepCy(id)))
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id)))
         .should('be.visible')
         .should('contain', newSliderData.question);
 

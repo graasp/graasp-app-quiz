@@ -1,5 +1,6 @@
 import { Context } from '@graasp/sdk';
 
+import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/types';
 import {
   AppSettingData,
   TextAppDataData,
@@ -17,6 +18,7 @@ import {
   buildFillBlanksAnswerId,
   buildFillBlanksCorrectionAnswerCy,
   buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
 import { mockAppDataFactory } from '../../../src/data/factories';
@@ -166,7 +168,7 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
       });
 
       it('Start with empty app data', () => {
@@ -199,7 +201,8 @@ describe('Play Fill In The Blanks', () => {
         cy.checkHintsPlay(null);
         cy.checkExplanationPlay(null);
         checkInputDisabled(false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 0,
         });
@@ -234,7 +237,9 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(
+          dataCyWrapper(buildQuestionStepCy(id, QuestionStepStyleKeys.CORRECT))
+        ).click();
         const data = correctAppData.data;
 
         checkCorrection(splitSentence(data.text));
@@ -242,13 +247,11 @@ describe('Play Fill In The Blanks', () => {
         // hints should be hidden
         cy.checkHintsPlay(null);
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, true);
-
         // delete one answer
         removeAnswer(answers[0], true);
         checkInputDisabled(true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: true,
@@ -269,7 +272,11 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(
+          dataCyWrapper(
+            buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT)
+          )
+        ).click();
 
         const data = partiallyCorrectAppData.data;
         checkCorrection(splitSentence(data.text));
@@ -277,12 +284,10 @@ describe('Play Fill In The Blanks', () => {
         // hints should be hidden
         cy.checkHintsPlay(null);
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, false);
-
         removeAnswer(answers[0], true);
         checkInputDisabled(true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -303,7 +308,11 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(
+          dataCyWrapper(
+            buildQuestionStepCy(id, QuestionStepStyleKeys.INCORRECT)
+          )
+        ).click();
 
         const data = shorterAppData.data;
         checkCorrection(splitSentence(data.text));
@@ -311,12 +320,10 @@ describe('Play Fill In The Blanks', () => {
         // hints should be hidden
         cy.checkHintsPlay(null);
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, false);
-
         removeAnswer(answers[0], true);
         checkInputDisabled(true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -337,7 +344,7 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
         // hints should be hidden
         cy.checkHintsPlay(null);
@@ -345,12 +352,10 @@ describe('Play Fill In The Blanks', () => {
         // we do not check correction: nothing matches
         // but we want to know that the app didn't crash
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, false);
-
         removeAnswer(answers[0], true);
         checkInputDisabled(true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -361,26 +366,6 @@ describe('Play Fill In The Blanks', () => {
 
   describe('3 attempts', () => {
     const NUMBER_OF_ATTEMPTS = 3;
-
-    describe('Empty data', () => {
-      beforeEach(() => {
-        cy.setUpApi({
-          database: {
-            appSettings: setAttemptsOnAppSettings(
-              APP_SETTINGS,
-              NUMBER_OF_ATTEMPTS
-            ),
-          },
-          appContext: {
-            context: Context.Player,
-          },
-        });
-        cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
-      });
-
-      // todo: difficult to test drag and drop
-    });
 
     describe('Display saved settings', () => {
       const buildAppData = (text: string) =>
@@ -411,7 +396,7 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
         const data = correctAppData.data;
 
         checkCorrection(splitSentence(data.text));
@@ -419,13 +404,11 @@ describe('Play Fill In The Blanks', () => {
         // hints should be hidden
         cy.checkHintsPlay(null);
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, true);
-
         // delete one answer
         removeAnswer(answers[0], true);
         checkInputDisabled(true);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: true,
@@ -449,7 +432,7 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
         const data = partiallyCorrectAppData.data;
         checkCorrection(splitSentence(data.text), false);
@@ -457,12 +440,10 @@ describe('Play Fill In The Blanks', () => {
         // hints should be displayed
         cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, false);
-
         removeAnswer(answers[0], false);
         checkInputDisabled(false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -486,7 +467,7 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
         const data = shorterAppData.data;
         checkCorrection(splitSentence(data.text), false);
@@ -494,12 +475,10 @@ describe('Play Fill In The Blanks', () => {
         // hints should be displayed
         cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, false);
-
         removeAnswer(answers[0], false);
         checkInputDisabled(false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,
@@ -523,7 +502,7 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
         // hints should be displayed
         cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
@@ -531,12 +510,10 @@ describe('Play Fill In The Blanks', () => {
         // we do not check correction: nothing matches
         // but we want to know that the app didn't crash
 
-        // success displayed in question bar
-        cy.checkStepStatus(id, false);
-
         removeAnswer(answers[0], false);
         checkInputDisabled(false);
-        cy.checkNumberOfAttemptsProgression({
+        cy.checkQuizNavigation({
+          questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,
           currentAttempts: 1,
           isCorrect: false,

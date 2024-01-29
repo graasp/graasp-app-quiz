@@ -23,7 +23,7 @@ import {
   QUESTION_BAR_NEXT_CY,
   QUESTION_BAR_PREV_CY,
   QUESTION_STEP_CLASSNAME,
-  buildQuestionStepCy,
+  buildQuestionStepDefaultCy,
 } from '../../config/selectors';
 import TypographyMaxLines from '../common/TypographyMaxLines';
 import { QuizContext } from '../context/QuizContext';
@@ -142,7 +142,7 @@ const CreateQuestionTopBar = () => {
                   return (
                     <Step
                       key={qId}
-                      data-cy={buildQuestionStepCy(qId)}
+                      data-cy={buildQuestionStepDefaultCy(qId)}
                       className={QUESTION_STEP_CLASSNAME}
                       ref={provided.innerRef}
                     >
