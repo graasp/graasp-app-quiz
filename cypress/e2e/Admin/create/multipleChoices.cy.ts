@@ -13,8 +13,7 @@ import {
   CREATE_VIEW_SAVE_BUTTON_CY,
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
-  QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
-  QUESTION_BAR_PREV_CY,
+  NAVIGATION_ADD_QUESTION_BUTTON_CY,
   buildMultipleChoiceAddAnswerExplanationButtonCy,
   buildMultipleChoiceAnswerCy,
   buildMultipleChoiceAnswerExplanationCy,
@@ -289,7 +288,6 @@ describe('Multiple Choices', () => {
           )} .${MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME} input`
         ).should(isCorrect ? 'be.checked' : 'not.be.checked');
       });
-      cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
 
       cy.checkHintsField(data.hints);
       cy.checkExplanationField(data.explanation);
@@ -299,7 +297,7 @@ describe('Multiple Choices', () => {
       fillMultipleChoiceQuestion(newMultipleChoiceData);
 
       // click new question and come back
-      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+      cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
 
       // question bar should be updated

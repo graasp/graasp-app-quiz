@@ -4,15 +4,19 @@ import {
   PLAY_VIEW_EMPTY_QUIZ_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
   QUESTION_BAR_CY,
-  QUESTION_BAR_NEXT_CY,
-  QUESTION_BAR_PREV_CY,
   buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../src/config/selectors';
-import { APP_SETTINGS, QUESTION_APP_SETTINGS } from '../../fixtures/appSettings';
 import { appDataChloe } from '../../../src/data/appDataChloe';
+import {
+  APP_SETTINGS,
+  QUESTION_APP_SETTINGS,
+} from '../../fixtures/appSettings';
+import { QuizNavigator } from '../../utils/navigation';
 
 describe('Play View', () => {
+  let quizNavigator: QuizNavigator;
+
   it('Empty data', () => {
     cy.setUpApi({
       database: {
@@ -20,7 +24,7 @@ describe('Play View', () => {
       },
       appContext: {
         context: Context.Player,
-      }
+      },
     });
     cy.visit('/');
 
@@ -35,7 +39,7 @@ describe('Play View', () => {
       },
       appContext: {
         context: Context.Player,
-      }
+      },
     });
     cy.visit('/');
 
@@ -66,12 +70,16 @@ describe('Play View', () => {
           permission: PermissionLevel.Admin,
         },
       });
+      quizNavigator = new QuizNavigator({
+        questionSettings: QUESTION_APP_SETTINGS,
+        context: Context.Player,
+      });
       cy.visit('/');
     });
 
     it('Navigation', () => {
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
-      cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
+      quizNavigator.prevBtnShouldBeDisabled();
 
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
@@ -79,25 +87,25 @@ describe('Play View', () => {
       );
 
       // go to next
-      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
+      quizNavigator.goToNext();
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
         QUESTION_APP_SETTINGS[1].data.question
       );
       // go to prev
-      cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).click();
+      quizNavigator.goToPrev();
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
         QUESTION_APP_SETTINGS[0].data.question
       );
       // go to next
-      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
+      quizNavigator.goToNext();
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
         QUESTION_APP_SETTINGS[1].data.question
       );
       // go to next
-      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
+      quizNavigator.goToNext();
       cy.get(`${dataCyWrapper(PLAY_VIEW_QUESTION_TITLE_CY)}`).should(
         'contain',
         QUESTION_APP_SETTINGS[2].data.question

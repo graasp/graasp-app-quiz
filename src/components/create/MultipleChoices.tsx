@@ -209,7 +209,7 @@ const MultipleChoices = ({
         })}
         <Stack alignItems="flex-start">
           <Button
-            variant="contained"
+            variant="outlined"
             color="primary"
             onClick={addAnswer}
             data-cy={MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY}

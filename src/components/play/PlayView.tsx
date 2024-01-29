@@ -154,9 +154,7 @@ const PlayView = () => {
       justifyContent="space-between"
       alignContent="center"
     >
-      <Box
-        width={{ xs: '100%', md: '20%' }}
-      >
+      <Box width={{ xs: '100%', md: '20%' }}>
         <QuestionStepper />
       </Box>
 
@@ -217,7 +215,6 @@ const PlayView = () => {
             {t('Submit')}
           </Button>
         </Box>
-
         {renderNavigationButtons()}
       </Grid>
     </Stack>

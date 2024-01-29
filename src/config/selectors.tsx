@@ -25,13 +25,13 @@ export const buildMultipleChoiceAddAnswerExplanationButtonCy = (idx: number) =>
 export const MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME =
   'multipleChoicesAnswerCorrectness';
 export const QUESTION_STEP_CLASSNAME = 'questionStep';
+export const buildQuestionStepTitle = (idx: number) => `questionStepTitle-${idx}`;
 export const buildMultipleChoiceDeleteAnswerButtonCy = (idx: number) =>
   `multipleChoiceDeleteAnswerButton-${idx}`;
 export const buildMultipleChoiceDeleteAnswerExplanationButtonCy = (
   idx: number
 ) => `multipleChoiceDeleteAnswerExplanationButton-${idx}`;
 export const CREATE_VIEW_SAVE_BUTTON_CY = 'createViewSaveButton';
-export const QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME = 'questionBarAddNewButton';
 export const MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY =
   'multipleChoicesAddAnswerButton';
 export const CREATE_VIEW_ERROR_ALERT_CY = 'createViewErrorAlert';
@@ -70,6 +70,7 @@ export const TABLE_BY_QUESTION_CONTAINER_CY = 'tableByQuestionContainer';
 export const NAVIGATION_TAB_CONTAINER_CY = 'navigationTabContainer';
 export const NAVIGATION_CREATE_QUIZ_BUTTON_CY = 'navigationCreateQuizButton';
 export const NAVIGATION_RESULT_BUTTON_CY = 'navigationResultButton';
+export const NAVIGATION_ADD_QUESTION_BUTTON_CY = 'navigationAddQuestionButton';
 export const buildTableByQuestionCy = (qId: string) => `tableByQuestion-${qId}`;
 export const buildTableByQuestionTableBodyCy = (qId: string) =>
   `tableByQuestionTableBody-${qId}`;
@@ -131,3 +132,6 @@ export const buildNavigationQuestionStatus = (status: QuestionStatus) =>
 export const NUMBER_OF_ATTEMPTS_DECREASE_BTN_CY = 'numberOfAttemptsDecreaseBtn';
 export const NUMBER_OF_ATTEMPTS_INCREASE_BTN_CY = 'numberOfAttemptsIncreaseBtn';
 export const NUMBER_OF_ATTEMPTS_INPUT_CY = 'numberOfAttemptsInput';
+export const CREATE_VIEW_SELECT_POSITION_QUESTION_CY = 'selectPositionQuestion';
+export const buildQuestionPositionOption = (idx: number) =>
+  `buildQuestionPositionOption-${idx}`;

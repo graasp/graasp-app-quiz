@@ -27,7 +27,7 @@ type ContextType = {
   addQuestion: () => void;
   saveQuestion: (newData: QuestionData) => Promise<void>;
   isSettingsFetching: boolean;
-  saveOrder: (order: string[]) => void;
+  saveOrder: (order: string[], currQuestionId?: string) => void;
 };
 
 export const QuizContext = React.createContext({} as ContextType);
@@ -76,7 +76,7 @@ export const QuizProvider = ({ children }: Props) => {
       }
       // update list order
       const idx = order.findIndex((id) => id === question.data.questionId);
-      // construct new order without the idx: 
+      // construct new order without the idx:
       // add elements before the idx as well as the end of the list after the idx
       const newOrder = [...order.slice(0, idx), ...order.slice(idx + 1)];
       if (orderSetting) {
@@ -159,16 +159,29 @@ export const QuizProvider = ({ children }: Props) => {
   );
 
   const saveOrder = useCallback(
-    async (newOrder: string[]) => {
+    async (newOrder: string[], currQuestionId?: string) => {
       if (!orderSetting) {
         return console.error('order is not defined');
       }
+
+      // The state currentQuestion is not synchronized correctly in the callback,
+      // so we pass the current id in the parameters to set its new position as the current idx.
+      // Update the current index to the new position of the current question.
+      // This allows the user to stay on the current question even after changing the order.
+      if (currQuestionId) {
+        const newIdx = newOrder.findIndex((qId) => qId === currQuestionId);
+        if (newIdx >= 0 && newIdx < newOrder.length) {
+          setCurrentIdx(newIdx);
+        }
+      }
+
       setOrder(newOrder);
       await patchAppSettingAsync({
         id: orderSetting.id,
         data: { list: newOrder },
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [orderSetting, patchAppSettingAsync]
   );
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
-import { Alert, Button, Grid, Typography } from '@mui/material';
+import { Alert, Box, Button, Grid, Stack, Typography } from '@mui/material';
 
 import { QuestionType } from '../../config/constants';
 import {
@@ -18,12 +18,13 @@ import {
 import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { QuizContext } from '../context/QuizContext';
 import { isDifferent, validateQuestionData } from '../context/utilities';
+import MoveQuestionSection from '../navigation/builderNavigation/MoveQuestionSection';
+import { QuizNavigationBuilder } from '../navigation/builderNavigation/QuizNavigation';
 import {
   MultipleChoicesAppSettingData,
   SliderAppSettingData,
 } from '../types/types';
 import { QuestionData } from '../types/types';
-import CreateQuestionTopBar from './CreateQuestionTopBar';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
 import NumberOfAttempts from './NumberOfAttempts';
@@ -38,6 +39,22 @@ type ValidationSeverity = 'warning' | 'error';
 type ValidationMessage = {
   msg: string;
   severity: ValidationSeverity;
+};
+
+const flexItemSx = {
+  flex: '0 0',
+  position: 'relative',
+};
+
+const flexItemQuestionSx = {
+  display: 'box',
+  height: 'auto',
+};
+
+const flexItemNavSx = {
+  position: { md: 'absolute', sm: 'relative' },
+  top: 0,
+  bottom: 0,
 };
 
 const CreateView = () => {
@@ -87,199 +104,211 @@ const CreateView = () => {
   };
 
   return (
-    <>
-      <Grid
-        container
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        data-cy={CREATE_VIEW_CONTAINER_CY}
+    <Box
+      display="flex"
+      flexDirection={{ xs: 'column', md: 'row' }}
+      justifyContent="space-between"
+      data-cy={CREATE_VIEW_CONTAINER_CY}
+    >
+      <Box
+        sx={{
+          ...flexItemSx,
+          flexBasis: { md: '30%', sm: '100%' },
+          mb: { xs: 2, md: 0 },
+        }}
       >
-        <Grid item width={'100%'}>
-          <CreateQuestionTopBar />
-        </Grid>
-      </Grid>
-      {!currentQuestion.id && (
-        <Typography
-          variant="h4"
-          sx={{ pb: 4 }}
-          data-cy={ADD_NEW_QUESTION_TITLE_CY}
-        >
-          {t('Add a new question')}
-        </Typography>
-      )}
-      <Grid container direction="column" spacing={3}>
-        <Grid item>
-          <QuestionTitle
-            title={newData.question}
-            onChange={(question: string) => {
-              setNewData({
-                ...newData,
-                question,
-              });
-            }}
-          />
-        </Grid>
-        <Grid item>
-          <QuestionTypeSelect
-            value={newData.type}
-            onChange={(changes: QuestionData) => {
-              setNewData({
-                ...changes,
-                questionId: newData.questionId,
-                question: newData.question,
-                explanation: newData.explanation,
-                numberOfAttempts: newData.numberOfAttempts,
-              });
-            }}
-          />
-        </Grid>
-        <Grid item>
-          {(() => {
-            switch (newData.type) {
-              case QuestionType.TEXT_INPUT: {
-                return (
-                  <TextInput
-                    text={newData.text}
-                    onChangeData={(text: string) => {
-                      setNewData({
-                        ...newData,
-                        text,
-                      });
-                    }}
-                  />
-                );
-              }
-              case QuestionType.SLIDER: {
-                return (
-                  <Slider
-                    data={newData}
-                    onChangeData={(d: SliderAppSettingData) => {
-                      setNewData({
-                        ...newData,
-                        ...d,
-                      });
-                    }}
-                  />
-                );
-              }
-              case QuestionType.FILL_BLANKS: {
-                return (
-                  <FillInTheBlanks
-                    text={newData.text}
-                    onChangeData={(text: string) =>
-                      setNewData({
-                        ...newData,
-                        text,
-                      })
-                    }
-                  />
-                );
-              }
-              case QuestionType.MULTIPLE_CHOICES:
-              default: {
-                return (
-                  <MultipleChoices
-                    choices={newData.choices}
-                    setChoices={(
-                      newChoices: MultipleChoicesAppSettingData['choices']
-                    ) =>
-                      setNewData({
-                        ...newData,
-                        choices: newChoices,
-                      })
-                    }
-                  />
-                );
-              }
-            }
-          })()}
+        <QuizNavigationBuilder sx={flexItemNavSx} />
+      </Box>
+      <Box sx={{ ...flexItemSx, flexBasis: { md: '60%', sm: '100%' } }}>
+        <Stack sx={flexItemQuestionSx}>
+          {!currentQuestion.id && (
+            <Typography
+              variant="h4"
+              sx={{ pb: 4 }}
+              data-cy={ADD_NEW_QUESTION_TITLE_CY}
+            >
+              {t('Add a new question')}
+            </Typography>
+          )}
+          <Grid container direction="column" spacing={3}>
+            <Grid item>
+              <QuestionTitle
+                title={newData.question}
+                onChange={(question: string) => {
+                  setNewData({
+                    ...newData,
+                    question,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <QuestionTypeSelect
+                value={newData.type}
+                onChange={(changes: QuestionData) => {
+                  setNewData({
+                    ...changes,
+                    questionId: newData.questionId,
+                    question: newData.question,
+                    explanation: newData.explanation,
+                    numberOfAttempts: newData.numberOfAttempts,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item>
+              {(() => {
+                switch (newData.type) {
+                  case QuestionType.TEXT_INPUT: {
+                    return (
+                      <TextInput
+                        text={newData.text}
+                        onChangeData={(text: string) => {
+                          setNewData({
+                            ...newData,
+                            text,
+                          });
+                        }}
+                      />
+                    );
+                  }
+                  case QuestionType.SLIDER: {
+                    return (
+                      <Slider
+                        data={newData}
+                        onChangeData={(d: SliderAppSettingData) => {
+                          setNewData({
+                            ...newData,
+                            ...d,
+                          });
+                        }}
+                      />
+                    );
+                  }
+                  case QuestionType.FILL_BLANKS: {
+                    return (
+                      <FillInTheBlanks
+                        text={newData.text}
+                        onChangeData={(text: string) =>
+                          setNewData({
+                            ...newData,
+                            text,
+                          })
+                        }
+                      />
+                    );
+                  }
+                  case QuestionType.MULTIPLE_CHOICES:
+                  default: {
+                    return (
+                      <MultipleChoices
+                        choices={newData.choices}
+                        setChoices={(
+                          newChoices: MultipleChoicesAppSettingData['choices']
+                        ) =>
+                          setNewData({
+                            ...newData,
+                            choices: newChoices,
+                          })
+                        }
+                      />
+                    );
+                  }
+                }
+              })()}
 
-          <NumberOfAttempts
-            initAttempts={currentQuestion.data.numberOfAttempts}
-            onChange={(attempts: number) => {
-              setNewData({
-                ...newData,
-                numberOfAttempts: attempts,
-              });
-            }}
-          />
-        </Grid>
+              <NumberOfAttempts
+                initAttempts={currentQuestion.data.numberOfAttempts}
+                onChange={(attempts: number) => {
+                  setNewData({
+                    ...newData,
+                    numberOfAttempts: attempts,
+                  });
+                }}
+              />
+            </Grid>
 
-        <Grid item>
-          <TitleDescriptionTextField
-            title={t(QUIZ_TRANSLATIONS.HINTS_TITLE)}
-            subTitle={t(QUIZ_TRANSLATIONS.HINTS_SUB_TITLE)}
-            label={t(QUIZ_TRANSLATIONS.HINTS_LABEL)}
-            value={newData.hints}
-            onChange={(hints: string) => {
-              setNewData({
-                ...newData,
-                hints,
-              });
-            }}
-            dataCy={HINTS_CY}
-          />
-        </Grid>
+            <Grid item>
+              <TitleDescriptionTextField
+                title={t(QUIZ_TRANSLATIONS.HINTS_TITLE)}
+                subTitle={t(QUIZ_TRANSLATIONS.HINTS_SUB_TITLE)}
+                label={t(QUIZ_TRANSLATIONS.HINTS_LABEL)}
+                value={newData.hints}
+                onChange={(hints: string) => {
+                  setNewData({
+                    ...newData,
+                    hints,
+                  });
+                }}
+                dataCy={HINTS_CY}
+              />
+            </Grid>
 
-        <Grid item>
-          <TitleDescriptionTextField
-            title={t('Explanation')}
-            subTitle={t(
-              'Type here an explanation that will be displayed after an answer is submitted'
+            <Grid item>
+              <TitleDescriptionTextField
+                title={t('Explanation')}
+                subTitle={t(
+                  'Type here an explanation that will be displayed after an answer is submitted'
+                )}
+                label={t('Explanation')}
+                value={newData.explanation}
+                onChange={(explanation: string) => {
+                  setNewData({
+                    ...newData,
+                    explanation,
+                  });
+                }}
+                dataCy={EXPLANATION_CY}
+              />
+            </Grid>
+            {currentQuestion.id && (
+              <Grid item>
+                <MoveQuestionSection qId={currentQuestion.data.questionId} />
+              </Grid>
             )}
-            label={t('Explanation')}
-            value={newData.explanation}
-            onChange={(explanation: string) => {
-              setNewData({
-                ...newData,
-                explanation,
-              });
-            }}
-            dataCy={EXPLANATION_CY}
-          />
-        </Grid>
-        {errorMessage && (
-          <Grid item>
-            <Alert
-              severity={errorMessage.severity}
-              data-cy={CREATE_VIEW_ERROR_ALERT_CY}
-            >
-              {t(errorMessage.msg)}
-            </Alert>
+            {errorMessage && (
+              <Grid item>
+                <Alert
+                  severity={errorMessage.severity}
+                  data-cy={CREATE_VIEW_ERROR_ALERT_CY}
+                >
+                  {t(errorMessage.msg)}
+                </Alert>
+              </Grid>
+            )}
+            <Grid container spacing={2} sx={{ pt: 2 }} justifyContent="center">
+              <Grid item>
+                <Button
+                  data-cy={CREATE_VIEW_DELETE_BUTTON_CY}
+                  color="error"
+                  variant="contained"
+                  startIcon={<DeleteIcon />}
+                  onClick={deleteQuestion(currentQuestion)}
+                  disabled={!currentQuestion.id}
+                >
+                  {t('Delete')}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  data-cy={CREATE_VIEW_SAVE_BUTTON_CY}
+                  onClick={saveNewQuestion}
+                  variant="contained"
+                  color="success"
+                  startIcon={<SaveIcon />}
+                  disabled={
+                    !isDifferent(newData, currentQuestion.data) ||
+                    Boolean(errorMessage)
+                  }
+                >
+                  {t('Save')}
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
-        )}
-        <Grid container spacing={2} sx={{ pt: 2 }} justifyContent="center">
-          <Grid item>
-            <Button
-              data-cy={CREATE_VIEW_DELETE_BUTTON_CY}
-              color="error"
-              variant="contained"
-              startIcon={<DeleteIcon />}
-              onClick={deleteQuestion(currentQuestion)}
-              disabled={!currentQuestion.id}
-            >
-              {t('Delete')}
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              data-cy={CREATE_VIEW_SAVE_BUTTON_CY}
-              onClick={saveNewQuestion}
-              variant="contained"
-              color="success"
-              startIcon={<SaveIcon />}
-              disabled={
-                !isDifferent(newData, currentQuestion.data) ||
-                Boolean(errorMessage)
-              }
-            >
-              {t('Save')}
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-    </>
+        </Stack>
+      </Box>
+    </Box>
   );
 };
 

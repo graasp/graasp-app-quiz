@@ -10,14 +10,15 @@ import {
   CREATE_QUESTION_TITLE_CY,
   CREATE_VIEW_DELETE_BUTTON_CY,
   CREATE_VIEW_SAVE_BUTTON_CY,
+  CREATE_VIEW_SELECT_POSITION_QUESTION_CY,
+  NAVIGATION_ADD_QUESTION_BUTTON_CY,
   NUMBER_OF_ATTEMPTS_INPUT_CY,
-  QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME,
   QUESTION_BAR_CY,
-  QUESTION_BAR_NEXT_CY,
-  QUESTION_BAR_PREV_CY,
   QUESTION_STEP_CLASSNAME,
   TEXT_INPUT_FIELD_CY,
+  buildQuestionPositionOption,
   buildQuestionStepDefaultCy,
+  buildQuestionStepTitle,
   buildQuestionTypeOption,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
@@ -25,6 +26,7 @@ import {
   APP_SETTINGS,
   QUESTION_APP_SETTINGS,
 } from '../../../fixtures/appSettings';
+import { QuizNavigator } from '../../../utils/navigation';
 import { WAITING_DELAY_MS } from '../../../utils/time';
 import { fillMultipleChoiceQuestion } from './multipleChoices.cy';
 
@@ -69,8 +71,6 @@ describe('Create View', () => {
         DEFAULT_QUESTION_TYPE
       );
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
-      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).should('be.disabled');
-      cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
     });
 
     it('Add questions from empty quiz', () => {
@@ -79,14 +79,14 @@ describe('Create View', () => {
       fillMultipleChoiceQuestion(newMultipleChoiceData);
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(WAITING_DELAY_MS); // Wait for the new question to appear
-      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+      cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
         .should('be.visible')
         .should('have.value', '');
       fillMultipleChoiceQuestion(newMultipleChoiceData);
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(WAITING_DELAY_MS);
-      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+      cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
         .should('be.visible')
         .should('have.value', '');
@@ -100,6 +100,8 @@ describe('Create View', () => {
   });
 
   describe('Existing Quizz', () => {
+    let quizNavigator: QuizNavigator;
+
     beforeEach(() => {
       cy.setUpApi({
         database: {
@@ -110,12 +112,17 @@ describe('Create View', () => {
           context: Context.Builder,
         },
       });
+
+      quizNavigator = new QuizNavigator({
+        questionSettings: QUESTION_APP_SETTINGS,
+        context: Context.Builder,
+      });
+
       cy.visit('/');
     });
 
     it('Navigation', () => {
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
-      cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).should('be.disabled');
 
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
@@ -123,25 +130,25 @@ describe('Create View', () => {
       );
 
       // go to next
-      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
+      quizNavigator.goToNext();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
         QUESTION_APP_SETTINGS[1].data.type
       );
       // go to prev
-      cy.get(dataCyWrapper(QUESTION_BAR_PREV_CY)).click();
+      quizNavigator.goToPrev();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
         QUESTION_APP_SETTINGS[0].data.type
       );
       // go to next
-      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
+      quizNavigator.goToNext();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
         QUESTION_APP_SETTINGS[1].data.type
       );
       // go to next
-      cy.get(dataCyWrapper(QUESTION_BAR_NEXT_CY)).click();
+      quizNavigator.goToNext();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_SELECT_TYPE_CY)} input`).should(
         'have.value',
         QUESTION_APP_SETTINGS[2].data.type
@@ -172,7 +179,7 @@ describe('Create View', () => {
       const id = currentQuestion.data.questionId;
       cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
       // click new question and come back
-      cy.get(`.${QUESTION_BAR_ADD_NEW_BUTTON_CLASSNAME}`).click();
+      cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
 
       // New question title should be visible
       cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
@@ -250,6 +257,37 @@ describe('Create View', () => {
         'have.value',
         numberOfAttempts
       );
+    });
+
+    it('Move question to another position', () => {
+      // Position idx start with 0, so index 0 is the first question.
+      const FIRST_POSITION_IDX = 0;
+      const THIRD_POSITION_IDX = 2;
+      const firstQuestionTitle = QUESTION_APP_SETTINGS[0].data.question;
+
+      // Check that the first question has the position 0.
+      cy.get(
+        `${dataCyWrapper(CREATE_VIEW_SELECT_POSITION_QUESTION_CY)} input`
+      ).should('have.value', FIRST_POSITION_IDX);
+
+      // Check that the question at position 0 is the right question by checking the question's title.
+      cy.get(
+        `${dataCyWrapper(buildQuestionStepTitle(FIRST_POSITION_IDX))}`
+      ).should('have.text', firstQuestionTitle);
+
+      // Move the question to the third position (index 2).
+      cy.get(dataCyWrapper(CREATE_VIEW_SELECT_POSITION_QUESTION_CY)).click();
+      cy.get(
+        `${dataCyWrapper(buildQuestionPositionOption(THIRD_POSITION_IDX))}`
+      ).click();
+
+      cy.get(
+        `${dataCyWrapper(CREATE_VIEW_SELECT_POSITION_QUESTION_CY)} input`
+      ).should('have.value', THIRD_POSITION_IDX);
+
+      cy.get(
+        `${dataCyWrapper(buildQuestionStepTitle(THIRD_POSITION_IDX))}`
+      ).should('have.text', firstQuestionTitle);
     });
   });
 });

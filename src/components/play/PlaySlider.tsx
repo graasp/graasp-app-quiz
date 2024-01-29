@@ -44,7 +44,7 @@ const PlaySlider = ({
     // Notify with the default value if response's value is null.
     // Without it, if the user click on submit without changing the slider's value,
     // the response's value will be undefined instead of defaultValue displayed on the screen.
-    if (!isReadonly && !response.value) {
+    if (!response.value) {
       setResponse(defaultValue);
     }
 
@@ -68,7 +68,7 @@ const PlaySlider = ({
 
     setMarks(newMarks);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showCorrection, response, values]);
+  }, [showCorrection, response.value, values]);
 
   const computeColor = () => {
     return isCorrect ? 'success' : 'error';

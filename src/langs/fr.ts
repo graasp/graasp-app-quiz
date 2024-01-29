@@ -95,5 +95,11 @@ export default {
     QUESTION_STEPPER_TITLE_NO_MORE_ATTEMPTS: 'Aucune tentative restante',
     QUESTION_STEPPER_TITLE_ATTEMPTS:
       '{{current_attempts}} sur {{max_attempts}} tentatives',
+    ADD_NEW_QUESTION: 'Ajouter une nouvelle question',
+    QUESTION_POSITION_TITLE: 'Position de la question',
+    QUESTION_POSITION_EXPLANATION:
+      'Vous pouvez définir une nouvelle position pour cette question. Les changements sont appliqués directement',
+    QUESTION_POSITION_LABEL: 'Position de la question dans le quiz',
+    BUILDER_QUIZ_NAVIGATION_TITLE: 'Navigation du Quiz',
   },
 };
