@@ -84,6 +84,7 @@ export default {
     CREATE_VIEW_NUMBER_OF_ATTEMPTS: 'Nombre de tentatives',
     MULTIPLE_CHOICE_NOT_CORRECT:
       "La réponse est incorrecte ou n'est pas entièrement correcte.",
+    RESPONSE_NOT_CORRECT: "La réponse que vous avez fournie n'est pas correcte",
     HINTS_TITLE: 'Indices',
     HINTS_SUB_TITLE:
       "Saisissez ici les indices qui s'afficheront si la réponse est incorrecte, afin d'aider l'étudiant",

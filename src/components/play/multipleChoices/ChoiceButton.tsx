@@ -1,4 +1,3 @@
-
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Typography } from '@mui/material';
@@ -77,16 +76,13 @@ export const ChoiceButton = ({
     if (showState) {
       switch (choiceState) {
         case ChoiceState.CORRECT:
+        case ChoiceState.MISSING:
           color = CORRECT_COLOR;
           icon = <CheckIcon />;
           break;
         case ChoiceState.INCORRECT:
           color = INCORRECT_COLOR;
           icon = <CloseIcon />;
-          break;
-        case ChoiceState.MISSING:
-          color = CORRECT_COLOR;
-          icon = <CheckIcon />;
           break;
       }
     }

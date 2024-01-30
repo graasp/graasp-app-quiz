@@ -76,7 +76,8 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
   // The charts to display, must contain 'link' and 'label' properties so that they can easily be passed
   // to AutoScrollableMenu component
   const [charts, setCharts] = useState<Chart[]>(generalCharts(t));
-  const [considerLastAttemptsOnly, setConsiderLastAttempts] = useState(true);
+  const [considerLastAttemptsOnly, setConsiderLastAttemptsOnly] =
+    useState(true);
   const chartRefs = useRef({});
   const chartContainerRef = useRef(null);
   const [stackElem, setStackElem] = useState<HTMLElement | null>(null);
@@ -214,7 +215,7 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
               <Switch
                 checked={considerLastAttemptsOnly}
                 onChange={(_, checked: boolean) =>
-                  setConsiderLastAttempts(checked)
+                  setConsiderLastAttemptsOnly(checked)
                 }
               />
             }

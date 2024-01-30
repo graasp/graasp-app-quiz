@@ -85,6 +85,7 @@ export default {
     MULTIPLE_CHOICE_NOT_CORRECT:
       'The answer is incomplete and/or contains incorrect choices.',
     HINTS_TITLE: 'Hints',
+    RESPONSE_NOT_CORRECT: 'The answer you provided is not correct.',
     HINTS_SUB_TITLE:
       'Enter here the hints to help the student. They will be displayed if the answer is incorrect.',
     HINTS_LABEL: 'Hints',

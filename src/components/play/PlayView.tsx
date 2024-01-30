@@ -178,6 +178,7 @@ const PlayView = () => {
       direction={{ xs: 'column', md: 'row-reverse' }}
       justifyContent="space-between"
       alignContent="center"
+      spacing={2}
     >
       <Box width={{ xs: '100%', md: '20%' }}>
         <QuestionStepper />
@@ -187,14 +188,11 @@ const PlayView = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        spacing={2}
+        spacing={3}
         width={{ xs: '100%', md: '60%' }}
-        ml={{ sm: 0 }}
       >
-        {/* TODO: check if the box is needed needed */}
-        <Box mb={4} width="100%">
-          {renderNavigationButtons()}
-        </Box>
+        {renderNavigationButtons()}
+
         <Typography
           component="h1"
           variant="h5"

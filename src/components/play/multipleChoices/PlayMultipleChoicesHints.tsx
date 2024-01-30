@@ -27,7 +27,7 @@ export const PlayMultipleChoicesHints = ({
               (showCorrection || response?.choices?.includes(c.value))
           )
           .map((c, idx) => (
-            <li key={idx} data-cy={buildMultipleChoiceHintPlayCy(idx)}>
+            <li key={c.explanation} data-cy={buildMultipleChoiceHintPlayCy(idx)}>
               {c.explanation}
             </li>
           ))}

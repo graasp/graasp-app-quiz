@@ -40,7 +40,7 @@ const PlayFillInTheBlanks = ({
   response,
   setResponse,
 }: Props) => {
-  const [state, setState] = useState<{answers: Word[], words: Word[]}>({
+  const [state, setState] = useState<{ answers: Word[]; words: Word[] }>({
     answers: [],
     words: [],
   });
@@ -49,12 +49,19 @@ const PlayFillInTheBlanks = ({
   const [prevWords, setPrevWords] = useState<string[]>();
 
   useEffect(() => {
-    const words = lastUserAnswer
-      ? (lastUserAnswer?.text?.match(ANSWER_REGEXP) || []).map((w) =>
-          w.slice(1, -1)
-        )
-      : undefined;
-    setPrevWords(words);
+    if (lastUserAnswer) {
+      const regExp = RegExp(ANSWER_REGEXP);
+      const words: string[] = [];
+      let array1;
+      while ((array1 = regExp.exec(lastUserAnswer?.text)) !== null) {
+        if (array1.length) {
+          words.push(array1[0].slice(1, -1));
+        }
+      }
+      setPrevWords(words);
+    } else {
+      setPrevWords(undefined);
+    }
   }, [lastUserAnswer]);
 
   useEffect(() => {
@@ -137,7 +144,7 @@ const PlayFillInTheBlanks = ({
       />
       {!showCorrection && prevWords && (
         <Typography variant="body1" color="error" mt={2}>
-          {t(QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_NOT_CORRECT)}
+          {t(QUIZ_TRANSLATIONS.RESPONSE_NOT_CORRECT)}
         </Typography>
       )}
       {showCorrection && <Correction words={state.words} />}

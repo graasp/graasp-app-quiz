@@ -51,21 +51,19 @@ const BlankedText = ({
       const hasChanged = !prevWords || prevWord !== word.displayed;
 
       return (
-        <>
-          <Blank
-            dataCy={buildBlankedTextWordCy(word.id)}
-            showCorrection={showCorrection}
-            showCorrectness={showCorrectness}
-            isCorrect={word.displayed === word.text}
-            isReadonly={isReadonly}
-            key={i}
-            id={word.id}
-            onDrop={onDrop}
-            onDelete={onDelete}
-            text={word.displayed ?? ' '}
-            hasChanged={hasChanged}
-          />
-        </>
+        <Blank
+          dataCy={buildBlankedTextWordCy(word.id)}
+          showCorrection={showCorrection}
+          showCorrectness={showCorrectness}
+          isCorrect={word.displayed === word.text}
+          isReadonly={isReadonly}
+          key={i}
+          id={word.id}
+          onDrop={onDrop}
+          onDelete={onDelete}
+          text={word.displayed ?? ' '}
+          hasChanged={hasChanged}
+        />
       );
     });
   };

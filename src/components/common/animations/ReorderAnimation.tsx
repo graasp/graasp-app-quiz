@@ -3,7 +3,7 @@ import { useTransition } from '@react-spring/web';
 import { useState } from 'react';
 import { animated } from 'react-spring';
 
-const ANIMATION_DURATION_MS = 450;
+const ANIMATION_DURATION_MS = 350;
 
 type DataElementType = { elementType: number };
 
@@ -95,22 +95,20 @@ export const ReorderAnimation = <T extends DataElementType>({
       {transitions(
         (style, item, _t, index) =>
           item.key && (
-            <>
-              <animated.div
-                style={{
-                  zIndex: elements.length - index,
-                  // Do not add style when not animated to be sure to reset
-                  // transform on existing div when changing question to another
-                  // multiple choice. This solves bad position problems.
-                  ...(isAnimating ? style : {}),
-                  opacity: style.opacity,
-                  height: item.height,
-                  marginBottom: isAnimating ? 0 : item.marginBottom,
-                }}
-              >
-                {renderElement(item, handleElementHeight)}
-              </animated.div>
-            </>
+            <animated.div
+              style={{
+                zIndex: elements.length - index,
+                // Do not add style when not animated to be sure to reset
+                // transform on existing div when changing question to another
+                // multiple choice. This solves bad position problems.
+                ...(isAnimating ? style : {}),
+                opacity: style.opacity,
+                height: item.height,
+                marginBottom: isAnimating ? 0 : item.marginBottom,
+              }}
+            >
+              {renderElement(item, handleElementHeight)}
+            </animated.div>
           )
       )}
     </div>
