@@ -72,7 +72,7 @@ const NumberOfAttempts = ({ initAttempts, onChange }: Props) => {
   };
 
   return (
-    <FormControl sx={{ mt: 3, width: '25ch' }} variant="outlined">
+    <FormControl sx={{ width: '25ch' }} variant="outlined">
       <InputLabel htmlFor="outlined-adornment-attempts">
         {attemptsLabel}
       </InputLabel>

@@ -110,7 +110,6 @@ export const QuestionStepper = () => {
 
   return (
     <Box
-      mb={4}
       sx={{
         width: '100%',
       }}

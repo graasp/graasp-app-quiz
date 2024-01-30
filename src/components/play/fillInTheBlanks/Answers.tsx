@@ -44,17 +44,15 @@ const Answers = ({ answers, isReadonly }: Props) => {
         .sort(({ text: textA }, { text: textB }) =>
           textA < textB ? -1 : textA > textB ? 1 : 0
         )
-        .map((a) => {
-          return (
-            <Answer
-              onDragStart={onDragStart}
-              key={a.id}
-              id={a.id}
-              name={a.text}
-              isReadonly={isReadonly}
-            />
-          );
-        })}
+        .map((a) => (
+          <Answer
+            onDragStart={onDragStart}
+            key={a.id}
+            id={a.id}
+            name={a.text}
+            isReadonly={isReadonly}
+          />
+        ))}
     </Box>
   );
 };

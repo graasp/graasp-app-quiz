@@ -23,12 +23,13 @@ type Props = {
 
 const Slider = ({ data, onChangeData }: Props) => {
   const { t } = useTranslation();
-  const values = useMemo(() => {
-    return {
+  const values = useMemo(
+    () => ({
       ...DEFAULT_QUESTION_VALUES[QuestionType.SLIDER],
       ...data,
-    };
-  }, [data]);
+    }),
+    [data]
+  );
 
   const middleValue = (values.max - values.min) / 2;
 

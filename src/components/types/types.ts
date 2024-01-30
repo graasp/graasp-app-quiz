@@ -141,3 +141,10 @@ export type AppDataWithDataId<T extends Data = Data> = Partial<
   Pick<AppData<T>, 'id'>
 > &
   Pick<AppData<T>, 'data'>;
+  
+export enum ChoiceState {
+  CORRECT,
+  INCORRECT,
+  MISSING,
+  UNSELECTED,
+}

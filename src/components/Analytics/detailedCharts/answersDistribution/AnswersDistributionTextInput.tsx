@@ -6,7 +6,11 @@ import { useTheme } from '@mui/material';
 
 import { truncateText } from '../../../../utils/plotUtils';
 import { computeCorrectness } from '../../../context/utilities';
-import { ChartData, TextAppDataData, TextAppSettingData } from '../../../types/types';
+import {
+  ChartData,
+  TextAppDataData,
+  TextAppSettingData,
+} from '../../../types/types';
 import AnswersDistributionBarChart from './AnswersDistributionBarChart';
 
 type Props = {
@@ -36,26 +40,24 @@ const AnswersDistributionTextInput = ({
   const chartData = useMemo(
     () =>
       Object.entries(responsesByText).reduce(
-        (acc, [text, list], idx) => {
-          return {
-            data: {
-              x: [...acc.data.x, `A${idx + 1}<br>${truncateText(text, 10)}`],
-              y: [...acc.data.y, list.length],
-            },
-            percentage: [
-              ...acc.percentage,
-              list.length / appDataForQuestion.length,
-            ],
-            maxValue: Math.max(acc.maxValue, list.length),
-            hoverText: [...acc.hoverText, text],
-            barColors: [
-              ...acc.barColors,
-              computeCorrectness(questionData, list.at(0))
-                ? theme.palette.success.main
-                : theme.palette.primary.main,
-            ],
-          };
-        },
+        (acc, [text, list], idx) => ({
+          data: {
+            x: [...acc.data.x, `A${idx + 1}<br>${truncateText(text, 10)}`],
+            y: [...acc.data.y, list.length],
+          },
+          percentage: [
+            ...acc.percentage,
+            list.length / appDataForQuestion.length,
+          ],
+          maxValue: Math.max(acc.maxValue, list.length),
+          hoverText: [...acc.hoverText, text],
+          barColors: [
+            ...acc.barColors,
+            computeCorrectness(questionData, list.at(0))
+              ? theme.palette.success.main
+              : theme.palette.primary.main,
+          ],
+        }),
         {
           data: { x: [], y: [] },
           percentage: [],

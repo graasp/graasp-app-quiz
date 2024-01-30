@@ -85,6 +85,7 @@ export default {
     MULTIPLE_CHOICE_NOT_CORRECT:
       'The answer is incomplete and/or contains incorrect choices.',
     HINTS_TITLE: 'Hints',
+    RESPONSE_NOT_CORRECT: 'The answer you provided is not correct.',
     HINTS_SUB_TITLE:
       'Enter here the hints to help the student. They will be displayed if the answer is incorrect.',
     HINTS_LABEL: 'Hints',
@@ -101,5 +102,25 @@ export default {
       'You can define a new position for this question. Changes are applied directly.',
     QUESTION_POSITION_LABEL: 'Position of the question in the quiz',
     BUILDER_QUIZ_NAVIGATION_TITLE: 'Quiz Navigation',
+    MULTIPLE_ATTEMPTS_SECTION_TITLE: 'Multiple attempts',
+    MULTIPLE_ATTEMPTS_EXPLANATION:
+      'If the value is greater than 1, you allow users to retry at most {{count}} times when the given answer is incorrect.',
+    MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_CHECKBOX:
+      'Display response errors after each attempt',
+    MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_TOOLTIP:
+      'If the option is enabled, the user will see the corrections for each reply sent. If not, the user will only be informed that his answer is not entirely correct.',
+    MULTIPLE_CHOICE_SECTION_TITLE_CORRECT: 'Your correct answers',
+    MULTIPLE_CHOICE_SECTION_TITLE_INCORRECT: 'Incorrect answers you selected',
+    MULTIPLE_CHOICE_SECTION_TITLE_MISSING: 'Correct answers you forgot',
+    MULTIPLE_CHOICE_SECTION_TITLE_UNSELECTED: "Answers you haven't selected",
+    PLAY_VIEW_RETRY_BTN: 'Retry',
+    ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE:
+      'Consider the last attempts by users only',
+    MULTIPLE_CHOICE_ADD_HINT_BTN: 'add hint',
+    MULTIPLE_CHOICE_HINT_INPUT_LABEL: 'Hint',
+    MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION:
+      'Type here a hint to help the user to find the answer or to understand it',
+    CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING:
+      'Caution: Users with some informatics skills can retrieve quiz answers; consider to not use it as an exam method.',
   },
 };

@@ -33,6 +33,7 @@ import { QuizContext } from '../context/QuizContext';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
 import TabPanel from '../navigation/TabPanel';
 import { Chart, QuestionData } from '../types/types';
+import RenderAllAttemptsToggleBtn from './RenderAllAttemptsToggleBtn';
 import {
   fillInTheBlankCharts,
   generalCharts,
@@ -68,6 +69,8 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
   // The charts to display, must contain 'link' and 'label' properties so that they can easily be passed
   // to AutoScrollableMenu component
   const [charts, setCharts] = useState<Chart[]>(generalCharts(t));
+  const [considerLastAttemptsOnly, setConsiderLastAttemptsOnly] =
+    useState(true);
   const chartRefs = useRef({});
   const chartContainerRef = useRef(null);
   const [stackElem, setStackElem] = useState<HTMLElement | null>(null);
@@ -266,18 +269,25 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
           >
             <TabPanel tab={tab} index={0}>
               {data ? (
-                <GeneralCharts
-                  maxWidth={
-                    stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH
-                  }
-                  generalCharts={generalCharts(t)}
-                  chartRefs={chartRefs}
-                  goToDetailedQuestion={handleQuestionRedirection}
-                  questions={questions}
-                  order={order}
-                  responses={responses}
-                  members={data.members}
-                />
+                <>
+                  <RenderAllAttemptsToggleBtn
+                    considerLastAttemptsOnly={considerLastAttemptsOnly}
+                    onChange={setConsiderLastAttemptsOnly}
+                  />
+                  <GeneralCharts
+                    maxWidth={
+                      stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH
+                    }
+                    generalCharts={generalCharts(t)}
+                    chartRefs={chartRefs}
+                    goToDetailedQuestion={handleQuestionRedirection}
+                    questions={questions}
+                    order={order}
+                    responses={responses}
+                    members={data.members}
+                    considerLastAttemptsOnly={considerLastAttemptsOnly}
+                  />
+                </>
               ) : (
                 <Typography align="center">
                   {t(QUIZ_TRANSLATIONS.NO_DATA_FOR_GENERAL_CHARTS)}

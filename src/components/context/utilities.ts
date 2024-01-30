@@ -1,3 +1,4 @@
+import { Dictionary, groupBy, mapValues } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Data } from '@graasp/apps-query-client';
@@ -24,13 +25,10 @@ import {
   TextAppDataData,
 } from '../types/types';
 
-export const generateId = (): string => {
-  return uuidv4();
-};
+export const generateId = (): string => uuidv4();
 
-export const getQuestionById = (data: QuestionDataAppSetting[], id: string) => {
-  return data.find((d) => d.data.questionId === id);
-};
+export const getQuestionById = (data: QuestionDataAppSetting[], id: string) =>
+  data.find((d) => d.data.questionId === id);
 
 // Define specific setting type depending on the app setting name.
 type SettingReturnTypeMap = {
@@ -48,15 +46,11 @@ export type GettingSettingsReturnType<T extends AppSettingName> =
 export const getSettingsByName = <T extends AppSettingName>(
   settings: AppSetting[] = [],
   name: T
-): GettingSettingsReturnType<T> => {
-  return settings?.filter(
-    (d) => d.name === name
-  ) as GettingSettingsReturnType<T>;
-};
+): GettingSettingsReturnType<T> =>
+  settings?.filter((d) => d.name === name) as GettingSettingsReturnType<T>;
 
-export const isDifferent = (obj1: object, obj2: object): boolean => {
-  return JSON.stringify(obj1) !== JSON.stringify(obj2);
-};
+export const isDifferent = (obj1: object, obj2: object): boolean =>
+  JSON.stringify(obj1) !== JSON.stringify(obj2);
 
 export const computeCorrectness = (
   question: QuestionData,
@@ -141,17 +135,14 @@ export const getAllAppDataByQuestionIdForMemberId = <T extends Data>(
   appData: AppData<T>[] | undefined,
   questionId: string,
   memberId?: Member['id']
-): AppData<T>[] => {
-  return (
-    appData
-      ?.filter(
-        ({ creator, data }) =>
-          creator?.id === memberId && data.questionId === questionId
-      )
-      // ensure to have an ascending sorts of createdAt
-      .sort(sortAppDataByDate) ?? []
-  );
-};
+): AppData<T>[] =>
+  appData
+    ?.filter(
+      ({ creator, data }) =>
+        creator?.id === memberId && data.questionId === questionId
+    )
+    // ensure to have an ascending sorts of createdAt
+    .sort(sortAppDataByDate) ?? [];
 
 export const sortAppDataByDate = (a: AppData, b: AppData, asc = true) => {
   if (asc) {
@@ -161,13 +152,39 @@ export const sortAppDataByDate = (a: AppData, b: AppData, asc = true) => {
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 };
 
+export const getLastDataByGroup = <T extends { createdAt: string }>(
+  groupedResponses: Dictionary<T[]>
+) =>
+  mapValues(
+    groupedResponses,
+    (group) =>
+      // Returning the most recent data from the group
+      group.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )[0]
+  );
+
+export const getLastUsersAttemptByQuestion = (
+  responsesGroupedByQId: Dictionary<AppData[]>
+) =>
+  Object.fromEntries(
+    Object.entries(responsesGroupedByQId).map(([questionId, responses]) => {
+      const attemptsByUser = groupBy(responses, (r) => r.creator?.id);
+      const lastAttemptByUser = getLastDataByGroup(attemptsByUser);
+      const questionLastAttempts = Object.values(lastAttemptByUser).map(
+        (v) => v
+      );
+      return [questionId, questionLastAttempts];
+    })
+  );
+
 export const getQuestionNameFromId = (
   appSettings: QuestionDataAppSetting[],
   qId: string
-) => {
-  return appSettings?.find((setting) => setting.data.questionId === qId)?.data
+) =>
+  appSettings?.find((setting) => setting.data.questionId === qId)?.data
     .question;
-};
 
 export const getQuestionNames = (
   responses: TableByUserResponse[],
@@ -185,16 +202,12 @@ export const getQuestionNames = (
 export const getAllAppDataByQuestionId = (
   appData: AppData[] | undefined,
   qId: string
-) => {
-  return appData?.filter(({ data }) => data?.questionId === qId) ?? [];
-};
+) => appData?.filter(({ data }) => data?.questionId === qId) ?? [];
 
 export const getAllAppDataByUserId = (
   appData: AppData[] | undefined,
   uId: string
-) => {
-  return appData?.filter((entry) => entry.member.id === uId) ?? [];
-};
+) => appData?.filter((entry) => entry.member.id === uId) ?? [];
 
 export const areTagsMatching = (text: string) => {
   let acc = 0;

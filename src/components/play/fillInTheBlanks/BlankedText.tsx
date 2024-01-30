@@ -21,6 +21,7 @@ type Props = {
   showCorrectness: boolean;
   isReadonly: boolean;
   words: Word[];
+  prevWords?: string[];
   onDrop: (e: React.DragEvent<HTMLSpanElement>, id: number) => void;
   onDelete: (e: React.MouseEvent<HTMLSpanElement>) => void;
 };
@@ -30,10 +31,17 @@ const BlankedText = ({
   showCorrectness,
   isReadonly,
   words,
+  prevWords,
   onDrop,
   onDelete,
 }: Props) => {
   const renderWords = () => {
+    // This idx is used to compare the current blank with 
+    // the previous answer and the current filled word.
+    // Because "words" doesn't contains WORD types, this 
+    // index must be incremented each time a WORD is found.
+    let previousAnswerIdx = 0;
+
     return words.map((word, i) => {
       if (word.type === FILL_BLANKS_TYPE.WORD) {
         return (
@@ -42,6 +50,9 @@ const BlankedText = ({
           </Typography>
         );
       }
+
+      const prevWord = prevWords?.at(previousAnswerIdx++) ?? '';
+      const hasChanged = !prevWords || prevWord !== word.displayed;
 
       return (
         <Blank
@@ -55,6 +66,7 @@ const BlankedText = ({
           onDrop={onDrop}
           onDelete={onDelete}
           text={word.displayed ?? ' '}
+          hasChanged={hasChanged}
         />
       );
     });

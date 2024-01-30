@@ -69,15 +69,13 @@ export const fillInTheBlankCharts = (
 
   if (matched) {
     return adaptWithLink(
-      matched.map((_word: string, idx: number) => {
-        return {
-          label: `${t('Question answer frequency')} ${t('blank')} ${idx + 1}`,
-          id: `${t('Question answer frequency')} ${t('blank')} ${idx + 1}`,
-          chartType: DetailedChartType.ANSWER_FREQUENCY,
-          chartIndex: idx,
-          type: QuestionType.FILL_BLANKS,
-        };
-      })
+      matched.map((_word: string, idx: number) => ({
+        label: `${t('Question answer frequency')} ${t('blank')} ${idx + 1}`,
+        id: `${t('Question answer frequency')} ${t('blank')} ${idx + 1}`,
+        chartType: DetailedChartType.ANSWER_FREQUENCY,
+        chartIndex: idx,
+        type: QuestionType.FILL_BLANKS,
+      }))
     );
   }
 
@@ -147,9 +145,7 @@ export const textInputCharts = (t: TFunction) =>
  * @param charts The list of charts to which to add the link property
  */
 const adaptWithLink = <T extends BaseChart>(charts: T[]): Chart<T>[] =>
-  charts.map((chart) => {
-    return {
-      ...chart,
-      link: formatInnerLink(chart.label),
-    };
-  });
+  charts.map((chart) => ({
+    ...chart,
+    link: formatInnerLink(chart.label),
+  }));

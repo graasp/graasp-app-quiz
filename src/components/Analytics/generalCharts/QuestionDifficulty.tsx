@@ -17,7 +17,11 @@ import {
   defaultSettings,
   hoverData,
 } from '../../../utils/plotUtils';
-import { computeCorrectness, getQuestionById } from '../../context/utilities';
+import {
+  computeCorrectness,
+  getLastUsersAttemptByQuestion,
+  getQuestionById,
+} from '../../context/utilities';
 import {
   ChartEvent,
   QuestionAppDataData,
@@ -31,6 +35,7 @@ type Props = {
   responses: AppData[];
   order: string[];
   questions: QuestionDataAppSetting[];
+  considerLastAttemptsOnly: boolean;
   goToDetailedQuestion: (qId: string) => void;
 };
 
@@ -54,6 +59,7 @@ type Chart = {
  * @param responses The responses provided by the user to the quiz
  * @param order The order in which the questions appear in the quiz
  * @param questions The question for which to display detailed information
+ * @param considerLastAttemptsOnly If true, the analytics are computed with the latest users' answers
  */
 const QuestionDifficulty = ({
   maxWidth,
@@ -61,6 +67,7 @@ const QuestionDifficulty = ({
   responses,
   order,
   questions,
+  considerLastAttemptsOnly,
 }: Props) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -73,7 +80,12 @@ const QuestionDifficulty = ({
    * the order of the question are the same as defined when creating the quiz
    */
   const chartData = useMemo(() => {
-    const responsesByQId = groupBy(responses, (r) => r.data.questionId);
+    let responsesByQId = groupBy(responses, (r) => r.data.questionId);
+
+    if (considerLastAttemptsOnly) {
+      responsesByQId = getLastUsersAttemptByQuestion(responsesByQId);
+    }
+
     return order.reduce<Chart>(
       (acc, qId, idx) => {
         const question = getQuestionById(questions, qId);
@@ -129,7 +141,7 @@ const QuestionDifficulty = ({
         hoverText: [],
       }
     );
-  }, [questions, responses, order]);
+  }, [questions, responses, order, considerLastAttemptsOnly]);
 
   return (
     <Box sx={{ width: '100%' }} data-cy={ANALYTICS_GENERAL_QUIZ_PERFORMANCE_CY}>

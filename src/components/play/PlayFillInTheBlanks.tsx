@@ -1,10 +1,14 @@
 import clonedeep from 'lodash.clonedeep';
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import {
+  ANSWER_REGEXP,
   Word,
   responseToText,
   splitSentence,
@@ -20,6 +24,7 @@ import Correction from './fillInTheBlanks/Correction';
 type Props = {
   showCorrection: boolean;
   showCorrectness: boolean;
+  lastUserAnswer?: FillTheBlanksAppDataData;
   isReadonly: boolean;
   values: FillTheBlanksAppSettingData;
   response: FillTheBlanksAppDataData;
@@ -29,27 +34,39 @@ type Props = {
 const PlayFillInTheBlanks = ({
   showCorrection,
   showCorrectness,
+  lastUserAnswer,
   isReadonly,
   values,
   response,
   setResponse,
 }: Props) => {
-  const [state, setState] = useState(
-    (() => {
-      const { words, answers } = splitSentence(
-        values.text ?? '',
-        response.text
-      );
-      return {
-        answers,
-        words,
-      };
-    })()
-  );
+  const [state, setState] = useState<{ answers: Word[]; words: Word[] }>({
+    answers: [],
+    words: [],
+  });
+
+  const { t } = useTranslation();
+  const [prevWords, setPrevWords] = useState<string[]>();
+
+  useEffect(() => {
+    if (lastUserAnswer) {
+      const regExp = RegExp(ANSWER_REGEXP);
+      const words: string[] = [];
+      let array1;
+      while ((array1 = regExp.exec(lastUserAnswer?.text)) !== null) {
+        if (array1.length) {
+          words.push(array1[0].slice(1, -1));
+        }
+      }
+      setPrevWords(words);
+    } else {
+      setPrevWords(undefined);
+    }
+  }, [lastUserAnswer]);
 
   useEffect(() => {
     const { words, answers } = splitSentence(values.text ?? '', response.text);
-    setState({ ...state, words, answers });
+    setState({ words, answers });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values, response]);
 
@@ -121,9 +138,15 @@ const PlayFillInTheBlanks = ({
         showCorrectness={showCorrectness}
         isReadonly={isReadonly}
         words={state.words}
+        prevWords={prevWords}
         onDrop={onDrop}
         onDelete={onDelete}
       />
+      {!showCorrection && prevWords && (
+        <Typography variant="body1" color="error" mt={2}>
+          {t(QUIZ_TRANSLATIONS.RESPONSE_NOT_CORRECT)}
+        </Typography>
+      )}
       {showCorrection && <Correction words={state.words} />}
     </Box>
   );

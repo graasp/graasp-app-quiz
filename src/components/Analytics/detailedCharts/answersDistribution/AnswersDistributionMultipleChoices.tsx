@@ -69,23 +69,21 @@ const AnswersDistributionMultipleChoices = ({
   const chartData = useMemo(
     () =>
       Object.entries(responsesCount).reduce(
-        (acc, [choice, count], idx) => {
-          return {
-            data: {
-              x: [...acc.data.x, `A${idx + 1}<br>${truncateText(choice, 10)}`],
-              y: [...acc.data.y, count],
-            },
-            percentage: [...acc.percentage, count / totalCount],
-            maxValue: Math.max(acc.maxValue, count),
-            hoverText: [...acc.hoverText, choice],
-            barColors: [
-              ...acc.barColors,
-              correctChoices.includes(choice)
-                ? theme.palette.success.main
-                : theme.palette.primary.main,
-            ],
-          };
-        },
+        (acc, [choice, count], idx) => ({
+          data: {
+            x: [...acc.data.x, `A${idx + 1}<br>${truncateText(choice, 10)}`],
+            y: [...acc.data.y, count],
+          },
+          percentage: [...acc.percentage, count / totalCount],
+          maxValue: Math.max(acc.maxValue, count),
+          hoverText: [...acc.hoverText, choice],
+          barColors: [
+            ...acc.barColors,
+            correctChoices.includes(choice)
+              ? theme.palette.success.main
+              : theme.palette.primary.main,
+          ],
+        }),
         {
           data: { x: [], y: [] },
           percentage: [],

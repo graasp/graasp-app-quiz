@@ -2,6 +2,7 @@ import { AppData } from '@graasp/sdk';
 
 import { getSettingsByName } from '../../../../src/components/context/utilities';
 import { APP_SETTING_NAMES } from '../../../../src/config/constants';
+import i18n from '../../../../src/config/i18n';
 import {
   AUTO_SCROLLABLE_MENU_LINK_LIST_CY,
   RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
@@ -35,11 +36,13 @@ import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
 import { USER_RESPONSES } from '../../../fixtures/tableByUserResponses';
 import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
 
+const t = i18n.t;
+
 describe('Table by User', () => {
   /**
    * Test the table by user view for a few question and some user answers
    */
-  it('Table by Question correctly display data', () => {
+  it('Table by User correctly display data', () => {
     cy.setupResultTablesByUserForCheck(
       APP_SETTINGS_FEW_QUESTIONS,
       APP_DATA_FEW_QUESTIONS_FEW_USERS,
@@ -237,71 +240,91 @@ const getUserNamesFromAppData = (appData: AppData[]) => {
   );
 };
 
+const isOrdered = (arr: string[], asc = true) => {
+  const orderComparison = (a: string, b: string) =>
+    asc ? a.localeCompare(b) : b.localeCompare(a);
+
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (orderComparison(arr[i], arr[i + 1]) > 0) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 /**
  * Helper function to test that the content of the table is correct
  *
- * @param {string} uName The name of the user for which we currently are displayint the data
  * @param {string} uId The user id for which we currently are displaying the data
  * @param {boolean} ascending Whether the current sorting order is ascending or descending
  */
 const testTableContent = (uId: string, ascending: boolean) => {
-  /**
-   * Helper function to return the index of the user for which to check the response from,
-   *
-   * The function is different depending on whether the data is sorted ascending or descending,
-   * this is to enforce ordering of entry sorted by user id.
-   *
-   * @param n the current index when iterating through each child
-   * @param length the length of the array we are indexing
-   */
-  const index = ascending
-    ? (n: number) => n
-    : (n: number, length: number) => length - 1 - n;
+  const questionTitles: string[] = [];
 
   cy.get(dataCyWrapper(buildTableByUserTableBodyCy(uId)))
     .children(dataCyWrapper(TABLE_BY_USER_ENTRY_CY))
-    .each((entry, idx) => {
-      // Test the header (i.e. the userId)
-      cy.wrap(entry)
-        .get(dataCyWrapper(TABLE_BY_USER_QUESTION_NAME_HEADER_CY), {
-          withinSubject: entry,
-        })
-        .should(
-          'have.text',
-          USER_RESPONSES[uId][index(idx, USER_RESPONSES[uId].length)].qName
-        );
+    .each((entry) => {
+      const currentQuestionName = Cypress.$(entry)
+        .find(dataCyWrapper(TABLE_BY_USER_QUESTION_NAME_HEADER_CY))
+        .text()
+        .trim();
 
-      // Test the answer to the question
-      cy.wrap(entry)
-        .get(dataCyWrapper(TABLE_BY_USER_ANSWER_DATA_CY), {
-          withinSubject: entry,
-        })
-        .should(
-          'have.text',
-          USER_RESPONSES[uId][index(idx, USER_RESPONSES[uId].length)].fields
-            .answer
-        );
+      questionTitles.push(currentQuestionName);
+      if (!isOrdered(questionTitles, ascending)) {
+        throw new Error(`The questions are not ordered in ${ascending ? 'ASC' : 'DESC'}.`)
+      }
 
-      cy.wrap(entry)
-        .get(dataCyWrapper(TABLE_BY_USER_DATE_DATA_CY), {
-          withinSubject: entry,
-        })
-        .should(
-          'have.text',
-          USER_RESPONSES[uId][index(idx, USER_RESPONSES[uId].length)].fields
-            .date
-        );
+      const userResponse = USER_RESPONSES[uId].find(
+        (r) => r.qName === currentQuestionName
+      );
 
-      cy.wrap(entry)
-        .get(dataCyWrapper(TABLE_BY_USER_CORRECT_ICON_CY), {
-          withinSubject: entry,
-        })
-        .find('svg')
-        .should(
-          'have.attr',
-          'data-testid',
-          USER_RESPONSES[uId][index(idx, USER_RESPONSES[uId].length)].fields
-            .icon
-        );
+      if (userResponse) {
+        // Test the header (i.e. the userId)
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_USER_QUESTION_NAME_HEADER_CY), {
+            withinSubject: entry,
+          })
+          .should('have.text', userResponse.qName);
+
+        // Test the answer to the question
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_USER_ANSWER_DATA_CY), {
+            withinSubject: entry,
+          })
+          .should('have.text', userResponse.fields.answer);
+
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_USER_DATE_DATA_CY), {
+            withinSubject: entry,
+          })
+          .should('have.text', userResponse.fields.date);
+
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_USER_CORRECT_ICON_CY), {
+            withinSubject: entry,
+          })
+          .find('svg')
+          .should('have.attr', 'data-testid', userResponse.fields.icon);
+      } else {
+        // Test the answer to the question
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_USER_ANSWER_DATA_CY), {
+            withinSubject: entry,
+          })
+          .should('not.exist');
+
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_USER_DATE_DATA_CY), {
+            withinSubject: entry,
+          })
+          .should('have.text', t('Not yet answered'));
+
+        cy.wrap(entry)
+          .get(dataCyWrapper(TABLE_BY_USER_CORRECT_ICON_CY), {
+            withinSubject: entry,
+          })
+          .should('not.exist');
+      }
     });
 };

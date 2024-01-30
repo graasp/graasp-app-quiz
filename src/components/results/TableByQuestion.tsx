@@ -40,11 +40,12 @@ import {
   comparatorArrayByElemName,
   getComparator,
 } from '../../utils/tableUtils';
-import { computeCorrectness, getResponseValue, sortAppDataByDate } from '../context/utilities';
 import {
-  QuestionAppDataData,
-  QuestionDataAppSetting,
-} from '../types/types';
+  computeCorrectness,
+  getResponseValue,
+  sortAppDataByDate,
+} from '../context/utilities';
+import { QuestionAppDataData, QuestionDataAppSetting } from '../types/types';
 
 type Props = {
   question: QuestionDataAppSetting;
@@ -89,11 +90,9 @@ const TableByQuestion = ({
    * @param {string} userId The name of the user
    * @returns {string} Response for given user.
    */
-  const getResponseDataForUserId = (userId: string) => {
+  const getResponseDataForUserId = (userId: string) =>
     // using this instead of switch allow to display answer after question type changed
-    return getResponseValue(getResponseForUserId(userId)?.data);
-  };
-
+    getResponseValue(getResponseForUserId(userId)?.data);
   /**
    * Helper function to extract the date at which the user answered a specific question
    *

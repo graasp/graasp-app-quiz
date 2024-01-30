@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from 'react';
+
 import { MultipleRefs } from '../components/types/types';
 
 /**
@@ -67,15 +68,14 @@ export const useDynamicHighlightedLink = (
       threshold: 0.25,
     };
     const intersectionCallback = (entries: IntersectionObserverEntry[]) => {
-      const newVisibility = entries.reduce((obj, elm) => {
-        return {
+      const newVisibility = entries.reduce(
+        (obj, elm) => ({
           ...obj,
           [elm.target.id]: elm.isIntersecting,
-        };
-      }, {});
-      setQuestionVisibility((prev) => {
-        return { ...prev, ...newVisibility };
-      });
+        }),
+        {}
+      );
+      setQuestionVisibility((prev) => ({ ...prev, ...newVisibility }));
     };
     const observer = new IntersectionObserver(
       intersectionCallback,

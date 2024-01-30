@@ -10,7 +10,7 @@ type Props = {
   values: SliderAppSettingData;
   response: SliderAppDataData;
   showCorrection: boolean;
-  showCorrectness: boolean;
+  lastUserAnswer?: SliderAppDataData;
   isCorrect: boolean;
   isReadonly: boolean;
   setResponse: (value: number) => void;
@@ -21,7 +21,7 @@ const PlaySlider = ({
   response,
   setResponse,
   showCorrection,
-  showCorrectness,
+  lastUserAnswer,
   isReadonly,
   isCorrect,
 }: Props) => {
@@ -29,6 +29,8 @@ const PlaySlider = ({
   const max = values?.max;
   const defaultValue = Math.round((max - min) / 2 + min);
   const [marks, setMarks] = useState<{ value: number; label: number }[]>([]);
+
+  const showCorrectness = lastUserAnswer?.value === response.value;
 
   const sliderSx = {
     '&.MuiSlider-root': {
@@ -70,9 +72,7 @@ const PlaySlider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showCorrection, response.value, values]);
 
-  const computeColor = () => {
-    return isCorrect ? 'success' : 'error';
-  };
+  const computeColor = () => (isCorrect ? 'success' : 'error');
 
   return (
     <Grid container direction="column" sx={{ p: 2 }}>

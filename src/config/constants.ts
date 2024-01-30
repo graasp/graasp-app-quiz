@@ -147,4 +147,4 @@ export const AUTO_SCROLLABLE_HOVER_COLOR = '#878383';
 
 export const CHART_SECONDARY_COLOR = '#d95557';
 export const MAX_QUESTION_LINES_TOP_BAR = 2;
-export const DRAGGABLE_HANDLE_COMPONENT = 'draggableComponentHandler'
+export const DRAGGABLE_HANDLE_COMPONENT = 'draggableComponentHandler';

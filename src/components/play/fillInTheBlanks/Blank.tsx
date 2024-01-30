@@ -9,6 +9,7 @@ interface WordBoxProps extends TypographyProps {
   showCorrectness: boolean;
   isCorrect: boolean;
   isReadonly: boolean;
+  hasChanged: boolean;
   filled: string;
 }
 
@@ -20,13 +21,18 @@ export const WordBox = styled(Typography)<WordBoxProps>(
     showCorrectness,
     isCorrect,
     isReadonly,
+    hasChanged,
     filled,
   }) => {
     let bgColor = backgroundColor ?? 'transparent';
-    if (showCorrection || showCorrectness) {
-      bgColor = isCorrect
-        ? theme.palette.success.main
-        : theme.palette.error.main;
+    if (!hasChanged) {
+      if (showCorrection || showCorrectness) {
+        bgColor = isCorrect
+          ? theme.palette.success.main
+          : theme.palette.error.main;
+      } else {
+        bgColor = theme.palette.warning.main;
+      }
     }
 
     return {
@@ -53,6 +59,7 @@ type Props = {
   showCorrection: boolean;
   showCorrectness: boolean;
   isReadonly: boolean;
+  hasChanged: boolean;
   dataCy: string;
   onDrop: (e: React.DragEvent<HTMLSpanElement>, id: number) => void;
   onDelete: (e: React.MouseEvent<HTMLSpanElement>) => void;
@@ -65,6 +72,7 @@ const Blank = ({
   showCorrection,
   showCorrectness,
   isReadonly,
+  hasChanged,
   dataCy,
   onDrop,
   onDelete,
@@ -102,6 +110,7 @@ const Blank = ({
       filled={text}
       isCorrect={isCorrect}
       isReadonly={isReadonly}
+      hasChanged={hasChanged}
       backgroundColor={state.backgroundColor}
       onDragLeave={_handleDragLeave}
       onDragOver={_handleDragOver}

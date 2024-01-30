@@ -6,8 +6,7 @@ type Props = {
   index: number;
 };
 
-const TabPanel = ({ children, tab, index }: Props) => {
-  return tab === index && <Box>{children}</Box>;
-};
+const TabPanel = ({ children, tab, index }: Props) =>
+  tab === index && <Box>{children}</Box>;
 
 export default TabPanel;

@@ -63,17 +63,15 @@ export const getComparator = <T>({
 }: {
   order?: string;
   comp: (a: T, b: T) => number;
-}) => {
-  return order === Order.DESC
+}) =>
+  order === Order.DESC
     ? (a: T, b: T) => comp(a, b)
     : (a: T, b: T) => -comp(a, b);
-};
 
 /**
  * Helper function to substitute spaces by hyphens in strings to be able to use them as inner links
  *
  * @param {String} linkName The string that we want to format as an inner link
  */
-export const formatInnerLink = (linkName: string) => {
-  return linkName.replaceAll(' ', '-');
-};
+export const formatInnerLink = (linkName: string) =>
+  linkName.replaceAll(' ', '-');

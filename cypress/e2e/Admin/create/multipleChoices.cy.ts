@@ -14,11 +14,11 @@ import {
   MULTIPLE_CHOICES_ADD_ANSWER_BUTTON_CY,
   MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME,
   NAVIGATION_ADD_QUESTION_BUTTON_CY,
-  buildMultipleChoiceAddAnswerExplanationButtonCy,
+  buildMultipleChoiceAddAnswerHintButtonCy,
   buildMultipleChoiceAnswerCy,
-  buildMultipleChoiceAnswerExplanationCy,
+  buildMultipleChoiceAnswerHintCy,
   buildMultipleChoiceDeleteAnswerButtonCy,
-  buildMultipleChoiceDeleteAnswerExplanationButtonCy,
+  buildMultipleChoiceDeleteAnswerHintButtonCy,
   buildQuestionStepDefaultCy,
   dataCyWrapper,
 } from '../../../../src/config/selectors';
@@ -207,37 +207,31 @@ describe('Multiple Choices', () => {
 
     newMultipleChoiceData.choices.forEach(({ explanation }, idx) => {
       cy.get(
-        dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+        dataCyWrapper(buildMultipleChoiceAddAnswerHintButtonCy(idx))
       ).should('be.visible');
       cy.get(
-        dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+        dataCyWrapper(buildMultipleChoiceAddAnswerHintButtonCy(idx))
       ).click();
-      cy.get(
-        `${dataCyWrapper(buildMultipleChoiceAnswerExplanationCy(idx))} textarea`
-      )
+      cy.get(`${dataCyWrapper(buildMultipleChoiceAnswerHintCy(idx))} textarea`)
         .should('be.visible')
         .should('have.value', '');
       if (explanation.length) {
         cy.get(
-          `${dataCyWrapper(
-            buildMultipleChoiceAnswerExplanationCy(idx)
-          )} textarea`
+          `${dataCyWrapper(buildMultipleChoiceAnswerHintCy(idx))} textarea`
         )
           .first()
           .type(explanation);
         cy.get(
-          dataCyWrapper(buildMultipleChoiceDeleteAnswerExplanationButtonCy(idx))
+          dataCyWrapper(buildMultipleChoiceDeleteAnswerHintButtonCy(idx))
         ).should('be.visible');
         cy.get(
-          dataCyWrapper(buildMultipleChoiceDeleteAnswerExplanationButtonCy(idx))
+          dataCyWrapper(buildMultipleChoiceDeleteAnswerHintButtonCy(idx))
         ).click();
         cy.get(
-          `${dataCyWrapper(
-            buildMultipleChoiceAnswerExplanationCy(idx)
-          )} textarea`
+          `${dataCyWrapper(buildMultipleChoiceAnswerHintCy(idx))} textarea`
         ).should('not.exist');
         cy.get(
-          dataCyWrapper(buildMultipleChoiceAddAnswerExplanationButtonCy(idx))
+          dataCyWrapper(buildMultipleChoiceAddAnswerHintButtonCy(idx))
         ).should('be.visible');
       }
     });
@@ -276,9 +270,7 @@ describe('Multiple Choices', () => {
           `${dataCyWrapper(buildMultipleChoiceAnswerCy(idx))} input`
         ).should('have.value', value);
         cy.get(
-          `${dataCyWrapper(
-            buildMultipleChoiceAnswerExplanationCy(idx)
-          )} textarea`
+          `${dataCyWrapper(buildMultipleChoiceAnswerHintCy(idx))} textarea`
         )
           .should('be.visible')
           .should('have.value', explanation);

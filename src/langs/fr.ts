@@ -84,6 +84,7 @@ export default {
     CREATE_VIEW_NUMBER_OF_ATTEMPTS: 'Nombre de tentatives',
     MULTIPLE_CHOICE_NOT_CORRECT:
       "La réponse est incorrecte ou n'est pas entièrement correcte.",
+    RESPONSE_NOT_CORRECT: "La réponse que vous avez fournie n'est pas correcte",
     HINTS_TITLE: 'Indices',
     HINTS_SUB_TITLE:
       "Saisissez ici les indices qui s'afficheront si la réponse est incorrecte, afin d'aider l'étudiant",
@@ -101,5 +102,28 @@ export default {
       'Vous pouvez définir une nouvelle position pour cette question. Les changements sont appliqués directement',
     QUESTION_POSITION_LABEL: 'Position de la question dans le quiz',
     BUILDER_QUIZ_NAVIGATION_TITLE: 'Navigation du Quiz',
+    MULTIPLE_ATTEMPTS_SECTION_TITLE: 'Tentatives multiples',
+    MULTIPLE_ATTEMPTS_EXPLANATION:
+      'Si la valeur est supérieure à 1, vous autorisez les utilisateurs à réessayer au maximum {{count}} fois, lorsque la réponse donnée est incorrecte.',
+    MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_CHECKBOX:
+      'Afficher les erreurs dans la réponse après chaque tentative',
+    MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_TOOLTIP:
+      "Si l'option est activée, l'utilisateur verra les corrections pour chaque réponse envoyée. Dans le cas contraire, l'utilisateur sera seulement informé que sa réponse n'est pas tout à fait correcte.",
+    MULTIPLE_CHOICE_SECTION_TITLE_CORRECT: 'Vos réponses correctes',
+    MULTIPLE_CHOICE_SECTION_TITLE_INCORRECT:
+      'Les réponses incorrectes que vous avez sélectionnées',
+    MULTIPLE_CHOICE_SECTION_TITLE_MISSING:
+      'Les réponses correctes que vous avez oubliées',
+    MULTIPLE_CHOICE_SECTION_TITLE_UNSELECTED:
+      "Les réponses que vous n'avez pas sélectionnées",
+    PLAY_VIEW_RETRY_BTN: 'Réessayer',
+    ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE:
+      'Tenir compte uniquement des dernières tentatives des utilisateurs',
+    MULTIPLE_CHOICE_ADD_HINT_BTN: 'ajouter un indice',
+    MULTIPLE_CHOICE_HINT_INPUT_LABEL: 'Indice',
+    CHOIX_MULTIPLES_HINT_INPUT_DESCRIPTION:
+      "Tapez ici un indice pour aider l'utilisateur à trouver la réponse ou à la comprendre",
+    CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING:
+      "Attention : Les utilisateurs ayant des compétences en informatique peuvent récupérer les réponses du quiz ; pensez à ne pas l'utiliser comme méthode d'examen",
   },
 };

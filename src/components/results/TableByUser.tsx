@@ -1,4 +1,4 @@
-import groupBy from 'lodash.groupby';
+import { groupBy } from 'lodash';
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,20 +39,21 @@ import { getFirstOrUndefined } from '../../utils/array';
 import { Order, getComparator, stringComparator } from '../../utils/tableUtils';
 import {
   computeCorrectness,
+  getLastDataByGroup,
   getQuestionNameFromId,
-  getQuestionNames,
   getResponseValue,
 } from '../context/utilities';
-import {
-  QuestionAppDataData,
-  QuestionDataAppSetting,
-  TableByUserResponse,
-} from '../types/types';
+import { QuestionAppDataData, QuestionDataAppSetting } from '../types/types';
+
+export type Response = {
+  data: QuestionAppDataData;
+  createdAt: string;
+};
 
 type Props = {
   user: Member;
   questions: QuestionDataAppSetting[];
-  responses: TableByUserResponse[];
+  responses: Response[];
   handleQuestionClicked: (qId: string) => void;
 };
 
@@ -76,20 +77,11 @@ const TableByUser = ({
   );
 
   /**
-   * List of question names that the user answered
-   */
-  const [questionNames, setQuestionNames] = useState(
-    getQuestionNames(responses, questions)
-  );
-
-  /**
    * Map of responses grouped by question name
    */
-  const [responsesByQuestionName, setResponsesByQuestionName] = useState(
-    groupBy(responses, (res) =>
-      getQuestionNameFromId(questions, res.data.questionId)
-    )
-  );
+  const [responsesByQuestionName, setResponsesByQuestionName] = useState<{
+    [x: string]: Response;
+  }>({});
 
   /**
    * Map of question grouped by question name
@@ -98,20 +90,15 @@ const TableByUser = ({
     groupBy(questions, (question) => question?.data?.question)
   );
 
-  useEffect(
-    () =>
-      setResponsesByQuestionName(
-        groupBy(responses, (res) =>
-          getQuestionNameFromId(questions, res.data.questionId)
-        )
-      ),
-    [responses, questions]
-  );
+  useEffect(() => {
+    const groupedResponses = groupBy(responses, (res) =>
+      getQuestionNameFromId(questions, res.data.questionId)
+    );
 
-  useEffect(
-    () => setQuestionNames(getQuestionNames(responses, questions)),
-    [responses, questions]
-  );
+    const responsesByQuestionName = getLastDataByGroup(groupedResponses);
+
+    setResponsesByQuestionName(responsesByQuestionName);
+  }, [responses, questions]);
 
   useEffect(
     () =>
@@ -133,35 +120,30 @@ const TableByUser = ({
    * Helper function to extract the response from a question name
    *
    * @param {string} qName The name of the question
-   * @param {number} qIdx The index of the question when multiple answers
    * @returns A user response
    */
-  const getResponseForQuestionName = (qName: string, qIdx: number) => {
-    return responsesByQuestionName[qName]?.at(qIdx);
-  };
+  const getResponseForQuestionName = (qName: string) =>
+    responsesByQuestionName[qName];
 
   /**
    * Helper function to extract the data of one question given its name for the current user.
    *
    * @param {string} qName The name of the question
-   * @param {number} qIdx The index of the question when multiple answers
    * @returns {string} Response for given user.
    */
-  const getResponseDataForQuestionName = (qName: string, qIdx: number) => {
-    return getResponseValue(getResponseForQuestionName(qName, qIdx)?.data);
-  };
+  const getResponseDataForQuestionName = (qName: string) =>
+    getResponseValue(getResponseForQuestionName(qName)?.data);
 
   /**
    * Helper function to extract the date at which the user answered the question
    *
    * @param {string} qName The name of the question
-   * @param {number} qIdx The index of the question when multiple answers
    * @returns {string} return the date of answer's last modification
    */
-  const getResponseDateForQuestionName = (qName: string, qIdx: number) => {
-    const updatedAt = getResponseForQuestionName(qName, qIdx)?.updatedAt;
+  const getResponseDateForQuestionName = (qName: string) => {
+    const createdAt = getResponseForQuestionName(qName)?.createdAt;
 
-    return updatedAt ? new Date(updatedAt).toDateString() : '';
+    return createdAt ? new Date(createdAt).toDateString() : '';
   };
 
   return (
@@ -174,7 +156,7 @@ const TableByUser = ({
         >
           {user.name}
         </Typography>
-        {questionNames.length > 0 ? (
+        {Object.keys(questionByName).length > 0 ? (
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -217,7 +199,7 @@ const TableByUser = ({
                 </TableRow>
               </TableHead>
               <TableBody data-cy={buildTableByUserTableBodyCy(user.id)}>
-                {questionNames
+                {Object.entries(questionByName)
                   ?.sort((a, b) => {
                     const stringA = a[0];
                     const stringB = b[0];
@@ -253,41 +235,57 @@ const TableByUser = ({
                       >
                         {qName}
                       </TableCell>
-                      <TableCell
-                        align="left"
-                        sx={{ maxWidth: 350 }}
-                        data-cy={TABLE_BY_USER_ANSWER_DATA_CY}
-                      >
-                        {getResponseDataForQuestionName(qName, qIdx)}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        data-cy={TABLE_BY_USER_DATE_DATA_CY}
-                      >
-                        {getResponseDateForQuestionName(qName, qIdx)}
-                      </TableCell>
+
                       {(() => {
                         const questionData = getFirstOrUndefined(
                           questionByName,
                           qName
                         )?.data;
 
+                        const responseData =
+                          getResponseDataForQuestionName(qName);
+
                         // Only render TableCell if questionData is not undefined
-                        if (questionData) {
+                        if (questionData && responseData) {
+                          return (
+                            <>
+                              <TableCell
+                                align="left"
+                                sx={{ maxWidth: 350 }}
+                                data-cy={TABLE_BY_USER_ANSWER_DATA_CY}
+                              >
+                                {responseData}
+                              </TableCell>
+                              <TableCell
+                                align="left"
+                                data-cy={TABLE_BY_USER_DATE_DATA_CY}
+                              >
+                                {getResponseDateForQuestionName(qName)}
+                              </TableCell>
+                              <TableCell
+                                align="left"
+                                data-cy={TABLE_BY_USER_CORRECT_ICON_CY}
+                              >
+                                {computeCorrectness(
+                                  questionData,
+                                  getResponseForQuestionName(qName)
+                                    ?.data as QuestionAppDataData
+                                ) ? (
+                                  <CheckCircleOutlined color="success" />
+                                ) : (
+                                  <CancelOutlined color="error" />
+                                )}
+                              </TableCell>
+                            </>
+                          );
+                        } else {
                           return (
                             <TableCell
-                              align="left"
-                              data-cy={TABLE_BY_USER_CORRECT_ICON_CY}
+                              colSpan={3}
+                              align="center"
+                              data-cy={TABLE_BY_USER_DATE_DATA_CY}
                             >
-                              {computeCorrectness(
-                                questionData,
-                                getResponseForQuestionName(qName, qIdx)
-                                  ?.data as QuestionAppDataData
-                              ) ? (
-                                <CheckCircleOutlined color="success" />
-                              ) : (
-                                <CancelOutlined color="error" />
-                              )}
+                              {t('Not yet answered')}
                             </TableCell>
                           );
                         }

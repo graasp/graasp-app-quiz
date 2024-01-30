@@ -16,7 +16,11 @@ import {
   defaultSettings,
   hoverData,
 } from '../../../utils/plotUtils';
-import { computeCorrectness, getQuestionById } from '../../context/utilities';
+import {
+  computeCorrectness,
+  getLastUsersAttemptByQuestion,
+  getQuestionById,
+} from '../../context/utilities';
 import {
   ChartEvent,
   QuestionAppDataData,
@@ -31,6 +35,7 @@ type Props = {
   responses: AppData[];
   order: string[];
   questions: QuestionDataAppSetting[];
+  considerLastAttemptsOnly: boolean;
 };
 
 type ChartData = {
@@ -48,6 +53,7 @@ type ChartData = {
  * @param responses The responses provided by the user to the quiz
  * @param order The order in which the questions appear in the quiz
  * @param questions The question for which to display detailed information
+ * @param considerLastAttemptsOnly If true, the analytics are computed with the latest users' answers
  */
 const CorrectResponsesPercentage = ({
   maxWidth,
@@ -55,51 +61,62 @@ const CorrectResponsesPercentage = ({
   responses,
   order,
   questions,
+  considerLastAttemptsOnly,
 }: Props) => {
   const { t } = useTranslation();
   const theme = useTheme();
 
-  const responsesByQId = useMemo(
-    () => groupBy(responses, (r) => r.data.questionId),
-    [responses]
-  );
+  const responsesByQId = useMemo(() => {
+    let groupedByQuestion = groupBy(responses, (r) => r.data.questionId);
 
-  const chartData = useMemo(() => {
-    return order.reduce<ChartData>(
-      (acc, qId, idx) => {
-        const question = getQuestionById(questions, qId);
-        const responses = responsesByQId[qId];
+    if (considerLastAttemptsOnly) {
+      groupedByQuestion = getLastUsersAttemptByQuestion(groupedByQuestion);
+    }
 
-        // Ignore deleted questions and responses for deleted question
-        if (!question || !responses) {
-          return acc;
+    return groupedByQuestion;
+  }, [considerLastAttemptsOnly, responses]);
+
+  const chartData = useMemo(
+    () =>
+      order.reduce<ChartData>(
+        (acc, qId, idx) => {
+          const question = getQuestionById(questions, qId);
+          const responses = responsesByQId[qId];
+
+          // Ignore deleted questions and responses for deleted question
+          if (!question || !responses) {
+            return acc;
+          }
+
+          const nbCorrect = responses.reduce(
+            (acc, next) =>
+              question &&
+              computeCorrectness(
+                question.data,
+                next.data as QuestionAppDataData
+              )
+                ? acc + 1
+                : acc,
+            0
+          );
+
+          return {
+            data: {
+              x: [...acc.data.x, `Q${idx + 1}`],
+              y: [...acc.data.y, nbCorrect / responses.length],
+            },
+            hoverText: [...acc.hoverText, question.data.question],
+            qIds: [...acc.qIds, question.data.questionId],
+          };
+        },
+        {
+          data: { x: [], y: [] },
+          hoverText: [],
+          qIds: [],
         }
-
-        const nbCorrect = responses.reduce(
-          (acc, next) =>
-            question &&
-            computeCorrectness(question.data, next.data as QuestionAppDataData)
-              ? acc + 1
-              : acc,
-          0
-        );
-
-        return {
-          data: {
-            x: [...acc.data.x, `Q${idx + 1}`],
-            y: [...acc.data.y, nbCorrect / responses.length],
-          },
-          hoverText: [...acc.hoverText, question.data.question],
-          qIds: [...acc.qIds, question.data.questionId],
-        };
-      },
-      {
-        data: { x: [], y: [] },
-        hoverText: [],
-        qIds: [],
-      }
-    );
-  }, [questions, responsesByQId, order]);
+      ),
+    [questions, responsesByQId, order]
+  );
 
   return (
     <Box
