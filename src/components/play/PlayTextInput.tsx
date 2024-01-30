@@ -56,8 +56,10 @@ const PlayTextInput = ({
     },
   };
 
-  const computeColor = (showColors: boolean) =>
-    showColors ? (isCorrect ? 'success' : 'error') : undefined;
+  const computeColor = (showColors: boolean) => {
+    const state = isCorrect ? 'success' : 'error';
+    return showColors ? state : undefined;
+  };
 
   return (
     <TextField
