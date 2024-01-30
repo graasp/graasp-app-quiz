@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/graasp/graasp-app-quiz/compare/v1.1.0...v1.2.0) (2024-01-30)
+
+
+### Features
+
+* add ellipsis and decrease title ([#108](https://github.com/graasp/graasp-app-quiz/issues/108)) ([2a548f0](https://github.com/graasp/graasp-app-quiz/commit/2a548f0834b69a3fc5433673ed6dedf996e91b52))
+* allow multiple attempts ([#107](https://github.com/graasp/graasp-app-quiz/issues/107)) ([57bd30c](https://github.com/graasp/graasp-app-quiz/commit/57bd30c10094f81014d6a3e77a46439a482287cc))
+* changing question type create new question ([#110](https://github.com/graasp/graasp-app-quiz/issues/110)) ([1e7ca75](https://github.com/graasp/graasp-app-quiz/commit/1e7ca750e16f45f24101cea352c9d50009610a3f))
+* disable save btn when question is not valid and display warning ([#114](https://github.com/graasp/graasp-app-quiz/issues/114)) ([84553a7](https://github.com/graasp/graasp-app-quiz/commit/84553a7f5d0f42b3a39eb624a735ee7217939785))
+* improve corrections for multiple choices ([#130](https://github.com/graasp/graasp-app-quiz/issues/130)) ([48862ab](https://github.com/graasp/graasp-app-quiz/commit/48862ab1cebc1e0787825f09b302ac40ebc391f9))
+* improve the navigation in the builder view ([#124](https://github.com/graasp/graasp-app-quiz/issues/124)) ([a62b7ba](https://github.com/graasp/graasp-app-quiz/commit/a62b7bae3e1c00ffee9362787e8004b4acaf0810))
+* improve the navigation in the player view ([#122](https://github.com/graasp/graasp-app-quiz/issues/122)) ([c6a6b50](https://github.com/graasp/graasp-app-quiz/commit/c6a6b50082b30a9a70f115d989d626491989a3d9))
+* migrate to typescript and remove immutable ([163f757](https://github.com/graasp/graasp-app-quiz/commit/163f757785de2d8bb69cea2f6f52c4795773944f))
+* provide hints when incorrect answer ([#117](https://github.com/graasp/graasp-app-quiz/issues/117)) ([93d811f](https://github.com/graasp/graasp-app-quiz/commit/93d811f5ec1c65e4dde27b16cfe0108769e93d98))
+* remove unnecessary link in analytics charts utils ([163f757](https://github.com/graasp/graasp-app-quiz/commit/163f757785de2d8bb69cea2f6f52c4795773944f))
+* reset show correction when currentIdx change in PlayView ([#112](https://github.com/graasp/graasp-app-quiz/issues/112)) ([b09bef1](https://github.com/graasp/graasp-app-quiz/commit/b09bef1c0a9104a4a23802e6b8088309d21108ee))
+
 ## [1.1.0](https://github.com/graasp/graasp-app-quiz/compare/v1.0.2...v1.1.0) (2023-09-26)
 
 
