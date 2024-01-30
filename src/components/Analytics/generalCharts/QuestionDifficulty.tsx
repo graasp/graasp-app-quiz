@@ -59,7 +59,7 @@ type Chart = {
  * @param responses The responses provided by the user to the quiz
  * @param order The order in which the questions appear in the quiz
  * @param questions The question for which to display detailed information
- * @param considerLastAttemptsOnly If true, the analytics are computed with the lastest users' answers
+ * @param considerLastAttemptsOnly If true, the analytics are computed with the latest users' answers
  */
 const QuestionDifficulty = ({
   maxWidth,

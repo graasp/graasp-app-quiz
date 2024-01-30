@@ -7,18 +7,16 @@ type Props = {
   sx?: SxProps;
 };
 
-export const Section = ({ children, title, explanation, sx }: Props) => {
-  return (
-    <Stack sx={sx}>
-      <Typography variant="h6">{title}</Typography>
+export const Section = ({ children, title, explanation, sx }: Props) => (
+  <Stack sx={sx}>
+    <Typography variant="h6">{title}</Typography>
 
-      <Typography variant="body1" mb={1}>
-        {explanation}
-      </Typography>
+    <Typography variant="body1" mb={1}>
+      {explanation}
+    </Typography>
 
-      {children}
-    </Stack>
-  );
-};
+    {children}
+  </Stack>
+);
 
 export default Section;

@@ -33,9 +33,7 @@ export const setInData = <T extends Data, K extends keyof T, V extends T[K]>(
   object: Partial<T>,
   key: K,
   value: V
-): Partial<T> => {
-  return {
-    ...object,
-    [key]: value,
-  };
-};
+): Partial<T> => ({
+  ...object,
+  [key]: value,
+});

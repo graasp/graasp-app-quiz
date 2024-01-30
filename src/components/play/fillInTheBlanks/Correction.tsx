@@ -26,27 +26,25 @@ const StyledListItem = styled(ListItem)<StyledListItemProps>(
 
 type Props = {
   words: Word[];
-}
-
-const Correction = ({ words }: Props) => {
-  return (
-    <StyledOl data-cy={FILL_BLANKS_CORRECTION_CY}>
-      {words
-        .filter(({ type }) => type === FILL_BLANKS_TYPE.BLANK)
-        .map(({ text, displayed, id }) => {
-          const isCorrect = text === displayed;
-          return (
-            <StyledListItem isCorrect={isCorrect}>
-              <Typography
-                data-cy={buildFillBlanksCorrectionAnswerCy(id, isCorrect)}
-              >
-                {text}
-              </Typography>
-            </StyledListItem>
-          );
-        })}
-    </StyledOl>
-  );
 };
+
+const Correction = ({ words }: Props) => (
+  <StyledOl data-cy={FILL_BLANKS_CORRECTION_CY}>
+    {words
+      .filter(({ type }) => type === FILL_BLANKS_TYPE.BLANK)
+      .map(({ text, displayed, id }) => {
+        const isCorrect = text === displayed;
+        return (
+          <StyledListItem isCorrect={isCorrect}>
+            <Typography
+              data-cy={buildFillBlanksCorrectionAnswerCy(id, isCorrect)}
+            >
+              {text}
+            </Typography>
+          </StyledListItem>
+        );
+      })}
+  </StyledOl>
+);
 
 export default Correction;

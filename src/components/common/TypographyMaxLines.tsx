@@ -11,21 +11,19 @@ export const TypographyMaxLines = ({
   maxLines,
   children,
   ...typographyProps
-}: Props) => {
-  return (
-    <Typography
-      {...typographyProps}
-      sx={{
-        ...typographyProps.sx, 
-        display: '-webkit-box',
-        overflow: 'hidden',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: maxLines,
-      }}
-    >
-      {children}
-    </Typography>
-  );
-};
+}: Props) => (
+  <Typography
+    {...typographyProps}
+    sx={{
+      ...typographyProps.sx,
+      display: '-webkit-box',
+      overflow: 'hidden',
+      WebkitBoxOrient: 'vertical',
+      WebkitLineClamp: maxLines,
+    }}
+  >
+    {children}
+  </Typography>
+);
 
 export default TypographyMaxLines;

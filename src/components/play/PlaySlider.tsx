@@ -72,9 +72,7 @@ const PlaySlider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showCorrection, response.value, values]);
 
-  const computeColor = () => {
-    return isCorrect ? 'success' : 'error';
-  };
+  const computeColor = () => (isCorrect ? 'success' : 'error');
 
   return (
     <Grid container direction="column" sx={{ p: 2 }}>

@@ -79,61 +79,59 @@ export const NavigationItem = ({
   marginTop,
 
   onClick,
-}: Props) => {
-  return (
-    <Stack
-      className={QUESTION_STEP_CLASSNAME}
-      data-cy={buildQuestionStepDefaultCy(qId)}
-      // questionIdx - 1 because question number is questionIdx + 1
-      onClick={() => onClick(questionIdx - 1)}
-      direction="row"
-      alignContent="center"
-      alignItems="center"
+}: Props) => (
+  <Stack
+    className={QUESTION_STEP_CLASSNAME}
+    data-cy={buildQuestionStepDefaultCy(qId)}
+    // questionIdx - 1 because question number is questionIdx + 1
+    onClick={() => onClick(questionIdx - 1)}
+    direction="row"
+    alignContent="center"
+    alignItems="center"
+    sx={{
+      ...SX_CONTAINER,
+      borderColor: isSwapping ? DRAGGING_BORDER_COLOR : GRAY_COLOR,
+      bgcolor: isActive ? ACTIVE_BG_COLOR : DEFAULT_BG_COLOR,
+      // use margin instead of gap in parent component to work correctly with draggable
+      mb: marginBottom,
+      mt: marginTop,
+    }}
+    spacing={CONTAINER_PADDING}
+    paddingLeft={CONTAINER_PADDING}
+    paddingRight={CONTAINER_PADDING}
+    ref={draggableProvided.innerRef}
+    {...draggableProvided.draggableProps}
+  >
+    <Box {...draggableProvided.dragHandleProps} display="flex">
+      <DragHandleIcon
+        className={DRAGGABLE_HANDLE_COMPONENT}
+        htmlColor={isActive ? WHITE_COLOR : GRAY_COLOR}
+        sx={SX_DRAG_ICON}
+      />
+    </Box>
+    <Box
       sx={{
-        ...SX_CONTAINER,
-        borderColor: isSwapping ? DRAGGING_BORDER_COLOR : GRAY_COLOR,
-        bgcolor: isActive ? ACTIVE_BG_COLOR : DEFAULT_BG_COLOR,
-        // use margin instead of gap in parent component to work correctly with draggable
-        mb: marginBottom,
-        mt: marginTop,
+        ...SX_QUESTION_IDX,
+        borderColor: isActive ? WHITE_COLOR : PRIMARY_PALETTE.dark,
       }}
-      spacing={CONTAINER_PADDING}
-      paddingLeft={CONTAINER_PADDING}
-      paddingRight={CONTAINER_PADDING}
-      ref={draggableProvided.innerRef}
-      {...draggableProvided.draggableProps}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
     >
-      <Box {...draggableProvided.dragHandleProps} display="flex">
-        <DragHandleIcon
-          className={DRAGGABLE_HANDLE_COMPONENT}
-          htmlColor={isActive ? WHITE_COLOR : GRAY_COLOR}
-          sx={SX_DRAG_ICON}
-        />
-      </Box>
-      <Box
-        sx={{
-          ...SX_QUESTION_IDX,
-          borderColor: isActive ? WHITE_COLOR : PRIMARY_PALETTE.dark,
-        }}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Typography fontSize={questionIdx < 100 ? 'medium' : 'small'}>
-          {questionIdx}
-        </Typography>
-      </Box>
+      <Typography fontSize={questionIdx < 100 ? 'medium' : 'small'}>
+        {questionIdx}
+      </Typography>
+    </Box>
 
-      <TypographyMaxLines
-        maxLines={MAX_QUESTION_LINES_TOP_BAR}
-        color={isActive ? WHITE_COLOR : DARK_GRAY_COLOR}
-        lineHeight={QUESTION_LINE_HEIGHT}
-        data-cy={buildQuestionStepTitle(questionIdx - 1)}
-      >
-        {questionTitle}
-      </TypographyMaxLines>
-    </Stack>
-  );
-};
+    <TypographyMaxLines
+      maxLines={MAX_QUESTION_LINES_TOP_BAR}
+      color={isActive ? WHITE_COLOR : DARK_GRAY_COLOR}
+      lineHeight={QUESTION_LINE_HEIGHT}
+      data-cy={buildQuestionStepTitle(questionIdx - 1)}
+    >
+      {questionTitle}
+    </TypographyMaxLines>
+  </Stack>
+);
 
 export default NavigationItem;

@@ -11,15 +11,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  CircularProgress,
-  FormControlLabel,
-  FormGroup,
-  Stack,
-  Switch,
-  Tab,
-  Tabs,
-} from '@mui/material';
+import { CircularProgress, Stack, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
@@ -41,6 +33,7 @@ import { QuizContext } from '../context/QuizContext';
 import AutoScrollableMenu from '../navigation/AutoScrollableMenu';
 import TabPanel from '../navigation/TabPanel';
 import { Chart, QuestionData } from '../types/types';
+import RenderAllAttemptsToggleBtn from './RenderAllAttemptsToggleBtn';
 import {
   fillInTheBlankCharts,
   generalCharts,
@@ -201,31 +194,6 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
     [order, getChartsForType, getDetailedChartTabQuestion, t]
   );
 
-  const renderAllAttemptsToggleBtn = () => {
-    return (
-      <Box
-        width="100%"
-        display="flex"
-        flexDirection="row"
-        justifyContent={{ xs: 'start', sm: 'end' }}
-      >
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={considerLastAttemptsOnly}
-                onChange={(_, checked: boolean) =>
-                  setConsiderLastAttemptsOnly(checked)
-                }
-              />
-            }
-            label={t(QUIZ_TRANSLATIONS.ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE)}
-          />
-        </FormGroup>
-      </Box>
-    );
-  };
-
   if (isLoading || isContextLoading) {
     return <CircularProgress />;
   }
@@ -302,7 +270,10 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
             <TabPanel tab={tab} index={0}>
               {data ? (
                 <>
-                  {renderAllAttemptsToggleBtn()}
+                  <RenderAllAttemptsToggleBtn
+                    considerLastAttemptsOnly={considerLastAttemptsOnly}
+                    onChange={setConsiderLastAttemptsOnly}
+                  />
                   <GeneralCharts
                     maxWidth={
                       stackElemWidth - sideMenuElemWidth - SLIDE_BAR_WIDTH

@@ -31,9 +31,10 @@ const AnswersDistributionSlider = ({
   appDataForQuestion,
 }: Props) => {
   const theme = useTheme();
-  const responsesByValue = useMemo(() => {
-    return groupBy(appDataForQuestion, (r) => r.value);
-  }, [appDataForQuestion]);
+  const responsesByValue = useMemo(
+    () => groupBy(appDataForQuestion, (r) => r.value),
+    [appDataForQuestion]
+  );
 
   const chartData = useMemo(
     () =>
@@ -48,26 +49,24 @@ const AnswersDistributionSlider = ({
           }
         })
         .reduce(
-          (acc, [value, list]) => {
-            return {
-              data: {
-                x: [...acc.data.x, value],
-                y: [...acc.data.y, list.length],
-              },
-              percentage: [
-                ...acc.percentage,
-                list.length / appDataForQuestion.length,
-              ],
-              maxValue: Math.max(acc.maxValue, list.length),
-              hoverText: [...acc.hoverText, value],
-              barColors: [
-                ...acc.barColors,
-                computeCorrectness(questionData, list.at(0))
-                  ? theme.palette.success.main
-                  : theme.palette.primary.main,
-              ],
-            };
-          },
+          (acc, [value, list]) => ({
+            data: {
+              x: [...acc.data.x, value],
+              y: [...acc.data.y, list.length],
+            },
+            percentage: [
+              ...acc.percentage,
+              list.length / appDataForQuestion.length,
+            ],
+            maxValue: Math.max(acc.maxValue, list.length),
+            hoverText: [...acc.hoverText, value],
+            barColors: [
+              ...acc.barColors,
+              computeCorrectness(questionData, list.at(0))
+                ? theme.palette.success.main
+                : theme.palette.primary.main,
+            ],
+          }),
           {
             data: { x: [], y: [] },
             percentage: [],

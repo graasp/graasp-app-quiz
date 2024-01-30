@@ -240,7 +240,8 @@ const CreateView = () => {
                   sx={{ mt: 2 }}
                   title={t(QUIZ_TRANSLATIONS.MULTIPLE_ATTEMPTS_SECTION_TITLE)}
                   explanation={t(
-                    QUIZ_TRANSLATIONS.MULTIPLE_ATTEMPTS_EXPLANATION
+                    QUIZ_TRANSLATIONS.MULTIPLE_ATTEMPTS_EXPLANATION,
+                    { count: newData.numberOfAttempts ?? 0 }
                   )}
                 >
                   <NumberOfAttempts

@@ -32,9 +32,10 @@ export const useMaxAvailableHeightInWindow = (
   /**
    * Stores the height of the viewport, dynamically updated if it is resized
    */
-  const windowHeight = useSyncExternalStore(windowCallback, () => {
-    return window.innerHeight;
-  });
+  const windowHeight = useSyncExternalStore(
+    windowCallback,
+    () => window.innerHeight
+  );
 
   return windowHeight - maxHeight;
 };
@@ -87,9 +88,9 @@ const useTotalDynamicHeight = (
   /**
    * Stores the height of the header, dynamically updated if it is resized
    */
-  const elemAboveHeight = useSyncExternalStore(elemAboveCallback, () => {
-    return getElemFullHeight(elemAbove);
-  });
+  const elemAboveHeight = useSyncExternalStore(elemAboveCallback, () =>
+    getElemFullHeight(elemAbove)
+  );
 
   /**
    * Memorise the elem below callback function, to avoid subscribing and unsubscribing everytime the
@@ -106,9 +107,9 @@ const useTotalDynamicHeight = (
   /**
    * Stores the height of the header, dynamically updated if it is resized
    */
-  const elemBelowHeight = useSyncExternalStore(elemBelowCallback, () => {
-    return getElemFullHeight(elemBelow);
-  });
+  const elemBelowHeight = useSyncExternalStore(elemBelowCallback, () =>
+    getElemFullHeight(elemBelow)
+  );
 
   // 16 is en empirical value, that allow to have the biggest height possible without showing scroll bar
   return elemAboveHeight + elemBelowHeight + 16;

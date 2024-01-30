@@ -104,7 +104,7 @@ export default {
     BUILDER_QUIZ_NAVIGATION_TITLE: 'Navigation du Quiz',
     MULTIPLE_ATTEMPTS_SECTION_TITLE: 'Tentatives multiples',
     MULTIPLE_ATTEMPTS_EXPLANATION:
-      'Si la valeur est supérieure à 1, vous autorisez vos utilisateurs à réessayer plusieurs fois lorsque la réponse donnée est incorrecte.',
+      'Si la valeur est supérieure à 1, vous autorisez les utilisateurs à réessayer au maximum {{count}} fois, lorsque la réponse donnée est incorrecte.',
     MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_CHECKBOX:
       'Afficher les erreurs dans la réponse après chaque tentative',
     MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_TOOLTIP:

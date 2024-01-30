@@ -47,7 +47,7 @@ type ChartData = {
  * @param responses The responses provided by the user to the quiz
  * @param questions The question for which to display detailed information
  * @param members The members who answered to the quiz
- * @param considerLastAttemptsOnly If true, the analytics are computed with the lastest users' answers
+ * @param considerLastAttemptsOnly If true, the analytics are computed with the latest users' answers
  */
 const CorrectResponsePerUser = ({
   maxWidth,
@@ -61,9 +61,10 @@ const CorrectResponsePerUser = ({
 
   const membersById = useMemo(() => groupBy(members, (m) => m.id), [members]);
 
-  const questionsById = useMemo(() => {
-    return groupBy(questions, (q) => q.data.questionId);
-  }, [questions]);
+  const questionsById = useMemo(
+    () => groupBy(questions, (q) => q.data.questionId),
+    [questions]
+  );
 
   const chartData = useMemo(() => {
     const responsesByUser = groupBy(

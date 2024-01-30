@@ -25,14 +25,13 @@ const styleButton = ({
   isSelected: boolean;
   dataCy: string;
   endIcon?: JSX.Element;
-}) => {
-  return {
+}) =>
+  ({
     color,
     variant: isSelected ? 'contained' : 'outlined',
     endIcon,
     'data-cy': dataCy,
-  } as const;
-};
+  } as const);
 
 const computeDisabledSx = (choiceState: ChoiceState | undefined) => {
   const successColor = theme.palette.success.main;
@@ -70,29 +69,31 @@ export const ChoiceButton = ({
   onClick,
 }: Props) => {
   const computeStyles = () => {
-    let color: StatusColor = DEFAULT_COLOR;
-    let icon;
+    const btn = {
+      color: DEFAULT_COLOR,
+      isSelected: isSelected,
+      dataCy: buildMultipleChoicesButtonCy(idx, isSelected),
+    } as const; // const is needed to allow color strings
 
     if (showState) {
       switch (choiceState) {
         case ChoiceState.CORRECT:
         case ChoiceState.MISSING:
-          color = CORRECT_COLOR;
-          icon = <CheckIcon />;
-          break;
+          return styleButton({
+            ...btn,
+            color: CORRECT_COLOR,
+            endIcon: <CheckIcon />,
+          });
         case ChoiceState.INCORRECT:
-          color = INCORRECT_COLOR;
-          icon = <CloseIcon />;
-          break;
+          return styleButton({
+            ...btn,
+            color: INCORRECT_COLOR,
+            endIcon: <CloseIcon />,
+          });
       }
     }
 
-    return styleButton({
-      color,
-      isSelected: isSelected,
-      dataCy: buildMultipleChoicesButtonCy(idx, isSelected),
-      endIcon: icon,
-    });
+    return styleButton(btn);
   };
 
   const handleClick = () => {

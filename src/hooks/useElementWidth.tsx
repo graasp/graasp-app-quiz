@@ -15,7 +15,8 @@ export const useElementWidth = (elem: HTMLElement | null) => {
     []
   );
 
-  return useSyncExternalStore(windowResizeCallback, () => {
-    return elem?.offsetWidth ?? 0;
-  });
+  return useSyncExternalStore(
+    windowResizeCallback,
+    () => elem?.offsetWidth ?? 0
+  );
 };

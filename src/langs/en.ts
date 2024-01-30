@@ -104,7 +104,7 @@ export default {
     BUILDER_QUIZ_NAVIGATION_TITLE: 'Quiz Navigation',
     MULTIPLE_ATTEMPTS_SECTION_TITLE: 'Multiple attempts',
     MULTIPLE_ATTEMPTS_EXPLANATION:
-      'If the value is greater than 1, you allow your users to retry multiple time when the given answer is incorrect.',
+      'If the value is greater than 1, you allow users to retry at most {{count}} times when the given answer is incorrect.',
     MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_CHECKBOX:
       'Display response errors after each attempt',
     MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_TOOLTIP:

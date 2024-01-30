@@ -31,7 +31,7 @@ const PlayTextInput = ({
   const showCorrectness = response.text === lastUserAnswer?.text;
 
   const textInputColor =
-  showCorrectness || showCorrection
+    showCorrectness || showCorrection
       ? isCorrect
         ? theme.palette.success.main
         : theme.palette.error.main
@@ -56,9 +56,8 @@ const PlayTextInput = ({
     },
   };
 
-  const computeColor = (showColors: boolean) => {
-    return showColors ? (isCorrect ? 'success' : 'error') : undefined;
-  };
+  const computeColor = (showColors: boolean) =>
+    showColors ? (isCorrect ? 'success' : 'error') : undefined;
 
   return (
     <TextField

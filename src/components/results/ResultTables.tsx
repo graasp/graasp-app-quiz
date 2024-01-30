@@ -157,9 +157,10 @@ const ResultTables = ({ headerElem }: Props) => {
    *
    * @returns Immutable set of user's id
    */
-  const getAllUsers = useCallback(() => {
-    return responses?.map((r) => r.member.id);
-  }, [responses]);
+  const getAllUsers = useCallback(
+    () => responses?.map((r) => r.member.id),
+    [responses]
+  );
 
   const [usersId, setUsersId] = useState(getAllUsers());
 
@@ -172,9 +173,11 @@ const ResultTables = ({ headerElem }: Props) => {
    * @returns A list of tuple from user name to its id
    */
   const getMembers = useCallback(() => {
-    const listIdNames = data?.members?.reduce((acc, cur) => {
-      return usersId?.find((id) => id === cur.id) ? [...acc, cur] : acc;
-    }, [] as Member[]);
+    const listIdNames = data?.members?.reduce(
+      (acc, cur) =>
+        usersId?.find((id) => id === cur.id) ? [...acc, cur] : acc,
+      [] as Member[]
+    );
 
     // directly sort the list descending
     return listIdNames?.sort(
@@ -233,9 +236,11 @@ const ResultTables = ({ headerElem }: Props) => {
             </TabPanel>
             <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
               <AutoScrollableMenu
-                links={members?.map(({ id, name }) => {
-                  return { label: name, link: formatInnerLink(id), id };
-                })}
+                links={members?.map(({ id, name }) => ({
+                  label: name,
+                  link: formatInnerLink(id),
+                  id,
+                }))}
                 elemRefs={userRefs}
                 containerRef={userContainerRef}
                 initiallyClickedId={initiallyClickedUser}

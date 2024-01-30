@@ -48,7 +48,7 @@ const PlayView = () => {
   const [userAnswers, setUserAnswers] = useState<AppData[]>([]);
   const [showCorrectness, setShowCorrectness] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  // this state is used to determine if the animations should to be activated or not.
+  // this state is used to determine if the animations should be activated or not.
   // for multiple choice, it must be a counter to avoid animating once only.
   const [numberOfSubmit, setNumberOfSubmit] = useState(0);
 

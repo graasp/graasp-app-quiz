@@ -99,20 +99,27 @@ const GeneralCharts = ({
           return <Typography> {t('Error, chart type unknown')} </Typography>;
       }
     },
-    [maxWidth, goToDetailedQuestion, responses, order, questions, considerLastAttemptsOnly, members, t]
+    [
+      maxWidth,
+      goToDetailedQuestion,
+      responses,
+      order,
+      questions,
+      considerLastAttemptsOnly,
+      members,
+      t,
+    ]
   );
 
-  return generalCharts.map((chart) => {
-    return (
-      <Box
-        ref={(elm: HTMLElement) => (chartRefs.current[chart.label] = elm)}
-        key={chart.label}
-        id={chart.link}
-      >
-        {renderChartType(chart.chartType)}
-      </Box>
-    );
-  });
+  return generalCharts.map((chart) => (
+    <Box
+      ref={(elm: HTMLElement) => (chartRefs.current[chart.label] = elm)}
+      key={chart.label}
+      id={chart.link}
+    >
+      {renderChartType(chart.chartType)}
+    </Box>
+  ));
 };
 
 export default GeneralCharts;

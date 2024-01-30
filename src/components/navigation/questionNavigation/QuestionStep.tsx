@@ -118,8 +118,8 @@ export const QuestionStep = ({
     ...(isSelected ? isSelectedStyle : {}),
   };
 
-  const renderTooltipTitle = () => {
-    return isSelected ? null : (
+  const renderTooltipTitle = () =>
+    isSelected ? null : (
       <QuestionTitleStepper
         isCorrect={isCorrect}
         currentNumberOfAttempts={currentNumberOfAttempts}
@@ -128,7 +128,6 @@ export const QuestionStep = ({
         darkIconColor={false}
       />
     );
-  };
 
   return (
     <Box

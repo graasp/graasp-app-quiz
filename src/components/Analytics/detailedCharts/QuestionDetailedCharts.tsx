@@ -129,22 +129,20 @@ const QuestionDetailedCharts = ({
     [renderAnswerDistributionChart, t]
   );
 
-  return detailedCharts.map((chart) => {
-    return (
-      <Box
-        ref={(elm: HTMLElement) => {
-          if (chartRefs.current) {
-            chartRefs.current[chart.label] = elm;
-          }
-        }}
-        key={chart.label}
-        id={chart.link}
-        data-cy={buildAnalyticsDetailedChartCy(chart.label)}
-      >
-        {renderChartType(chart.chartType, chart)}
-      </Box>
-    );
-  });
+  return detailedCharts.map((chart) => (
+    <Box
+      ref={(elm: HTMLElement) => {
+        if (chartRefs.current) {
+          chartRefs.current[chart.label] = elm;
+        }
+      }}
+      key={chart.label}
+      id={chart.link}
+      data-cy={buildAnalyticsDetailedChartCy(chart.label)}
+    >
+      {renderChartType(chart.chartType, chart)}
+    </Box>
+  ));
 };
 
 export default QuestionDetailedCharts;

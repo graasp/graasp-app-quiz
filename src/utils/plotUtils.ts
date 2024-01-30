@@ -20,33 +20,29 @@ export const hoverData = <T>({
   meta,
   hoverTemplate,
   borderColor,
-}: HoverDataOptions<T>) => {
-  return {
-    hovertext: hoverText,
-    meta,
-    hovertemplate: hoverTemplate,
-    hoverlabel: {
-      bordercolor: borderColor,
-      bgcolor: 'rgb(234,234,234)',
-      align: 'left' as const,
-    },
-  };
-};
+}: HoverDataOptions<T>) => ({
+  hovertext: hoverText,
+  meta,
+  hovertemplate: hoverTemplate,
+  hoverlabel: {
+    bordercolor: borderColor,
+    bgcolor: 'rgb(234,234,234)',
+    align: 'left' as const,
+  },
+});
 
 /**
  * Function to get an object containing some basics setting to use with charts
  *
  * @param fileName The name to give to the downloaded file of the chart
  */
-export const defaultSettings = (fileName: string) => {
-  return {
-    displaylogo: false,
-    scrollZoom: false, // It doesn't bring much now, so disable it, but let it here if we need it again
-    toImageButtonOptions: {
-      filename: fileName,
-    },
-  };
-};
+export const defaultSettings = (fileName: string) => ({
+  displaylogo: false,
+  scrollZoom: false, // It doesn't bring much now, so disable it, but let it here if we need it again
+  toImageButtonOptions: {
+    filename: fileName,
+  },
+});
 
 type DefaultLayoutOptions = {
   title: string;
@@ -71,42 +67,40 @@ export const defaultLayout = ({
   percentage,
   maxValueX,
   maxValueY,
-}: DefaultLayoutOptions) => {
-  return {
-    autosize: true,
-    title: {
-      text: title,
-    },
-    yaxis: {
-      range: maxValueY ? [0, maxValueY] : [],
-      ...(percentage ? { tickformat: ',.0%' } : {}),
-    },
-    xaxis: {
-      range: maxValueX ? [0, maxValueX] : [],
-    },
-    modebar: {
-      orientation: 'h' as const,
-      remove: [
-        'pan2d',
-        'lasso2d',
-        'select2d',
-        'zoom2d',
-        'autoScale2d',
-      ] as ModeBarDefaultButtons[],
-    },
-    dragmode: 'pan' as const,
-    legend: {
-      orientation: 'h' as const,
-      xanchor: 'center' as const,
-      x: 0.5,
-    },
-    showlegend: true,
-    width,
-    margin: {
-      pad: 5,
-    },
-  };
-};
+}: DefaultLayoutOptions) => ({
+  autosize: true,
+  title: {
+    text: title,
+  },
+  yaxis: {
+    range: maxValueY ? [0, maxValueY] : [],
+    ...(percentage ? { tickformat: ',.0%' } : {}),
+  },
+  xaxis: {
+    range: maxValueX ? [0, maxValueX] : [],
+  },
+  modebar: {
+    orientation: 'h' as const,
+    remove: [
+      'pan2d',
+      'lasso2d',
+      'select2d',
+      'zoom2d',
+      'autoScale2d',
+    ] as ModeBarDefaultButtons[],
+  },
+  dragmode: 'pan' as const,
+  legend: {
+    orientation: 'h' as const,
+    xanchor: 'center' as const,
+    x: 0.5,
+  },
+  showlegend: true,
+  width,
+  margin: {
+    pad: 5,
+  },
+});
 
 /**
  * Function to truncate text that are longer than a certain length

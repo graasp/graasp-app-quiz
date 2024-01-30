@@ -122,9 +122,8 @@ const TableByUser = ({
    * @param {string} qName The name of the question
    * @returns A user response
    */
-  const getResponseForQuestionName = (qName: string) => {
-    return responsesByQuestionName[qName];
-  };
+  const getResponseForQuestionName = (qName: string) =>
+    responsesByQuestionName[qName];
 
   /**
    * Helper function to extract the data of one question given its name for the current user.
@@ -132,9 +131,8 @@ const TableByUser = ({
    * @param {string} qName The name of the question
    * @returns {string} Response for given user.
    */
-  const getResponseDataForQuestionName = (qName: string) => {
-    return getResponseValue(getResponseForQuestionName(qName)?.data);
-  };
+  const getResponseDataForQuestionName = (qName: string) =>
+    getResponseValue(getResponseForQuestionName(qName)?.data);
 
   /**
    * Helper function to extract the date at which the user answered the question

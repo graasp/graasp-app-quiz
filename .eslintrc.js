@@ -26,7 +26,9 @@ module.exports = {
     sourceType: 'module',
   },
   root: true, // For configuration cascading.
-  rules: {},
+  rules: {
+    "arrow-body-style": ["error", "as-needed"],
+  },
   settings: {
     react: {
       version: 'detect', // Detect react version

@@ -36,7 +36,11 @@ const BlankedText = ({
   onDelete,
 }: Props) => {
   const renderWords = () => {
-    let idx = 0;
+    // This idx is used to compare the current blank with 
+    // the previous answer and the current filled word.
+    // Because "words" doesn't contains WORD types, this 
+    // index must be incremented each time a WORD is found.
+    let previousAnswerIdx = 0;
 
     return words.map((word, i) => {
       if (word.type === FILL_BLANKS_TYPE.WORD) {
@@ -47,7 +51,7 @@ const BlankedText = ({
         );
       }
 
-      const prevWord = prevWords?.at(idx++) ?? '';
+      const prevWord = prevWords?.at(previousAnswerIdx++) ?? '';
       const hasChanged = !prevWords || prevWord !== word.displayed;
 
       return (
