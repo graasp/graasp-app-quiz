@@ -92,10 +92,10 @@
     "cypress": "13.2.0",
     "env-cmd": "10.1.0",
     "eslint": "^8.3.0",
-    "eslint-config-prettier": "8.5.0",
+    "eslint-config-prettier": "8.10.0",
     "eslint-config-react-app": "7.0.1",
     "eslint-plugin-cypress": "2.15.1",
-    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-import": "2.29.1",
     "prettier": "2.8.8",
     "standard-version": "9.5.0",
     "typescript": "5.1.6"
