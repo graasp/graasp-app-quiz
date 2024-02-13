@@ -70,6 +70,15 @@ export const QuestionStepper = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion, appData]);
 
+  // Because default current idx is set to -1 
+  // to active selection of create question button,
+  // it has to be set to 0.
+  useEffect(() => {
+    if (currentIdx === -1) {
+      setCurrentIdx(0);
+    }
+  }, [currentIdx, setCurrentIdx]);
+
   const renderQuestionStep = (questionId: string, index: number) => {
     const question = getQuestionById(questions, questionId);
     if (!question) {

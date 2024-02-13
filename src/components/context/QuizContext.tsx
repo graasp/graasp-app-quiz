@@ -51,7 +51,7 @@ export const QuizProvider = ({ children }: Props) => {
   const { mutateAsync: patchAppSettingAsync } = mutations.usePatchAppSetting();
   // current question idx
   // -1 if we are adding a new question
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const [currentIdx, setCurrentIdx] = useState(-1);
 
   const [orderSetting, setOrderSetting] = useState<AppSetting>();
   const [order, setOrder] = useState<string[]>([]);
