@@ -201,10 +201,29 @@ export const QuizProvider = ({ children }: Props) => {
         APP_SETTING_NAMES.QUESTION_LIST
       );
 
+      // Get all questions id. To support legacy code, if no question id, the id is used instead.
+      const questionIds = getSettingsByName(
+        settings,
+        APP_SETTING_NAMES.QUESTION
+      ).reduce<string[]>((acc, appSetting) => {
+        const qId = appSetting?.data?.questionId;
+        const id = appSetting?.id;
+        if (qId) {
+          acc.push(qId);
+        }
+        if (!qId && id) {
+          acc.push(id);
+        }
+        return acc;
+      }, []);
+
       if (newOrderSetting && newOrderSetting.length > 0) {
         const value = newOrderSetting[0] as QuestionListType;
         setOrderSetting(value);
-        setOrder(value?.data?.list ?? []);
+        // Filter out questions that are not well formatted in AppSettings.
+        setOrder(
+          value?.data?.list.filter((id) => questionIds.includes(id)) ?? []
+        );
       }
     }
   }, [settings]);
@@ -249,11 +268,22 @@ export const QuizProvider = ({ children }: Props) => {
   }, [patchAppSettingAsync, settings]);
 
   const value: ContextType = useMemo(() => {
+    const validIds =
+      getSettingsByName(settings, APP_SETTING_NAMES.QUESTION_LIST)[0]?.data
+        ?.list ?? [];
+
     const questions = settings
-      ? (getSettingsByName(
-          settings,
-          APP_SETTING_NAMES.QUESTION
-        ) as QuestionDataAppSetting[])
+      ? (
+          getSettingsByName(
+            settings,
+            APP_SETTING_NAMES.QUESTION
+          ) as QuestionDataAppSetting[]
+        )
+          // Filter out questions that are not well formatted in AppSettings.
+          .filter(
+            (q) =>
+              validIds.includes(q.data.questionId) || validIds.includes(q.id)
+          )
       : [];
 
     return {
