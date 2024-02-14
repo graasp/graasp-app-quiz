@@ -3,14 +3,11 @@ import { AppSetting, Context } from '@graasp/sdk';
 import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
 import {
   PLAY_VIEW_QUESTION_TITLE_CY,
-  buildPlayViewTextInputCy,
   QUESTION_BAR_NEXT_CY,
+  buildPlayViewTextInputCy,
   dataCyWrapper,
 } from '../../src/config/selectors';
-import {
-  datesFactory,
-  mockAppDataFactory,
-} from '../../src/data/factories';
+import { datesFactory, mockAppDataFactory } from '../../src/data/factories';
 import { mockItem } from '../../src/data/items';
 import { mockCurrentMember } from '../../src/data/members';
 
@@ -73,7 +70,7 @@ describe('Legacy', () => {
     };
 
     // current user
-    const textAppData =  mockAppDataFactory({
+    const textAppData = mockAppDataFactory({
       item: mockItem,
       creator: mockCurrentMember,
       data: {
@@ -107,7 +104,7 @@ describe('Legacy', () => {
       },
       appContext: {
         context: Context.Builder,
-      }
+      },
     });
     cy.visit('/');
 

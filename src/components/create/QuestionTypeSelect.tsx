@@ -34,7 +34,9 @@ const QuestionTypeSelect = ({ value, onChange }: Props) => {
 
   const onTypeChange: SelectProps['onChange'] = (e) => {
     const value = e.target.value as QuestionType;
-    const defaultQuestionValues = DEFAULT_QUESTION_VALUES[value] as QuestionData;
+    const defaultQuestionValues = DEFAULT_QUESTION_VALUES[
+      value
+    ] as QuestionData;
     onChange(defaultQuestionValues);
   };
 

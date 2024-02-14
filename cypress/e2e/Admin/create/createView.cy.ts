@@ -27,7 +27,6 @@ import {
   QUESTION_APP_SETTINGS,
 } from '../../../fixtures/appSettings';
 import { QuizNavigator } from '../../../utils/navigation';
-import { WAITING_DELAY_MS } from '../../../utils/time';
 import { fillMultipleChoiceQuestion } from './multipleChoices.cy';
 
 const newMultipleChoiceData = {
@@ -43,7 +42,7 @@ const newMultipleChoiceData = {
     },
   ],
   explanation: 'my new explanation',
-  hints: 'my new hints'
+  hints: 'my new hints',
 };
 
 describe('Create View', () => {
@@ -77,15 +76,19 @@ describe('Create View', () => {
       // Add three questions and make sure they are added to the QuestionTopBar
       cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
       fillMultipleChoiceQuestion(newMultipleChoiceData);
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(WAITING_DELAY_MS); // Wait for the new question to appear
+      // Wait for the new question to appear
+      cy.get('html')
+        .find(`.${QUESTION_STEP_CLASSNAME}`)
+        .should('have.length', 1);
       cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
         .should('be.visible')
         .should('have.value', '');
       fillMultipleChoiceQuestion(newMultipleChoiceData);
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(WAITING_DELAY_MS);
+      // Wait for the new question to appear
+      cy.get('html')
+        .find(`.${QUESTION_STEP_CLASSNAME}`)
+        .should('have.length', 2);
       cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
         .should('be.visible')

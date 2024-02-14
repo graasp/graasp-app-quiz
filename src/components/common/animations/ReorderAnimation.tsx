@@ -31,7 +31,7 @@ export const ReorderAnimation = <T extends DataElementType>({
 }: Props<T>) => {
   const [totalHeight, setTotalHeight] = useState<number>(0);
   // Tracks the heights of each element to recompute totalHeight when heights changed.
-  // That means, if a element's height changed, the map is updated and he totalHeight 
+  // That means, if a element's height changed, the map is updated and he totalHeight
   // recomputed with all the heights, including the updated one.
   const elementHeights = new Map<string, number>();
   // this variable is used to set the next element to the good y

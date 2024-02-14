@@ -1,5 +1,6 @@
 import { Context } from '@graasp/sdk';
 
+import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/types';
 import {
   AppSettingData,
   TextAppDataData,
@@ -29,7 +30,6 @@ import {
   QUESTION_APP_SETTINGS,
   setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
-import { QuestionStepStyleKeys } from '../../../src/components/navigation/questionNavigation/types';
 
 const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
