@@ -205,17 +205,14 @@ export const QuizProvider = ({ children }: Props) => {
       const questionIds = getSettingsByName(
         settings,
         APP_SETTING_NAMES.QUESTION
-      ).reduce<string[]>((acc, appSetting) => {
+      ).map((appSetting) => {
         const qId = appSetting?.data?.questionId;
-        const id = appSetting?.id;
         if (qId) {
-          acc.push(qId);
+          return qId;
+        } else {
+          return appSetting.id;
         }
-        if (!qId && id) {
-          acc.push(id);
-        }
-        return acc;
-      }, []);
+      });
 
       if (newOrderSetting && newOrderSetting.length > 0) {
         const value = newOrderSetting[0] as QuestionListType;
