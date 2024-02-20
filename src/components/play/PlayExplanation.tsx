@@ -20,7 +20,6 @@ const PlayExplanation = ({ currentQuestionData, showCorrection }: Props) => {
   return (
     <Alert severity="info" sx={{ width: '100%', mt: 4 }}>
       <AlertTitle>
-        {' '}
         <Typography variant="h6" mb={1}>
           {t('Explanations')}
         </Typography>

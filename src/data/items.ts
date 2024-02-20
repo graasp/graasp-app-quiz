@@ -1,5 +1,5 @@
-import { DiscriminatedItem } from '@graasp/sdk';
+import { AppItemFactory } from '@graasp/sdk';
 
-export const mockItem = { id: 'mock-item-id' } as DiscriminatedItem;
+export const mockItem = AppItemFactory({ id: 'mock-item-id' });
 
 export const mockItems = [mockItem];
