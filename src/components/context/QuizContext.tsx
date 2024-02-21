@@ -58,20 +58,9 @@ export const QuizProvider = ({ children }: Props) => {
   const [order, setOrder] = useState<string[]>([]);
 
   // This state indicates if the questions were received and the question order set correctly.
-  // It allows QuizNavigation to display the Add question button when the loading is terminated 
+  // It allows QuizNavigation to display the Add question button when the loading is terminated
   // and the current index updated correctly according if there is questions or not.
   const [isLoaded, setIsLoaded] = useState(false);
-
-  // This useEffect is used to change current idx to first question if there are questions.
-  useEffect(() => {
-    if (!isLoading) {
-      if (order.length) {
-        setCurrentIdx(0);
-      }
-      setIsLoaded(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order]);
 
   // Here use type of CurrentQuestion because only the id of appSetting is needed...
   const [currentQuestion, setCurrentQuestion] =
@@ -235,11 +224,23 @@ export const QuizProvider = ({ children }: Props) => {
         const value = newOrderSetting[0] as QuestionListType;
         setOrderSetting(value);
         // Filter out questions that are not well formatted in AppSettings.
-        setOrder(
-          value?.data?.list.filter((id) => questionIds.includes(id)) ?? []
-        );
+        const filteredOrder =
+          value?.data?.list.filter((id) => questionIds.includes(id)) ?? [];
+        setOrder(filteredOrder);
+
+        // If there are questions, set current idx to the first one.
+        // If it has already set current idx, don't do it again to not reset curr question on order changed.
+        if (filteredOrder.length && !isLoaded) {
+          setCurrentIdx(0);
+        }
+      }
+
+      // if it is first loading, set is loaded to true.
+      if (!isLoaded) {
+        setIsLoaded(true);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 
   // set current question
