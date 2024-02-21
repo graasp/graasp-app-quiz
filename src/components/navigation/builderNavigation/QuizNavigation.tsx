@@ -80,7 +80,6 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
 
   const [questionsInOrder, setQuestionsOrder] = useState<QuestionOrder[]>([]);
   const [swappingId, setSwappingId] = useState<string>();
-  const [hasQuestions, setHasQuestions] = useState<boolean>(false);
 
   useEffect(() => {
     setQuestionsOrder(
@@ -98,17 +97,6 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
       }, [])
     );
   }, [order, questions]);
-
-  // Set the current idx to -1 if there are questions.
-  // This is because default is set to -1 to active selection of
-  // create question button.
-  useEffect(() => {
-    if (!hasQuestions && currentIdx === -1 && order.length > 0) {
-      setCurrentIdx(0);
-      setHasQuestions(order.length > 0);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order]);
 
   const getQIdByIdx = (idx: number | undefined) =>
     questionsInOrder[idx ?? -1]?.id;

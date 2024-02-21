@@ -51,10 +51,18 @@ export const QuizProvider = ({ children }: Props) => {
   const { mutateAsync: patchAppSettingAsync } = mutations.usePatchAppSetting();
   // current question idx
   // -1 if we are adding a new question
-  const [currentIdx, setCurrentIdx] = useState(-1);
+  const [currentIdx, setCurrentIdx] = useState(0);
 
   const [orderSetting, setOrderSetting] = useState<AppSetting>();
   const [order, setOrder] = useState<string[]>([]);
+
+  // This useEffect is used to set state to add new question when no data after fetching.
+  useEffect(() => {
+    if (!isSettingsFetching && order.length === 0) {
+      setCurrentIdx(-1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order]);
 
   // Here use type of CurrentQuestion because only the id of appSetting is needed...
   const [currentQuestion, setCurrentQuestion] =
