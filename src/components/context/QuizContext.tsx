@@ -27,6 +27,7 @@ type ContextType = {
   addQuestion: () => void;
   saveQuestion: (newData: QuestionData) => Promise<void>;
   isSettingsFetching: boolean;
+  isLoaded: boolean;
   saveOrder: (order: string[], currQuestionId?: string) => void;
 };
 
@@ -51,15 +52,23 @@ export const QuizProvider = ({ children }: Props) => {
   const { mutateAsync: patchAppSettingAsync } = mutations.usePatchAppSetting();
   // current question idx
   // -1 if we are adding a new question
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const [currentIdx, setCurrentIdx] = useState(-1);
 
   const [orderSetting, setOrderSetting] = useState<AppSetting>();
   const [order, setOrder] = useState<string[]>([]);
 
-  // This useEffect is used to set state to add new question when no data after fetching.
+  // This state indicates if the questions were received and the question order set correctly.
+  // It allows QuizNavigation to display the Add question button when the loading is terminated 
+  // and the current index updated correctly according if there is questions or not.
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // This useEffect is used to change current idx to first question if there are questions.
   useEffect(() => {
-    if (!isSettingsFetching && order.length === 0) {
-      setCurrentIdx(-1);
+    if (!isLoading) {
+      if (order.length) {
+        setCurrentIdx(0);
+      }
+      setIsLoaded(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
@@ -303,6 +312,7 @@ export const QuizProvider = ({ children }: Props) => {
       addQuestion,
       saveQuestion,
       isSettingsFetching,
+      isLoaded,
       saveOrder,
     };
   }, [
@@ -315,6 +325,7 @@ export const QuizProvider = ({ children }: Props) => {
     moveToPreviousQuestion,
     saveQuestion,
     isSettingsFetching,
+    isLoaded,
     saveOrder,
   ]);
 

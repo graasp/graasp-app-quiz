@@ -72,6 +72,7 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
     order,
     saveOrder,
     addQuestion,
+    isLoaded,
   } = useContext(QuizContext);
 
   const { t } = useTranslation();
@@ -193,6 +194,10 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
 
     return <Box sx={SX_CONTAINER}>{renderDraggableList()}</Box>;
   };
+
+  if (!isLoaded) {
+    return null;
+  }
 
   return (
     <>
