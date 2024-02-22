@@ -58,7 +58,7 @@ export const QuizProvider = ({ children }: Props) => {
   const [order, setOrder] = useState<string[]>([]);
 
   // This state indicates if the questions were received and the question order set correctly.
-  // It allows QuizNavigation to display the Add question button when the loading is terminated
+  // It allows QuizNavigation to display the Add question button when loading stops
   // and the current index updated correctly according if there is questions or not.
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -211,35 +211,32 @@ export const QuizProvider = ({ children }: Props) => {
       const questionIds = getSettingsByName(
         settings,
         APP_SETTING_NAMES.QUESTION
-      ).map((appSetting) => {
-        const qId = appSetting?.data?.questionId;
-        if (qId) {
-          return qId;
-        } else {
-          return appSetting.id;
-        }
-      });
+      ).map((appSetting) => appSetting?.data?.questionId ?? appSetting.id);
 
+      const filteredOrder: string[] = [];
       if (newOrderSetting && newOrderSetting.length > 0) {
         const value = newOrderSetting[0] as QuestionListType;
         setOrderSetting(value);
         // Filter out questions that are not well formatted in AppSettings.
-        const filteredOrder =
-          value?.data?.list.filter((id) => questionIds.includes(id)) ?? [];
+        filteredOrder.push(
+          ...(value?.data?.list.filter((id) => questionIds.includes(id)) ?? [])
+        );
         setOrder(filteredOrder);
-
-        // If there are questions, set current idx to the first one.
-        // If it has already set current idx, don't do it again to not reset curr question on order changed.
-        if (filteredOrder.length && !isLoaded) {
-          setCurrentIdx(0);
-        }
       }
 
       // if it is first loading, set is loaded to true.
       if (!isLoaded) {
+        // If there are questions, set current idx to the first one.
+        // If it has already set current idx, don't do it again to not reset curr question on order changed.
+        if (filteredOrder.length) {
+          setCurrentIdx(0);
+        }
+
         setIsLoaded(true);
       }
     }
+    // Disable exhaustive-deps for isLoaded, because we don't want
+    // to reload this useEffect when isLoaded has changed.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 
