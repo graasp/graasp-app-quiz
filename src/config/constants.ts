@@ -1,4 +1,5 @@
 import { UnionOfConst } from '@graasp/sdk';
+
 import {
   MultipleChoicesAppSettingData,
   QuestionDataAppSetting,

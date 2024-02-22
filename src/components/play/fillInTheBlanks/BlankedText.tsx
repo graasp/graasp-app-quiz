@@ -36,9 +36,9 @@ const BlankedText = ({
   onDelete,
 }: Props) => {
   const renderWords = () => {
-    // This idx is used to compare the current blank with 
+    // This idx is used to compare the current blank with
     // the previous answer and the current filled word.
-    // Because "words" doesn't contains WORD types, this 
+    // Because "words" doesn't contains WORD types, this
     // index must be incremented each time a WORD is found.
     let previousAnswerIdx = 0;
 

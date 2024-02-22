@@ -1,6 +1,4 @@
-import {
-  configureQueryClient,
-} from '@graasp/apps-query-client';
+import { configureQueryClient } from '@graasp/apps-query-client';
 
 import { API_HOST, ENABLE_MOCK_API, GRAASP_APP_KEY } from './constants';
 import notifier from './notifier';

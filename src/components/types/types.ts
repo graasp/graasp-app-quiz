@@ -2,10 +2,10 @@ import { PlotDatum } from 'plotly.js-basic-dist-min';
 
 import { MutableRefObject } from 'react';
 
+import { Data } from '@graasp/apps-query-client';
 import { AppData, AppSetting } from '@graasp/sdk';
 
 import { QuestionType } from '../../config/constants';
-import { Data } from '@graasp/apps-query-client';
 
 export type AppDataData = {
   questionId: string;
@@ -141,7 +141,7 @@ export type AppDataWithDataId<T extends Data = Data> = Partial<
   Pick<AppData<T>, 'id'>
 > &
   Pick<AppData<T>, 'data'>;
-  
+
 export enum ChoiceState {
   CORRECT,
   INCORRECT,

@@ -272,7 +272,9 @@ const testTableContent = (uId: string, ascending: boolean) => {
 
       questionTitles.push(currentQuestionName);
       if (!isOrdered(questionTitles, ascending)) {
-        throw new Error(`The questions are not ordered in ${ascending ? 'ASC' : 'DESC'}.`)
+        throw new Error(
+          `The questions are not ordered in ${ascending ? 'ASC' : 'DESC'}.`
+        );
       }
 
       const userResponse = USER_RESPONSES[uId].find(

@@ -27,7 +27,6 @@ import {
   QUESTION_APP_SETTINGS,
 } from '../../../fixtures/appSettings';
 import { QuizNavigator } from '../../../utils/navigation';
-import { WAITING_DELAY_MS } from '../../../utils/time';
 import { fillMultipleChoiceQuestion } from './multipleChoices.cy';
 
 const newMultipleChoiceData = {
@@ -43,7 +42,7 @@ const newMultipleChoiceData = {
     },
   ],
   explanation: 'my new explanation',
-  hints: 'my new hints'
+  hints: 'my new hints',
 };
 
 describe('Create View', () => {
@@ -77,15 +76,15 @@ describe('Create View', () => {
       // Add three questions and make sure they are added to the QuestionTopBar
       cy.get(dataCyWrapper(ADD_NEW_QUESTION_TITLE_CY)).should('be.visible');
       fillMultipleChoiceQuestion(newMultipleChoiceData);
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(WAITING_DELAY_MS); // Wait for the new question to appear
+      // Wait for the new question to appear
+      cy.get(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 1);
       cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
         .should('be.visible')
         .should('have.value', '');
       fillMultipleChoiceQuestion(newMultipleChoiceData);
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(WAITING_DELAY_MS);
+      // Wait for the new question to appear
+      cy.get(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 2);
       cy.get(dataCyWrapper(NAVIGATION_ADD_QUESTION_BUTTON_CY)).click();
       cy.get(dataCyWrapper(CREATE_QUESTION_TITLE_CY))
         .should('be.visible')
@@ -93,9 +92,7 @@ describe('Create View', () => {
       fillMultipleChoiceQuestion(newMultipleChoiceData);
       // Verify the questions are added to the order list by checking the number of
       // question nodes in the QuestionTopBar, as we cannot check the app settings directly
-      cy.get('html')
-        .find(`.${QUESTION_STEP_CLASSNAME}`)
-        .should('have.length', 3);
+      cy.get(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 3);
     });
   });
 
@@ -192,9 +189,7 @@ describe('Create View', () => {
       );
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
       fillMultipleChoiceQuestion(newMultipleChoiceData);
-      cy.get('html')
-        .find(`.${QUESTION_STEP_CLASSNAME}`)
-        .should('have.length', 5);
+      cy.get(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 5);
     });
 
     it('Update Question type should not create a new question', () => {
@@ -210,9 +205,10 @@ describe('Create View', () => {
       cy.get(`${dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)}`).click();
 
       // Check the current number of questions
-      cy.get('html')
-        .find(`.${QUESTION_STEP_CLASSNAME}`)
-        .should('have.length', numberOfQuestions);
+      cy.get(`.${QUESTION_STEP_CLASSNAME}`).should(
+        'have.length',
+        numberOfQuestions
+      );
 
       // update the question type and save
       const updatedQuestion = {
@@ -236,9 +232,10 @@ describe('Create View', () => {
       cy.get(`${dataCyWrapper(CREATE_VIEW_SAVE_BUTTON_CY)}`).click();
 
       // Check that the current number of questions is still unchanged
-      cy.get('html')
-        .find(`.${QUESTION_STEP_CLASSNAME}`)
-        .should('have.length', numberOfQuestions);
+      cy.get(`.${QUESTION_STEP_CLASSNAME}`).should(
+        'have.length',
+        numberOfQuestions
+      );
 
       // Check the question title, question type, the answer and attempts.
       cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).should(

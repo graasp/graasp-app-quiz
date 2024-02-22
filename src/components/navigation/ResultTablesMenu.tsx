@@ -1,3 +1,4 @@
+import { MutableRefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Tab, Tabs } from '@mui/material';
@@ -8,13 +9,12 @@ import {
   RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
   RESULT_TABLES_TAB_CONTAINERS_CY,
 } from '../../config/selectors';
-import { MutableRefObject } from 'react';
 
 type Props = {
   tab: number;
   tableMenuElem: MutableRefObject<HTMLElement | undefined>;
   setTab: (tabIdx: number) => void;
-}
+};
 
 /**
  *

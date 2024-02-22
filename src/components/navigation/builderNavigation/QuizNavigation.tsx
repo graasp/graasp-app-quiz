@@ -72,6 +72,7 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
     order,
     saveOrder,
     addQuestion,
+    isLoaded,
   } = useContext(QuizContext);
 
   const { t } = useTranslation();
@@ -194,6 +195,10 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
     return <Box sx={SX_CONTAINER}>{renderDraggableList()}</Box>;
   };
 
+  if (!isLoaded) {
+    return null;
+  }
+
   return (
     <>
       <Stack
@@ -206,7 +211,7 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
         {renderMenu()}
         <Button
           data-cy={NAVIGATION_ADD_QUESTION_BUTTON_CY}
-          variant={currentIdx === -1 ? "contained" : "outlined"}
+          variant={currentIdx === -1 ? 'contained' : 'outlined'}
           startIcon={<AddIcon />}
           onClick={addQuestion}
         >

@@ -15,10 +15,8 @@ export const verifySelectedMenu = (
   labels: { id: string }[]
 ) => {
   labels.forEach(({ id }) => {
-    cy.get(
-      dataCyWrapper(
-        buildAutoScrollableMenuLinkCy(id)
-      )
-    ).should('be.visible');
+    cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id))).should(
+      'be.visible'
+    );
   });
 };

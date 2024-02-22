@@ -1,5 +1,5 @@
-import { mockItem } from './items';
 import { mockMemberFactory, mockMultipleAppDataFactory } from './factories';
+import { mockItem } from './items';
 
 export const micheal = mockMemberFactory({
   id: 'mock-member-id-4',

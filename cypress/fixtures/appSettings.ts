@@ -156,7 +156,7 @@ export const CAPITAL_FRANCE_SETTING = {
       },
     ],
     explanation: 'Paris is the capital of France.',
-    hints: 'Think about the iconic Eiffel Tower.'
+    hints: 'Think about the iconic Eiffel Tower.',
   },
   name: APP_SETTING_NAMES.QUESTION,
 };

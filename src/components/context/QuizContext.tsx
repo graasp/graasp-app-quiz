@@ -27,6 +27,7 @@ type ContextType = {
   addQuestion: () => void;
   saveQuestion: (newData: QuestionData) => Promise<void>;
   isSettingsFetching: boolean;
+  isLoaded: boolean;
   saveOrder: (order: string[], currQuestionId?: string) => void;
 };
 
@@ -51,10 +52,15 @@ export const QuizProvider = ({ children }: Props) => {
   const { mutateAsync: patchAppSettingAsync } = mutations.usePatchAppSetting();
   // current question idx
   // -1 if we are adding a new question
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const [currentIdx, setCurrentIdx] = useState(-1);
 
   const [orderSetting, setOrderSetting] = useState<AppSetting>();
   const [order, setOrder] = useState<string[]>([]);
+
+  // This state indicates if the questions were received and the question order set correctly.
+  // It allows QuizNavigation to display the Add question button when loading stops
+  // and the current index updated correctly according if there is questions or not.
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Here use type of CurrentQuestion because only the id of appSetting is needed...
   const [currentQuestion, setCurrentQuestion] =
@@ -201,12 +207,37 @@ export const QuizProvider = ({ children }: Props) => {
         APP_SETTING_NAMES.QUESTION_LIST
       );
 
+      // Get all questions id. To support legacy code, if no question id, the id is used instead.
+      const questionIds = getSettingsByName(
+        settings,
+        APP_SETTING_NAMES.QUESTION
+      ).map((appSetting) => appSetting?.data?.questionId ?? appSetting.id);
+
+      const filteredOrder: string[] = [];
       if (newOrderSetting && newOrderSetting.length > 0) {
         const value = newOrderSetting[0] as QuestionListType;
         setOrderSetting(value);
-        setOrder(value?.data?.list ?? []);
+        // Filter out questions that are not well formatted in AppSettings.
+        filteredOrder.push(
+          ...(value?.data?.list.filter((id) => questionIds.includes(id)) ?? [])
+        );
+        setOrder(filteredOrder);
+      }
+
+      // if it is first loading, set is loaded to true.
+      if (!isLoaded) {
+        // If there are questions, set current idx to the first one.
+        // If it has already set current idx, don't do it again to not reset curr question on order changed.
+        if (filteredOrder.length) {
+          setCurrentIdx(0);
+        }
+
+        setIsLoaded(true);
       }
     }
+    // Disable exhaustive-deps for isLoaded, because we don't want
+    // to reload this useEffect when isLoaded has changed.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 
   // set current question
@@ -249,11 +280,22 @@ export const QuizProvider = ({ children }: Props) => {
   }, [patchAppSettingAsync, settings]);
 
   const value: ContextType = useMemo(() => {
+    const validIds =
+      getSettingsByName(settings, APP_SETTING_NAMES.QUESTION_LIST)[0]?.data
+        ?.list ?? [];
+
     const questions = settings
-      ? (getSettingsByName(
-          settings,
-          APP_SETTING_NAMES.QUESTION
-        ) as QuestionDataAppSetting[])
+      ? (
+          getSettingsByName(
+            settings,
+            APP_SETTING_NAMES.QUESTION
+          ) as QuestionDataAppSetting[]
+        )
+          // Filter out questions that are not well formatted in AppSettings.
+          .filter(
+            (q) =>
+              validIds.includes(q.data.questionId) || validIds.includes(q.id)
+          )
       : [];
 
     return {
@@ -268,6 +310,7 @@ export const QuizProvider = ({ children }: Props) => {
       addQuestion,
       saveQuestion,
       isSettingsFetching,
+      isLoaded,
       saveOrder,
     };
   }, [
@@ -280,6 +323,7 @@ export const QuizProvider = ({ children }: Props) => {
     moveToPreviousQuestion,
     saveQuestion,
     isSettingsFetching,
+    isLoaded,
     saveOrder,
   ]);
 
