@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/graasp/graasp-app-quiz/compare/v1.2.0...v1.3.0) (2024-02-22)
+
+
+### Features
+
+* add more languages, move to json ([#137](https://github.com/graasp/graasp-app-quiz/issues/137)) ([c4ddb3c](https://github.com/graasp/graasp-app-quiz/commit/c4ddb3cb44711dbfb24011ef56ab331e8fa8afd3))
+
+
+### Bug Fixes
+
+* player display invalid questions ([#136](https://github.com/graasp/graasp-app-quiz/issues/136)) ([9d12017](https://github.com/graasp/graasp-app-quiz/commit/9d12017cd9a026e043396cb61d1ee0b166add2d9))
+
 ## [1.2.0](https://github.com/graasp/graasp-app-quiz/compare/v1.1.0...v1.2.0) (2024-01-30)
 
 
