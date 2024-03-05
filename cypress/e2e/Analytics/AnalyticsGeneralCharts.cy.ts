@@ -1,5 +1,5 @@
-import { getSettingsByName } from '../../../../src/components/context/utilities';
-import { APP_SETTING_NAMES } from '../../../../src/config/constants';
+import { getSettingsByName } from '../../../src/components/context/utilities';
+import { APP_SETTING_NAMES } from '../../../src/config/constants';
 import {
   ANALYTICS_CONTAINER_CY,
   ANALYTICS_GENERAL_CORRECT_RESPONSE_PERCENTAGE_CY,
@@ -9,14 +9,14 @@ import {
   buildAnalyticsDetailedQuestionTabMenuCy,
   buildAutoScrollableMenuLinkCy,
   dataCyWrapper,
-} from '../../../../src/config/selectors';
-import { APP_DATA_LOT_QUESTIONS_LOT_USERS } from '../../../fixtures/appData';
+} from '../../../src/config/selectors';
+import { APP_DATA_LOT_QUESTIONS_LOT_USERS } from '../../fixtures/appData';
 import {
   APP_SETTINGS_FEW_QUESTIONS,
   APP_SETTINGS_LOT_QUESTIONS,
-} from '../../../fixtures/appSettings';
-import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
-import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
+} from '../../fixtures/appSettings';
+import { MEMBERS_RESULT_TABLES } from '../../fixtures/members';
+import { verifySelectedMenu } from '../../utils/autoScrollableMenuSelected';
 
 const generalCharts = [
   {

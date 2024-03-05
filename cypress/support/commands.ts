@@ -151,15 +151,12 @@ Cypress.Commands.add(
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: Context.Builder,
+        context: Context.Analytics,
       },
       members,
     });
 
     cy.visit('/');
-
-    // navigate to Analytics
-    cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
   }
 );
 
