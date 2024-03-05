@@ -103,30 +103,6 @@ describe('Analytics General', () => {
     });
   });
 
-  // bug: transition fails in cypress
-  // it('Analytics, click chart in menu goes to correct charts', () => {
-  //   cy.setupAnalyticsForCheck(
-  //     APP_SETTINGS_LOT_QUESTIONS,
-  //     APP_DATA_LOT_QUESTIONS_LOT_USERS,
-  //     MEMBERS_RESULT_TABLES
-  //   );
-
-  //   generalCharts.forEach(({ selector, chartTitle, label, id }, index) => {
-  //     cy.get(dataCyWrapper(buildAutoScrollableMenuLinkCy(id)))
-  //       .scrollIntoView()
-  //       .click();
-  //     // check that correct menu is selected
-  //     verifySelectedMenu(index, generalCharts);
-
-  //     cy.get(dataCyWrapper(selector)).should('be.visible');
-
-  //     // Check the title of the chart as well
-  //     cy.get(dataCyWrapper(selector))
-  //       .find('.gtitle')
-  //       .should('have.text', chartTitle);
-  //   });
-  // });
-
   it('Scroll to chart, select correct menu entry', () => {
     cy.setupAnalyticsForCheck(
       APP_SETTINGS_LOT_QUESTIONS,

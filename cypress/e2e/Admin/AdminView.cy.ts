@@ -4,9 +4,7 @@ import { getSettingsByName } from '../../../src/components/context/utilities';
 import { APP_SETTING_NAMES } from '../../../src/config/constants';
 import {
   ADD_NEW_QUESTION_TITLE_CY,
-  ANALYTICS_CONTAINER_CY,
   CREATE_VIEW_CONTAINER_CY,
-  NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_CREATE_QUIZ_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
   NAVIGATION_TAB_CONTAINER_CY,
@@ -36,12 +34,6 @@ describe('Admin View', () => {
 
     cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
     cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should(
-      'have.text',
-      "There isn't any question to display"
-    );
-
-    cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
-    cy.get(dataCyWrapper(ANALYTICS_CONTAINER_CY)).should(
       'have.text',
       "There isn't any question to display"
     );
@@ -86,14 +78,9 @@ export const testAdminViewBaseLayout = () => {
   cy.get(dataCyWrapper(NAVIGATION_TAB_CONTAINER_CY)).should('be.visible');
   cy.get(dataCyWrapper(NAVIGATION_CREATE_QUIZ_BUTTON_CY)).should('be.visible');
   cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).should('be.visible');
-  cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).should('be.visible');
   cy.get(dataCyWrapper(NAVIGATION_RESULT_BUTTON_CY)).click();
 
   // after we click on result, the table component should be visible and the table
   cy.get(dataCyWrapper(CREATE_VIEW_CONTAINER_CY)).should('not.exist');
   cy.get(dataCyWrapper(TABLE_BY_QUESTION_CONTAINER_CY)).should('be.visible');
-
-  // after clicking on analytics, the component should be visible
-  cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
-  cy.get(dataCyWrapper(ANALYTICS_CONTAINER_CY)).should('be.visible');
 };
