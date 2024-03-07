@@ -3739,9 +3739,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.0.0":
-  version: 8.20.1
-  resolution: "@testing-library/dom@npm:8.20.1"
+"@testing-library/dom@npm:^9.0.0":
+  version: 9.3.4
+  resolution: "@testing-library/dom@npm:9.3.4"
   dependencies:
     "@babel/code-frame": ^7.10.4
     "@babel/runtime": ^7.12.5
@@ -3751,7 +3751,7 @@ __metadata:
     dom-accessibility-api: ^0.5.9
     lz-string: ^1.5.0
     pretty-format: ^27.0.2
-  checksum: 06fc8dc67849aadb726cbbad0e7546afdf8923bd39acb64c576d706249bd7d0d05f08e08a31913fb621162e3b9c2bd0dce15964437f030f9fa4476326fdd3007
+  checksum: dfd6fb0d6c7b4dd716ba3c47309bc9541b4a55772cb61758b4f396b3785efe2dbc75dc63423545c039078c7ffcc5e4b8c67c2db1b6af4799580466036f70026f
   languageName: node
   linkType: hard
 
@@ -3772,17 +3772,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^12.1.5":
-  version: 12.1.5
-  resolution: "@testing-library/react@npm:12.1.5"
+"@testing-library/react@npm:^14.0.0":
+  version: 14.2.1
+  resolution: "@testing-library/react@npm:14.2.1"
   dependencies:
     "@babel/runtime": ^7.12.5
-    "@testing-library/dom": ^8.0.0
-    "@types/react-dom": <18.0.0
+    "@testing-library/dom": ^9.0.0
+    "@types/react-dom": ^18.0.0
   peerDependencies:
-    react: <18.0.0
-    react-dom: <18.0.0
-  checksum: 4abd0490405e709a7df584a0db604e508a4612398bb1326e8fa32dd9393b15badc826dcf6d2f7525437886d507871f719f127b9860ed69ddd204d1fa834f576a
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 7054ae69a0e06c0777da8105fa08fac7e8dac570476a065285d7b993947acda5c948598764a203ebaac759c161c562d6712f19f5bd08be3f09a07e23baee5426
   languageName: node
   linkType: hard
 
@@ -4269,12 +4269,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:<18.0.0":
-  version: 17.0.20
-  resolution: "@types/react-dom@npm:17.0.20"
+"@types/react-dom@npm:^18.0.0":
+  version: 18.2.21
+  resolution: "@types/react-dom@npm:18.2.21"
   dependencies:
-    "@types/react": ^17
-  checksum: 525439fb14a033fc5dbe74711ecc50ec82273a528df9656594066a6219401e975101dafffd15d9a1a57a9442d52ea0c92eaacae09554dde27cd792e773f67467
+    "@types/react": "*"
+  checksum: 0ff00aedf5ffad90ed226c0ab0acdca609804c81af5dbde0d13a4ae53dac6bd92f85f1adc032c42966ec2e9417d13d18a41767434afa4d8c1979cad57348191b
   languageName: node
   linkType: hard
 
@@ -4328,17 +4328,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: a6a5e8cc78f486b9020d1ad009aa6c56943c68c7c6376e0f8399e9cbcd950b7b8f5d73f00200f5379f5e58d31d57d8aed24357f301d8e86108cd438ce6c8b3dd
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:^17":
-  version: 17.0.65
-  resolution: "@types/react@npm:17.0.65"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: bb862f0f97a49e690cd5c62743307d17398ee62b87bbb2c85c1b01cb992244c0aef4ecdedaab0e8d33c6315d5a8f067cf90e7f1c366b8819678c59204e202932
   languageName: node
   linkType: hard
 
@@ -9621,7 +9610,7 @@ __metadata:
     "@tanstack/react-query": 4.29.15
     "@tanstack/react-query-devtools": 4.29.15
     "@testing-library/jest-dom": ^5.16.5
-    "@testing-library/react": ^12.1.5
+    "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^13.5.0
     "@trivago/prettier-plugin-sort-imports": 4.1.1
     "@types/lodash.clonedeep": 4.5.7
