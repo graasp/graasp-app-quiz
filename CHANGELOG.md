@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/graasp/graasp-app-quiz/compare/v1.3.0...v1.4.0) (2024-03-07)
+
+
+### Features
+
+* move analytics tab to analytics view ([#141](https://github.com/graasp/graasp-app-quiz/issues/141)) ([a21e06b](https://github.com/graasp/graasp-app-quiz/commit/a21e06b901dadd41dc619201c3772a0eb0d4cf30))
+
 ## [1.3.0](https://github.com/graasp/graasp-app-quiz/compare/v1.2.0...v1.3.0) (2024-02-22)
 
 
