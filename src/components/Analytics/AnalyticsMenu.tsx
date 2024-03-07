@@ -1,7 +1,6 @@
 import groupBy from 'lodash.groupby';
 
 import {
-  RefObject,
   SyntheticEvent,
   useCallback,
   useContext,
@@ -46,19 +45,7 @@ import GeneralCharts from './generalCharts/GeneralCharts';
 
 const SLIDE_BAR_WIDTH = 16;
 
-type Props = {
-  headerElem: RefObject<HTMLElement | undefined>;
-};
-
-export type ChartRefs = RefObject<{ [key: string]: unknown }>;
-
-/**
- * Component that represents the Analytics menu. Handle which charts have to be drawn.
- *
- * @param headerElem The header element if any, used to calculate the remaining height that this object can take
- * in the window
- */
-const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
+const AnalyticsMenu = (): JSX.Element => {
   const { t } = useTranslation();
 
   // Fetch all the data here, as it is used by multiple children, avoid to fetch it in all children
@@ -73,12 +60,11 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
     useState(true);
   const chartRefs = useRef({});
   const chartContainerRef = useRef(null);
-  const [stackElem, setStackElem] = useState<HTMLElement | null>(null);
-  const [sideMenuElem, setSideMenuElem] = useState<HTMLElement | null>(null);
+  const stackElem = useRef(null);
+  const sideMenuElem = useRef(null);
+
   const chartTabs = useRef(null);
-  const maxResultViewHeight = useMaxAvailableHeightInWindow(
-    headerElem?.current
-  );
+  const maxResultViewHeight = useMaxAvailableHeightInWindow(null);
   const maxHeightScrollableMenu = useMaxAvailableHeightWithParentHeight(
     maxResultViewHeight,
     chartTabs.current
@@ -90,8 +76,8 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
     [questions]
   );
 
-  const stackElemWidth = useElementWidth(stackElem);
-  const sideMenuElemWidth = useElementWidth(sideMenuElem);
+  const stackElemWidth = useElementWidth(stackElem.current);
+  const sideMenuElemWidth = useElementWidth(sideMenuElem.current);
 
   // TODO: check if it is possible to delete old answers app data
   // For now, when a question is removed, the user answers still exists.
@@ -200,10 +186,10 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
 
   return order.length > 0 ? (
     responses && nValidResponses && nValidResponses > 0 ? (
-      <Box data-cy={ANALYTICS_CONTAINER_CY}>
-        <Stack direction="row" ref={(elem) => setStackElem(elem)}>
+      <Box data-cy={ANALYTICS_CONTAINER_CY} sx={{ height: '100%' }}>
+        <Stack direction="row" ref={stackElem} sx={{ height: '100%' }}>
           <Box
-            ref={(elem: HTMLElement) => setSideMenuElem(elem)}
+            ref={sideMenuElem}
             sx={{
               minWidth: '8em',
               maxWidth: '12em',
@@ -249,7 +235,7 @@ const AnalyticsMenu = ({ headerElem }: Props): JSX.Element => {
                 })}
               </Tabs>
             </Box>
-            <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
+            <Box sx={{ overflow: 'auto', maxHeight: maxHeightScrollableMenu }}>
               <AutoScrollableMenu
                 links={charts}
                 elemRefs={chartRefs}

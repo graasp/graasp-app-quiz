@@ -114,7 +114,6 @@ export const TABLE_BY_USER_QUESTION_NAME_HEADER_CY =
 export const TABLE_BY_USER_ANSWER_DATA_CY = 'tableByUserAnswerData';
 export const TABLE_BY_USER_DATE_DATA_CY = 'tableByUserDateData';
 export const TABLE_BY_USER_CORRECT_ICON_CY = 'tableByUserCorrectIcon';
-export const NAVIGATION_ANALYTICS_BUTTON_CY = 'navigationAnalyticsButton';
 export const ANALYTICS_CONTAINER_CY = 'analyticsContainer';
 export const ANALYTICS_GENERAL_TAB_MENU_CY = 'analyticsGeneralTabMenu';
 export const buildAnalyticsDetailedQuestionTabMenuCy = (qTitle: string) =>

@@ -1,20 +1,21 @@
-import { getSettingsByName } from '../../../../src/components/context/utilities';
+import { getSettingsByName } from '../../../src/components/context/utilities';
 import {
   APP_SETTING_NAMES,
   QuestionType,
-} from '../../../../src/config/constants';
+} from '../../../src/config/constants';
 import {
   buildAnalyticsDetailedChartCy,
   buildAnalyticsDetailedQuestionTabMenuCy,
   dataCyWrapper,
-} from '../../../../src/config/selectors';
-import { ANSWER_REGEXP } from '../../../../src/utils/fillInTheBlanks';
-import { APP_DATA_LOT_QUESTIONS_LOT_USERS } from '../../../fixtures/appData';
-import { APP_SETTINGS_LOT_QUESTIONS } from '../../../fixtures/appSettings';
-import { MEMBERS_RESULT_TABLES } from '../../../fixtures/members';
-import { verifySelectedMenu } from '../../../utils/autoScrollableMenuSelected';
+} from '../../../src/config/selectors';
+import { ANSWER_REGEXP } from '../../../src/utils/fillInTheBlanks';
+import { APP_DATA_LOT_QUESTIONS_LOT_USERS } from '../../fixtures/appData';
+import { APP_SETTINGS_LOT_QUESTIONS } from '../../fixtures/appSettings';
+import { MEMBERS_RESULT_TABLES } from '../../fixtures/members';
+import { verifySelectedMenu } from '../../utils/autoScrollableMenuSelected';
 
 describe('Analytics Detailed', () => {
+  
   it('Selecting detailed chart display correct answer frequency chart based on question type', () => {
     cy.setupAnalyticsForCheck(
       APP_SETTINGS_LOT_QUESTIONS,
@@ -38,13 +39,13 @@ describe('Analytics Detailed', () => {
         case QuestionType.FILL_BLANKS:
           q.data.text
             .match(ANSWER_REGEXP)
-            .map((word, idx) => {
+            .map((word, idx) => 
               // todo: use id instead of label
-              return {
+               ({
                 label: `Question answer frequency blank ${idx + 1}`,
                 id: `Question answer frequency blank ${idx + 1}`,
-              };
-            })
+              })
+            )
             .forEach((qLabel, idx, labels) => {
               // Goes to chart
               cy.get(

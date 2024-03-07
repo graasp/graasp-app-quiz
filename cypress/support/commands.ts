@@ -15,7 +15,6 @@ import {
   EXPLANATION_PLAY_CY,
   HINTS_CY,
   HINTS_PLAY_CY,
-  NAVIGATION_ANALYTICS_BUTTON_CY,
   NAVIGATION_RESULT_BUTTON_CY,
   NUMBER_OF_ATTEMPTS_TEXT_CY,
   RESULT_TABLES_RESULT_BY_USER_BUTTON_CY,
@@ -151,15 +150,12 @@ Cypress.Commands.add(
       },
       appContext: {
         permission: PermissionLevel.Admin,
-        context: Context.Builder,
+        context: Context.Analytics,
       },
       members,
     });
 
     cy.visit('/');
-
-    // navigate to Analytics
-    cy.get(dataCyWrapper(NAVIGATION_ANALYTICS_BUTTON_CY)).click();
   }
 );
 

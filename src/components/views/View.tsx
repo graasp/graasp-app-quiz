@@ -7,6 +7,7 @@ import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { DEFAULT_LANG } from '../../config/constants';
 import i18n from '../../config/i18n';
+import AnalyticsView from '../Analytics/AnalyticsView';
 import { QuizProvider } from '../context/QuizContext';
 import AdminView from '../navigation/AdminView';
 import PlayView from '../play/PlayView';
@@ -31,6 +32,8 @@ const View = (): JSX.Element => {
             return <PlayView />;
         }
       }
+      case Context.Analytics:
+        return <AnalyticsView />;
       case Context.Player:
       default:
         return <PlayView />;
