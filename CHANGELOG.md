@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/graasp/graasp-app-quiz/compare/v1.4.0...v1.5.0) (2024-04-11)
+
+
+### Features
+
+* add better precision in the feedback of an text answer ([#145](https://github.com/graasp/graasp-app-quiz/issues/145)) ([fe7af1b](https://github.com/graasp/graasp-app-quiz/commit/fe7af1b75764b332f89141a2ab24d2e66b8ff053))
+
 ## [1.4.0](https://github.com/graasp/graasp-app-quiz/compare/v1.3.0...v1.4.0) (2024-03-07)
 
 
