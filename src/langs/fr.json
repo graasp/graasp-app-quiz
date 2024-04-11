@@ -12,7 +12,7 @@
   "Next": "Suivant",
   "Submit": "Envoyer",
   "Type your answer": "Entrer la réponse",
-  "Correct Answer": "Réponse correcte: {{answer}}",
+  "Correct Answer": "La réponse attendue était: {{answer}}",
   "Answer": "Réponse",
   "Answer nb": "Réponse: {{nb}}",
   "Answers": "Réponses",
