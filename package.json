@@ -6,7 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@graasp/apps-query-client": "3.4.4",
+    "@graasp/apps-query-client": "3.4.10",
     "@graasp/sdk": "3.8.3",
     "@graasp/translations": "1.23.0",
     "@mui/icons-material": "5.15.0",
