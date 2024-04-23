@@ -85,7 +85,6 @@ const AutoScrollableMenu = ({
     triggerVal
   );
 
-  console.log(highlightedLink, 'higlitedlink');
   /**
    * Helper function to handle the click on a link
    *
@@ -95,7 +94,6 @@ const AutoScrollableMenu = ({
    * @param {string} link The label of the question we clicked on
    */
   const handleLinkClicked = (link: string) => {
-    console.log(link, 'link');
     clickOnLink(link);
   };
 
