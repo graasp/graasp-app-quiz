@@ -22,10 +22,6 @@ import {
   buildAnalyticsDetailedQuestionTabMenuCy,
 } from '../../config/selectors';
 import { useElementWidth } from '../../hooks/useElementWidth';
-import {
-  useMaxAvailableHeightInWindow,
-  useMaxAvailableHeightWithParentHeight,
-} from '../../hooks/useMaxAvailableHeight';
 import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { getFirstOrUndefined } from '../../utils/array';
 import { QuizContext } from '../context/QuizContext';
@@ -62,13 +58,8 @@ const AnalyticsMenu = (): JSX.Element => {
   const chartContainerRef = useRef(null);
   const stackElem = useRef(null);
   const sideMenuElem = useRef(null);
-
   const chartTabs = useRef(null);
-  const maxResultViewHeight = useMaxAvailableHeightInWindow(null);
-  const maxHeightScrollableMenu = useMaxAvailableHeightWithParentHeight(
-    maxResultViewHeight,
-    chartTabs.current
-  );
+
   const [tab, setTab] = useState(0);
 
   const questionById = useMemo(
@@ -186,14 +177,13 @@ const AnalyticsMenu = (): JSX.Element => {
 
   return order.length > 0 ? (
     responses && nValidResponses && nValidResponses > 0 ? (
-      <Box data-cy={ANALYTICS_CONTAINER_CY} sx={{ height: '100%' }}>
-        <Stack direction="row" ref={stackElem} sx={{ height: '100%' }}>
+      <Box data-cy={ANALYTICS_CONTAINER_CY}>
+        <Stack direction="row" ref={stackElem}>
           <Box
             ref={sideMenuElem}
             sx={{
               minWidth: '8em',
               maxWidth: '12em',
-              maxHeight: maxResultViewHeight,
             }}
           >
             <Box
@@ -201,8 +191,6 @@ const AnalyticsMenu = (): JSX.Element => {
                 borderBottom: 1,
                 borderColor: 'divider',
                 mb: 4,
-                maxHeight: maxResultViewHeight / 2,
-                overflow: 'auto',
               }}
               ref={chartTabs}
             >
@@ -235,7 +223,7 @@ const AnalyticsMenu = (): JSX.Element => {
                 })}
               </Tabs>
             </Box>
-            <Box sx={{ overflow: 'auto', maxHeight: maxHeightScrollableMenu }}>
+            <Box>
               <AutoScrollableMenu
                 links={charts}
                 elemRefs={chartRefs}
@@ -248,7 +236,6 @@ const AnalyticsMenu = (): JSX.Element => {
             sx={{
               overflow: 'auto',
               width: '100%',
-              height: maxResultViewHeight,
               scrollBehavior: 'smooth',
             }}
             ref={chartContainerRef}
