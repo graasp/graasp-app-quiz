@@ -115,6 +115,13 @@ const AutoScrollableMenu = ({
     }
   }, [initiallyClickedId, clickOnLink]);
 
+  useEffect(() => {
+    const el = document.getElementById(highlightedLink);
+    if (el) {
+      el.scrollIntoView(true);
+    }
+  }, [highlightedLink]);
+
   return (
     <Stack data-cy={AUTO_SCROLLABLE_MENU_LINK_LIST_CY}>
       {links?.map(({ label, id, link }) => {
