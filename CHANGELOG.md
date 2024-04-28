@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.1](https://github.com/graasp/graasp-app-quiz/compare/v1.5.0...v1.5.1) (2024-04-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @graasp/apps-query-client to v3.4.10 ([288a201](https://github.com/graasp/graasp-app-quiz/commit/288a201f3ea3ca8740c677f635e3604580666823))
+* fix resizing loop of analytics view ([#150](https://github.com/graasp/graasp-app-quiz/issues/150)) ([e70894a](https://github.com/graasp/graasp-app-quiz/commit/e70894ae83dd33069e406ef9799233060d0a470a))
+
 ## [1.5.0](https://github.com/graasp/graasp-app-quiz/compare/v1.4.0...v1.5.0) (2024-04-11)
 
 
