@@ -5,6 +5,9 @@ const graaspTheme = createTheme({
     primary: {
       main: '#555BD9',
     },
+    background: {
+      default: 'transparent',
+    },
   },
 });
 
