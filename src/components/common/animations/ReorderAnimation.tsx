@@ -3,6 +3,8 @@ import { useTransition } from '@react-spring/web';
 import { useState } from 'react';
 import { animated } from 'react-spring';
 
+import { countKeysApparition } from '../../../utils/array';
+
 const ANIMATION_DURATION_MS = 350;
 
 type DataElementType = { elementType: number };
@@ -27,13 +29,7 @@ type Props<T extends DataElementType> = {
 const duplicatedKeys = <T extends DataElementType>(
   elements: TransitionData<T>[]
 ) =>
-  Object.entries(
-    elements.reduce((countMap: Record<string, number>, e) => {
-      const key = e.key;
-      countMap[key] = (countMap[key] || 0) + 1;
-      return countMap;
-    }, {})
-  )
+  Object.entries(countKeysApparition(elements, 'key'))
     .filter(([key, count]) => key && count > 1)
     .map(([key, _]) => key);
 

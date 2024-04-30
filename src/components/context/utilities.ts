@@ -11,6 +11,7 @@ import {
   FAILURE_MESSAGES,
   QuestionType,
 } from '../../config/constants';
+import { getDuplicatedKeys, hasDuplicatedKeys } from '../../utils/array';
 import { ANSWER_REGEXP } from '../../utils/fillInTheBlanks';
 import {
   AppDataWithDataId,
@@ -249,6 +250,9 @@ export const validateQuestionData = (data: QuestionData) => {
       }
       if (data?.choices?.some(({ value }) => !value)) {
         throw FAILURE_MESSAGES.MULTIPLE_CHOICES_EMPTY_CHOICE;
+      }
+      if (hasDuplicatedKeys(getDuplicatedKeys(data?.choices, 'value'))) {
+        throw FAILURE_MESSAGES.MULTIPLE_CHOICES_DUPLICATED_CHOICE;
       }
 
       break;
