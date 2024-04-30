@@ -237,6 +237,32 @@ describe('Multiple Choices', () => {
     });
   });
 
+  it('Duplicated answers are not allowed', () => {
+    cy.setUpApi({
+      database: {
+        appSettings: [],
+      },
+      appContext: {
+        permission: PermissionLevel.Admin,
+        context: Context.Builder,
+      },
+    });
+    cy.visit('/');
+
+    const new1 = {
+      ...newMultipleChoiceData,
+      choices: [
+        ...newMultipleChoiceData.choices,
+        { value: 'choice1', isCorrect: true, explanation: '' },
+        { value: 'choice1', isCorrect: true, explanation: '' },
+      ],
+    };
+    fillMultipleChoiceQuestion(new1, { shouldSave: false });
+    cy.checkErrorMessage({
+      errorMessage: t(FAILURE_MESSAGES.MULTIPLE_CHOICES_DUPLICATED_CHOICE),
+    });
+  });
+
   describe('Display saved settings', () => {
     beforeEach(() => {
       cy.setUpApi({
