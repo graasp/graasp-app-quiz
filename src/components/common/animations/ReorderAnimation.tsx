@@ -24,6 +24,28 @@ type Props<T extends DataElementType> = {
   ) => JSX.Element;
 };
 
+const duplicatedKeys = <T extends DataElementType>(
+  elements: TransitionData<T>[]
+) =>
+  Object.entries(
+    elements.reduce((countMap: Record<string, number>, e) => {
+      const key = e.key;
+      countMap[key] = (countMap[key] || 0) + 1;
+      return countMap;
+    }, {})
+  )
+    .filter(([key, count]) => key && count > 1)
+    .map(([key, _]) => key);
+
+const printDuplicatedKeysWarning = <T extends DataElementType>(
+  elements: TransitionData<T>[]
+) =>
+  duplicatedKeys(elements).forEach((k) =>
+    console.warn(
+      `Be carefull, the key "${k}" is not unique ! This can cause issues with the animation.`
+    )
+  );
+
 export const ReorderAnimation = <T extends DataElementType>({
   isAnimating,
   elements,
@@ -87,6 +109,8 @@ export const ReorderAnimation = <T extends DataElementType>({
       )
     );
   };
+
+  printDuplicatedKeysWarning(elements);
 
   return (
     <div

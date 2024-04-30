@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Stack, Typography } from '@mui/material';
@@ -87,13 +87,15 @@ const choiceToAnswer = (
   idx: number,
   marginBottom: number
 ): TransitionData<AnswerDataType> => ({
-  key: choice.value,
+  // use random to avoid having duplicated keys
+  key: `answer-${choice.value}-${Math.random()}`,
   marginBottom,
   data: { idx, choice, elementType: ElementType.Answer },
 });
 
 const choiceToTitle = (title: string): TransitionData<TitleDataType> => ({
-  key: title,
+  // use random to avoid having duplicated keys
+  key: `title-${title}-${Math.random()}`,
   marginBottom: DEFAULT_MARGIN,
   data: {
     title,
@@ -105,7 +107,8 @@ const choiceToHint = (
   choiceIdx: number,
   hint: string
 ): TransitionData<HintDataType> => ({
-  key: hint,
+  // use random to avoid having duplicated keys
+  key: `hint-${hint}-${Math.random()}`,
   marginBottom: HINT_MARGIN,
   data: {
     hint,
@@ -147,6 +150,7 @@ const PlayMultipleChoices = ({
   const { t } = useTranslation();
 
   const [elements, setElements] = useState<TransitionData<DataType>[]>([]);
+  const answers = useRef<TransitionData<AnswerDataType>[]>([]);
   const isReadonly = showCorrection || showCorrectness;
   const choiceStates = choices.map((choice) =>
     computeChoiceState(choice, lastUserAnswer?.choices, showCorrection)
@@ -160,12 +164,17 @@ const PlayMultipleChoices = ({
     showCorrectness &&
     !showCorrection;
 
+  // convert answers once to have random keys once to continue to have the animation.
+  useEffect(() => {
+    answers.current = choices.map((c, idx) =>
+      choiceToAnswer(c, idx, DEFAULT_MARGIN)
+    );
+  }, [choices]);
+
   useEffect(() => {
     // set the "gaming" view
     if (!showCorrection && !showCorrectness) {
-      setElements(
-        choices.map((c, idx) => choiceToAnswer(c, idx, DEFAULT_MARGIN))
-      );
+      setElements(answers.current);
     } else {
       // set the "correctness" or "correction" view
       setElements(
@@ -178,13 +187,10 @@ const PlayMultipleChoices = ({
             return [];
           }
 
-          const answers = choices
-            .map((c, idx) => choiceToAnswer(c, idx, DEFAULT_MARGIN))
-            .filter((_, idx) => sectionTitle.state === choiceStates[idx]);
-
           return [
             choiceToTitle(t(sectionTitles[i].title)),
-            ...answers
+            ...answers.current
+              .filter((_, idx) => sectionTitle.state === choiceStates[idx])
               .map((answer) => {
                 const hint = answer.data.choice.explanation;
                 const displayHint = showHint(
@@ -206,7 +212,7 @@ const PlayMultipleChoices = ({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [choices, showCorrection, showCorrectness]);
+  }, [answers, showCorrection, showCorrectness]);
 
   const onResponseClick = (value: string) => {
     const choiceIdx = response.choices?.findIndex((choice) => choice === value);
