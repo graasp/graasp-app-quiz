@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Stack, Typography } from '@mui/material';
@@ -87,15 +87,13 @@ const choiceToAnswer = (
   idx: number,
   marginBottom: number
 ): TransitionData<AnswerDataType> => ({
-  // use random to avoid having duplicated keys
-  key: `answer-${choice.value}-${Math.random()}`,
+  key: `answer-${choice.value}-${idx}`,
   marginBottom,
   data: { idx, choice, elementType: ElementType.Answer },
 });
 
 const choiceToTitle = (title: string): TransitionData<TitleDataType> => ({
-  // use random to avoid having duplicated keys
-  key: `title-${title}-${Math.random()}`,
+  key: `title-${title}`,
   marginBottom: DEFAULT_MARGIN,
   data: {
     title,
@@ -107,8 +105,7 @@ const choiceToHint = (
   choiceIdx: number,
   hint: string
 ): TransitionData<HintDataType> => ({
-  // use random to avoid having duplicated keys
-  key: `hint-${hint}-${Math.random()}`,
+  key: `hint-${hint}-${choiceIdx}`,
   marginBottom: HINT_MARGIN,
   data: {
     hint,
@@ -150,7 +147,6 @@ const PlayMultipleChoices = ({
   const { t } = useTranslation();
 
   const [elements, setElements] = useState<TransitionData<DataType>[]>([]);
-  const answers = useRef<TransitionData<AnswerDataType>[]>([]);
   const isReadonly = showCorrection || showCorrectness;
   const choiceStates = choices.map((choice) =>
     computeChoiceState(choice, lastUserAnswer?.choices, showCorrection)
@@ -164,17 +160,13 @@ const PlayMultipleChoices = ({
     showCorrectness &&
     !showCorrection;
 
-  // convert answers once to have random keys once to continue to have the animation.
   useEffect(() => {
-    answers.current = choices.map((c, idx) =>
+    const answers = choices.map((c, idx) =>
       choiceToAnswer(c, idx, DEFAULT_MARGIN)
     );
-  }, [choices]);
-
-  useEffect(() => {
     // set the "gaming" view
     if (!showCorrection && !showCorrectness) {
-      setElements(answers.current);
+      setElements(answers);
     } else {
       // set the "correctness" or "correction" view
       setElements(
@@ -189,7 +181,7 @@ const PlayMultipleChoices = ({
 
           return [
             choiceToTitle(t(sectionTitles[i].title)),
-            ...answers.current
+            ...answers
               .filter((_, idx) => sectionTitle.state === choiceStates[idx])
               .map((answer) => {
                 const hint = answer.data.choice.explanation;
@@ -212,7 +204,7 @@ const PlayMultipleChoices = ({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [answers, showCorrection, showCorrectness]);
+  }, [choices, showCorrection, showCorrectness]);
 
   const onResponseClick = (value: string) => {
     const choiceIdx = response.choices?.findIndex((choice) => choice === value);
