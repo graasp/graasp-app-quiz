@@ -27,6 +27,7 @@
   "MULTIPLE_CHOICES_ANSWER_COUNT": "Au moins 2 réponses doivent être proposées",
   "MULTIPLE_CHOICES_CORRECT_ANSWER": "Au moins une réponse doit être correcte",
   "MULTIPLE_CHOICES_EMPTY_CHOICE": "Une réponse ne peut pas être vide",
+  "MULTIPLE_CHOICES_DUPLICATED_CHOICE": "Chaque réponse doit être unique",
   "TEXT_INPUT_NOT_EMPTY": "La réponse ne peut pas être vide",
   "FILL_BLANKS_EMPTY_TEXT": "",
   "FILL_BLANKS_UNMATCHING_TAGS": "",

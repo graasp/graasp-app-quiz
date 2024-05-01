@@ -3,6 +3,8 @@ import { useTransition } from '@react-spring/web';
 import { useState } from 'react';
 import { animated } from 'react-spring';
 
+import { countKeysApparition } from '../../../utils/array';
+
 const ANIMATION_DURATION_MS = 350;
 
 type DataElementType = { elementType: number };
@@ -23,6 +25,22 @@ type Props<T extends DataElementType> = {
     onHeightChange: (key: string, height: number) => void
   ) => JSX.Element;
 };
+
+const duplicatedKeys = <T extends DataElementType>(
+  elements: TransitionData<T>[]
+) =>
+  Object.entries(countKeysApparition(elements, 'key'))
+    .filter(([key, count]) => key && count > 1)
+    .map(([key, _]) => key);
+
+const printDuplicatedKeysWarning = <T extends DataElementType>(
+  elements: TransitionData<T>[]
+) =>
+  duplicatedKeys(elements).forEach((k) =>
+    console.warn(
+      `Be carefull, the key "${k}" is not unique ! This can cause issues with the animation.`
+    )
+  );
 
 export const ReorderAnimation = <T extends DataElementType>({
   isAnimating,
@@ -87,6 +105,8 @@ export const ReorderAnimation = <T extends DataElementType>({
       )
     );
   };
+
+  printDuplicatedKeysWarning(elements);
 
   return (
     <div

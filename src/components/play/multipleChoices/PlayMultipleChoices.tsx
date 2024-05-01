@@ -87,13 +87,13 @@ const choiceToAnswer = (
   idx: number,
   marginBottom: number
 ): TransitionData<AnswerDataType> => ({
-  key: choice.value,
+  key: `answer-${choice.value}-${idx}`,
   marginBottom,
   data: { idx, choice, elementType: ElementType.Answer },
 });
 
 const choiceToTitle = (title: string): TransitionData<TitleDataType> => ({
-  key: title,
+  key: `title-${title}`,
   marginBottom: DEFAULT_MARGIN,
   data: {
     title,
@@ -105,7 +105,7 @@ const choiceToHint = (
   choiceIdx: number,
   hint: string
 ): TransitionData<HintDataType> => ({
-  key: hint,
+  key: `hint-${hint}-${choiceIdx}`,
   marginBottom: HINT_MARGIN,
   data: {
     hint,
@@ -161,11 +161,12 @@ const PlayMultipleChoices = ({
     !showCorrection;
 
   useEffect(() => {
+    const answers = choices.map((c, idx) =>
+      choiceToAnswer(c, idx, DEFAULT_MARGIN)
+    );
     // set the "gaming" view
     if (!showCorrection && !showCorrectness) {
-      setElements(
-        choices.map((c, idx) => choiceToAnswer(c, idx, DEFAULT_MARGIN))
-      );
+      setElements(answers);
     } else {
       // set the "correctness" or "correction" view
       setElements(
@@ -178,13 +179,10 @@ const PlayMultipleChoices = ({
             return [];
           }
 
-          const answers = choices
-            .map((c, idx) => choiceToAnswer(c, idx, DEFAULT_MARGIN))
-            .filter((_, idx) => sectionTitle.state === choiceStates[idx]);
-
           return [
             choiceToTitle(t(sectionTitles[i].title)),
             ...answers
+              .filter((_, idx) => sectionTitle.state === choiceStates[idx])
               .map((answer) => {
                 const hint = answer.data.choice.explanation;
                 const displayHint = showHint(
