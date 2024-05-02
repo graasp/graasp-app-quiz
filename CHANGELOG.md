@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/graasp/graasp-app-quiz/compare/v1.5.1...v1.6.0) (2024-05-01)
+
+
+### Features
+
+* prevent same choice and duplicated keys ([#152](https://github.com/graasp/graasp-app-quiz/issues/152)) ([3fefa3c](https://github.com/graasp/graasp-app-quiz/commit/3fefa3c8cdf7cee5fbbed99742352c32b57cff67))
+
 ## [1.5.1](https://github.com/graasp/graasp-app-quiz/compare/v1.5.0...v1.5.1) (2024-04-24)
 
 
