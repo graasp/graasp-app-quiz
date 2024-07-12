@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/graasp/graasp-app-quiz/compare/v1.6.0...v1.7.0) (2024-07-12)
+
+
+### Features
+
+* allow users to duplicate questions ([#164](https://github.com/graasp/graasp-app-quiz/issues/164)) ([621c569](https://github.com/graasp/graasp-app-quiz/commit/621c56965cca8eef8d18c4fee3856c92c5f54433))
+* improve the texts ([#161](https://github.com/graasp/graasp-app-quiz/issues/161)) ([d349f87](https://github.com/graasp/graasp-app-quiz/commit/d349f87307ed69cb3401860019a28ce834789068))
+
 ## [1.6.0](https://github.com/graasp/graasp-app-quiz/compare/v1.5.1...v1.6.0) (2024-05-01)
 
 
