@@ -7,13 +7,25 @@ import { AppSetting } from '@graasp/sdk';
 
 import { APP_SETTING_NAMES, DEFAULT_QUESTION } from '../../config/constants';
 import { hooks, mutations } from '../../config/queryClient';
+import { appendAfter } from '../../utils/array';
 import {
   CurrentQuestion,
   QuestionData,
   QuestionDataAppSetting,
-  QuestionListType,
 } from '../types/types';
-import { generateId, getSettingsByName } from './utilities';
+import {
+  generateId,
+  getSettingsByName,
+  isDifferent,
+  validateQuestionData,
+} from './utilities';
+
+type ValidationSeverity = 'warning' | 'error';
+
+type ValidationMessage = {
+  msg: string;
+  severity: ValidationSeverity;
+};
 
 type ContextType = {
   order: string[];
@@ -26,9 +38,13 @@ type ContextType = {
   moveToPreviousQuestion: () => void;
   addQuestion: () => void;
   saveQuestion: (newData: QuestionData) => Promise<void>;
+  duplicateQuestion: () => Promise<void>;
   isSettingsFetching: boolean;
   isLoaded: boolean;
   saveOrder: (order: string[], currQuestionId?: string) => void;
+  newData: QuestionData;
+  setNewData: (newData: QuestionData) => void;
+  errorMessage: ValidationMessage | null;
 };
 
 export const QuizContext = React.createContext({} as ContextType);
@@ -65,6 +81,32 @@ export const QuizProvider = ({ children }: Props) => {
   // Here use type of CurrentQuestion because only the id of appSetting is needed...
   const [currentQuestion, setCurrentQuestion] =
     useState<CurrentQuestion>(DEFAULT_QUESTION);
+
+  const [newData, setNewData] = useState<QuestionData>(currentQuestion.data);
+  const hasChanged = isDifferent(newData, currentQuestion.data);
+  const [errorMessage, setErrorMessage] = useState<ValidationMessage | null>(
+    null
+  );
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // validate data to enable save
+  useEffect(() => {
+    try {
+      validateQuestionData(newData);
+      setErrorMessage(null);
+    } catch (e) {
+      setErrorMessage({
+        msg: e as string,
+        severity: isSubmitted ? 'error' : 'warning',
+      });
+    }
+  }, [isSubmitted, newData]);
+
+  // Reset is submitted when currentIdx changed to
+  // display errorMessage with the correct severity.
+  useEffect(() => {
+    setIsSubmitted(false);
+  }, [currentIdx]);
 
   const setCurrentIdxBounded = useCallback(
     (newIdx: number) => {
@@ -118,51 +160,115 @@ export const QuizProvider = ({ children }: Props) => {
     setCurrentIdx(-1);
   };
 
+  // add question in order if new
+  // create order setting if doesn't exist
+  const saveQuestionList = useCallback(
+    async (newQuestionId: string, newOrder: string[]) => {
+      if (!orderSetting) {
+        await postAppSettingAsync({
+          name: APP_SETTING_NAMES.QUESTION_LIST,
+          data: { list: [newQuestionId] },
+        });
+      } else {
+        await patchAppSettingAsync({
+          id: orderSetting.id,
+          data: { list: newOrder },
+        });
+      }
+    },
+    [orderSetting, patchAppSettingAsync, postAppSettingAsync]
+  );
+
+  const saveNewQuestion = useCallback(
+    async (
+      newQuestionId: string,
+      newData: QuestionData,
+      newOrder: string[]
+    ) => {
+      await saveQuestionList(newQuestionId, newOrder);
+
+      await postAppSettingAsync({
+        data: { ...newData, questionId: newQuestionId },
+        name: APP_SETTING_NAMES.QUESTION,
+      });
+
+      const idxOfNewQuestion = newOrder.indexOf(newQuestionId);
+      setCurrentIdx(idxOfNewQuestion);
+    },
+    [postAppSettingAsync, saveQuestionList]
+  );
+
   // Saves Data of current question in db and adds its id to order list (at the end)
   const saveQuestion = useCallback(
     async (newData: QuestionData) => {
-      // getcurrentquestionsetting
-      // currentSetting.id
-      // add new question
-      if (!currentQuestion.id) {
-        const newQuestionId = generateId();
-        // add question in order if new
-        // create order setting if doesn't exist
-        if (!orderSetting) {
+      try {
+        validateQuestionData(newData);
+        // add new question
+        if (!currentQuestion.id) {
+          const newQuestionId = generateId();
+          const newOrder = [...order, newQuestionId];
+
+          await saveNewQuestion(newQuestionId, newData, newOrder);
+
           await postAppSettingAsync({
-            name: APP_SETTING_NAMES.QUESTION_LIST,
-            data: { list: [newQuestionId] },
+            data: { ...newData, questionId: newQuestionId },
+            name: APP_SETTING_NAMES.QUESTION,
           });
-        } else {
+          setCurrentIdx(order.length);
+        }
+
+        // update question
+        else {
           await patchAppSettingAsync({
-            id: orderSetting.id,
-            data: { list: [...order, newQuestionId] },
+            id: currentQuestion.id,
+            data: newData,
           });
         }
 
-        await postAppSettingAsync({
-          data: { ...newData, questionId: newQuestionId },
-          name: APP_SETTING_NAMES.QUESTION,
-        });
-        setCurrentIdx(order.length);
-      }
-
-      // update question
-      else {
-        patchAppSettingAsync({
-          id: currentQuestion.id,
-          data: newData,
+        setIsSubmitted(true);
+      } catch (e) {
+        setErrorMessage({
+          msg: e as string,
+          severity: 'error',
         });
       }
     },
     [
       currentQuestion.id,
       order,
-      orderSetting,
       patchAppSettingAsync,
       postAppSettingAsync,
+      saveNewQuestion,
     ]
   );
+
+  // Duplicate current question and add it just after the original one
+  const duplicateQuestion = useCallback(async () => {
+    if (!currentQuestion.id) {
+      console.error('Cannot duplicate a new question!');
+
+      return;
+    }
+
+    if (hasChanged) {
+      await saveQuestion(newData);
+    }
+
+    const newQuestionData = hasChanged ? newData : currentQuestion.data;
+    const prevId = currentQuestion.data.questionId;
+    const newId = generateId();
+    const newOrder = appendAfter(order, prevId, newId);
+
+    await saveNewQuestion(newId, newQuestionData, newOrder);
+  }, [
+    currentQuestion.data,
+    currentQuestion.id,
+    hasChanged,
+    newData,
+    order,
+    saveNewQuestion,
+    saveQuestion,
+  ]);
 
   const saveOrder = useCallback(
     async (newOrder: string[], currQuestionId?: string) => {
@@ -215,7 +321,7 @@ export const QuizProvider = ({ children }: Props) => {
 
       const filteredOrder: string[] = [];
       if (newOrderSetting && newOrderSetting.length > 0) {
-        const value = newOrderSetting[0] as QuestionListType;
+        const value = newOrderSetting[0];
         setOrderSetting(value);
         // Filter out questions that are not well formatted in AppSettings.
         filteredOrder.push(
@@ -255,7 +361,7 @@ export const QuizProvider = ({ children }: Props) => {
         currentIdx < order.length
       ) {
         const currentQId = order[currentIdx];
-        newValue = (questions as QuestionDataAppSetting[]).find(
+        newValue = questions.find(
           ({ data: { questionId } }: { data: { questionId: string } }) =>
             questionId === currentQId
         );
@@ -285,12 +391,7 @@ export const QuizProvider = ({ children }: Props) => {
         ?.list ?? [];
 
     const questions = settings
-      ? (
-          getSettingsByName(
-            settings,
-            APP_SETTING_NAMES.QUESTION
-          ) as QuestionDataAppSetting[]
-        )
+      ? getSettingsByName(settings, APP_SETTING_NAMES.QUESTION)
           // Filter out questions that are not well formatted in AppSettings.
           .filter(
             (q) =>
@@ -309,9 +410,13 @@ export const QuizProvider = ({ children }: Props) => {
       moveToPreviousQuestion,
       addQuestion,
       saveQuestion,
+      duplicateQuestion,
       isSettingsFetching,
       isLoaded,
       saveOrder,
+      newData,
+      setNewData,
+      errorMessage,
     };
   }, [
     settings,
@@ -322,9 +427,12 @@ export const QuizProvider = ({ children }: Props) => {
     moveToNextQuestion,
     moveToPreviousQuestion,
     saveQuestion,
+    duplicateQuestion,
     isSettingsFetching,
     isLoaded,
     saveOrder,
+    newData,
+    errorMessage,
   ]);
 
   if (isLoading) {

@@ -72,6 +72,8 @@ export const NAVIGATION_TAB_CONTAINER_CY = 'navigationTabContainer';
 export const NAVIGATION_CREATE_QUIZ_BUTTON_CY = 'navigationCreateQuizButton';
 export const NAVIGATION_RESULT_BUTTON_CY = 'navigationResultButton';
 export const NAVIGATION_ADD_QUESTION_BUTTON_CY = 'navigationAddQuestionButton';
+export const NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY =
+  'navigationDuplicateQuestionButton';
 export const buildTableByQuestionCy = (qId: string) => `tableByQuestion-${qId}`;
 export const buildTableByQuestionTableBodyCy = (qId: string) =>
   `tableByQuestionTableBody-${qId}`;

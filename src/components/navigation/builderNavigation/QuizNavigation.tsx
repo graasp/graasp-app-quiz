@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import AddIcon from '@mui/icons-material/Add';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import {
   Accordion,
   AccordionDetails,
@@ -18,12 +19,14 @@ import {
   Divider,
   Stack,
   SxProps,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from '@mui/material';
 
 import {
   NAVIGATION_ADD_QUESTION_BUTTON_CY,
+  NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY,
   QUESTION_BAR_CY,
 } from '../../../config/selectors';
 import { QUIZ_TRANSLATIONS } from '../../../langs/constants';
@@ -72,7 +75,9 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
     order,
     saveOrder,
     addQuestion,
+    duplicateQuestion,
     isLoaded,
+    errorMessage,
   } = useContext(QuizContext);
 
   const { t } = useTranslation();
@@ -81,6 +86,13 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
 
   const [questionsInOrder, setQuestionsOrder] = useState<QuestionOrder[]>([]);
   const [swappingId, setSwappingId] = useState<string>();
+  const isOnNewQuestion = currentIdx === -1;
+  const duplicationErrorKey = isOnNewQuestion
+    ? QUIZ_TRANSLATIONS.CANNOT_DUPLICATE_NEW_QUESTION_TOOLTIP
+    : errorMessage?.msg;
+  const duplicationError = duplicationErrorKey
+    ? t(duplicationErrorKey)
+    : undefined;
 
   useEffect(() => {
     setQuestionsOrder(
@@ -214,9 +226,32 @@ export const QuizNavigationBuilder = ({ sx }: Props) => {
           variant={currentIdx === -1 ? 'contained' : 'outlined'}
           startIcon={<AddIcon />}
           onClick={addQuestion}
+          fullWidth
         >
           {t(QUIZ_TRANSLATIONS.ADD_NEW_QUESTION)}
         </Button>
+        <Tooltip
+          title={
+            <Typography>
+              {duplicationError ??
+                t(QUIZ_TRANSLATIONS.DUPLICATE_QUESTION_TOOLTIP)}
+            </Typography>
+          }
+        >
+          {/* span is used to display tooltip even when button is disabled */}
+          <span style={{ width: '100%' }}>
+            <Button
+              data-cy={NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY}
+              disabled={Boolean(duplicationError)}
+              variant="outlined"
+              startIcon={<FileCopyIcon />}
+              onClick={duplicateQuestion}
+              fullWidth
+            >
+              {t(QUIZ_TRANSLATIONS.DUPLICATE_QUESTION)}
+            </Button>
+          </span>
+        </Tooltip>
       </Stack>
 
       {displayAccordion && <Divider sx={{ mb: 2, mt: 2 }}></Divider>}
