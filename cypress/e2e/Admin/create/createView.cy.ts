@@ -12,6 +12,7 @@ import {
   CREATE_VIEW_SAVE_BUTTON_CY,
   CREATE_VIEW_SELECT_POSITION_QUESTION_CY,
   NAVIGATION_ADD_QUESTION_BUTTON_CY,
+  NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY,
   NUMBER_OF_ATTEMPTS_INPUT_CY,
   QUESTION_BAR_CY,
   QUESTION_STEP_CLASSNAME,
@@ -70,6 +71,12 @@ describe('Create View', () => {
         DEFAULT_QUESTION_TYPE
       );
       cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
+    });
+
+    it('Cannot duplicate empty data', () => {
+      cy.get(dataCyWrapper(NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY)).should(
+        'be.disabled'
+      );
     });
 
     it('Add questions from empty quiz', () => {
@@ -285,6 +292,61 @@ describe('Create View', () => {
       cy.get(
         `${dataCyWrapper(buildQuestionStepTitle(THIRD_POSITION_IDX))}`
       ).should('have.text', firstQuestionTitle);
+    });
+
+    it('Duplicate question after the original one', () => {
+      const numberOfQuestions = QUESTION_APP_SETTINGS.length;
+      const currentQuestion = QUESTION_APP_SETTINGS[1];
+      const currentIdx = QUESTION_APP_SETTINGS.indexOf(currentQuestion);
+      const id = currentQuestion.data.questionId;
+
+      // Check the current number of questions
+      cy.get(`.${QUESTION_STEP_CLASSNAME}`).should(
+        'have.length',
+        numberOfQuestions
+      );
+
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
+
+      // Check that the position index equals to the selected question.
+      cy.get(
+        `${dataCyWrapper(CREATE_VIEW_SELECT_POSITION_QUESTION_CY)} input`
+      ).should('have.value', currentIdx);
+
+      // Duplicate the current question
+      cy.get(dataCyWrapper(NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY)).click();
+
+      // Check the current number of questions increased
+      cy.get(`.${QUESTION_STEP_CLASSNAME}`).should(
+        'have.length',
+        numberOfQuestions + 1
+      );
+
+      // Check that the new question is selected and next to previous question.
+      cy.get(
+        `${dataCyWrapper(CREATE_VIEW_SELECT_POSITION_QUESTION_CY)} input`
+      ).should('have.value', currentIdx + 1);
+
+      // Check that the new question's title equals the original question.
+      cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).should(
+        'have.value',
+        currentQuestion.data.question
+      );
+    });
+
+    it('Cannot duplicate question with error', () => {
+      const currentQuestion = QUESTION_APP_SETTINGS[1];
+      const id = currentQuestion.data.questionId;
+
+      cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
+
+      // Invalidate the question
+      cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
+
+      // Duplicate the current question
+      cy.get(dataCyWrapper(NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY)).should(
+        'be.disabled'
+      );
     });
   });
 });

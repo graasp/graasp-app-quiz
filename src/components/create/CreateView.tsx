@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -25,14 +25,14 @@ import {
 } from '../../config/selectors';
 import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { QuizContext } from '../context/QuizContext';
-import { isDifferent, validateQuestionData } from '../context/utilities';
+import { isDifferent } from '../context/utilities';
 import MoveQuestionSection from '../navigation/builderNavigation/MoveQuestionSection';
 import { QuizNavigationBuilder } from '../navigation/builderNavigation/QuizNavigation';
 import {
   MultipleChoicesAppSettingData,
+  QuestionData,
   SliderAppSettingData,
 } from '../types/types';
-import { QuestionData } from '../types/types';
 import FillInTheBlanks from './FillInTheBlanks';
 import MultipleChoices from './MultipleChoices';
 import NumberOfAttempts from './NumberOfAttempts';
@@ -41,13 +41,6 @@ import QuestionTypeSelect from './QuestionTypeSelect';
 import Section from './Section';
 import Slider from './Slider';
 import TextInput from './TextInput';
-
-type ValidationSeverity = 'warning' | 'error';
-
-type ValidationMessage = {
-  msg: string;
-  severity: ValidationSeverity;
-};
 
 const flexItemSx = {
   flex: '0 0',
@@ -67,48 +60,24 @@ const flexItemNavSx = {
 
 const CreateView = () => {
   const { t } = useTranslation();
-  const { currentQuestion, deleteQuestion, saveQuestion, currentIdx } =
-    useContext(QuizContext);
+  const {
+    currentQuestion,
+    newData,
+    setNewData,
+    deleteQuestion,
+    saveQuestion,
+    errorMessage,
+  } = useContext(QuizContext);
 
-  const [newData, setNewData] = useState<QuestionData>(currentQuestion.data);
-  const [errorMessage, setErrorMessage] = useState<ValidationMessage | null>();
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  // Reset is submitted when currentIdx changed to
-  // display errorMessage with the correct severity.
-  useEffect(() => {
-    setIsSubmitted(false);
-  }, [currentIdx]);
+  const disableSaveButton =
+    !isDifferent(newData, currentQuestion.data) || Boolean(errorMessage);
 
   useEffect(() => {
     setNewData(currentQuestion.data as QuestionData);
-  }, [currentQuestion]);
-
-  // validate data to enable save
-  useEffect(() => {
-    try {
-      validateQuestionData(newData);
-      setErrorMessage(null);
-    } catch (e) {
-      setErrorMessage({
-        msg: e as string,
-        severity: isSubmitted ? 'error' : 'warning',
-      });
-    }
-  }, [newData, isSubmitted]);
+  }, [currentQuestion, setNewData]);
 
   const saveNewQuestion = () => {
-    setIsSubmitted(true);
-    try {
-      validateQuestionData(newData);
-      setErrorMessage(null);
-      saveQuestion(newData);
-    } catch (e) {
-      setErrorMessage({
-        msg: e as string,
-        severity: 'error',
-      });
-    }
+    saveQuestion(newData).catch((e) => console.error(e));
   };
 
   return (
@@ -339,10 +308,7 @@ const CreateView = () => {
                     variant="contained"
                     color="success"
                     startIcon={<SaveIcon />}
-                    disabled={
-                      !isDifferent(newData, currentQuestion.data) ||
-                      Boolean(errorMessage)
-                    }
+                    disabled={disableSaveButton}
                   >
                     {t('Save')}
                   </Button>
