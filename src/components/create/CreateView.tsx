@@ -210,7 +210,7 @@ const CreateView = () => {
                   title={t(QUIZ_TRANSLATIONS.MULTIPLE_ATTEMPTS_SECTION_TITLE)}
                   explanation={t(
                     QUIZ_TRANSLATIONS.MULTIPLE_ATTEMPTS_EXPLANATION,
-                    { count: newData.numberOfAttempts ?? 0 }
+                    { count: newData.numberOfAttempts ?? 1 }
                   )}
                 >
                   <NumberOfAttempts
@@ -247,15 +247,13 @@ const CreateView = () => {
               </Grid>
               <Grid item>
                 <Section
-                  title={t('Explanation')}
-                  explanation={t(
-                    'Type here an explanation that will be displayed after an answer is submitted'
-                  )}
+                  title={t(QUIZ_TRANSLATIONS.EXPLANATIONS_TITLE)}
+                  explanation={t(QUIZ_TRANSLATIONS.EXPLANATIONS_SUB_TITLE)}
                 >
                   <TextField
                     data-cy={EXPLANATION_CY}
                     fullWidth
-                    label={t('Explanation')}
+                    label={t(QUIZ_TRANSLATIONS.EXPLANATIONS_LABEL)}
                     value={newData.explanation}
                     variant="outlined"
                     onChange={(e) => {

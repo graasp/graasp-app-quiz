@@ -71,9 +71,12 @@
   "MULTIPLE_CHOICE_NOT_CORRECT": "La réponse est incorrecte ou n'est pas entièrement correcte.",
   "RESPONSE_NOT_CORRECT": "La réponse que vous avez fournie n'est pas correcte",
   "HINTS_TITLE": "Indices",
-  "HINTS_SUB_TITLE": "Saisissez ici les indices qui s'afficheront si la réponse est incorrecte, afin d'aider l'étudiant",
+  "HINTS_SUB_TITLE": "Saisissez ici des indices pour aider l'utilisateur. Ils s'affichent lorsqu'une réponse incorrecte est donnée et qu'il reste encore des essais.",
   "HINTS_LABEL": "Indices",
   "HINTS_ALERT_TITLE": "Avez-vous besoins d'indices ?",
+  "EXPLANATIONS_TITLE": "Explication",
+  "EXPLANATIONS_SUB_TITLE": "Saisissez ici une explication qui sera affichée lorsqu'il n'y a plus d'essais ou lorsqu'une réponse correcte est donnée.",
+  "EXPLANATIONS_LABEL": "Explication",
   "PREV_QUESTION_BTN": "Précédent",
   "NEXT_QUESTION_BTN": "Suivant",
   "QUESTION_STEPPER_NAV_TITLE": "Navigation du Quiz",
@@ -87,8 +90,9 @@
   "QUESTION_POSITION_EXPLANATION": "Vous pouvez définir une nouvelle position pour cette question. Les changements sont appliqués directement",
   "QUESTION_POSITION_LABEL": "Position de la question dans le quiz",
   "BUILDER_QUIZ_NAVIGATION_TITLE": "Navigation du Quiz",
-  "MULTIPLE_ATTEMPTS_SECTION_TITLE": "Tentatives multiples",
-  "MULTIPLE_ATTEMPTS_EXPLANATION": "Si la valeur est supérieure à 1, vous autorisez les utilisateurs à réessayer au maximum {{count}} fois, lorsque la réponse donnée est incorrecte.",
+  "MULTIPLE_ATTEMPTS_SECTION_TITLE": "Nombre d'essais",
+  "MULTIPLE_ATTEMPTS_EXPLANATION_one": "Les utilisateurs ne peuvent pas réessayer après avoir envoyé une réponse. Si vous souhaitez autoriser plusieurs essais après avoir donné des réponses incorrectes, augmentez ce nombre.",
+  "MULTIPLE_ATTEMPTS_EXPLANATION": "Vous autorisez actuellement les utilisateurs à réessayer au maximum {{count}} fois lorsque la réponse donnée est incorrecte.",
   "MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_CHECKBOX": "Afficher les erreurs dans la réponse après chaque tentative",
   "MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_TOOLTIP": "Si l'option est activée, l'utilisateur verra les corrections pour chaque réponse envoyée. Dans le cas contraire, l'utilisateur sera seulement informé que sa réponse n'est pas tout à fait correcte.",
   "MULTIPLE_CHOICE_SECTION_TITLE_CORRECT": "Vos réponses correctes",
@@ -100,5 +104,6 @@
   "MULTIPLE_CHOICE_ADD_HINT_BTN": "ajouter un indice",
   "MULTIPLE_CHOICE_HINT_INPUT_LABEL": "Indice",
   "CHOIX_MULTIPLES_HINT_INPUT_DESCRIPTION": "Tapez ici un indice pour aider l'utilisateur à trouver la réponse ou à la comprendre",
-  "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Attention : Les utilisateurs ayant des compétences en informatique peuvent récupérer les réponses du quiz ; pensez à ne pas l'utiliser comme méthode d'examen"
+  "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Attention : Les utilisateurs ayant des compétences en informatique peuvent récupérer les réponses du quiz ; pensez à ne pas l'utiliser comme méthode d'examen",
+  "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Le saviez-vous ? Notre choix multiple vous permet de définir plusieurs réponses correctes. Les utilisateurs devront sélectionner la totalité des bonnes réponses pour que la question soit considérée juste. N'hésitez pas à l'essayer si ce n'est pas déjà fait."
 }

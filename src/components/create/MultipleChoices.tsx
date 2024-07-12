@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Alert,
   Button,
   Checkbox,
   FormControl,
@@ -97,6 +98,9 @@ const MultipleChoices = ({
       <Typography variant="h6" sx={{ pb: 2 }}>
         {t('Answers')}
       </Typography>
+      <Alert sx={{ mb: 2 }} severity="info">
+        {t(QUIZ_TRANSLATIONS.MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING)}
+      </Alert>
       <Stack direction="column" spacing={2}>
         {choices?.map(({ value, isCorrect, explanation }, index) => {
           const readableIndex = index + 1;
