@@ -208,6 +208,12 @@ const PlayMultipleChoices = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [choices, showCorrection, showCorrectness]);
 
+  // Reset the user's selection at each retry.
+  useEffect(() => {
+    setResponse([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [numberOfRetry]);
+
   const onResponseClick = (value: string) => {
     const choiceIdx = response.choices?.findIndex((choice) => choice === value);
 

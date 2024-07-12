@@ -33,6 +33,7 @@ const { data } = QUESTION_APP_SETTINGS.find(
 
 const id = data.questionId;
 const { choices } = data as MultipleChoicesAppSettingData;
+const allChoicesIdx = choices.map((_c, idx) => idx);
 
 const multipleChoiceAppSettingsData = APP_SETTINGS[0].data as AppSettingData;
 
@@ -89,6 +90,13 @@ const checkCorrection = (selection: number[], showCorrection = true) => {
     cy.checkExplanationPlay(data.explanation);
   }
 };
+
+const checkAllChoicesAreNotSelected = () =>
+  allChoicesIdx.forEach((idx) =>
+    cy
+      .get(dataCyWrapper(buildMultipleChoicesButtonCy(idx, false)))
+      .should('be.visible')
+  );
 
 /**
  * Checks that the buttons inputs and submit buttons are disabled or not.
@@ -304,6 +312,18 @@ describe('Play Multiple Choices', () => {
           currentAttempts: 1,
           isCorrect: false,
         });
+      });
+
+      it('Reset selection on retry', () => {
+        const selection = [0, 2];
+
+        clickSelection(selection);
+
+        cy.get(dataCyWrapper(PLAY_VIEW_SUBMIT_BUTTON_CY)).click();
+        cy.get(dataCyWrapper(PLAY_VIEW_RETRY_BUTTON_CY)).click();
+
+        // Checks that the user's selection is reset on retry.
+        checkAllChoicesAreNotSelected();
       });
 
       it('Correct app data', () => {
