@@ -29,6 +29,11 @@ import PlayExplanation from './PlayExplanation';
 import PlayHints from './PlayHints';
 import PlayViewQuestionType from './PlayViewQuestionType';
 
+const QUESTION_TYPES_WITH_RETRY_BTN = [
+  QuestionType.MULTIPLE_CHOICES,
+  QuestionType.FILL_BLANKS,
+];
+
 const PlayView = () => {
   const { t } = useTranslation();
   const { data: responses, isSuccess } = hooks.useAppData();
@@ -51,6 +56,8 @@ const PlayView = () => {
   // this state is used to determine if the animations should be activated or not.
   // for multiple choice, it must be a counter to avoid animating once only.
   const [numberOfSubmit, setNumberOfSubmit] = useState(0);
+  // used to reset the user's answer on retry.
+  const [numberOfRetry, setNumberOfRetry] = useState(0);
 
   const numberOfAnswers = userAnswers.length;
   const latestAnswer = userAnswers.at(numberOfAnswers - 1);
@@ -59,7 +66,7 @@ const PlayView = () => {
   const isReadonly = isCorrect || maxAttemptsReached;
   const showCorrection = isCorrect || numberOfAnswers >= maxAttempts;
   const displaySubmitBtn = !(
-    currentQuestion.data.type === QuestionType.MULTIPLE_CHOICES &&
+    QUESTION_TYPES_WITH_RETRY_BTN.includes(currentQuestion.data.type) &&
     showCorrectness &&
     !showCorrection
   );
@@ -71,6 +78,7 @@ const PlayView = () => {
     setUserAnswers([]);
     setShowCorrectness(false);
     setNumberOfSubmit(0);
+    setNumberOfRetry(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIdx]);
 
@@ -120,7 +128,7 @@ const PlayView = () => {
   };
 
   const handleRetry = () => {
-    setNumberOfSubmit(numberOfSubmit + 1);
+    setNumberOfRetry(numberOfRetry + 1);
     setShowCorrectness(false);
   };
 
@@ -215,6 +223,7 @@ const PlayView = () => {
           setShowCorrectness={setShowCorrectness}
           setNewResponse={setNewResponse}
           numberOfSubmit={numberOfSubmit}
+          numberOfRetry={numberOfRetry}
           currentNumberOfAttempts={numberOfAnswers}
           maxNumberOfAttempts={maxAttempts}
           resetNumberOfSubmit={() => setNumberOfSubmit(0)}

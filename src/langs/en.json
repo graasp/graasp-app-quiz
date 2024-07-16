@@ -72,7 +72,7 @@
   "MULTIPLE_CHOICE_NOT_CORRECT": "The answer is incomplete and/or contains incorrect choices.",
   "HINTS_TITLE": "Hints",
   "RESPONSE_NOT_CORRECT": "The answer you provided is not correct.",
-  "HINTS_SUB_TITLE": "Enter hints here to help the user. They are displayed when an incorrect answer is given and there are still attempts to be made.",
+  "HINTS_SUB_TITLE": "Enter hints here to help the user. They are displayed when an incorrect answer is given and there are still remaining attempts.",
   "HINTS_LABEL": "Hints",
   "HINTS_ALERT_TITLE": "Do you need some hints?",
   "EXPLANATIONS_TITLE": "Explanation",
@@ -92,8 +92,8 @@
   "QUESTION_POSITION_LABEL": "Position of the question in the quiz",
   "BUILDER_QUIZ_NAVIGATION_TITLE": "Quiz Navigation",
   "MULTIPLE_ATTEMPTS_SECTION_TITLE": "Number of attempts",
-  "MULTIPLE_ATTEMPTS_EXPLANATION_one": "Users cannot try again after sending a response. If you wish to allow multiple attempts after giving incorrect answers, please increase this number.",
-  "MULTIPLE_ATTEMPTS_EXPLANATION": "You're currently allowing the users to try again at most {{count}} times when the given answer is incorrect.",
+  "MULTIPLE_ATTEMPTS_EXPLANATION_one": "Users cannot retry after sending a response. If you wish to allow multiple attempts after giving incorrect answers, please increase this number.",
+  "MULTIPLE_ATTEMPTS_EXPLANATION": "You're currently allowing the users to retry at most {{count}} times if the given answer is incorrect.",
   "MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_CHECKBOX": "Display response errors after each attempt",
   "MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_TOOLTIP": "If the option is enabled, the user will see the corrections for each reply sent. If not, the user will only be informed that his answer is not entirely correct.",
   "MULTIPLE_CHOICE_SECTION_TITLE_CORRECT": "Your correct answers",
@@ -105,6 +105,6 @@
   "MULTIPLE_CHOICE_ADD_HINT_BTN": "add hint",
   "MULTIPLE_CHOICE_HINT_INPUT_LABEL": "Hint",
   "MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION": "Type here a hint to help the user to find the answer or to understand it",
-  "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Caution: Users with some informatics skills can retrieve quiz answers; consider to not use it as an exam method.",
-  "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Did you know? Our multiple choice allows you to define several correct answers. Users will have to select all the correct answers for the question to be answered correctly. Don't hesitate to try it if you haven't already."
+  "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Caution: Users with some computer skills can retrieve quiz answers; it isn't a suitable method for an exam method.",
+  "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Did you know? Our multiple choice question allows you to define several correct answers. Users will have to submit all the correct answers for the question to be marked as correct. Don't hesitate to try it out if you haven't already."
 }

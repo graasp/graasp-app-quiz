@@ -35,14 +35,8 @@ const BlankedText = ({
   onDrop,
   onDelete,
 }: Props) => {
-  const renderWords = () => {
-    // This idx is used to compare the current blank with
-    // the previous answer and the current filled word.
-    // Because "words" doesn't contains WORD types, this
-    // index must be incremented each time a WORD is found.
-    let previousAnswerIdx = 0;
-
-    return words.map((word, i) => {
+  const renderWords = () =>
+    words.map((word, i) => {
       if (word.type === FILL_BLANKS_TYPE.WORD) {
         return (
           <Typography data-cy={buildBlankedTextWordCy(word.id)}>
@@ -50,9 +44,6 @@ const BlankedText = ({
           </Typography>
         );
       }
-
-      const prevWord = prevWords?.at(previousAnswerIdx++) ?? '';
-      const hasChanged = !prevWords || prevWord !== word.displayed;
 
       return (
         <Blank
@@ -66,11 +57,9 @@ const BlankedText = ({
           onDrop={onDrop}
           onDelete={onDelete}
           text={word.displayed ?? ' '}
-          hasChanged={hasChanged}
         />
       );
     });
-  };
 
   return <WordWrapper>{renderWords()}</WordWrapper>;
 };
