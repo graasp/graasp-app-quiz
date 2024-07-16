@@ -132,6 +132,7 @@ type Props = {
   showCorrection: boolean;
   showCorrectness: boolean;
   numberOfSubmit: number;
+  numberOfRetry: number;
   setResponse: (d: MultipleChoiceAppDataData['choices']) => void;
 };
 
@@ -142,6 +143,7 @@ const PlayMultipleChoices = ({
   showCorrection,
   showCorrectness,
   numberOfSubmit,
+  numberOfRetry,
   setResponse,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
@@ -151,7 +153,7 @@ const PlayMultipleChoices = ({
   const choiceStates = choices.map((choice) =>
     computeChoiceState(choice, lastUserAnswer?.choices, showCorrection)
   );
-  const isAnimating = numberOfSubmit > 0;
+  const isAnimating = numberOfSubmit + numberOfRetry > 0;
   const showError =
     choiceStates.some(
       (state) =>

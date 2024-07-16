@@ -13,6 +13,7 @@ import {
 import {
   FILL_BLANKS_CORRECTION_CY,
   PLAY_VIEW_QUESTION_TITLE_CY,
+  PLAY_VIEW_RETRY_BUTTON_CY,
   PLAY_VIEW_SUBMIT_BUTTON_CY,
   buildBlankedTextWordCy,
   buildFillBlanksAnswerId,
@@ -151,6 +152,20 @@ const removeAnswer = (answer: Word, shouldFail: boolean) => {
     // testing should contain '' seems not to work, so check is empty.
     cy.get(`[data-id="${answer.id}"]`).should('be.empty');
   }
+};
+
+const checkBadAnswersAreReset = (state: { answers: Word[]; words: Word[] }) => {
+  const correctAnswersId = state.words
+    .filter((w) => w.displayed === w.text)
+    .map((w) => w.id);
+
+  state.answers.forEach((answer) => {
+    if (correctAnswersId.find((id) => id === answer.id)) {
+      cy.get(`[data-id="${answer.id}"]`).should('contain', answer.text);
+    } else {
+      cy.get(`[data-id="${answer.id}"]`).should('contain', '');
+    }
+  });
 };
 
 describe('Play Fill In The Blanks', () => {
@@ -440,7 +455,17 @@ describe('Play Fill In The Blanks', () => {
         // hints should be displayed
         cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
 
-        removeAnswer(answers[0], false);
+        // check that user have to click on retry before updating their answer
+        removeAnswer(answers[2], true);
+        cy.get(dataCyWrapper(PLAY_VIEW_RETRY_BUTTON_CY)).click();
+
+        // check that the input is reset on retry and keep only correct answers
+        checkBadAnswersAreReset(
+          splitSentence(partiallyCorrectAppData.data.text)
+        );
+
+        removeAnswer(answers[2], false);
+
         checkInputDisabled(false);
         cy.checkQuizNavigation({
           questionId: id,
@@ -475,7 +500,8 @@ describe('Play Fill In The Blanks', () => {
         // hints should be displayed
         cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
 
-        removeAnswer(answers[0], false);
+        cy.get(dataCyWrapper(PLAY_VIEW_RETRY_BUTTON_CY)).click();
+
         checkInputDisabled(false);
         cy.checkQuizNavigation({
           questionId: id,
@@ -510,8 +536,8 @@ describe('Play Fill In The Blanks', () => {
         // we do not check correction: nothing matches
         // but we want to know that the app didn't crash
 
-        removeAnswer(answers[0], false);
-        checkInputDisabled(false);
+        cy.get(dataCyWrapper(PLAY_VIEW_RETRY_BUTTON_CY)).click();
+
         cy.checkQuizNavigation({
           questionId: id,
           numberOfAttempts: NUMBER_OF_ATTEMPTS,

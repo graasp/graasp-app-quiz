@@ -21,6 +21,34 @@ import Answers from './fillInTheBlanks/Answers';
 import BlankedText from './fillInTheBlanks/BlankedText';
 import Correction from './fillInTheBlanks/Correction';
 
+type State = { answers: Word[]; words: Word[] };
+
+const isWordCorrect = (w: Word) => w.displayed === w.text;
+
+const resetWrongAnswers = (state: State): State => {
+  const newWords = state.words.map((w) => {
+    const isCorrect = isWordCorrect(w);
+
+    // Type word cannot be placed
+    if (w.type === 'word') {
+      return w;
+    }
+
+    return {
+      ...w,
+      // set displayed to empty string to reset the answer
+      displayed: isCorrect ? w.displayed : '',
+      placed: isCorrect,
+    };
+  });
+  const newAnswers = state.answers.map((a) => ({
+    ...a,
+    placed: Boolean(newWords.find((w) => w.id === a.id)?.displayed),
+  }));
+
+  return { answers: newAnswers, words: newWords };
+};
+
 type Props = {
   showCorrection: boolean;
   showCorrectness: boolean;
@@ -28,6 +56,7 @@ type Props = {
   isReadonly: boolean;
   values: FillTheBlanksAppSettingData;
   response: FillTheBlanksAppDataData;
+  numberOfRetry: number;
   setResponse: (text: string) => void;
 };
 
@@ -38,6 +67,7 @@ const PlayFillInTheBlanks = ({
   isReadonly,
   values,
   response,
+  numberOfRetry,
   setResponse,
 }: Props) => {
   const [state, setState] = useState<{ answers: Word[]; words: Word[] }>({
@@ -47,6 +77,20 @@ const PlayFillInTheBlanks = ({
 
   const { t } = useTranslation();
   const [prevWords, setPrevWords] = useState<string[]>();
+
+  const userCannotPlay = isReadonly || showCorrection || showCorrectness;
+
+  useEffect(() => {
+    console.log('words', state.words);
+  }, [state.words]);
+
+  // reset wrong answers on retry
+  useEffect(() => {
+    const newState = resetWrongAnswers(state);
+    setState(newState);
+    saveResponse(newState.words);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [numberOfRetry]);
 
   useEffect(() => {
     if (lastUserAnswer) {
@@ -75,7 +119,7 @@ const PlayFillInTheBlanks = ({
   };
 
   const onDelete = (e: React.MouseEvent<HTMLSpanElement>) => {
-    if (isReadonly) {
+    if (userCannotPlay) {
       return;
     }
 
@@ -95,7 +139,7 @@ const PlayFillInTheBlanks = ({
   };
 
   const onDrop = (e: React.DragEvent<HTMLSpanElement>, dropId: number) => {
-    if (isReadonly) {
+    if (userCannotPlay) {
       return;
     }
 
@@ -132,17 +176,17 @@ const PlayFillInTheBlanks = ({
 
   return (
     <Box width="100%">
-      <Answers answers={state.answers} isReadonly={isReadonly} />
+      <Answers answers={state.answers} isReadonly={userCannotPlay} />
       <BlankedText
         showCorrection={showCorrection}
         showCorrectness={showCorrectness}
-        isReadonly={isReadonly}
+        isReadonly={userCannotPlay}
         words={state.words}
         prevWords={prevWords}
         onDrop={onDrop}
         onDelete={onDelete}
       />
-      {!showCorrection && prevWords && (
+      {showCorrectness && !isReadonly && (
         <Typography variant="body1" color="error" mt={2}>
           {t(QUIZ_TRANSLATIONS.RESPONSE_NOT_CORRECT)}
         </Typography>

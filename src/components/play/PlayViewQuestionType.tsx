@@ -30,6 +30,7 @@ type Props = {
   isCorrect: boolean;
   latestAnswer?: AppData;
   numberOfSubmit: number;
+  numberOfRetry: number;
   currentNumberOfAttempts: number;
   maxNumberOfAttempts: number;
 
@@ -47,6 +48,7 @@ export const PlayViewQuestionType = ({
   isCorrect,
   latestAnswer,
   numberOfSubmit,
+  numberOfRetry,
   currentNumberOfAttempts,
   maxNumberOfAttempts,
   resetNumberOfSubmit,
@@ -96,6 +98,7 @@ export const PlayViewQuestionType = ({
           showCorrection={showCorrection}
           showCorrectness={showCorrectness}
           numberOfSubmit={numberOfSubmit}
+          numberOfRetry={numberOfRetry}
         />
       );
     }
@@ -126,6 +129,7 @@ export const PlayViewQuestionType = ({
           showCorrection={showCorrection}
           showCorrectness={showCorrectness}
           isReadonly={isReadonly}
+          numberOfRetry={numberOfRetry}
         />
       );
     }
