@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/graasp/graasp-app-quiz/compare/v1.7.0...v1.8.0) (2024-07-17)
+
+
+### Features
+
+* add retry button on fill in blanks ([#168](https://github.com/graasp/graasp-app-quiz/issues/168)) ([8d73a48](https://github.com/graasp/graasp-app-quiz/commit/8d73a483bc00dc87bbf6ad853d844156609745a6))
+* reset the user's selection on retry of multiple choices ([#166](https://github.com/graasp/graasp-app-quiz/issues/166)) ([c4df01d](https://github.com/graasp/graasp-app-quiz/commit/c4df01d283628de04527851da34e36f8ff07a501))
+
 ## [1.7.0](https://github.com/graasp/graasp-app-quiz/compare/v1.6.0...v1.7.0) (2024-07-12)
 
 
