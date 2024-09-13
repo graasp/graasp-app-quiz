@@ -97,7 +97,6 @@ export const PlayViewQuestionType = ({
           }
           showCorrection={showCorrection}
           showCorrectness={showCorrectness}
-          numberOfSubmit={numberOfSubmit}
           numberOfRetry={numberOfRetry}
         />
       );
