@@ -5,10 +5,6 @@ import { Stack, Typography } from '@mui/material';
 
 import { buildMultipleChoiceHintPlayCy } from '../../../config/selectors';
 import { QUIZ_TRANSLATIONS } from '../../../langs/constants';
-import HeightObserver from '../../common/HeightObserver';
-import ReorderAnimation, {
-  TransitionData,
-} from '../../common/animations/ReorderAnimation';
 import {
   ChoiceState,
   MultipleChoiceAppDataData,
@@ -16,9 +12,6 @@ import {
   MultipleChoicesChoice,
 } from '../../types/types';
 import ChoiceButton from './ChoiceButton';
-
-const DEFAULT_MARGIN = 10;
-const HINT_MARGIN = 10;
 
 const computeChoiceState = (
   { value, isCorrect }: MultipleChoicesChoice,
@@ -43,29 +36,8 @@ const computeChoiceState = (
   }
 };
 
-const sectionTitles = [
-  {
-    title: QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_SECTION_TITLE_CORRECT,
-    state: ChoiceState.CORRECT,
-  },
-  {
-    title: QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_SECTION_TITLE_MISSING,
-    state: ChoiceState.MISSING,
-  },
-  {
-    title: QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_SECTION_TITLE_INCORRECT,
-    state: ChoiceState.INCORRECT,
-  },
-
-  {
-    title: QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_SECTION_TITLE_UNSELECTED,
-    state: ChoiceState.UNSELECTED,
-  },
-];
-
 enum ElementType {
   Answer,
-  SectionTitle,
   Hint,
 }
 
@@ -74,44 +46,27 @@ type AnswerDataType = {
   choice: MultipleChoicesChoice;
   elementType: ElementType.Answer;
 };
-type TitleDataType = { title: string; elementType: ElementType.SectionTitle };
 type HintDataType = {
   idx: number;
   hint: string;
   elementType: ElementType.Hint;
 };
-type DataType = AnswerDataType | TitleDataType | HintDataType;
+type DataType = AnswerDataType | HintDataType;
+type DataTypes = DataType | DataType[];
 
 const choiceToAnswer = (
   choice: MultipleChoicesChoice,
-  idx: number,
-  marginBottom: number
-): TransitionData<AnswerDataType> => ({
-  key: `answer-${choice.value}-${idx}`,
-  marginBottom,
-  data: { idx, choice, elementType: ElementType.Answer },
+  idx: number
+): AnswerDataType => ({
+  idx,
+  choice,
+  elementType: ElementType.Answer,
 });
 
-const choiceToTitle = (title: string): TransitionData<TitleDataType> => ({
-  key: `title-${title}`,
-  marginBottom: DEFAULT_MARGIN,
-  data: {
-    title,
-    elementType: ElementType.SectionTitle,
-  },
-});
-
-const choiceToHint = (
-  choiceIdx: number,
-  hint: string
-): TransitionData<HintDataType> => ({
-  key: `hint-${hint}-${choiceIdx}`,
-  marginBottom: HINT_MARGIN,
-  data: {
-    hint,
-    idx: choiceIdx,
-    elementType: ElementType.Hint,
-  },
+const choiceToHint = (choiceIdx: number, hint: string): HintDataType => ({
+  hint,
+  idx: choiceIdx,
+  elementType: ElementType.Hint,
 });
 
 const isChoiceSelected = (
@@ -122,8 +77,12 @@ const isChoiceSelected = (
 export const showHint = (
   isSelected: boolean,
   showCorrectness: boolean,
-  showCorrection: boolean
-) => showCorrection || (showCorrectness && isSelected);
+  showCorrection: boolean,
+  choiceState: ChoiceState
+) =>
+  isSelected &&
+  (showCorrectness || showCorrection) &&
+  choiceState === ChoiceState.INCORRECT;
 
 type Props = {
   choices: MultipleChoicesAppSettingData['choices'];
@@ -131,7 +90,6 @@ type Props = {
   lastUserAnswer?: MultipleChoiceAppDataData;
   showCorrection: boolean;
   showCorrectness: boolean;
-  numberOfSubmit: number;
   numberOfRetry: number;
   setResponse: (d: MultipleChoiceAppDataData['choices']) => void;
 };
@@ -142,66 +100,44 @@ const PlayMultipleChoices = ({
   lastUserAnswer,
   showCorrection,
   showCorrectness,
-  numberOfSubmit,
   numberOfRetry,
   setResponse,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const [elements, setElements] = useState<TransitionData<DataType>[]>([]);
+  const [elements, setElements] = useState<DataTypes[]>([]);
   const isReadonly = showCorrection || showCorrectness;
   const choiceStates = choices.map((choice) =>
     computeChoiceState(choice, lastUserAnswer?.choices, showCorrection)
   );
-  const isAnimating = numberOfSubmit + numberOfRetry > 0;
   const showError =
-    choiceStates.some(
-      (state) =>
-        state === ChoiceState.INCORRECT || state === ChoiceState.MISSING
-    ) &&
-    showCorrectness &&
-    !showCorrection;
+    (showCorrection &&
+      choiceStates.some(
+        (state) =>
+          state === ChoiceState.INCORRECT || state === ChoiceState.MISSING
+      )) ||
+    (showCorrectness && !showCorrection);
 
   useEffect(() => {
-    const answers = choices.map((c, idx) =>
-      choiceToAnswer(c, idx, DEFAULT_MARGIN)
-    );
+    const answers = choices.map((c, idx) => choiceToAnswer(c, idx));
     // set the "gaming" view
     if (!showCorrection && !showCorrectness) {
       setElements(answers);
     } else {
       // set the "correctness" or "correction" view
       setElements(
-        sectionTitles.flatMap((sectionTitle, i) => {
-          const sectionAnswers = choiceStates.some(
-            (state) => sectionTitle.state === state
+        answers.map((answer, idx) => {
+          const hint = answer.choice.explanation;
+          const displayHint = showHint(
+            isChoiceSelected(response.choices, answer.choice),
+            showCorrectness,
+            showCorrection,
+            choiceStates[idx]
           );
 
-          if (!sectionAnswers) {
-            return [];
-          }
-
-          return [
-            choiceToTitle(t(sectionTitles[i].title)),
-            ...answers
-              .filter((_, idx) => sectionTitle.state === choiceStates[idx])
-              .map((answer) => {
-                const hint = answer.data.choice.explanation;
-                const displayHint = showHint(
-                  isChoiceSelected(response.choices, answer.data.choice),
-                  showCorrectness,
-                  showCorrection
-                );
-
-                return displayHint && hint
-                  ? [
-                      { ...answer, marginBottom: 0 },
-                      choiceToHint(answer.data.idx, hint),
-                    ]
-                  : answer;
-              })
-              .flat(),
-          ];
+          return displayHint && hint
+            ? [answer, choiceToHint(answer.idx, hint)]
+            : answer;
         })
       );
     }
@@ -228,67 +164,47 @@ const PlayMultipleChoices = ({
     }
   };
 
-  const renderElement = (
-    item: TransitionData<DataType>,
-    onHeightChange: (key: string, height: number) => void
-  ) => {
-    let element: JSX.Element | undefined;
-
-    switch (item.data.elementType) {
+  const renderElement = (el: DataType) => {
+    switch (el.elementType) {
       case ElementType.Answer: {
-        const isSelected = isChoiceSelected(response.choices, item.data.choice);
-        element = (
+        const isSelected = isChoiceSelected(response.choices, el.choice);
+        return (
           <ChoiceButton
-            idx={item.data.idx}
-            choice={item.data.choice}
-            choiceState={choiceStates[item.data.idx]}
+            idx={el.idx}
+            choice={el.choice}
+            choiceState={choiceStates[el.idx]}
             isReadonly={isReadonly}
             isSelected={isSelected}
             showState={showCorrection || showCorrectness}
             onClick={onResponseClick}
           />
         );
-        break;
       }
-      case ElementType.SectionTitle:
-        element = (
-          <Typography
-            component="h2"
-            variant="subtitle1"
-            sx={{ fontWeight: 500 }}
-          >
-            {item.data.title}
-          </Typography>
-        );
-        break;
       case ElementType.Hint:
-        element = (
+        return (
           <Typography
-            data-cy={buildMultipleChoiceHintPlayCy(item.data.idx)}
-            style={{ paddingLeft: '25px' }}
+            data-cy={buildMultipleChoiceHintPlayCy(el.idx)}
+            style={{ paddingLeft: '25px', fontStyle: 'italic' }}
           >
-            {item.data.hint}
+            {el.hint}
           </Typography>
         );
-        break;
     }
 
-    return (
-      <HeightObserver
-        onHeightChange={(height: number) => onHeightChange(item.key, height)}
-      >
-        {element}
-      </HeightObserver>
-    );
+    return undefined;
   };
 
   return (
     <Stack sx={{ width: '100%', mb: showError ? 0 : 2 }}>
-      <ReorderAnimation
-        isAnimating={isAnimating}
-        elements={elements}
-        renderElement={renderElement}
-      />
+      <Stack spacing={1.5}>
+        {elements.map((el) => {
+          // The element can be a button or an array with a button and a hint
+          if (Array.isArray(el)) {
+            return <Stack>{el.map((e) => renderElement(e))}</Stack>;
+          }
+          return renderElement(el);
+        })}
+      </Stack>
       {showError && (
         <Typography variant="body1" mt={4}>
           {t(QUIZ_TRANSLATIONS.MULTIPLE_CHOICE_NOT_CORRECT)}

@@ -1,6 +1,6 @@
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, Typography } from '@mui/material';
+import { Button, Checkbox, Typography } from '@mui/material';
 
 import { buildMultipleChoicesButtonCy } from '../../../config/selectors';
 import theme from '../../../layout/theme';
@@ -14,39 +14,105 @@ const DEFAULT_COLOR = 'primary';
 const CORRECT_COLOR = 'success';
 const INCORRECT_COLOR = 'error';
 const DEFAULT_DISABLED = 'whitesmoke';
+const SUCCESS_COLOR = theme.palette.success.main;
+const ERROR_COLOR = theme.palette.error.main;
+const PRIMARY_COLOR = theme.palette.primary.main;
 
 const styleButton = ({
   color,
-  isSelected,
   dataCy,
   endIcon,
 }: {
   color: StatusColor;
-  isSelected: boolean;
   dataCy: string;
   endIcon?: JSX.Element;
 }) =>
   ({
     color,
-    variant: isSelected ? 'contained' : 'outlined',
     endIcon,
+    variant: 'outlined',
     'data-cy': dataCy,
   } as const);
 
 const computeDisabledSx = (choiceState: ChoiceState | undefined) => {
-  const successColor = theme.palette.success.main;
-  const errorColor = theme.palette.error.main;
-
   switch (choiceState) {
     case ChoiceState.CORRECT:
-      return { backgroundColor: successColor, color: DEFAULT_DISABLED };
-    case ChoiceState.INCORRECT:
-      return { backgroundColor: errorColor, color: DEFAULT_DISABLED };
     case ChoiceState.MISSING:
-      return { color: successColor, borderColor: successColor };
+      return { borderColor: SUCCESS_COLOR, color: SUCCESS_COLOR };
+    case ChoiceState.INCORRECT:
+      return { borderColor: ERROR_COLOR, color: ERROR_COLOR };
     default:
       return {};
   }
+};
+
+const computeStyles = ({
+  isSelected,
+  idx,
+  showState,
+  choiceState,
+}: {
+  isSelected: boolean;
+  idx: number;
+  showState: boolean;
+  choiceState: number;
+}) => {
+  const btn = {
+    color: DEFAULT_COLOR,
+    isSelected: isSelected,
+    dataCy: buildMultipleChoicesButtonCy(idx, isSelected),
+  } as const; // const is needed to allow color strings
+
+  if (showState) {
+    switch (choiceState) {
+      case ChoiceState.CORRECT:
+      case ChoiceState.MISSING:
+        return styleButton({
+          ...btn,
+          color: CORRECT_COLOR,
+          endIcon: <CheckIcon />,
+        });
+      case ChoiceState.INCORRECT:
+        return styleButton({
+          ...btn,
+          color: INCORRECT_COLOR,
+          endIcon: <CloseIcon />,
+        });
+    }
+  }
+
+  return styleButton(btn);
+};
+
+const computeCheckboxSx = ({
+  showState,
+  choiceState,
+}: {
+  showState: boolean;
+  choiceState: number;
+}) => {
+  let borderColor = PRIMARY_COLOR;
+
+  if (showState) {
+    switch (choiceState) {
+      case ChoiceState.CORRECT:
+      case ChoiceState.MISSING:
+        borderColor = SUCCESS_COLOR;
+        break;
+      case ChoiceState.INCORRECT:
+        borderColor = ERROR_COLOR;
+        break;
+      default:
+        borderColor = DEFAULT_DISABLED;
+    }
+  }
+
+  return {
+    '&.Mui-checked': {
+      color: borderColor,
+    },
+    color: borderColor,
+  };
 };
 
 type Props = {
@@ -68,34 +134,6 @@ export const ChoiceButton = ({
   showState,
   onClick,
 }: Props) => {
-  const computeStyles = () => {
-    const btn = {
-      color: DEFAULT_COLOR,
-      isSelected: isSelected,
-      dataCy: buildMultipleChoicesButtonCy(idx, isSelected),
-    } as const; // const is needed to allow color strings
-
-    if (showState) {
-      switch (choiceState) {
-        case ChoiceState.CORRECT:
-        case ChoiceState.MISSING:
-          return styleButton({
-            ...btn,
-            color: CORRECT_COLOR,
-            endIcon: <CheckIcon />,
-          });
-        case ChoiceState.INCORRECT:
-          return styleButton({
-            ...btn,
-            color: INCORRECT_COLOR,
-            endIcon: <CloseIcon />,
-          });
-      }
-    }
-
-    return styleButton(btn);
-  };
-
   const handleClick = () => {
     if (isReadonly) {
       return;
@@ -106,6 +144,12 @@ export const ChoiceButton = ({
   return (
     <Button
       key={choice.value}
+      startIcon={
+        <Checkbox
+          checked={isSelected}
+          sx={computeCheckboxSx({ showState, choiceState })}
+        />
+      }
       onClick={handleClick}
       fullWidth
       sx={{
@@ -113,7 +157,7 @@ export const ChoiceButton = ({
           '&.Mui-disabled': computeDisabledSx(choiceState),
         },
       }}
-      {...computeStyles()}
+      {...computeStyles({ isSelected, idx, choiceState, showState })}
       disabled={isReadonly}
     >
       <Typography variant="body1" sx={{ fontWeight: 500 }}>

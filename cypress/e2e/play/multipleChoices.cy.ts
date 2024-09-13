@@ -74,7 +74,7 @@ const checkCorrection = (selection: number[], showCorrection = true) => {
       }
     );
 
-    if (showCorrection || wasSelected) {
+    if (wasSelected && !isCorrect) {
       cy.get(dataCyWrapper(buildMultipleChoiceHintPlayCy(idx))).should(
         'contain',
         explanation
