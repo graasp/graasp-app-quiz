@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/graasp/graasp-app-quiz/compare/v1.8.0...v1.9.0) (2024-09-13)
+
+
+### Features
+
+* improve the multiple choices player view ([#172](https://github.com/graasp/graasp-app-quiz/issues/172)) ([2e8f873](https://github.com/graasp/graasp-app-quiz/commit/2e8f8735b8df67385df868dce961973e5fa86694))
+
 ## [1.8.0](https://github.com/graasp/graasp-app-quiz/compare/v1.7.0...v1.8.0) (2024-07-17)
 
 
