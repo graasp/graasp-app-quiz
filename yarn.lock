@@ -9651,7 +9651,7 @@ __metadata:
     eslint-config-react-app: 7.0.1
     eslint-plugin-cypress: 2.15.1
     eslint-plugin-import: 2.29.1
-    i18next: 22.5.1
+    i18next: 23.15.2
     lodash.clonedeep: 4.5.0
     lodash.groupby: 4.6.0
     lodash.mapvalues: 4.6.0
@@ -10115,12 +10115,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:22.5.1":
-  version: 22.5.1
-  resolution: "i18next@npm:22.5.1"
+"i18next@npm:23.15.2":
+  version: 23.15.2
+  resolution: "i18next@npm:23.15.2"
   dependencies:
-    "@babel/runtime": ^7.20.6
-  checksum: 175f8ab7fac2abcee147b00cc2d8e7d4fa9b05cdc227f02cac841fc2fd9545ed4a6d88774f594f8ad12dc944e4d34cc8e88aa00c8b9947baef9e859d93abd305
+    "@babel/runtime": ^7.23.2
+  checksum: 0f7294ca7df2e926039a0e1bbacf18e64cbc4e9886ce7c1611e423900207da28cedf1dac5af690472bb8e6a98bed85efba908c1c972d20395363d4d82850b528
   languageName: node
   linkType: hard
 
