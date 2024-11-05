@@ -234,11 +234,10 @@ const testTableHeader = (uId: string, ascending: string) => {
  *
  * @return list of tuple containing the user id along with its name, sorted by name
  */
-const getUserNamesFromAppData = (appData: AppData[]) => {
-  return [...new Set(appData.map((data) => data.member))].sort(
+const getUserNamesFromAppData = (appData: AppData[]) =>
+  [...new Set(appData.map((data) => data.member))].sort(
     getComparator({ order: Order.ASC, comp: comparatorArrayByElemName })
   );
-};
 
 const isOrdered = (arr: string[], asc = true) => {
   const orderComparison = (a: string, b: string) =>

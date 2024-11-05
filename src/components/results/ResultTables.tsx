@@ -18,10 +18,6 @@ import { Member } from '@graasp/sdk';
 
 import { hooks } from '../../config/queryClient';
 import { TABLE_BY_QUESTION_CONTAINER_CY } from '../../config/selectors';
-import {
-  useMaxAvailableHeightInWindow,
-  useMaxAvailableHeightWithParentHeight,
-} from '../../hooks/useMaxAvailableHeight';
 import { getFirstOrUndefined } from '../../utils/array';
 import {
   Order,
@@ -75,11 +71,6 @@ const ResultTables = ({ headerElem }: Props) => {
   const userContainerRef = useRef<null | HTMLElement>(null);
   const [tab, setTab] = useState(0);
   const tableMenuElem = useRef<HTMLElement | undefined>(undefined);
-  const maxResultViewHeight = useMaxAvailableHeightInWindow(headerElem.current);
-  const maxHeightScrollableMenu = useMaxAvailableHeightWithParentHeight(
-    maxResultViewHeight,
-    tableMenuElem.current
-  );
   // Use a ref here, so that we can reset it from the child component (AutoScrollableMenu), without triggering a
   //re-render. We have to reset it in the child component, so that it only scroll to this value only once
   const initiallyClickedQuestion = useRef<string | null>(null);
@@ -206,13 +197,13 @@ const ResultTables = ({ headerElem }: Props) => {
   return order.length > 0 ? (
     usersId && usersId.length > 0 ? (
       <Stack direction="row" spacing={5}>
-        <Box sx={{ maxHeight: maxResultViewHeight }}>
+        <Box>
           <ResultTablesMenu
             tab={tab}
             setTab={setTab}
             tableMenuElem={tableMenuElem}
           />
-          <Box sx={{ maxHeight: maxHeightScrollableMenu, overflow: 'auto' }}>
+          <Box>
             <TabPanel tab={tab} index={TABLE_BY_QUESTION_PANEL_IDX}>
               <AutoScrollableMenu
                 links={order?.reduce((accumulator, qId) => {
@@ -251,11 +242,8 @@ const ResultTables = ({ headerElem }: Props) => {
         <TabPanel tab={tab} index={TABLE_BY_QUESTION_PANEL_IDX}>
           <Box
             sx={{
-              overflow: 'auto',
               width: '100%',
-              height: maxResultViewHeight,
               pr: 1,
-              scrollBehavior: 'smooth',
             }}
             ref={questionContainerRef}
           >
@@ -288,11 +276,8 @@ const ResultTables = ({ headerElem }: Props) => {
         <TabPanel tab={tab} index={TABLE_BY_USER_PANEL_IDX}>
           <Box
             sx={{
-              overflow: 'auto',
               width: '100%',
-              height: maxResultViewHeight,
               pr: 1,
-              scrollBehavior: 'smooth',
             }}
             ref={userContainerRef}
           >

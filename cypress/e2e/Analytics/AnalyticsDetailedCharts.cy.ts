@@ -1,8 +1,5 @@
 import { getSettingsByName } from '../../../src/components/context/utilities';
-import {
-  APP_SETTING_NAMES,
-  QuestionType,
-} from '../../../src/config/constants';
+import { APP_SETTING_NAMES, QuestionType } from '../../../src/config/constants';
 import {
   buildAnalyticsDetailedChartCy,
   buildAnalyticsDetailedQuestionTabMenuCy,
@@ -15,7 +12,6 @@ import { MEMBERS_RESULT_TABLES } from '../../fixtures/members';
 import { verifySelectedMenu } from '../../utils/autoScrollableMenuSelected';
 
 describe('Analytics Detailed', () => {
-  
   it('Selecting detailed chart display correct answer frequency chart based on question type', () => {
     cy.setupAnalyticsForCheck(
       APP_SETTINGS_LOT_QUESTIONS,
@@ -39,9 +35,9 @@ describe('Analytics Detailed', () => {
         case QuestionType.FILL_BLANKS:
           q.data.text
             .match(ANSWER_REGEXP)
-            .map((word, idx) => 
+            .map((word, idx) =>
               // todo: use id instead of label
-               ({
+              ({
                 label: `Question answer frequency blank ${idx + 1}`,
                 id: `Question answer frequency blank ${idx + 1}`,
               })
