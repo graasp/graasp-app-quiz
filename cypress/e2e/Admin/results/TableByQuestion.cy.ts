@@ -89,11 +89,11 @@ describe('Table by Question', () => {
     const orderedResponseText = getSettingsByName(
       APP_SETTINGS_FEW_QUESTIONS,
       APP_SETTING_NAMES.QUESTION_LIST
-    )[0].data.list.map((elem) => {
-      return APP_SETTINGS_FEW_QUESTIONS.find(
-        (el) => el.data.questionId === elem
-      ).data.question;
-    });
+    )[0].data.list.map(
+      (elem) =>
+        APP_SETTINGS_FEW_QUESTIONS.find((el) => el.data.questionId === elem)
+          .data.question
+    );
 
     cy.get(dataCyWrapper(AUTO_SCROLLABLE_MENU_LINK_LIST_CY))
       .children('a')
@@ -191,9 +191,7 @@ describe('Table by Question', () => {
         ])
       ).values(),
     ];
-    users.sort(({ name: a }, { name: b }) => {
-      return a > b ? 1 : -1;
-    });
+    users.sort(({ name: a }, { name: b }) => (a > b ? 1 : -1));
     for (const [i] of users.entries()) {
       // navigate to the table by user
       cy.get(dataCyWrapper(RESULT_TABLES_RESULT_BY_QUESTION_BUTTON_CY)).click();
