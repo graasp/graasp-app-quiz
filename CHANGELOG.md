@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.1](https://github.com/graasp/graasp-app-quiz/compare/v1.9.0...v1.9.1) (2024-11-05)
+
+
+### Bug Fixes
+
+* remove useMaxAvailableHeightInWindow ([#177](https://github.com/graasp/graasp-app-quiz/issues/177)) ([1213ed8](https://github.com/graasp/graasp-app-quiz/commit/1213ed8120b9152586582353052a7bc8bced93b0))
+
 ## [1.9.0](https://github.com/graasp/graasp-app-quiz/compare/v1.8.0...v1.9.0) (2024-09-13)
 
 
