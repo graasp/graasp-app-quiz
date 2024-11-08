@@ -31,6 +31,7 @@
   "MULTIPLE_CHOICES_DUPLICATED_CHOICE": "Chaque réponse doit être unique",
   "TEXT_INPUT_NOT_EMPTY": "La réponse ne peut pas être vide",
   "FILL_BLANKS_EMPTY_TEXT": "Le texte ne peut pas être vide",
+  "FILL_BLANKS_UNMATCHING_TAGS": "Le texte contient des « < » et des « > » non concordants",
   "Create Quiz": "Créer un quiz",
   "Results": "Résultats",
   "User": "Utilisateur",
@@ -103,6 +104,7 @@
   "ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE": "Tenir compte uniquement des dernières tentatives des utilisateurs",
   "MULTIPLE_CHOICE_ADD_HINT_BTN": "ajouter un indice",
   "MULTIPLE_CHOICE_HINT_INPUT_LABEL": "Indice",
+  "MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION": "Entrez ici un indice pour aider l'utilisateur à trouver la réponse ou à la comprendre",
   "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Attention : Les utilisateurs ayant des compétences en informatique peuvent récupérer les réponses du quiz ; pensez à ne pas l'utiliser comme méthode d'examen",
   "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Le saviez-vous ? La question à choix multiple vous permet de définir plusieurs réponses correctes. Les utilisateurs devront sélectionner la totalité des bonnes réponses pour que la question soit considérée juste. N'hésitez pas à l'essayer si ce n'est pas déjà fait."
 }
