@@ -31,6 +31,7 @@ import {
   QUESTION_APP_SETTINGS,
   setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
+import { APP_SETTINGS_FILL_THE_BLANKS_WITH_DUPLICATED } from './fixtures';
 
 const { data } = QUESTION_APP_SETTINGS.find(
   ({ name, data }) =>
@@ -307,6 +308,34 @@ describe('Play Fill In The Blanks', () => {
           currentAttempts: 1,
           isCorrect: false,
         });
+      });
+
+      it('Show partially correct saved question with duplicate words', () => {
+        const partiallyCorrectAppData = buildAppData(
+          'Lorem <> dolor sit amet, consectetur adipiscing elit. <something> ut fermentum nulla, sed <> sem.'
+        );
+        cy.setUpApi({
+          database: {
+            appSettings: APP_SETTINGS_FILL_THE_BLANKS_WITH_DUPLICATED,
+            appData: [partiallyCorrectAppData],
+          },
+          appContext: {
+            context: Context.Player,
+          },
+        });
+        cy.visit('/');
+
+        // answer block still exists
+        cy.get(`${dataCyWrapper(buildFillBlanksAnswerId(3))}`).should(
+          'have.text',
+          'something'
+        );
+
+        // dropped answer block exists  and is displayed
+        cy.get(`${dataCyWrapper(buildBlankedTextWordCy(3))}`).should(
+          'have.text',
+          'something'
+        );
       });
 
       it('Show unmatching and shorter saved question', () => {
