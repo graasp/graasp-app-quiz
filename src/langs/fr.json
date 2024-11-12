@@ -1,8 +1,9 @@
 {
   "Answer Type": "Type de la réponse",
-  "Multiple Choices": "Réponse à choix multiples",
-  "Text Input": "Texte",
-  "Slider": "Slider",
+  "MULTIPLE_CHOICES": "Réponse à choix multiples",
+  "TEXT_INPUT": "Texte",
+  "SLIDER": "Slider",
+  "FILL_BLANKS": "Texte à trous",
   "Question": "Question",
   "Enter Question": "Entrer une question",
   "Previous": "Précédent",
