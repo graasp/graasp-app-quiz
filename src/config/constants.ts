@@ -17,18 +17,11 @@ export const APP_DATA_TYPES = {
 };
 
 export enum QuestionType {
-  MULTIPLE_CHOICES = 'multipleChoices',
-  TEXT_INPUT = 'textInput',
-  SLIDER = 'slider',
-  FILL_BLANKS = 'fillBlanks',
+  MULTIPLE_CHOICES = 'MULTIPLE_CHOICES',
+  TEXT_INPUT = 'TEXT_INPUT',
+  SLIDER = 'SLIDER',
+  FILL_BLANKS = 'FILL_BLANKS',
 }
-
-export const QuestionType_TO_NAME = {
-  [QuestionType.MULTIPLE_CHOICES]: 'Multiple Choices',
-  [QuestionType.TEXT_INPUT]: 'Text Input',
-  [QuestionType.SLIDER]: 'Slider',
-  [QuestionType.FILL_BLANKS]: 'Fill In The Blanks',
-};
 
 export const DEFAULT_CHOICE = {
   value: '',

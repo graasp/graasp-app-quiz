@@ -14,7 +14,6 @@ import {
   DEFAULT_QUESTION_TYPE,
   DEFAULT_QUESTION_VALUES,
   QuestionType,
-  QuestionType_TO_NAME,
 } from '../../config/constants';
 import {
   CREATE_QUESTION_SELECT_TYPE_CY,
@@ -50,11 +49,11 @@ const QuestionTypeSelect = ({ value, onChange }: Props) => {
           label={t('Answer Type')}
           onChange={onTypeChange}
         >
-          {Object.entries(QuestionType_TO_NAME).map(([key, value]) => (
+          {Object.values(QuestionType).map((value) => (
             <MenuItem
-              key={key}
-              value={key}
-              data-cy={buildQuestionTypeOption(key)}
+              key={value}
+              value={value}
+              data-cy={buildQuestionTypeOption(value)}
             >
               {t(value)}
             </MenuItem>
