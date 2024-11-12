@@ -81,9 +81,15 @@ export const splitSentence = (
   }
 
   // second pass to set as placed the displayed text
+  const displayedWords = result.words.map(({ displayed }) => displayed);
   result.answers = result.answers.map((a) => {
-    const isPlaced =
-      result.words.find((word) => word.displayed === a.text) !== undefined;
+    const idx = displayedWords.findIndex((word) => word === a.text);
+    const isPlaced = idx >= 0;
+
+    // remove occurence from displayed answers
+    if (isPlaced) {
+      displayedWords.splice(idx, 1);
+    }
 
     return { ...a, placed: isPlaced };
   });

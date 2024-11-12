@@ -80,10 +80,6 @@ const PlayFillInTheBlanks = ({
 
   const userCannotPlay = isReadonly || showCorrection || showCorrectness;
 
-  useEffect(() => {
-    console.log('words', state.words);
-  }, [state.words]);
-
   // reset wrong answers on retry
   useEffect(() => {
     const newState = resetWrongAnswers(state);
@@ -153,16 +149,12 @@ const PlayFillInTheBlanks = ({
       // change reference
       blank.displayed = text;
     }
-    // remove answer
-    const newAnswers = clonedeep(state.answers);
-    const droppedAnswer = newAnswers.find((answer) => answer.text === text);
-    if (droppedAnswer) {
-      // change reference
-      droppedAnswer.placed = true;
-    }
+
+    // don't need to remove answers manually, it is automatically computed when app data changes
+
     // add back the previous answer to the poll
     if (previousAnswer) {
-      const prevAnswer = newAnswers.find(
+      const prevAnswer = state.answers.find(
         (answer) => answer.text === previousAnswer
       );
       if (prevAnswer) {
