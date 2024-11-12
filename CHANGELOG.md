@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/graasp/graasp-app-quiz/compare/v1.9.1...v1.10.0) (2024-11-12)
+
+
+### Features
+
+* translate question types ([#182](https://github.com/graasp/graasp-app-quiz/issues/182)) ([2134544](https://github.com/graasp/graasp-app-quiz/commit/21345443da3d0646b79092cb12d2d474a405b597))
+* update french translations ([#179](https://github.com/graasp/graasp-app-quiz/issues/179)) ([3c50f0c](https://github.com/graasp/graasp-app-quiz/commit/3c50f0cd01dd64f44ff488abc41195b110880ba0))
+
+
+### Bug Fixes
+
+* allow duplicate words in fill the blanks ([#181](https://github.com/graasp/graasp-app-quiz/issues/181)) ([c072bdf](https://github.com/graasp/graasp-app-quiz/commit/c072bdf46e6cec6bd4b9c8d485d1b4b9c6bab061))
+
 ## [1.9.1](https://github.com/graasp/graasp-app-quiz/compare/v1.9.0...v1.9.1) (2024-11-05)
 
 
