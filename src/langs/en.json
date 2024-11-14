@@ -1,9 +1,9 @@
 {
   "Answer Type": "Answer Type",
-  "MULTIPLE_CHOICES": "Multiple Choices",
-  "TEXT_INPUT": "Text Input",
-  "SLIDER": "Slider",
-  "FILL_BLANKS": "Fill In The Blanks",
+  "multipleChoices": "Multiple Choices",
+  "textInput": "Text Input",
+  "slider": "Slider",
+  "fillBlanks": "Fill In The Blanks",
   "Question": "Question",
   "Enter Question": "Enter Question",
   "Previous": "Previous",
