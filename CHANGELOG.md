@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.1](https://github.com/graasp/graasp-app-quiz/compare/v1.10.0...v1.10.1) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency uuid to v9.0.1 ([#134](https://github.com/graasp/graasp-app-quiz/issues/134)) ([fedffbd](https://github.com/graasp/graasp-app-quiz/commit/fedffbd091154882a2c85ee88c9f7c87b9d63e8d))
+* revert question type values ([#183](https://github.com/graasp/graasp-app-quiz/issues/183)) ([037236e](https://github.com/graasp/graasp-app-quiz/commit/037236e32eb25b174ad22bf799591525d5f2fe35))
+
 ## [1.10.0](https://github.com/graasp/graasp-app-quiz/compare/v1.9.1...v1.10.0) (2024-11-12)
 
 
