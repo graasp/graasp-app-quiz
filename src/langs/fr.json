@@ -107,5 +107,6 @@
   "MULTIPLE_CHOICE_HINT_INPUT_LABEL": "Indice",
   "MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION": "Entrez ici un indice pour aider l'utilisateur à trouver la réponse ou à la comprendre",
   "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Attention : Les utilisateurs ayant des compétences en informatique peuvent récupérer les réponses du quiz ; pensez à ne pas l'utiliser comme méthode d'examen",
-  "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Le saviez-vous ? La question à choix multiple vous permet de définir plusieurs réponses correctes. Les utilisateurs devront sélectionner la totalité des bonnes réponses pour que la question soit considérée juste. N'hésitez pas à l'essayer si ce n'est pas déjà fait."
+  "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Le saviez-vous ? La question à choix multiple vous permet de définir plusieurs réponses correctes. Les utilisateurs devront sélectionner la totalité des bonnes réponses pour que la question soit considérée juste. N'hésitez pas à l'essayer si ce n'est pas déjà fait.",
+  "OUTDATED_QUIZ_FORMAT_MESSAGE": "Le quiz est obsolète. Un administrateur doit le mettre à jour."
 }

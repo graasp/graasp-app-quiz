@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Alert, CircularProgress } from '@mui/material';
 
-import { AppSetting } from '@graasp/sdk';
+import { useLocalContext } from '@graasp/apps-query-client';
+import { AppSetting, PermissionLevel } from '@graasp/sdk';
 
 import { APP_SETTING_NAMES, DEFAULT_QUESTION } from '../../config/constants';
 import { hooks, mutations } from '../../config/queryClient';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { appendAfter } from '../../utils/array';
 import {
   CurrentQuestion,
@@ -65,7 +67,11 @@ export const QuizProvider = ({ children }: Props) => {
   const { mutateAsync: deleteAppSettingAsync } =
     mutations.useDeleteAppSetting();
   const { mutateAsync: postAppSettingAsync } = mutations.usePostAppSetting();
-  const { mutateAsync: patchAppSettingAsync } = mutations.usePatchAppSetting();
+  const { mutateAsync: patchAppSettingAsync, isLoading: isPatching } =
+    mutations.usePatchAppSetting();
+  const { permission } = useLocalContext();
+  // prevents patching infinitely because of throwing patch
+  const [isPatched, setIsPatched] = useState(false);
   // current question idx
   // -1 if we are adding a new question
   const [currentIdx, setCurrentIdx] = useState(-1);
@@ -370,9 +376,9 @@ export const QuizProvider = ({ children }: Props) => {
     }
   }, [order, currentIdx, settings]);
 
-  // back track legacy data to match order list
+  // back track legacy data to match order list when admin
   useEffect(() => {
-    if (settings) {
+    if (settings && permission === PermissionLevel.Admin && !isPatched) {
       const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
       for (const q of questions) {
         if (!q.data.questionId) {
@@ -382,8 +388,9 @@ export const QuizProvider = ({ children }: Props) => {
           });
         }
       }
+      setIsPatched(true);
     }
-  }, [patchAppSettingAsync, settings]);
+  }, [patchAppSettingAsync, settings, permission, isPatched]);
 
   const value: ContextType = useMemo(() => {
     const validIds =
@@ -442,6 +449,21 @@ export const QuizProvider = ({ children }: Props) => {
   if (isError) {
     console.error(error);
     return <Alert severity="error">{t('Error while loading the quiz')}</Alert>;
+  }
+
+  // show error banner if quiz format is incorrect and show current state of patch
+  // useful message for readers
+  if (settings) {
+    const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
+    console.log(questions);
+    if (questions.some((q) => !q.data.questionId)) {
+      return (
+        <Alert severity="error">
+          {t(QUIZ_TRANSLATIONS.OUTDATED_QUIZ_FORMAT_MESSAGE)}
+          {isPatching && <CircularProgress />}
+        </Alert>
+      );
+    }
   }
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
