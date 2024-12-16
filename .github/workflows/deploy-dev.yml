@@ -32,6 +32,12 @@ jobs:
         run: yarn build
         shell: bash
 
+      - name: Upload source maps
+        run: yarn sentry:sourcemaps
+        shell: bash
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
       - name: Deploy
         uses: graasp/graasp-deploy/.github/actions/deploy-s3-app@v1
         # Replace input build-folder or version if needed

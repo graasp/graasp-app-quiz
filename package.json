@@ -12,6 +12,7 @@
     "@mui/icons-material": "5.15.0",
     "@mui/material": "^5.15.0",
     "@mui/utils": "5.15.0",
+    "@sentry/cli": "2.39.1",
     "@sentry/react": "8.45.0",
     "@sentry/tracing": "7.70.0",
     "@tanstack/react-query": "4.29.15",
@@ -58,7 +59,8 @@
     "release:first": "standard-version -a --first-release",
     "release:minor": "standard-version -a --release-as minor",
     "release:major": "standard-version -a --release-as major",
-    "release:patch": "standard-version -a --release-as patch"
+    "release:patch": "standard-version -a --release-as patch",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org graasp --project graasp-app-quiz ./build && sentry-cli sourcemaps upload --org graasp --project graasp-app-quiz ./build"
   },
   "browserslist": {
     "production": [
