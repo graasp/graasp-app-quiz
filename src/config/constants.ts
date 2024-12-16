@@ -115,12 +115,15 @@ export const DEFAULT_LANG = 'en';
 const {
   REACT_APP_ENABLE_MOCK_API,
   REACT_APP_SENTRY_DSN,
+  REACT_APP_SENTRY_ENV,
   REACT_APP_GRAASP_APP_KEY,
   REACT_APP_API_HOST,
 } = window.Cypress ? Cypress.env() : process.env;
 
 export const ENABLE_MOCK_API = REACT_APP_ENABLE_MOCK_API === 'true';
 export const SENTRY_DSN = REACT_APP_SENTRY_DSN;
+export const SENTRY_ENV = REACT_APP_SENTRY_ENV;
+
 export const GRAASP_APP_KEY = REACT_APP_GRAASP_APP_KEY;
 export const API_HOST = REACT_APP_API_HOST || 'http://localhost:3000';
 

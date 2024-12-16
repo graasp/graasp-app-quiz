@@ -28,16 +28,23 @@ jobs:
           REACT_APP_API_HOST: ${{ secrets.REACT_APP_API_HOST_DEV }}
           REACT_APP_GRAASP_APP_KEY: ${{ secrets.APP_KEY }}
           REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          REACT_APP_SENTRY_ENV: ${{ vars.SENTRY_ENV }}
         run: yarn build
         shell: bash
+
+      - name: Upload source maps
+        run: yarn sentry:sourcemaps
+        shell: bash
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Deploy
         uses: graasp/graasp-deploy/.github/actions/deploy-s3-app@v1
         # Replace input build-folder or version if needed
         with:
-          build-folder: 'build'
+          build-folder: "build"
           graasp-app-id: ${{ secrets.APP_ID }}
-          version: 'latest'
+          version: "latest"
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
           aws-region: ${{ vars.APPS_AWS_REGION_DEV }}
