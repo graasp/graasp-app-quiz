@@ -13,7 +13,10 @@ import buildDatabase from './data/db';
 if (SENTRY_DSN) {
   Sentry.init({
     dsn: SENTRY_DSN,
-    integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.replayIntegration(),
+    ],
     environment: SENTRY_ENVIRONMENT,
 
     // Set tracesSampleRate to 1.0 to capture 100%
