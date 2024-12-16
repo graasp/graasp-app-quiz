@@ -4,9 +4,10 @@ import { createRoot } from 'react-dom/client';
 
 import { MockSolution, mockApi } from '@graasp/apps-query-client';
 
+import packageConfig from '../package.json';
 import App from './components/App';
-import { ENABLE_MOCK_API, SENTRY_DSN } from './config/constants';
-import { SENTRY_ENVIRONMENT, SENTRY_TRACE_SAMPLE_RATE } from './config/sentry';
+import { ENABLE_MOCK_API, SENTRY_DSN, SENTRY_ENV } from './config/constants';
+import { SENTRY_TRACE_SAMPLE_RATE } from './config/sentry';
 import { mockContext } from './data/config';
 import buildDatabase from './data/db';
 
@@ -17,8 +18,8 @@ if (SENTRY_DSN) {
       Sentry.browserTracingIntegration(),
       Sentry.replayIntegration(),
     ],
-    environment: SENTRY_ENVIRONMENT,
-
+    environment: SENTRY_ENV,
+    release: `${packageConfig.name}@${packageConfig.version}`,
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production

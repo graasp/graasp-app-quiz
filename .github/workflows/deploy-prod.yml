@@ -27,6 +27,7 @@ jobs:
           REACT_APP_API_HOST: ${{ secrets.REACT_APP_API_HOST_PROD }}
           REACT_APP_GRAASP_APP_KEY: ${{ secrets.APP_KEY }}
           REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          REACT_APP_SENTRY_ENV: ${{ vars.SENTRY_ENV }}
         run: yarn build
         shell: bash
 
@@ -34,9 +35,9 @@ jobs:
         uses: graasp/graasp-deploy/.github/actions/deploy-s3-app@v1
         # Replace input build-folder or version if needed
         with:
-          build-folder: 'build'
+          build-folder: "build"
           graasp-app-id: ${{ secrets.APP_ID }}
-          version: 'latest'
+          version: "latest"
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
           aws-region: ${{ vars.APPS_AWS_REGION_PROD }}
