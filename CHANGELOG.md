@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.2](https://github.com/graasp/graasp-app-quiz/compare/v1.10.1...v1.10.2) (2024-12-16)
+
+
+### Bug Fixes
+
+* prevent infinite loop for readers and network errors on legacy data ([#187](https://github.com/graasp/graasp-app-quiz/issues/187)) ([717c14d](https://github.com/graasp/graasp-app-quiz/commit/717c14de0e817bf14e07b7b06c26b1a1130c6f02))
+* update sentry config ([#188](https://github.com/graasp/graasp-app-quiz/issues/188)) ([388e7cc](https://github.com/graasp/graasp-app-quiz/commit/388e7cc321fbc7e0c41043670d2012360fd0c33f))
+
 ## [1.10.1](https://github.com/graasp/graasp-app-quiz/compare/v1.10.0...v1.10.1) (2024-11-19)
 
 
