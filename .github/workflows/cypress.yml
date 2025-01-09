@@ -3,19 +3,19 @@ name: cypress tests
 on:
   push:
     branches-ignore:
-      - 'release-please-**'
+      - "release-please-**"
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: set up node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: "20"
 
       - name: Yarn Install and Cache
         uses: graasp/graasp-deploy/.github/actions/yarn-install-and-cache@v1
@@ -23,7 +23,7 @@ jobs:
           cypress: true
 
       - name: cypress run
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         env:
           REACT_APP_API_HOST: http://localhost:3636
           REACT_APP_GRAASP_DOMAIN: localhost
@@ -35,21 +35,12 @@ jobs:
           build: yarn build
           config: baseUrl=http://localhost:3000
           start: yarn start:ci
-          wait-on: 'http://localhost:3000'
+          wait-on: "http://localhost:3000"
           wait-on-timeout: 180
           browser: chrome
           quiet: true
           # point to new cypress@10 config file
           config-file: cypress.config.ts
-
-      # component tests are not running ok in the CI
-      # - name: Run Component tests 🧪
-      #   uses: cypress-io/github-action@v4
-      #   with:
-      #     # we have already installed everything
-      #     install: false
-      #     # to run component tests we need to use "component: true"
-      #     component: true
 
       # after the test run completes
       # store videos and any screenshots
@@ -57,13 +48,13 @@ jobs:
       # thus we store screenshots only on failures
       # Alternative: create and commit an empty cypress/screenshots folder
       # to always have something to upload
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-videos
