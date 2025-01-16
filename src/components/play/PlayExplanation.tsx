@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, AlertTitle, Typography } from '@mui/material';
 
 import { EXPLANATION_PLAY_CY } from '../../config/selectors';
+import { QUIZ_TRANSLATIONS } from '../../langs/constants';
 import { QuestionData } from '../types/types';
 
 type Props = {
@@ -21,7 +22,7 @@ const PlayExplanation = ({ currentQuestionData, showCorrection }: Props) => {
     <Alert severity="info" sx={{ width: '100%', mt: 4 }}>
       <AlertTitle>
         <Typography variant="h6" mb={1}>
-          {t('Explanations')}
+          {t(QUIZ_TRANSLATIONS.EXPLANATIONS_LABEL)}
         </Typography>
       </AlertTitle>
 

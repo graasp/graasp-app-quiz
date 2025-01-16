@@ -78,7 +78,7 @@
   "HINTS_ALERT_TITLE": "Avez-vous besoins d'indices ?",
   "EXPLANATIONS_TITLE": "Explication",
   "EXPLANATIONS_SUB_TITLE": "Saisissez ici une explication qui sera affichée lorsqu'il n'y a plus d'essais ou lorsqu'une réponse correcte est donnée.",
-  "EXPLANATIONS_LABEL": "Explication",
+  "EXPLANATIONS_LABEL": "Explications",
   "PREV_QUESTION_BTN": "Précédent",
   "NEXT_QUESTION_BTN": "Suivant",
   "QUESTION_STEPPER_NAV_TITLE": "Navigation du Quiz",
