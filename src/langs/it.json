@@ -107,5 +107,6 @@
   "MULTIPLE_CHOICE_HINT_INPUT_LABEL": "Suggerimento",
   "MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION": "Digita qui un suggerimento per aiutare l'utente a trovare la risposta o a comprenderla",
   "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Attenzione: gli utenti con qualche competenza informatica possono recuperare le risposte al quiz; non è un metodo adatto per un esame.",
-  "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Lo sapevi? La nostra domanda a scelta multipla ti consente di definire più risposte corrette. Gli utenti dovranno inviare tutte le risposte corrette affinché la domanda venga contrassegnata come corretta. Non esitare a provarla se non l'hai già fatto."
+  "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Lo sapevi? La nostra domanda a scelta multipla ti consente di definire più risposte corrette. Gli utenti dovranno inviare tutte le risposte corrette affinché la domanda venga contrassegnata come corretta. Non esitare a provarla se non l'hai già fatto.",
+  "OUTDATED_QUIZ_FORMAT_MESSAGE": "Il quiz è obsoleto. Un amministratore deve aggiornarlo."
 }
