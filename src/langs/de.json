@@ -1,5 +1,9 @@
 {
   "Answer Type": "Antworttyp",
+  "multipleChoices": "Mehrere Auswahlmöglichkeiten",
+  "textInput": "Texteingabe",
+  "slider": "Schieberegler",
+  "fillBlanks": "Füllen Sie die Lücken aus",
   "Question": "Frage",
   "Enter Question": "Frage eingeben",
   "Previous": "Vorherige",
@@ -28,6 +32,7 @@
   "MULTIPLE_CHOICES_DUPLICATED_CHOICE": "Jede Antwort sollte eindeutig sein",
   "TEXT_INPUT_NOT_EMPTY": "Die Antwort darf nicht leer sein",
   "FILL_BLANKS_EMPTY_TEXT": "Der Text darf nicht leer sein",
+  "FILL_BLANKS_UNMATCHING_TAGS": "Der Text enthält nicht übereinstimmende '<' und '>'.",
   "Create Quiz": "Quiz erstellen",
   "Results": "Ergebnisse",
   "User": "Benutzer",
@@ -93,5 +98,15 @@
   "MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_CHECKBOX": "Antwortfehler nach jedem Versuch anzeigen",
   "MULTIPLE_ATTEMPTS_SHOW_CORRECTNESS_TOOLTIP": "Wenn die Option aktiviert ist, sieht der Benutzer die Korrekturen für jede gesendete Antwort. Wenn nicht, wird der Benutzer lediglich darüber informiert, dass seine Antwort nicht ganz korrekt ist.",
   "MULTIPLE_CHOICE_SECTION_TITLE_CORRECT": "Ihre richtigen Antworten",
-  "MULTIPLE_CHOICE_SECTION_TITLE_INCORRECT": "Falsche Antworten, die Sie ausgewählt haben"
+  "MULTIPLE_CHOICE_SECTION_TITLE_INCORRECT": "Falsche Antworten, die Sie ausgewählt haben",
+  "MULTIPLE_CHOICE_SECTION_TITLE_MISSING": "Korrigieren Sie vergessene Antworten",
+  "MULTIPLE_CHOICE_SECTION_TITLE_UNSELECTED": "Antworten, die Sie nicht ausgewählt haben",
+  "PLAY_VIEW_RETRY_BTN": "Wiederholen",
+  "ANALYTICS_CONSIDER_LAST_ATTEMPTS_TOGGLE": "Nur die letzten Versuche der Benutzer berücksichtigen",
+  "MULTIPLE_CHOICE_ADD_HINT_BTN": "Hinweis hinzufügen",
+  "MULTIPLE_CHOICE_HINT_INPUT_LABEL": "Hinweis",
+  "MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION": "Geben Sie hier einen Hinweis ein, der dem Benutzer hilft, die Antwort zu finden oder zu verstehen",
+  "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Achtung: Benutzer mit gewissen Computerkenntnissen können Quiz-Antworten abrufen, dies ist jedoch keine geeignete Methode als Prüfungsmethode.",
+  "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Wussten Sie schon? Unsere Multiple-Choice-Frage ermöglicht es Ihnen, mehrere richtige Antworten festzulegen. Benutzer müssen alle richtigen Antworten übermitteln, damit die Frage als richtig markiert wird. Zögern Sie nicht, es auszuprobieren, falls Sie es noch nicht getan haben.",
+  "OUTDATED_QUIZ_FORMAT_MESSAGE": "Das Quiz ist veraltet. Ein Administrator muss es aktualisieren."
 }
