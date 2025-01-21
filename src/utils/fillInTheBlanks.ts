@@ -19,6 +19,8 @@ const removeMarkup = (a: string) => a.trim().slice(1, -1);
 
 export const ANSWER_REGEXP = /<[^<>]*>/g;
 
+export const EMPTY_BLANK_CONTENT = ' __________ ';
+
 /**
  * Return a result containing an array of answers (words to place in blanks) and an array of words (the remaining texts that are not fillable).
  *
@@ -48,7 +50,7 @@ export const splitSentence = (
       const word = {
         // The id is computed like that to have word as even idx and answer as odd idx.
         id: 2 * idx,
-        text: w.trim(),
+        text: w,
         type: FILL_BLANKS_TYPE.WORD,
       };
       acc.words.push(word);

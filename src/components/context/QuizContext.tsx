@@ -455,7 +455,6 @@ export const QuizProvider = ({ children }: Props) => {
   // useful message for readers
   if (settings) {
     const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
-    console.log(questions);
     if (questions.some((q) => !q.data.questionId)) {
       return (
         <Alert severity="error">

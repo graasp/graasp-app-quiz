@@ -38,11 +38,21 @@ const BlankedText = ({
   const renderWords = () =>
     words.map((word, i) => {
       if (word.type === FILL_BLANKS_TYPE.WORD) {
-        return (
-          <Typography data-cy={buildBlankedTextWordCy(word.id)}>
-            {word.text}
-          </Typography>
-        );
+        // allow break lines
+        return word.text
+          .split('\n')
+          .flatMap((n) => [n, <br key={n} />])
+          .slice(0, -1)
+          .map((t, idx) => (
+            <Typography
+              key={word.text + idx}
+              component="span"
+              sx={{ display: 'contents' }}
+              data-cy={buildBlankedTextWordCy(word.id)}
+            >
+              {t}
+            </Typography>
+          ));
       }
 
       return (
