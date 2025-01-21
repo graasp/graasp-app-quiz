@@ -200,7 +200,7 @@ describe('Create View', () => {
     });
 
     it('Update Question type should not create a new question', () => {
-      const numberOfQuestions = 4;
+      const numberOfQuestions = 5;
       const numberOfAttempts = 3;
 
       // update the number of attempts to ensure that changing question type
