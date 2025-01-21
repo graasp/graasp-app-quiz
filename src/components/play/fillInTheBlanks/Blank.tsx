@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-
-import Typography, { TypographyProps } from '@mui/material/Typography';
+import { TypographyProps } from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 
+import { EMPTY_BLANK_CONTENT } from '../../../utils/fillInTheBlanks';
+import { dataUrlTrashIcon } from './TrashIcon';
+
 interface WordBoxProps extends TypographyProps {
-  backgroundColor?: string;
   showCorrection: boolean;
   showCorrectness: boolean;
   isCorrect: boolean;
@@ -12,36 +12,40 @@ interface WordBoxProps extends TypographyProps {
   filled: string;
 }
 
-export const WordBox = styled(Typography)<WordBoxProps>(
+const DEFAULT_BLANK_COLOR = 'blue';
+
+export const WordBox = styled('span')<WordBoxProps>(
   ({
     theme,
-    backgroundColor,
     showCorrection,
     showCorrectness,
     isCorrect,
     isReadonly,
     filled,
   }) => {
-    let bgColor = backgroundColor ?? 'transparent';
+    // text color
+    // default: when the blank is filled
+    // green: when correction is displayed, and the word is correct
+    // red: when correction is displayed, and the word is incorrect
+    let color = DEFAULT_BLANK_COLOR;
     if (showCorrection || showCorrectness) {
-      bgColor = isCorrect
+      color = isCorrect
         ? theme.palette.success.light
         : theme.palette.error.light;
     }
 
     return {
-      cursor: isReadonly ? '' : 'pointer',
+      // allow text flow, but disable block styles
+      display: 'contents',
+      cursor:
+        !isReadonly && filled
+          ? 'url(' + dataUrlTrashIcon + '), auto'
+          : undefined,
       minWidth: '3em',
       padding: theme.spacing(0.5, 1, 0),
       paddingTop: filled ? 0 : theme.spacing(2),
-      borderRadius: showCorrection ? '5px' : 0,
+      color,
       margin: theme.spacing(0, 1),
-      borderBottom: showCorrection ? 'none' : '1px solid black',
-      backgroundColor: bgColor,
-
-      '&:hover': {
-        textDecoration: isReadonly ? '' : 'line-through',
-      },
     };
   }
 );
@@ -69,14 +73,9 @@ const Blank = ({
   onDrop,
   onDelete,
 }: Props) => {
-  const [state, setState] = useState({
-    backgroundColor: 'white',
-  });
-
   const _handleDrop = (e: React.DragEvent<HTMLSpanElement>) => {
     if (!isReadonly) {
       onDrop(e, id);
-      setState({ backgroundColor: 'transparent' });
     }
   };
 
@@ -86,9 +85,6 @@ const Blank = ({
 
   const _handleDragLeave = (e: React.DragEvent<HTMLSpanElement>) => {
     e.preventDefault();
-    if (!isReadonly) {
-      setState({ backgroundColor: 'transparent' });
-    }
   };
 
   return (
@@ -99,7 +95,6 @@ const Blank = ({
       filled={text}
       isCorrect={isCorrect}
       isReadonly={isReadonly}
-      backgroundColor={state.backgroundColor}
       onDragLeave={_handleDragLeave}
       onDragOver={_handleDragOver}
       onDrop={_handleDrop}
@@ -109,7 +104,7 @@ const Blank = ({
       data-text={text}
       data-disabled={isReadonly}
     >
-      {text}
+      {text.length ? text : EMPTY_BLANK_CONTENT}
     </WordBox>
   );
 };

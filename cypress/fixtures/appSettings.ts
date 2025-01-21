@@ -100,11 +100,27 @@ export const FILL_BLANKS_SETTING: QuestionDataAppSetting = {
   },
 };
 
+export const FILL_BLANKS_WITH_BREAK_LINES_SETTING: QuestionDataAppSetting = {
+  id: 'fill-blanks-with-break-lines-id',
+  name: APP_SETTING_NAMES.QUESTION,
+  item: mockItem,
+  ...datesFactory,
+  data: {
+    type: QuestionType.FILL_BLANKS,
+    questionId: 'fill-blanks-with-break-lines-id1',
+    question: 'My fill in the blanks with break lines',
+    text: 'Lorem <ipsum> dolor sit amet, consectetur \n\nadipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
+    explanation: 'my explanation for fill in the blanks',
+    hints: 'my hints for fill in the blanks',
+  },
+};
+
 export const QUESTION_APP_SETTINGS = [
   MULTIPLE_CHOICES_APP_SETTING,
   TEXT_INPUT_APP_SETTING,
   SLIDER_APP_SETTING,
   FILL_BLANKS_SETTING,
+  FILL_BLANKS_WITH_BREAK_LINES_SETTING,
 ];
 
 export const APP_SETTINGS: AppSetting[] = [
@@ -120,6 +136,7 @@ export const APP_SETTINGS: AppSetting[] = [
         TEXT_INPUT_APP_SETTING.data.questionId,
         SLIDER_APP_SETTING.data.questionId,
         FILL_BLANKS_SETTING.data.questionId,
+        FILL_BLANKS_WITH_BREAK_LINES_SETTING.data.questionId,
       ],
     },
   },

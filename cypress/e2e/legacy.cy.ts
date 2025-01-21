@@ -3,9 +3,6 @@ import { AppSetting, Context, PermissionLevel } from '@graasp/sdk';
 import { APP_SETTING_NAMES, QuestionType } from '../../src/config/constants';
 import {
   CREATE_QUESTION_TITLE_CY,
-  PLAY_VIEW_QUESTION_TITLE_CY,
-  QUESTION_BAR_NEXT_CY,
-  buildPlayViewTextInputCy,
   dataCyWrapper,
 } from '../../src/config/selectors';
 import { datesFactory, mockAppDataFactory } from '../../src/data/factories';

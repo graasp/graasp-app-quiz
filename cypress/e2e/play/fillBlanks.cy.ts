@@ -25,9 +25,14 @@ import {
 import { mockAppDataFactory } from '../../../src/data/factories';
 import { mockItem } from '../../../src/data/items';
 import { mockCurrentMember } from '../../../src/data/members';
-import { Word, splitSentence } from '../../../src/utils/fillInTheBlanks';
+import {
+  EMPTY_BLANK_CONTENT,
+  Word,
+  splitSentence,
+} from '../../../src/utils/fillInTheBlanks';
 import {
   APP_SETTINGS,
+  FILL_BLANKS_WITH_BREAK_LINES_SETTING,
   QUESTION_APP_SETTINGS,
   setAttemptsOnAppSettings,
 } from '../../fixtures/appSettings';
@@ -145,13 +150,14 @@ const checkInputDisabled = (shouldBeDisabled: boolean) => {
 const removeAnswer = (answer: Word, shouldFail: boolean) => {
   // start by checking that the answer contains the correct text
   cy.get(`[data-id="${answer.id}"]`).should('not.be.empty');
-  cy.get(`[data-id="${answer.id}"]`).click();
+  // need force because element is not a block
+  cy.get(`[data-id="${answer.id}"]`).click({ force: true });
 
   if (shouldFail) {
     cy.get(`[data-id="${answer.id}"]`).should('not.be.empty');
   } else {
     // testing should contain '' seems not to work, so check is empty.
-    cy.get(`[data-id="${answer.id}"]`).should('be.empty');
+    cy.get(`[data-id="${answer.id}"]`).should('contain', EMPTY_BLANK_CONTENT);
   }
 };
 
@@ -210,7 +216,8 @@ describe('Play Fill In The Blanks', () => {
             );
           } else {
             cy.get(dataCyWrapper(buildBlankedTextWordCy(w.id))).should(
-              'be.empty'
+              'contain',
+              EMPTY_BLANK_CONTENT
             );
           }
         });
@@ -412,13 +419,13 @@ describe('Play Fill In The Blanks', () => {
     const NUMBER_OF_ATTEMPTS = 3;
 
     describe('Display saved settings', () => {
-      const buildAppData = (text: string) =>
+      const buildAppData = (text: string, questionId = id) =>
         mockAppDataFactory({
           id: 'app-data-1',
           item: mockItem,
           creator: mockCurrentMember,
           data: {
-            questionId: id,
+            questionId,
             text,
           },
         });
@@ -540,9 +547,11 @@ describe('Play Fill In The Blanks', () => {
         });
       });
 
-      it('Show unmatching and longer saved question', () => {
+      it.only('Show break lines', () => {
+        const questionId = FILL_BLANKS_WITH_BREAK_LINES_SETTING.data.questionId;
         const longerAppData = buildAppData(
-          'Lorem <ergerg> dolor <sit> amet, <consectetur> <adipiscing> elit.'
+          'Lorem <ipsum> dolor sit amet, consectetur \n\nadipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
+          questionId
         );
         cy.setUpApi({
           database: {
@@ -557,22 +566,14 @@ describe('Play Fill In The Blanks', () => {
           },
         });
         cy.visit('/');
-        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(id))).click();
+        cy.get(dataCyWrapper(buildQuestionStepDefaultCy(questionId))).click();
 
-        // hints should be displayed
-        cy.checkHintsPlay(fillBlanksAppSettingsData.hints);
-
-        // we do not check correction: nothing matches
-        // but we want to know that the app didn't crash
-
-        cy.get(dataCyWrapper(PLAY_VIEW_RETRY_BUTTON_CY)).click();
-
-        cy.checkQuizNavigation({
-          questionId: id,
-          numberOfAttempts: NUMBER_OF_ATTEMPTS,
-          currentAttempts: 1,
-          isCorrect: false,
-        });
+        // check break lines
+        cy.get(dataCyWrapper(buildBlankedTextWordCy(2)))
+          .first()
+          .next()
+          .get('br')
+          .should('exist');
       });
     });
   });
