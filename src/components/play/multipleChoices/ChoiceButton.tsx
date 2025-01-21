@@ -153,6 +153,7 @@ export const ChoiceButton = ({
       onClick={handleClick}
       fullWidth
       sx={{
+        textTransform: 'none',
         '&.MuiButton-root': {
           '&.Mui-disabled': computeDisabledSx(choiceState),
         },
