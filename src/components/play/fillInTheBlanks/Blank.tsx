@@ -2,7 +2,6 @@ import { TypographyProps } from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 
 import { EMPTY_BLANK_CONTENT } from '../../../utils/fillInTheBlanks';
-import { dataUrlTrashIcon } from './TrashIcon';
 
 interface WordBoxProps extends TypographyProps {
   showCorrection: boolean;
@@ -37,15 +36,19 @@ export const WordBox = styled('span')<WordBoxProps>(
     return {
       // allow text flow, but disable block styles
       display: 'contents',
-      cursor:
-        !isReadonly && filled
-          ? 'url(' + dataUrlTrashIcon + '), auto'
-          : undefined,
+      cursor: 'pointer',
+
       minWidth: '3em',
       padding: theme.spacing(0.5, 1, 0),
       paddingTop: filled ? 0 : theme.spacing(2),
       color,
       margin: theme.spacing(0, 1),
+      position: 'relative',
+
+      '&:hover': {
+        fontWeight: filled ? 'bold' : undefined,
+        color: filled ? 'red' : undefined,
+      },
     };
   }
 );
