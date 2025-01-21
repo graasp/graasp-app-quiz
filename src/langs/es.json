@@ -32,7 +32,7 @@
   "MULTIPLE_CHOICES_DUPLICATED_CHOICE": "Cada respuesta debe ser única",
   "TEXT_INPUT_NOT_EMPTY": "La respuesta no puede estar vacía",
   "FILL_BLANKS_EMPTY_TEXT": "El texto no puede estar vacío",
-  "FILL_BLANKS_UNMATCHING_TAGS": "El texto tiene '<' y \">' que no coinciden",
+  "FILL_BLANKS_UNMATCHING_TAGS": "El texto tiene '<' y '>' que no coinciden",
   "Create Quiz": "Crear cuestionario",
   "Results": "Resultados",
   "User": "Usuario",
