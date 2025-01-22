@@ -547,7 +547,7 @@ describe('Play Fill In The Blanks', () => {
         });
       });
 
-      it.only('Show break lines', () => {
+      it('Show break lines', () => {
         const questionId = FILL_BLANKS_WITH_BREAK_LINES_SETTING.data.questionId;
         const longerAppData = buildAppData(
           'Lorem <ipsum> dolor sit amet, consectetur \n\nadipiscing elit. <Praesent> ut fermentum nulla, sed <suscipit> sem.',
