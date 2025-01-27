@@ -199,7 +199,7 @@ describe('Create View', () => {
       cy.get(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 5);
     });
 
-    it.only('Update Question type should not create a new question', () => {
+    it('Update Question type should not create a new question', () => {
       const numberOfQuestions = 5;
       const numberOfAttempts = 3;
 

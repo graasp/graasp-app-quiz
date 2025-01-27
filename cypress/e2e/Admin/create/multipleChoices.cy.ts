@@ -315,7 +315,7 @@ describe('Multiple Choices', () => {
       cy.checkExplanationField(data.explanation);
     });
 
-    it.only('Update question', () => {
+    it('Update question', () => {
       fillMultipleChoiceQuestion(newMultipleChoiceData);
 
       // click new question and come back

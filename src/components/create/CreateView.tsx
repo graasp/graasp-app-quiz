@@ -80,8 +80,6 @@ const CreateView = () => {
     saveQuestion(newData).catch((e) => console.error(e));
   };
 
-  console.log(currentQuestion);
-
   return (
     <>
       <Box
