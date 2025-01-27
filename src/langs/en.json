@@ -106,7 +106,7 @@
   "MULTIPLE_CHOICE_ADD_HINT_BTN": "add hint",
   "MULTIPLE_CHOICE_HINT_INPUT_LABEL": "Hint",
   "MULTIPLE_CHOICE_HINT_INPUT_DESCRIPTION": "Type here a hint to help the user to find the answer or to understand it",
-  "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Caution: Users with some computer skills can retrieve quiz answers; it isn't a suitable method for an exam method.",
+  "CREATE_QUIZ_NOT_EXAM_SOLUTION_WARNING": "Caution: Users with some computer skills can retrieve quiz answers; this app isn't a suitable method for an exam method.",
   "MULTIPLE_CORRECT_ANSWERS_AVALAIBLE_WARNING": "Did you know? Our multiple choice question allows you to define several correct answers. Users will have to submit all the correct answers for the question to be marked as correct. Don't hesitate to try it out if you haven't already.",
   "OUTDATED_QUIZ_FORMAT_MESSAGE": "The quiz is outdated. An admin has to update it."
 }
