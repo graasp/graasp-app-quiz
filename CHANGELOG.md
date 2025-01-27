@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.3](https://github.com/graasp/graasp-app-quiz/compare/v1.10.2...v1.10.3) (2025-01-27)
+
+
+### Bug Fixes
+
+* allow break lines in fill in the blanks ([226baa0](https://github.com/graasp/graasp-app-quiz/commit/226baa0037a8c60e87f796ecbf6f09cc93200ce8))
+* filter out duplicated questions ([3cc5e90](https://github.com/graasp/graasp-app-quiz/commit/3cc5e90f81cea145b79adc20beec34f765da2e86))
+* fix translation for explanation ([99a47ab](https://github.com/graasp/graasp-app-quiz/commit/99a47abc9274040b4341bc7cf0f275bc266cd3fe))
+* **multiple-choice:** remove automatic uppercase for button ([#193](https://github.com/graasp/graasp-app-quiz/issues/193)) ([217cdf6](https://github.com/graasp/graasp-app-quiz/commit/217cdf641774b37f400c2ce9aa07087923f2a408))
+* upgrade workflow versions ([#191](https://github.com/graasp/graasp-app-quiz/issues/191)) ([63933bb](https://github.com/graasp/graasp-app-quiz/commit/63933bb5ac4181f3e1e15ef8020d191e4df3e89d))
+
+
+### Miscellaneous Chores
+
+* release 1.10.3 ([79712d8](https://github.com/graasp/graasp-app-quiz/commit/79712d802fd59004ee5364e3e53eb1e5c2d827f6))
+
 ## [1.10.2](https://github.com/graasp/graasp-app-quiz/compare/v1.10.1...v1.10.2) (2024-12-16)
 
 
