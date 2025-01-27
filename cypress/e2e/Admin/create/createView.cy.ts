@@ -70,12 +70,12 @@ describe('Create View', () => {
         'have.value',
         DEFAULT_QUESTION_TYPE
       );
-      cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('not.exist');
+      cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
     });
 
     it('Cannot duplicate empty data', () => {
       cy.get(dataCyWrapper(NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY)).should(
-        'not.exist'
+        'be.disabled'
       );
     });
 
