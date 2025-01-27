@@ -224,6 +224,9 @@ describe('Create View', () => {
         answer: 'new answer',
       };
 
+      // necessary to let init data show up
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(1000);
       cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).type(
         updatedQuestion.question
