@@ -88,6 +88,9 @@ export const QuizProvider = ({ children }: Props) => {
   const [currentQuestion, setCurrentQuestion] =
     useState<CurrentQuestion>(DEFAULT_QUESTION);
 
+  // curated questions
+  const [questions, setQuestions] = useState<QuestionDataAppSetting[]>([]);
+
   const [newData, setNewData] = useState<QuestionData>(currentQuestion.data);
   const hasChanged = isDifferent(newData, currentQuestion.data);
   const [errorMessage, setErrorMessage] = useState<ValidationMessage | null>(
@@ -311,19 +314,42 @@ export const QuizProvider = ({ children }: Props) => {
     setCurrentIdxBounded(currentIdx - 1);
   }, [currentIdx, setCurrentIdxBounded]);
 
+  // initialize questions
+  useEffect(() => {
+    // Get all questions
+    const validIds =
+      getSettingsByName(settings, APP_SETTING_NAMES.QUESTION_LIST)[0]?.data
+        ?.list ?? [];
+    const tmpQ = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION)
+      // Filter out questions that are not well formatted in AppSettings.
+      .filter(
+        (q) => validIds.includes(q.data.questionId) || validIds.includes(q.id)
+      );
+    // remove duplicated questions that might happen on save
+    const questions = tmpQ.filter(({ id, data, updatedAt }) => {
+      const duplicate = tmpQ.find(
+        (q) => data?.questionId === q.data.questionId && q.id !== id
+      );
+      if (!duplicate) {
+        return true;
+      }
+      return updatedAt > duplicate.updatedAt;
+    });
+    setQuestions(questions);
+  }, [settings]);
+
   // initialize order
   useEffect(() => {
-    if (settings) {
+    if (settings && questions) {
       const newOrderSetting = getSettingsByName(
         settings,
         APP_SETTING_NAMES.QUESTION_LIST
       );
 
       // Get all questions id. To support legacy code, if no question id, the id is used instead.
-      const questionIds = getSettingsByName(
-        settings,
-        APP_SETTING_NAMES.QUESTION
-      ).map((appSetting) => appSetting?.data?.questionId ?? appSetting.id);
+      const questionIds = questions.map(
+        (appSetting) => appSetting?.data?.questionId ?? appSetting.id
+      );
 
       const filteredOrder: string[] = [];
       if (newOrderSetting && newOrderSetting.length > 0) {
@@ -350,13 +376,11 @@ export const QuizProvider = ({ children }: Props) => {
     // Disable exhaustive-deps for isLoaded, because we don't want
     // to reload this useEffect when isLoaded has changed.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings]);
+  }, [settings, questions]);
 
   // set current question
   useEffect(() => {
     if (settings) {
-      const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
-
       let newValue;
       // set current question if current idx, questions and order are correctly defined
       if (
@@ -374,12 +398,11 @@ export const QuizProvider = ({ children }: Props) => {
       }
       setCurrentQuestion(newValue ?? DEFAULT_QUESTION);
     }
-  }, [order, currentIdx, settings]);
+  }, [order, currentIdx, settings, questions]);
 
   // back track legacy data to match order list when admin
   useEffect(() => {
-    if (settings && permission === PermissionLevel.Admin && !isPatched) {
-      const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
+    if (questions && permission === PermissionLevel.Admin && !isPatched) {
       for (const q of questions) {
         if (!q.data.questionId) {
           patchAppSettingAsync({
@@ -390,23 +413,10 @@ export const QuizProvider = ({ children }: Props) => {
       }
       setIsPatched(true);
     }
-  }, [patchAppSettingAsync, settings, permission, isPatched]);
+  }, [patchAppSettingAsync, permission, questions, isPatched]);
 
-  const value: ContextType = useMemo(() => {
-    const validIds =
-      getSettingsByName(settings, APP_SETTING_NAMES.QUESTION_LIST)[0]?.data
-        ?.list ?? [];
-
-    const questions = settings
-      ? getSettingsByName(settings, APP_SETTING_NAMES.QUESTION)
-          // Filter out questions that are not well formatted in AppSettings.
-          .filter(
-            (q) =>
-              validIds.includes(q.data.questionId) || validIds.includes(q.id)
-          )
-      : [];
-
-    return {
+  const value: ContextType = useMemo(
+    () => ({
       order,
       questions,
       currentQuestion: currentQuestion as QuestionDataAppSetting,
@@ -424,23 +434,24 @@ export const QuizProvider = ({ children }: Props) => {
       newData,
       setNewData,
       errorMessage,
-    };
-  }, [
-    settings,
-    order,
-    currentQuestion,
-    currentIdx,
-    deleteQuestion,
-    moveToNextQuestion,
-    moveToPreviousQuestion,
-    saveQuestion,
-    duplicateQuestion,
-    isSettingsFetching,
-    isLoaded,
-    saveOrder,
-    newData,
-    errorMessage,
-  ]);
+    }),
+    [
+      order,
+      currentQuestion,
+      currentIdx,
+      deleteQuestion,
+      moveToNextQuestion,
+      moveToPreviousQuestion,
+      saveQuestion,
+      duplicateQuestion,
+      isSettingsFetching,
+      isLoaded,
+      saveOrder,
+      newData,
+      errorMessage,
+      questions,
+    ]
+  );
 
   if (isLoading) {
     return <CircularProgress />;
@@ -454,7 +465,6 @@ export const QuizProvider = ({ children }: Props) => {
   // show error banner if quiz format is incorrect and show current state of patch
   // useful message for readers
   if (settings) {
-    const questions = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION);
     if (questions.some((q) => !q.data.questionId)) {
       return (
         <Alert severity="error">
