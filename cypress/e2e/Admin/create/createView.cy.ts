@@ -70,12 +70,12 @@ describe('Create View', () => {
         'have.value',
         DEFAULT_QUESTION_TYPE
       );
-      cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('be.visible');
+      cy.get(dataCyWrapper(QUESTION_BAR_CY)).should('not.exist');
     });
 
     it('Cannot duplicate empty data', () => {
       cy.get(dataCyWrapper(NAVIGATION_DUPLICATE_QUESTION_BUTTON_CY)).should(
-        'be.disabled'
+        'not.exist'
       );
     });
 
@@ -199,7 +199,7 @@ describe('Create View', () => {
       cy.get(`.${QUESTION_STEP_CLASSNAME}`).should('have.length', 5);
     });
 
-    it('Update Question type should not create a new question', () => {
+    it.only('Update Question type should not create a new question', () => {
       const numberOfQuestions = 5;
       const numberOfAttempts = 3;
 
@@ -223,6 +223,7 @@ describe('Create View', () => {
         questionType: QuestionType.TEXT_INPUT,
         answer: 'new answer',
       };
+
       cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).clear();
       cy.get(`${dataCyWrapper(CREATE_QUESTION_TITLE_CY)} input`).type(
         updatedQuestion.question

@@ -98,6 +98,8 @@ export const QuizProvider = ({ children }: Props) => {
   );
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  console.log(currentQuestion, currentIdx);
+
   // validate data to enable save
   useEffect(() => {
     try {
@@ -314,43 +316,51 @@ export const QuizProvider = ({ children }: Props) => {
     setCurrentIdxBounded(currentIdx - 1);
   }, [currentIdx, setCurrentIdxBounded]);
 
-  // initialize questions
-  useEffect(() => {
-    if (settings) {
-      // Get all questions
-      const validIds =
-        getSettingsByName(settings, APP_SETTING_NAMES.QUESTION_LIST)[0]?.data
-          ?.list ?? [];
-      const tmpQ = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION)
-        // Filter out questions that are not well formatted in AppSettings.
-        .filter(
-          (q) => validIds.includes(q.data.questionId) || validIds.includes(q.id)
-        );
-      // remove duplicated questions that might happen on save
-      const questions = tmpQ.filter(({ id, data, updatedAt }) => {
-        const duplicate = tmpQ.find(
-          (q) => data?.questionId === q.data.questionId && q.id !== id
-        );
-        if (!duplicate) {
-          return true;
-        }
-        return updatedAt > duplicate.updatedAt;
-      });
-      setQuestions(questions);
-    }
-  }, [settings]);
+  const initializeQuestions = () => {
+    // Get all questions
+    const validIds =
+      getSettingsByName(settings, APP_SETTING_NAMES.QUESTION_LIST)[0]?.data
+        ?.list ?? [];
+    const tmpQ = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION)
+      // to support legacy code, if no question id, the id is used instead.
+      .map((q) => ({
+        ...q,
+        data: {
+          ...q.data,
+          questionId: q.data.questionId ?? q.id,
+        },
+      }))
+      // Filter out questions that are not well formatted in AppSettings.
+      .filter(
+        (q) => validIds.includes(q.data.questionId) || validIds.includes(q.id)
+      );
+    // remove duplicated questions that might happen on save
+    const questions = tmpQ.filter(({ id, data, updatedAt }) => {
+      const duplicate = tmpQ.find(
+        (q) => data?.questionId === q.data.questionId && q.id !== id
+      );
+      if (!duplicate) {
+        return true;
+      }
+      return updatedAt > duplicate.updatedAt;
+    });
+    setQuestions(questions);
+
+    return questions;
+  };
 
   // initialize order
   useEffect(() => {
-    if (settings && questions.length) {
+    if (settings) {
+      const curatedQuestions = initializeQuestions();
+
       const newOrderSetting = getSettingsByName(
         settings,
         APP_SETTING_NAMES.QUESTION_LIST
       );
 
-      // Get all questions id. To support legacy code, if no question id, the id is used instead.
-      const questionIds = questions.map(
-        (appSetting) => appSetting?.data?.questionId ?? appSetting.id
+      const questionIds = curatedQuestions.map(
+        (appSetting) => appSetting?.data?.questionId
       );
 
       const filteredOrder: string[] = [];
@@ -378,7 +388,7 @@ export const QuizProvider = ({ children }: Props) => {
     // Disable exhaustive-deps for isLoaded, because we don't want
     // to reload this useEffect when isLoaded has changed.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings, questions]);
+  }, [settings]);
 
   // set current question
   useEffect(() => {
