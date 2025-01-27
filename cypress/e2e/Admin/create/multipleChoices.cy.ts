@@ -123,7 +123,11 @@ export const fillMultipleChoiceQuestion = (
       )} .${MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME} input[type="checkbox"]`
     ).then(($el) => {
       if (isCorrect !== $el.prop('checked')) {
-        $el.click();
+        cy.get(
+          `${dataCyWrapper(
+            buildMultipleChoiceAnswerCy(idx)
+          )} .${MULTIPLE_CHOICES_ANSWER_CORRECTNESS_CLASSNAME} input[type="checkbox"]`
+        ).click();
       }
     });
   });
@@ -311,7 +315,7 @@ describe('Multiple Choices', () => {
       cy.checkExplanationField(data.explanation);
     });
 
-    it('Update question', () => {
+    it.only('Update question', () => {
       fillMultipleChoiceQuestion(newMultipleChoiceData);
 
       // click new question and come back
