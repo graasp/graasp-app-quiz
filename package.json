@@ -81,7 +81,7 @@
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
     "@trivago/prettier-plugin-sort-imports": "4.1.1",
-    "@types/lodash.clonedeep": "4.5.7",
+    "@types/lodash.clonedeep": "4.5.9",
     "@types/lodash.groupby": "4.6.9",
     "@types/node": "18.16.19",
     "@types/plotly.js-basic-dist-min": "2.12.4",
