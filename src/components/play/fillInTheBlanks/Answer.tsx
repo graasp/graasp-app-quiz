@@ -14,6 +14,10 @@ export const Wrapper = styled(Typography)<WrapperProps>(
     cursor: isReadonly ? '' : 'pointer',
     minWidth: '1em',
     borderBottom: '1px solid black',
+
+    '&:hover': {
+      fontWeight: 'bold',
+    },
   })
 );
 
