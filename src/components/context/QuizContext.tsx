@@ -316,31 +316,33 @@ export const QuizProvider = ({ children }: Props) => {
 
   // initialize questions
   useEffect(() => {
-    // Get all questions
-    const validIds =
-      getSettingsByName(settings, APP_SETTING_NAMES.QUESTION_LIST)[0]?.data
-        ?.list ?? [];
-    const tmpQ = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION)
-      // Filter out questions that are not well formatted in AppSettings.
-      .filter(
-        (q) => validIds.includes(q.data.questionId) || validIds.includes(q.id)
-      );
-    // remove duplicated questions that might happen on save
-    const questions = tmpQ.filter(({ id, data, updatedAt }) => {
-      const duplicate = tmpQ.find(
-        (q) => data?.questionId === q.data.questionId && q.id !== id
-      );
-      if (!duplicate) {
-        return true;
-      }
-      return updatedAt > duplicate.updatedAt;
-    });
-    setQuestions(questions);
+    if (settings) {
+      // Get all questions
+      const validIds =
+        getSettingsByName(settings, APP_SETTING_NAMES.QUESTION_LIST)[0]?.data
+          ?.list ?? [];
+      const tmpQ = getSettingsByName(settings, APP_SETTING_NAMES.QUESTION)
+        // Filter out questions that are not well formatted in AppSettings.
+        .filter(
+          (q) => validIds.includes(q.data.questionId) || validIds.includes(q.id)
+        );
+      // remove duplicated questions that might happen on save
+      const questions = tmpQ.filter(({ id, data, updatedAt }) => {
+        const duplicate = tmpQ.find(
+          (q) => data?.questionId === q.data.questionId && q.id !== id
+        );
+        if (!duplicate) {
+          return true;
+        }
+        return updatedAt > duplicate.updatedAt;
+      });
+      setQuestions(questions);
+    }
   }, [settings]);
 
   // initialize order
   useEffect(() => {
-    if (settings && questions) {
+    if (settings && questions.length) {
       const newOrderSetting = getSettingsByName(
         settings,
         APP_SETTING_NAMES.QUESTION_LIST
