@@ -19,6 +19,7 @@ import {
   generateId,
   getSettingsByName,
   isDifferent,
+  removeDuplicates,
   validateQuestionData,
 } from './utilities';
 
@@ -330,17 +331,10 @@ export const QuizProvider = ({ children }: Props) => {
       }))
       // Filter out questions that are not well part of the order list
       .filter((q) => validIds.includes(q.data.questionId));
+
     // remove duplicated questions that might happen on save
     // keep most recent question
-    const questions = tmpQ.filter(({ id, data, updatedAt }) => {
-      const duplicate = tmpQ.find(
-        (q) => data?.questionId === q.data.questionId && q.id !== id
-      );
-      if (!duplicate) {
-        return true;
-      }
-      return updatedAt > duplicate.updatedAt;
-    });
+    const questions = tmpQ.filter(removeDuplicates(tmpQ));
     setQuestions(questions);
 
     return questions;
