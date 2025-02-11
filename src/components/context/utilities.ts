@@ -300,3 +300,19 @@ export const getResponseValue = (response: Data | undefined) => {
 
   return '';
 };
+
+export const removeDuplicates =
+  (tmpQ: AppSetting[]) =>
+  ({ id, data, updatedAt }: AppSetting, idx: number) => {
+    const duplicate = tmpQ.find(
+      (q) => data?.questionId === q.data.questionId && q.id !== id
+    );
+    if (!duplicate) {
+      return true;
+    }
+    // in case of copy, updatedAt properties are the same for all settings, so we return the furthest in the list, assuming the list is ordered by creation
+    if (updatedAt === duplicate.updatedAt) {
+      return idx > tmpQ.indexOf(duplicate);
+    }
+    return updatedAt > duplicate.updatedAt;
+  };
