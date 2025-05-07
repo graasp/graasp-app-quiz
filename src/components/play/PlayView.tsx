@@ -147,45 +147,6 @@ const PlayView = () => {
     }
   };
 
-  const renderNavigationButtons = () => (
-    <Stack direction="row" justifyContent="space-between" width="100%">
-      <Button
-        onClick={moveToPreviousQuestion}
-        variant="outlined"
-        data-cy={QUESTION_BAR_PREV_CY}
-        disabled={currentIdx === 0}
-      >
-        {t(QUIZ_TRANSLATIONS.PREV_QUESTION_BTN)}
-      </Button>
-      {displaySubmitBtn ? (
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
-          disabled={isReadonly}
-        >
-          {t('Submit')}
-        </Button>
-      ) : (
-        <Button
-          onClick={handleRetry}
-          variant="contained"
-          data-cy={PLAY_VIEW_RETRY_BUTTON_CY}
-        >
-          {t(QUIZ_TRANSLATIONS.PLAY_VIEW_RETRY_BTN)}
-        </Button>
-      )}
-      <Button
-        onClick={moveToNextQuestion}
-        variant="outlined"
-        data-cy={QUESTION_BAR_NEXT_CY}
-        disabled={currentIdx === questions.length - 1}
-      >
-        {t(QUIZ_TRANSLATIONS.NEXT_QUESTION_BTN)}
-      </Button>
-    </Stack>
-  );
-
   if (!questions || questions.length === 0) {
     return (
       <Alert severity="info" data-cy={PLAY_VIEW_EMPTY_QUIZ_CY}>
@@ -253,7 +214,47 @@ const PlayView = () => {
           showCorrection={showCorrection}
           currentQuestionData={currentQuestion.data as QuestionData}
         />
-        <Box mt={4}>{renderNavigationButtons()}</Box>
+        <Stack
+          mt={4}
+          direction="row"
+          justifyContent="space-between"
+          width="100%"
+        >
+          <Button
+            onClick={moveToPreviousQuestion}
+            variant="outlined"
+            data-cy={QUESTION_BAR_PREV_CY}
+            disabled={currentIdx === 0}
+          >
+            {t(QUIZ_TRANSLATIONS.PREV_QUESTION_BTN)}
+          </Button>
+          {displaySubmitBtn ? (
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
+              disabled={isReadonly}
+            >
+              {t('Submit')}
+            </Button>
+          ) : (
+            <Button
+              onClick={handleRetry}
+              variant="contained"
+              data-cy={PLAY_VIEW_RETRY_BUTTON_CY}
+            >
+              {t(QUIZ_TRANSLATIONS.PLAY_VIEW_RETRY_BTN)}
+            </Button>
+          )}
+          <Button
+            onClick={moveToNextQuestion}
+            variant="outlined"
+            data-cy={QUESTION_BAR_NEXT_CY}
+            disabled={currentIdx === questions.length - 1}
+          >
+            {t(QUIZ_TRANSLATIONS.NEXT_QUESTION_BTN)}
+          </Button>
+        </Stack>
       </Stack>
     </Stack>
   );
