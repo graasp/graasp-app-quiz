@@ -157,7 +157,24 @@ const PlayView = () => {
       >
         {t(QUIZ_TRANSLATIONS.PREV_QUESTION_BTN)}
       </Button>
-
+      {displaySubmitBtn ? (
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
+          disabled={isReadonly}
+        >
+          {t('Submit')}
+        </Button>
+      ) : (
+        <Button
+          onClick={handleRetry}
+          variant="contained"
+          data-cy={PLAY_VIEW_RETRY_BUTTON_CY}
+        >
+          {t(QUIZ_TRANSLATIONS.PLAY_VIEW_RETRY_BTN)}
+        </Button>
+      )}
       <Button
         onClick={moveToNextQuestion}
         variant="outlined"
@@ -199,8 +216,6 @@ const PlayView = () => {
         spacing={3}
         width={{ xs: '100%', md: '60%' }}
       >
-        {renderNavigationButtons()}
-
         <Typography
           component="h1"
           variant="h5"
@@ -238,28 +253,7 @@ const PlayView = () => {
           showCorrection={showCorrection}
           currentQuestionData={currentQuestion.data as QuestionData}
         />
-        <Box mt={4}>
-          {displaySubmitBtn && (
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              data-cy={PLAY_VIEW_SUBMIT_BUTTON_CY}
-              disabled={isReadonly}
-            >
-              {t('Submit')}
-            </Button>
-          )}
-
-          {!displaySubmitBtn && (
-            <Button
-              onClick={handleRetry}
-              variant="contained"
-              data-cy={PLAY_VIEW_RETRY_BUTTON_CY}
-            >
-              {t(QUIZ_TRANSLATIONS.PLAY_VIEW_RETRY_BTN)}
-            </Button>
-          )}
-        </Box>
+        <Box mt={4}>{renderNavigationButtons()}</Box>
       </Stack>
     </Stack>
   );
