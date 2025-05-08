@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.5](https://github.com/graasp/graasp-app-quiz/compare/v1.10.4...v1.10.5) (2025-05-08)
+
+
+### Bug Fixes
+
+* **deps:** update emotion monorepo ([#116](https://github.com/graasp/graasp-app-quiz/issues/116)) ([4a6bb11](https://github.com/graasp/graasp-app-quiz/commit/4a6bb11b5737a61e4ddc0829a7d4eb42f6322b7a))
+* move navigation button below ([79026db](https://github.com/graasp/graasp-app-quiz/commit/79026db9a121c4d104ad70125436ea29233d37c3))
+
 ## [1.10.4](https://github.com/graasp/graasp-app-quiz/compare/v1.10.3...v1.10.4) (2025-02-12)
 
 
